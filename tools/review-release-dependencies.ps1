@@ -48,8 +48,9 @@ if ($bom.bomFormat -cne 'CycloneDX' -or $bom.specVersion -cne '1.6' -or $bom.met
 $purls = @($bom.components | ForEach-Object { $_.purl })
 foreach ($purl in $purls) {
     if ($purl -isnot [string] -or $purl.Length -gt 512 -or
-        $purl -cnotmatch '\Apkg:(?:maven/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+|nuget/[a-z0-9_.-]+)@(?:[A-Za-z0-9_.~+-]|%[0-9A-Fa-f]{2})+\z') {
-        throw 'A release component lacks a supported Maven or NuGet package URL.'
+        ($purl -cnotmatch '\Apkg:(?:maven/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+|nuget/[a-z0-9_.-]+)@(?:[A-Za-z0-9_.~+-]|%[0-9A-Fa-f]{2})+\z' -and
+         $purl -cnotmatch '\Apkg:github/[a-z0-9_.-]+/[a-z0-9_.-]+@[a-f0-9]{40}\z')) {
+        throw 'A release component lacks a supported Maven, NuGet or commit-pinned GitHub package URL.'
     }
 }
 $purls = @($purls | Sort-Object -CaseSensitive -Unique)
@@ -64,19 +65,22 @@ if ($SbomOnly) {
     return
 }
 
-# OSV receives only public package URLs. Review data and file hashes stay local.
+# OSV receives only public package URLs or pinned public source commits.
 $endpoint = 'https://api.osv.dev/v1/querybatch'
 $findings = @()
 for ($start = 0; $start -lt $purls.Count; $start += 100) {
     $end = [Math]::Min($start + 99, $purls.Count - 1)
     $batch = $purls[$start..$end]
-    $body = @{ queries = @($batch | ForEach-Object { @{ package = @{ purl = $_ } } }) } | ConvertTo-Json -Depth 5 -Compress
+    $body = @{ queries = @($batch | ForEach-Object {
+        if ($_.StartsWith('pkg:github/',[StringComparison]::Ordinal)) { @{commit=$_.Substring($_.Length-40)} }
+        else { @{ package = @{ purl = $_ } } }
+    }) } | ConvertTo-Json -Depth 5 -Compress
     $reply = Invoke-RestMethod -Uri $endpoint -Method Post -ContentType 'application/json' -Body $body `
         -TimeoutSec 30 -MaximumRedirection 0
     if ($reply.results -isnot [array] -or $reply.results.Count -ne $batch.Count) { throw 'OSV returned an incomplete advisory response.' }
     for ($i = 0; $i -lt $batch.Count; $i++) {
         $result = $reply.results[$i]
-        if ($null -eq $result -or $result.next_page_token) { throw 'OSV returned a partial advisory result.' }
+        if ($null -eq $result -or $result.next_page_token -or $result.PSObject.Properties.Name -contains 'error') { throw 'OSV returned a partial advisory result.' }
         foreach ($advisory in $result.vulns) {
             if ($advisory.id -notmatch '\A[A-Za-z0-9_.-]{1,128}\z') { throw 'OSV returned an invalid advisory identifier.' }
             $findings += [ordered]@{ purl = $batch[$i]; advisory = $advisory.id; url = 'https://osv.dev/vulnerability/' + $advisory.id }

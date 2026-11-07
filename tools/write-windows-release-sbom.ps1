@@ -8,6 +8,12 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $components = @{}
+$inventoryPath = Join-Path $Payload 'PackageMetadata/sbom.cdx.json'
+if (Test-Path -LiteralPath $inventoryPath) { throw 'The staged inventory already exists. Publish to a new payload directory before generating another inventory.' }
+$nativeMetadata = Join-Path $Payload 'PackageMetadata/NativeTransport'
+$sourceNative = if (Test-Path -LiteralPath $nativeMetadata) {
+    & (Join-Path $PSScriptRoot 'read-native-transport-bundle.ps1') -BundleDirectory $nativeMetadata
+} else { $null }
 
 function Add-NuGetComponent([string]$Identity, [string]$Kind, [string]$ContentHash) {
     $name, $release = $Identity -split '/', 2
@@ -42,19 +48,49 @@ foreach ($entry in @('IConnect.Desktop.deps.json', 'PreviewWorker/IConnect.Previ
     $target = $deps.targets[$deps.runtimeTarget.name]
     if (!$target) { throw "Missing the runtime dependency graph in $entry." }
     foreach ($key in $target.Keys) {
+        if ($sourceNative -and $key -match '^MediaToolkit\.WebRtc\.Native\.win-x64/') { continue }
         $library = $deps.libraries[$key]
         if (!$library) { throw "Missing runtime dependency metadata for $key." }
         if ($library.type -in 'package', 'runtimepack') { $null = Add-NuGetComponent $key $library.type $library.sha512 }
     }
 }
 
-# The upstream NuGet package supplies this P/Invoke DLL as a build asset, outside the .deps graph.
-$assets = Get-Content -LiteralPath $ConnectivityAssets -Raw | ConvertFrom-Json -AsHashtable
-$native = @($assets.libraries.GetEnumerator() | Where-Object { $_.Key -match '^MediaToolkit\.WebRtc\.Native\.win-x64/' -and $_.Value.type -eq 'package' })
-if ($native.Count -ne 1 -or !$native[0].Value.sha512) { throw 'The native WebRTC package must have exactly one resolved version and content hash.' }
-$rtc = Add-NuGetComponent $native[0].Key 'package' $native[0].Value.sha512
-$payloadDigest = (Get-FileHash -LiteralPath (Join-Path $Payload 'libDatachannel/datachannel.dll') -Algorithm SHA256).Hash
-$rtc.properties = @([ordered]@{ name = 'iconnect:payload:libDatachannel/datachannel.dll:sha256'; value = $payloadDigest.ToLowerInvariant() })
+$payloadDigest = (Get-FileHash -LiteralPath (Join-Path $Payload 'libDatachannel/datachannel.dll') -Algorithm SHA256).Hash.ToLowerInvariant()
+if ($sourceNative) {
+    if ($payloadDigest -cne $sourceNative.BinarySha256) { throw 'The packaged native DLL does not match its source bundle.' }
+    foreach ($nativeComponent in $sourceNative.Components) {
+        $component = [ordered]@{
+            'bom-ref'=$nativeComponent.Purl; type='library'; name=$nativeComponent.Name
+            version=$nativeComponent.Version; purl=$nativeComponent.Purl; scope=$nativeComponent.Scope
+            externalReferences=@([ordered]@{type='vcs';url=$nativeComponent.Repository})
+            properties=@(
+                [ordered]@{name='iconnect:source:commit';value=$nativeComponent.Commit}
+                [ordered]@{name='iconnect:source:archive:path';value=('PackageMetadata/NativeTransport/' + $nativeComponent.SourceArchive)}
+                [ordered]@{name='iconnect:source:archive:sha256';value=$nativeComponent.SourceArchiveSha256}
+                [ordered]@{name='iconnect:license:root:path';value=('PackageMetadata/NativeTransport/' + $nativeComponent.RootLicense)}
+                [ordered]@{name='iconnect:license:root:sha256';value=$nativeComponent.RootLicenseSha256}
+            )
+        }
+        if ($nativeComponent.Name -ceq 'libdatachannel') {
+            $component.hashes=@([ordered]@{alg='SHA-256';content=$payloadDigest})
+            $component.properties+=@([ordered]@{name='iconnect:payload:libDatachannel/datachannel.dll:sha256';value=$payloadDigest})
+        }
+        $components[$nativeComponent.Purl]=$component
+    }
+} else {
+    # This P/Invoke DLL is a build asset outside the .deps graph. Do not label a
+    # substituted binary as the restored vendor package merely by hashing it.
+    $assets = Get-Content -LiteralPath $ConnectivityAssets -Raw | ConvertFrom-Json -AsHashtable
+    $native = @($assets.libraries.GetEnumerator() | Where-Object { $_.Key -match '^MediaToolkit\.WebRtc\.Native\.win-x64/' -and $_.Value.type -eq 'package' })
+    if ($native.Count -ne 1 -or !$native[0].Value.sha512 -or $native[0].Value.path -cne $native[0].Key.ToLowerInvariant()) { throw 'The native WebRTC package must have exactly one resolved version, path and content hash.' }
+    $packageHashes = @($assets.packageFolders.Keys | ForEach-Object {
+        $candidate = Join-Path $_ ($native[0].Value.path + '/native/win-x64/datachannel.dll')
+        if (Test-Path -LiteralPath $candidate -PathType Leaf) { (Get-FileHash -LiteralPath $candidate -Algorithm SHA256).Hash.ToLowerInvariant() }
+    } | Sort-Object -Unique)
+    if ($packageHashes.Count -ne 1 -or $packageHashes[0] -cne $payloadDigest) { throw 'The native DLL differs from the resolved NuGet artifact and has no matching source bundle.' }
+    $rtc = Add-NuGetComponent $native[0].Key 'package' $native[0].Value.sha512
+    $rtc.properties = @([ordered]@{ name = 'iconnect:payload:libDatachannel/datachannel.dll:sha256'; value = $payloadDigest })
+}
 
 $bom = [ordered]@{
     '$schema' = 'http://cyclonedx.org/schema/bom-1.6.schema.json'
@@ -64,6 +100,15 @@ $bom = [ordered]@{
     metadata = [ordered]@{ component = [ordered]@{ type = 'application'; name = $PackageName; version = $Version } }
     components = @($components.Keys | Sort-Object -CaseSensitive | ForEach-Object { $components[$_] })
 }
+if ($sourceNative) {
+    $bom.metadata.properties=@(
+        [ordered]@{name='iconnect:native:origin';value='pinned-source-bundle'}
+        [ordered]@{name='iconnect:native:source-lock:sha256';value=$sourceNative.Manifest.sourceLockSha256}
+        [ordered]@{name='iconnect:native:bundle-evidence:sha256';value=(Get-FileHash -LiteralPath (Join-Path $nativeMetadata 'bundle-evidence.json') -Algorithm SHA256).Hash.ToLowerInvariant()}
+    )
+}
 $directory = Join-Path $Payload 'PackageMetadata'
 [void][IO.Directory]::CreateDirectory($directory)
-$bom | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath (Join-Path $directory 'sbom.cdx.json') -Encoding utf8
+$temporaryInventory = Join-Path $directory ('sbom-' + [guid]::NewGuid().ToString('N') + '.partial')
+$bom | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $temporaryInventory -Encoding utf8
+[IO.File]::Move($temporaryInventory,$inventoryPath,$false)

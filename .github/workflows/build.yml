@@ -33,6 +33,7 @@ jobs:
           foreach ($relative in @('App.xbf', 'MainWindow.xbf', 'IConnect.Desktop.pri', 'libDatachannel/datachannel.dll', 'PreviewWorker/IConnect.Preview.Worker.exe', 'PreviewWorker/coreclr.dll', 'PreviewWorker/WinRT.Runtime.dll', 'AttachmentWorker/IConnect.Attachment.Worker.exe', 'AttachmentWorker/coreclr.dll')) {
             if (-not (Test-Path -LiteralPath (Join-Path $destination $relative) -PathType Leaf)) { throw "Missing published asset: $relative" }
           }
+          ./tools/write-windows-release-sbom.ps1 -Payload $destination -ConnectivityAssets apps/windows/IConnect.Connectivity/obj/project.assets.json -PackageName iConnect.CiPublishFixture -Version 1.0.0.0
   windows-large-files:
     runs-on: windows-latest
     steps:

@@ -16,11 +16,15 @@ param(
     [string]$CertificateThumbprint,
     [Parameter(Mandatory, ParameterSetName = 'Signed')]
     [uri]$TimestampServer,
-    [switch]$NoRestore
+    [switch]$NoRestore,
+    [string]$NativeTransportBundle
 )
 
 $ErrorActionPreference = 'Stop'
 $repository = Split-Path $PSScriptRoot -Parent
+$sourceNative = if ($NativeTransportBundle) {
+    & (Join-Path $PSScriptRoot 'read-native-transport-bundle.ps1') -BundleDirectory $NativeTransportBundle
+} else { $null }
 $versionValue = [version]$Version
 if ($versionValue.ToString() -cne $Version -or $versionValue.Major -eq 0 -or
     @($Version.Split('.') | Where-Object { [int]$_ -gt 65535 }).Count -ne 0) {
@@ -71,6 +75,20 @@ foreach ($asset in @('IConnect.Desktop.exe', 'IConnect.Desktop.dll', 'IConnect.D
 $metadata = [Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $payload 'IConnect.Desktop.dll'))
 if ($metadata.FileVersion -cne $Version) { throw 'The desktop binary does not match the package version.' }
 $connectivityAssets = Join-Path $repository 'apps/windows/IConnect.Connectivity/obj/project.assets.json'
+$nativeMetadata = Join-Path $payload 'PackageMetadata/NativeTransport'
+if (Test-Path -LiteralPath $nativeMetadata) { throw 'Unexpected native metadata in the fresh desktop publish output.' }
+if ($sourceNative) {
+    [void](New-Item -Path $nativeMetadata -ItemType Directory)
+    foreach ($file in $sourceNative.Files) {
+        $target = Join-Path $nativeMetadata $file.RelativePath
+        [void][IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($target))
+        Copy-Item -LiteralPath $file.Path -Destination $target
+    }
+    # Validate the staged source/notice copy before replacing this fresh publish's
+    # default transport. The repository's regular build output stays unchanged.
+    $stagedNative = & (Join-Path $PSScriptRoot 'read-native-transport-bundle.ps1') -BundleDirectory $nativeMetadata
+    Copy-Item -LiteralPath (Join-Path $stagedNative.Directory 'datachannel.dll') -Destination (Join-Path $payload 'libDatachannel/datachannel.dll') -Force
+}
 & (Join-Path $PSScriptRoot 'write-windows-release-sbom.ps1') -Payload $payload -ConnectivityAssets $connectivityAssets `
     -PackageName $PackageName -Version $Version
 
@@ -157,4 +175,5 @@ $hash = (Get-FileHash -LiteralPath $candidate -Algorithm SHA256).Hash.ToLowerInv
     Signed = $signed
     Sha256 = $hash
     WorkDirectory = $work
+    NativeTransport = if ($sourceNative) { 'PinnedSourceBundle' } else { 'NuGet' }
 }

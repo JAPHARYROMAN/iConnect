@@ -93,7 +93,7 @@ try {
         Assert-Source $component.source $component.commit
     }
     $files = @{}
-    foreach ($name in @('build-native-transport.ps1','native-transport-sources.json','test-native-transport.ps1','export-native-transport-sources.ps1','review-native-transport.ps1')) {
+    foreach ($name in @('build-native-transport.ps1','native-transport-sources.json','test-native-transport.ps1','export-native-transport-sources.ps1','review-native-transport.ps1','read-native-transport-bundle.ps1')) {
         $relative = 'recipe/' + $name
         Copy-Item -LiteralPath (Join-Path $PSScriptRoot $name) -Destination (Join-Path $destinationPath $relative)
         $files[$relative] = Hash (Join-Path $destinationPath $relative)

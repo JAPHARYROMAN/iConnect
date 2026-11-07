@@ -6,34 +6,15 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 function Hash([string]$Path) { return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant() }
-$bundle = (Resolve-Path -LiteralPath $BundleDirectory).Path
+$native = & (Join-Path $PSScriptRoot 'read-native-transport-bundle.ps1') -BundleDirectory $BundleDirectory
+$bundle = $native.Directory
 $manifestPath = Join-Path $bundle 'bundle-evidence.json'
-if ((Get-Item -LiteralPath $manifestPath).Length -gt 1MB) { throw 'Native bundle evidence is oversized.' }
-$evidence = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json -AsHashtable
-$lockPath = Join-Path $PSScriptRoot 'native-transport-sources.json'
-$lock = Get-Content -LiteralPath $lockPath -Raw | ConvertFrom-Json -AsHashtable
-$expected = @{ libdatachannel=$lock.libdatachannel.commit; openssl=$lock.openssl.commit }
-foreach ($module in $lock.libdatachannel.submodules.GetEnumerator()) { $expected[$module.Key.Substring('deps/'.Length)] = $module.Value }
-if ($lock.schema -ne 1 -or $expected.Count -ne 7 -or $evidence.schema -ne 1 -or $evidence.stage -cne 'SourceAndNoticeBundle' -or
-    $evidence.sourceLockSha256 -cne (Hash $lockPath) -or $evidence.binarySha256 -cnotmatch '\A[a-f0-9]{64}\z' -or
-    (Hash (Join-Path $bundle 'datachannel.dll')) -cne $evidence.binarySha256 -or $evidence.components.Count -ne 7) {
-    throw 'Choose a completed native source bundle matching the current pinned inputs and binary.'
-}
-$seen = @{}
-foreach ($component in $evidence.components) {
-    if ($component.name -isnot [string] -or !$expected.ContainsKey($component.name) -or $seen.ContainsKey($component.name) -or
-        $component.commit -cne $expected[$component.name] -or $component.commit -cnotmatch '\A[a-f0-9]{40}\z' -or
-        $component.sourceArchive -cne ('sources/' + $component.name + '.zip') -or $component.sourceArchiveSha256 -cnotmatch '\A[a-f0-9]{64}\z' -or
-        (Hash (Join-Path $bundle $component.sourceArchive)) -cne $component.sourceArchiveSha256) {
-        throw 'A native source component is duplicated, unpinned or changed.'
-    }
-    $seen[$component.name] = $true
-}
+$evidence = $native.Manifest
 $output = [IO.Path]::GetFullPath($OutputDirectory)
 if (Test-Path -LiteralPath $output) { throw 'Choose a new advisory output directory; existing evidence is preserved.' }
 [void](New-Item -Path $output -ItemType Directory)
 Copy-Item -LiteralPath $manifestPath -Destination (Join-Path $output 'bundle-evidence.json')
-$components = @($evidence.components | Sort-Object name -CaseSensitive)
+$components = @($native.Components | Sort-Object Name -CaseSensitive)
 $request = @{ queries = @($components | ForEach-Object { @{ commit=$_.commit } }) } | ConvertTo-Json -Depth 5 -Compress
 $request | Set-Content -LiteralPath (Join-Path $output 'osv-request.json') -Encoding UTF8
 # Only the seven public source commits are sent to OSV; local paths, payload and

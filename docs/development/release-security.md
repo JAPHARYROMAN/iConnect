@@ -17,11 +17,11 @@ Before distributing a build, review findings against the affected versions, plat
 
 ## Coverage
 
-The dependency lookup covers known advisories indexed for the listed Maven and NuGet coordinates at the recorded time. Review native components bundled inside dependencies against their upstream advisories, including the WebRTC implementations. Keep separate evidence for the deployed coordinator, the operating-system runtimes, dependency licenses and the independent authentication, filesystem and preview isolation review.
+The dependency lookup covers known advisories indexed for the listed Maven/NuGet coordinates and commit-pinned GitHub sources at the recorded time. GitHub inventory entries use full commit hashes and are queried by commit, without a package version in the same query. Review native components bundled inside dependencies against their upstream advisories, including the WebRTC implementations. Keep separate evidence for the deployed coordinator, the operating-system runtimes, dependency licenses and the independent authentication, filesystem and preview isolation review.
 
 The [native transport follow-up](native-transport-review.md) records the current binary hashes, the Windows vendor-source provenance gap and the candidate build from pinned public source. It also records the fresh 68-coordinate Android package lookup. Native adoption and release review remain pending.
 
-The candidate has a separate source/notice export and commit-level advisory procedure. It retains the source inputs and root license texts for review, with hashes bound to the candidate DLL. These source commits supplement the package-coordinate inventory; the application still packages the existing NuGet transport.
+The candidate has a separate source/notice export and commit-level advisory procedure. It retains the source inputs and root license texts for review, with hashes bound to the candidate DLL. An optional Windows review package now includes this bundle and identifies its seven source components instead of labeling the selected DLL as the vendor package. Its 24-component inventory passes schema validation and an artifact-bound advisory lookup with zero matches. Default builds continue using the restored NuGet transport. Complete native adoption, license review and release verification remain open.
 
 Use the [security policy](../../SECURITY.md) for reporting and triage. Confirm the repository has a monitored private reporting channel before distributing release builds.
 
