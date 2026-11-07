@@ -21,7 +21,11 @@ The dependency lookup covers known advisories indexed for the listed Maven and N
 
 The [native transport follow-up](native-transport-review.md) records the current binary hashes, the Windows vendor-source provenance gap and the candidate build from pinned public source. It also records the fresh 68-coordinate Android package lookup. Native adoption and release review remain pending.
 
+The candidate has a separate source/notice export and commit-level advisory procedure. It retains the source inputs and root license texts for review, with hashes bound to the candidate DLL. These source commits supplement the package-coordinate inventory; the application still packages the existing NuGet transport.
+
 Use the [security policy](../../SECURITY.md) for reporting and triage. Confirm the repository has a monitored private reporting channel before distributing release builds.
+
+The GitHub repository API reports private vulnerability reporting disabled on 7 November 2026. A working private contact and its monitoring remain unverified release requirements.
 
 ## Fixture evidence
 

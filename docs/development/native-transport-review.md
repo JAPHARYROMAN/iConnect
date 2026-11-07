@@ -14,7 +14,7 @@ On the review date, the published OpenSSL 3.6 advisory page listed fixed-version
 
 `tools/native-transport-sources.json` pins public libdatachannel 0.24.6 and OpenSSL 3.6.5 commits, all five recursive gitlinks and a hash-checked NASM 3.02 download. Checkouts and recursive revisions are verified. The assembler comes from [NASM's release server](https://www.nasm.us/pub/nasm/releasebuilds/3.02/win64/), with its archive hash checked against the [Scoop manifest](https://github.com/ScoopInstaller/Main/blob/master/bucket/nasm.json). No tag-signature verification is claimed. [libdatachannel release](https://github.com/paullouisageneau/libdatachannel/releases/tag/v0.24.6), [OpenSSL source revision](https://github.com/openssl/openssl/commit/c8bd5a57108599ac650bbae77fcabe3109dab2e8)
 
-The builder needs Windows MSVC x64, CMake, Ninja and Perl. Its source-preparation mode passes and rejects an unexpected local source file before compilation. The complete builder passes, producing static OpenSSL SSL/crypto libraries and `datachannel.dll` SHA-256 `84a0a63dcc579d97e4afac959866f9e61e9584c18732045a48db673d8ec87dde`. This is one observed build, not a byte-for-byte reproducibility claim. Notices and application packaging integration remain pending.
+The builder needs Windows MSVC x64, CMake, Ninja and Perl. Its source-preparation mode passes and rejects an unexpected local source file before compilation. The complete builder passes, producing static OpenSSL SSL/crypto libraries and `datachannel.dll` SHA-256 `84a0a63dcc579d97e4afac959866f9e61e9584c18732045a48db673d8ec87dde`. This is one observed build, not a byte-for-byte reproducibility claim. Complete license/notice review and application packaging integration remain pending.
 
 ```powershell
 ./tools/build-native-transport.ps1 -PrepareOnly
@@ -27,7 +27,31 @@ Sources and outputs use a cache under the user profile, with a default single wo
 
 The separate verifier passes nine application fixture cases without skips in an isolated copy of the Release test output. They cover native peer authentication and readiness, bidirectional file delivery, authorized browsing and revocation, folder publication, upload receipt resumption and local STUN binding. A loader assertion checks the actual process module's absolute path and SHA-256; it passes for the candidate and rejects a deliberately incorrect expected hash. The standard test output retains the existing NuGet binary.
 
-Before execution, the verifier checks the source-lock/evidence/payload hashes, x64 PE header, all 18 required C exports and direct DLL imports. The observed imports are `advapi32.dll`, `bcrypt.dll`, `crypt32.dll`, `kernel32.dll`, `user32.dll` and `ws2_32.dll`; unexpected external imports require review. It requires all nine cases across the five actual transport test classes, then checks that both candidate copies retain their hashes. The successful report is `.tools/native-transport-verification/14b08ca149bd4a3893b9ef23dc1a6247/native-verification.json`, marked `WindowsNativeFixturesPassed`. This local fixture proof does not execute upstream cryptographic tests or establish Android interoperability, physical-network behavior, complete license coverage or release readiness.
+Before execution, the verifier checks the source-lock/evidence/payload hashes, x64 PE header, all 18 required C exports and direct DLL imports. The observed imports are `advapi32.dll`, `bcrypt.dll`, `crypt32.dll`, `kernel32.dll`, `user32.dll` and `ws2_32.dll`; unexpected external imports require review. It requires all nine cases across the five actual transport test classes, then checks that both candidate copies retain their hashes. The successful report is `.tools/native-transport-verification/14b08ca149bd4a3893b9ef23dc1a6247/native-verification.json`, marked `WindowsNativeFixturesPassed`. This local fixture proof does not establish Android interoperability, physical-network behavior, complete license coverage or release readiness.
+
+## Upstream test execution
+
+The same `VC-WIN64A no-shared` OpenSSL build passes `nmake /nologo test` with `HARNESS_JOBS=1`. The harness reports `Files=356, Tests=3865` and `Result: PASS` in 1,185 seconds. Platform and build skips include FIPS-only, shared-library, dynamic-engine and unsupported native-Windows checks; these are not reported as executed passes. The build-tree SSL and crypto library hashes still match the libraries recorded in the candidate's build evidence. The full log is `test-openssl.log` under the native build cache. This is upstream test evidence, not cryptographic certification. [Upstream Windows test command](https://github.com/openssl/openssl/blob/c8bd5a57108599ac650bbae77fcabe3109dab2e8/NOTES-WINDOWS.md)
+
+The configured libdatachannel `datachannel-tests` target also builds and passes all 13 upstream cases in 49 seconds. Its final summary, rather than the exit code alone, is required because this upstream runner returns zero even when a case fails. Cases include wrong-fingerprint rejection, DTLS startup, C/C++ connectivity, reliability, media tracks, WebSocket fixtures and cleanup. The DLL hash before and after this run matches the candidate above. The build cache retains `test-datachannel.log`; `.tools/phase108-datachannel-upstream.json` records the result. These local fixtures do not test the deployed coordinator or separate physical networks.
+
+## Source and notice export
+
+After a completed build, export its DLL, build evidence, pinned source archives, root licenses and recipe into a new local bundle. The exporter requires the matching current source lock, exact commits and clean worktrees, and refuses a cache owned by an active build or test. It leaves incomplete exports without a completed evidence marker. Git archives preserve per-file notices and follow upstream export attributes; they contain source snapshots without Git history. [Git archive behavior](https://git-scm.com/docs/git-archive)
+
+```powershell
+$bundle = ./tools/export-native-transport-sources.ps1
+./tools/review-native-transport.ps1 -BundleDirectory $bundle.Bundle `
+    -OutputDirectory .tools/native-advisory-review/new-review
+```
+
+The bundle covers libdatachannel, OpenSSL and all five pinned dependency trees. The JSON tree is included as a pinned source input; the build disables examples. The exporter copies each root license from its source archive, hashes the archives, notices and recipe, and binds them to the DLL. This supports source and attribution review; complete license review and distribution approval remain explicit open gates.
+
+The advisory tool validates the pinned source commits, archive hashes and DLL before sending only the seven public commit hashes to OSV. It preserves the request, response and bundle manifest, rejects incomplete or paginated responses, and records the DLL and source-lock hashes. Advisory matches return exit code 2. A missing completed report indicates an unfinished review. Commit lookups cover indexed records, and do not establish that unlisted vulnerabilities are absent. [OSV commit and batch queries](https://google.github.io/osv.dev/post-v1-querybatch/)
+
+The first complete bundle passes on 7 November 2026 at `.tools/native-transport-bundles/76e7206b26b5471d98dedd275fe7c6c0`. All seven source archives and root licenses, the recipe files, build evidence and DLL pass an independent hash read-back. The artifact-bound advisory lookup checks all seven commits with zero matches; its report is `.tools/native-advisory-review/4a3e574168574e79bae228ade780073a/native-advisory-review.json`, bound to bundle-evidence SHA-256 `df1ee9c799e50ea4bfa070aef0ff53d64e5d1bd066858f1b875c5e1d951e2d17`.
+
+The exporter refuses an active cache and an existing bundle destination. Synthetic incomplete and paginated API responses fail without a completed report; a synthetic matching advisory is retained and returns exit code 2. A separate real API control returns three advisories for OSV's documented vulnerable example commit. Synthetic control outputs are explicitly marked as fixtures and are separate from the real artifact-bound lookup. Native adoption, full advisory/license review and independent security review remain open.
 
 ## Android artifact check
 
