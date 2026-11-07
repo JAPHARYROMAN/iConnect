@@ -248,7 +248,13 @@ class LargeFileTest {
                 try {
                     first.chooseDestination(id, fixture.receiver.tree, fixture.receiver.data.getInt("flags"), PhoneCollision.KEEP_BOTH).join()
                 } finally { observer.cancelAndJoin() }
-                val paused = first.state.value.items.single().download!!
+                // Pause cancels the local wrapper and its independently owned
+                // receiving worker. Joining the wrapper can finish before the
+                // receiver has flushed and published its final paused receipt.
+                val paused = withTimeout(60_000) {
+                    first.state.first { state -> state.items.single().download?.active == false }
+                        .items.single().download!!
+                }
                 assertEquals(paused.error, PhoneDownloadPhase.PAUSED, paused.phase)
                 assertTrue(paused.offset in signedBoundary..size)
                 println("LARGE_FILE offline checkpoint ${paused.offset}")

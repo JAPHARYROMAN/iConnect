@@ -2,6 +2,8 @@
 
 The active objective is the complete Windows/Android application described by the technical white paper. A working prototype, successful build, or local integration test does not establish full completion. This ledger records the remaining work and the evidence required; it does not replace the product requirements.
 
+The [pinned native transport candidate](native-transport-review.md) now passes nine application fixtures, all 13 configured upstream transport cases and the upstream OpenSSL test command. Its seven source/notice trees and artifact-bound commit advisory lookup are exported and checked; adoption, complete license review and cross-platform verification remain open. The [Android large-file follow-up](provider-range-reads-and-stop.md) records a passing download above 4 GiB, an offline pause-fixture synchronization failure with a pending corrected rerun, and the still-running upload case. The actual Android process-death probe remains pending.
+
 | Requirement | Current evidence / status | Completion evidence required |
 | --- | --- | --- |
 | Windows sending progress without page rebuilds | [Byte and file counts](batch-payload-estimates.md#windows-byte-updates-during-sending) for private preparation and intermediate send acknowledgements update existing labels. Original receipt adoption, the last acknowledged range and action changes still refresh the page. | Step 70 covers preparation and send controls with the keyboard and screen reader, checkpoint resume and final hashes on paired devices. |
