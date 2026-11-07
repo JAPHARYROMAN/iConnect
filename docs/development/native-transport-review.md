@@ -63,6 +63,10 @@ The package advisory lookup checks all 24 coordinates, using commit queries for 
 
 `tools/test-native-package.ps1` verifies the archive's native DLL, source-bundle members and native inventory. Its six optional guard checks pass: the standard NuGet inventory remains correct, existing inventories are preserved, an unlabeled replacement is rejected, runtime/source mismatches fail, and changed or redirected notices are refused. The successful guard record is `.tools/native-package-verification/34684e219d704d518a6eb693daf7fef4/native-package-verification.json`. The source-backed package was inspected without signing, installing or launching it. Cross-platform interoperability, full license review, production signing and installed lifecycle gates remain open.
 
+## Direct Windows–Android transport follow-up
+
+The [direct native fixture](native-cross-platform.md) now builds both host and Android probe artifacts. A Windows-only host-control self-test passes, and real ADB setup-data read-back and emulator ownership guards pass. Actual Windows–Android execution is queued after the existing large-file/recovery sequence. It has not yet produced a cross-platform result and does not replace full pairing/controller/coordinator or physical-network verification.
+
 ## Android artifact check
 
 The unsigned development release APK SHA-256 is `bb436f7017884f40904923148defbc65a8c72975ef9ca4c27ca0ab276a6c6394`; its embedded inventory SHA-256 is `aaf9a129220a2ab1486baa8e3d3ee2a79ec6ecb4a6d56dbf8664ddbef7b9dfe7`. OSV checked all 68 Maven coordinates on 7 November 2026 with no matches. The report is `.tools/security-20261107-android-f4152f5/dependency-review.json`. This does not cover every bundled native component or establish a production signature.

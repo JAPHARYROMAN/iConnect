@@ -20,6 +20,7 @@
     <Project Path="tests/IConnect.Attachment.Fixture/IConnect.Attachment.Fixture.csproj" />
     <Project Path="tests/IConnect.DesktopFixture/IConnect.DesktopFixture.csproj" />
     <Project Path="tests/IConnect.InteropRunner/IConnect.InteropRunner.csproj" />
+    <Project Path="tests/IConnect.NativeInterop.Fixture/IConnect.NativeInterop.Fixture.csproj" />
     <Project Path="tests/IConnect.Tests/IConnect.Tests.csproj" />
     <Project Path="tests/IConnect.Preview.Fixture/IConnect.Preview.Fixture.csproj" />
     <Project Path="tests/IConnect.Preview.Tests/IConnect.Preview.Tests.csproj" />
