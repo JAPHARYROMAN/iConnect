@@ -132,7 +132,11 @@ public sealed partial class WindowsBatchDownloads : IAsyncDisposable
                 try { await CancelCore(id); }
                 finally { lock (gate) canceling.Remove(id); Changed?.Invoke(); }
             });
-            canceling.Add(id, task); return task;
+            canceling.Add(id, task);
+            // Stop the active read before returning, even when the cleanup worker
+            // cannot be scheduled yet. Register first so reentrant controls join it.
+            Pause(id);
+            return task;
         }
     }
     private async Task CancelCore(string id)

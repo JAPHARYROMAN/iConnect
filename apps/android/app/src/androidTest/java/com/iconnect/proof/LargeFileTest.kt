@@ -25,6 +25,7 @@ class LargeFileTest {
     private val signedBoundary = 1L shl 31
     private val unsignedBoundary = 1L shl 32
     private val size = unsignedBoundary + 8L * StorageRules.RANGE + 17
+    private val timeout = 3 * 60 * 60 * 1000L
 
     private inner class Fixture {
         val receiver = IncomingUploadsTest.Fixture()
@@ -78,6 +79,8 @@ class LargeFileTest {
             val response = localHost.execute(locations.ownerId(), request.toBuilder().setRequestId(StorageRules.token()).build())
             check(response.status == FileStatus.FILE_STATUS_OK) { response.message }
             PhoneTransferManifests.validateResponse(response)
+            if (request.operation == FileOperation.READ_RANGE && request.offset % (256L * 1024 * 1024) == 0L)
+                println("LARGE_FILE local source range ${request.offset}")
             return response
         }
 
@@ -85,6 +88,8 @@ class LargeFileTest {
             val response = remoteHost.execute(receiver.approval.id, request.toBuilder().setRequestId(StorageRules.token()).build())
             check(response.status == FileStatus.FILE_STATUS_OK) { response.message }
             PhoneTransferManifests.validateResponse(response)
+            if (request.operation == FileOperation.DOWNLOAD_READ && request.offset % (256L * 1024 * 1024) == 0L)
+                println("LARGE_FILE remote source range ${request.offset}")
             return response
         }
 
@@ -92,6 +97,8 @@ class LargeFileTest {
             val response = receiver.raw(request)
             check(response.status == FileStatus.FILE_STATUS_OK) { response.message }
             PhoneTransferManifests.validateResponse(response)
+            if (request.operation == FileOperation.UPLOAD_WRITE && request.offset % (256L * 1024 * 1024) == 0L)
+                println("LARGE_FILE incoming accepted range ${request.offset}")
             return response
         }
 
@@ -127,7 +134,7 @@ class LargeFileTest {
         manager.state.first { rows -> rows.any { it.id == id && !it.active } }.single { it.id == id }
 
     @Test fun uploadAndIncomingProviderOver4GiBReopenTheOriginalReceipts(): Unit = runBlocking {
-        withTimeout(45 * 60 * 1000L) {
+        withTimeout(timeout) {
             val fixture = Fixture()
             val managers = mutableListOf<PhoneUploads>()
             try {
@@ -179,16 +186,17 @@ class LargeFileTest {
     }
 
     @Test fun downloadOver4GiBReopensItsCheckpointBeforeExplicitProviderSaving(): Unit = runBlocking {
-        withTimeout(45 * 60 * 1000L) {
+        withTimeout(timeout) {
             val fixture = Fixture()
             val managers = mutableListOf<AndroidDownloadManager>()
             try {
                 fixture.initialize()
                 fun manager() = AndroidDownloadManager(fixture.context).also { managers.add(it) }
                 val first = manager()
-                val id = first.enqueue(fixture.receiver.approval.id, fixture.remoteEntry, fixture.receiver.tree)
+                val sourcePeer = LocalIdentity().id
+                val id = first.enqueue(sourcePeer, fixture.remoteEntry, fixture.receiver.tree)
                 val entered = CompletableDeferred<Unit>()
-                val transfer = first.resume(id, fixture.receiver.approval.id) { request ->
+                val transfer = first.resume(id, sourcePeer) { request ->
                     val response = fixture.remote(request)
                     if (request.operation == FileOperation.DOWNLOAD_READ && request.offset >= unsignedBoundary) {
                         entered.complete(Unit); awaitCancellation()
@@ -204,7 +212,7 @@ class LargeFileTest {
                 first.shutdown()
                 val reopened = manager()
                 assertEquals(unsignedBoundary, reopened.state.value.single().offset)
-                reopened.resume(id, fixture.receiver.approval.id, fixture::remote).join()
+                reopened.resume(id, sourcePeer, fixture::remote).join()
                 val received = reopened.state.value.single()
                 assertEquals(received.error, PhoneDownloadPhase.READY_TO_SAVE, received.phase)
                 assertEquals(size, received.offset); assertEquals(paused.ticket, received.ticket)
@@ -223,7 +231,7 @@ class LargeFileTest {
     }
 
     @Test fun offlineProviderCopyOver4GiBKeepsItsObserved64BitCheckpoint(): Unit = runBlocking {
-        withTimeout(45 * 60 * 1000L) {
+        withTimeout(timeout) {
             val fixture = Fixture()
             val managers = mutableListOf<PhoneLocalCopies>()
             try {

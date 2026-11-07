@@ -1,6 +1,7 @@
 package com.iconnect.proof
 
 import android.content.Context
+import android.content.ContentResolver
 import android.database.Cursor
 import android.net.Uri
 import android.os.CancellationSignal
@@ -32,6 +33,8 @@ class AndroidFileService internal constructor(context: Context, private val gran
     @Volatile private var batchPlanHost:AndroidBatchPlans?=null
     private val resolver = context.contentResolver
     private data class Node(val grant: String, val document: String, val parent: String?, val names: List<String>)
+    private data class Resolved(val node: Node, val grant: AndroidStorageGrant, val info: Metadata)
+    private data class Ancestry(val path: List<String>, val leaf: Metadata)
     internal data class Metadata(val id: String, val name: String, val directory: Boolean,
         val size: Long, val modified: Long, val flags: Int, val knownSize: Boolean) {
         val version get() = StorageRules.version(id, size, modified)
@@ -160,8 +163,8 @@ class AndroidFileService internal constructor(context: Context, private val gran
     private fun mutationHost() = (grants as? AndroidStorageGrants)?.mutations ?: throw StorageFailure(FileStatus.UNSUPPORTED, "File changes are unavailable in this local browser.")
     internal fun sourceSnapshot(peer: String, grantId: String, documentId: String, version: String, signal: CancellationSignal): Metadata {
         val grant = grants.get(grantId, peer); StorageRules.requirePermission(grant.permissions, StorageRules.READ)
-        checkChild(grant, documentId); validateAncestry(grant, documentId, signal)
-        val info = metadata(grant, documentId, signal)
+        checkChild(grant, documentId)
+        val info = inspectAncestry(grant, documentId, signal).leaf
         requireVersion(version, info.version)
         if (info.directory || !info.knownSize || info.size > StorageRules.MAX_TRANSFER_SIZE ||
             info.flags and Documents.Document.FLAG_VIRTUAL_DOCUMENT != 0 || !grants.visible(grant, info.name))
@@ -205,11 +208,10 @@ class AndroidFileService internal constructor(context: Context, private val gran
     }
     internal fun sourceRange(peer: String, grantId: String, documentId: String, version: String,
         request: FileRequest, signal: CancellationSignal): FileResponse {
-        sourceSnapshot(peer, grantId, documentId, version, signal)
         val id = StorageRules.token(); nodes[id] = Node(grantId, documentId, null, emptyList())
         try {
             val result = FileResponse.newBuilder().setRequestId(request.requestId)
-            read(peer, request.toBuilder().setNodeId(id).setExpectedVersion(version).build(), result, signal)
+            read(peer, request.toBuilder().setNodeId(id).setExpectedVersion(version).build(), result, signal, StorageRules.MAX_TRANSFER_SIZE)
             // Internal references must not escape or be usable as session browse nodes.
             result.clearEntries(); return result.build()
         } finally { nodes.remove(id) }
@@ -276,37 +278,46 @@ class AndroidFileService internal constructor(context: Context, private val gran
             response.continuation = current.token
         } catch (e: Exception) { clearPage(); throw e }
     }
-    private fun read(peer: String, request: FileRequest, response: FileResponse.Builder, signal: CancellationSignal) {
-        val (node, grant) = resolve(peer, request.nodeId, StorageRules.READ, signal)
-        val before = metadata(grant, node.document, signal)
-        requireVersion(request.expectedVersion, before.version)
-        if (before.directory || !before.knownSize || before.flags and Documents.Document.FLAG_VIRTUAL_DOCUMENT != 0)
-            throw StorageFailure(FileStatus.UNSUPPORTED, "This provider cannot supply a normal file with a known size.")
-        if (request.offset < 0 || request.length !in 1..StorageRules.RANGE || request.offset > before.size)
-            throw StorageFailure(FileStatus.INVALID_REQUEST, "Request a bounded file range.")
-        val data = ByteArray(minOf(request.length.toLong(), before.size - request.offset).toInt())
-        val descriptor = resolver.openFileDescriptor(document(grant, node.document), "r", signal) ?: throw IOException()
-        descriptor.use {
-            FileInputStream(it.fileDescriptor).use { input ->
-                // Range reads require a seekable descriptor. Never skip unbounded remote content.
-                try { input.channel.position(request.offset) }
-                catch (_: IOException) { throw StorageFailure(FileStatus.UNSUPPORTED, "The provider does not support seekable range reads.") }
-                var offset = 0
-                while (offset < data.size) {
-                    signal.throwIfCanceled()
-                    val count = input.read(data, offset, data.size - offset)
-                    if (count < 0) throw StorageFailure(FileStatus.CONFLICT, "The source changed while it was being read.")
-                    offset += count
+    private fun read(peer: String, request: FileRequest, response: FileResponse.Builder, signal: CancellationSignal,
+        maximumSize: Long = Long.MAX_VALUE) {
+        val selected = nodes[request.nodeId] ?: throw StorageFailure(FileStatus.STALE_REFERENCE, "Refresh this folder to obtain a current document reference.")
+        val selectedGrant = grants.get(selected.grant, peer)
+        StorageRules.requirePermission(selectedGrant.permissions, StorageRules.READ)
+        signal.throwIfCanceled()
+        // A connection belongs to this synchronous read only. Every range rechecks policy
+        // and inspects ancestry/metadata before and after reading; no provider data is cached.
+        val client = resolver.acquireUnstableContentProviderClient(selectedGrant.tree) ?: throw FileNotFoundException()
+        client.use {
+            val provider = ContentResolver.wrap(it)
+            val (node, grant, before) = resolve(peer, request.nodeId, StorageRules.READ, signal, provider)
+            requireVersion(request.expectedVersion, before.version)
+            if (before.directory || !before.knownSize || before.size > maximumSize || before.flags and Documents.Document.FLAG_VIRTUAL_DOCUMENT != 0)
+                throw StorageFailure(FileStatus.UNSUPPORTED, "This provider cannot supply a normal file with a known size.")
+            if (request.offset < 0 || request.length !in 1..StorageRules.RANGE || request.offset > before.size)
+                throw StorageFailure(FileStatus.INVALID_REQUEST, "Request a bounded file range.")
+            val data = ByteArray(minOf(request.length.toLong(), before.size - request.offset).toInt())
+            val descriptor = provider.openFileDescriptor(document(grant, node.document), "r", signal) ?: throw IOException()
+            descriptor.use {
+                FileInputStream(it.fileDescriptor).use { input ->
+                    // Range reads require a seekable descriptor. Never skip unbounded remote content.
+                    try { input.channel.position(request.offset) }
+                    catch (_: IOException) { throw StorageFailure(FileStatus.UNSUPPORTED, "The provider does not support seekable range reads.") }
+                    var offset = 0
+                    while (offset < data.size) {
+                        signal.throwIfCanceled()
+                        val count = input.read(data, offset, data.size - offset)
+                        if (count < 0) throw StorageFailure(FileStatus.CONFLICT, "The source changed while it was being read.")
+                        offset += count
+                    }
                 }
             }
+            checkChild(grant, node.document, provider)
+            val after = inspectAncestry(grant, node.document, signal, provider).leaf
+            requireVersion(before.version, after.version)
+            response.content = ByteString.copyFrom(data)
+            response.endOfFile = request.offset + data.size >= after.size
+            response.addEntries(describe(request.nodeId, node, grant, after))
         }
-        checkChild(grant, node.document)
-        validateAncestry(grant, node.document, signal)
-        val after = metadata(grant, node.document, signal)
-        requireVersion(before.version, after.version)
-        response.content = ByteString.copyFrom(data)
-        response.endOfFile = request.offset + data.size >= after.size
-        response.addEntries(describe(request.nodeId, node, grant, after))
     }
     private fun create(peer: String, request: FileRequest, response: FileResponse.Builder, signal: CancellationSignal) {
         if (request.mutationId.isEmpty()) { resolve(peer, request.destinationId, StorageRules.CREATE, signal); throw StorageFailure(FileStatus.INVALID_REQUEST, "Update the client to supply a durable operation identifier.") }
@@ -389,19 +400,18 @@ class AndroidFileService internal constructor(context: Context, private val gran
         // replace names under concurrency; require the conservative provider opt-in.
         throw StorageFailure(FileStatus.UNSUPPORTED, "Safe rename requires a provider with no-replace guarantees.")
     }
-    private fun resolve(peer: String, id: String, permission: Int, signal: CancellationSignal): Pair<Node, AndroidStorageGrant> {
+    private fun resolve(peer: String, id: String, permission: Int, signal: CancellationSignal,
+        provider: ContentResolver = resolver): Resolved {
         val node = nodes[id] ?: throw StorageFailure(FileStatus.STALE_REFERENCE, "Refresh this folder to obtain a current document reference.")
         val grant = grants.get(node.grant, peer)
         StorageRules.requirePermission(grant.permissions, permission)
         if (node.names.any { !grants.visible(grant, it) }) throw StorageFailure(FileStatus.ACCESS_DENIED, "This item is excluded from sharing.")
-        checkChild(grant, node.document)
-        validateAncestry(grant, node.document, signal)
-        val info = metadata(grant, node.document, signal)
-        if (!grants.visible(grant, info.name)) throw StorageFailure(FileStatus.ACCESS_DENIED, "This item is excluded from sharing.")
-        return node to grant
+        checkChild(grant, node.document, provider)
+        val info = inspectAncestry(grant, node.document, signal, provider).leaf
+        return Resolved(node, grant, info)
     }
-    private fun checkChild(grant: AndroidStorageGrant, id: String) {
-        if (id != rootId(grant) && !Documents.isChildDocument(resolver, document(grant, rootId(grant)), document(grant, id)))
+    private fun checkChild(grant: AndroidStorageGrant, id: String, provider: ContentResolver = resolver) {
+        if (id != rootId(grant) && !Documents.isChildDocument(provider, document(grant, rootId(grant)), document(grant, id)))
             throw StorageFailure(FileStatus.ACCESS_DENIED, "The document is outside the approved folder.")
     }
     private fun returnedId(grant: AndroidStorageGrant, uri: Uri): String {
@@ -413,21 +423,27 @@ class AndroidFileService internal constructor(context: Context, private val gran
         checkChild(grant, id)
         return id
     }
-    private fun validateAncestry(grant: AndroidStorageGrant, id: String, signal: CancellationSignal): List<String> {
-        if (id == rootId(grant)) return listOf(id)
-        val path = Documents.findDocumentPath(resolver, document(grant, id))?.path
+    private fun validateAncestry(grant: AndroidStorageGrant, id: String, signal: CancellationSignal): List<String> =
+        inspectAncestry(grant, id, signal).path
+    private fun inspectAncestry(grant: AndroidStorageGrant, id: String, signal: CancellationSignal,
+        provider: ContentResolver = resolver): Ancestry {
+        val root = rootId(grant)
+        val path = if (id == root) listOf(id) else Documents.findDocumentPath(provider, document(grant, id))?.path
             ?: throw StorageFailure(FileStatus.UNSUPPORTED, "The provider cannot verify this document's folder ancestry.")
-        if (path.size !in 2..64 || path.first() != rootId(grant) || path.last() != id || path.distinct().size != path.size)
+        if (path.size !in (if (id == root) 1..1 else 2..64) || path.first() != root || path.last() != id || path.distinct().size != path.size)
             throw StorageFailure(FileStatus.ACCESS_DENIED, "The provider returned an invalid document ancestry.")
-        path.forEach { ancestor ->
+        val inspected = path.map { ancestor ->
             signal.throwIfCanceled()
-            if (!grants.visible(grant, metadata(grant, ancestor, signal).name))
+            val info = metadata(grant, ancestor, signal, provider)
+            if (!grants.visible(grant, info.name))
                 throw StorageFailure(FileStatus.ACCESS_DENIED, "An ancestor folder is excluded from sharing.")
+            info
         }
-        return path
+        return Ancestry(path, inspected.last())
     }
-    private fun metadata(grant: AndroidStorageGrant, id: String, signal: CancellationSignal): Metadata =
-        resolver.query(document(grant, id), projection, null, null, null, signal)?.use {
+    private fun metadata(grant: AndroidStorageGrant, id: String, signal: CancellationSignal,
+        provider: ContentResolver = resolver): Metadata =
+        provider.query(document(grant, id), projection, null, null, null, signal)?.use {
             if (!it.moveToFirst()) throw FileNotFoundException()
             decode(it).also { data -> if (data.id != id) throw IOException() }
         } ?: throw FileNotFoundException()

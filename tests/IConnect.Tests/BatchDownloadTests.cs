@@ -222,6 +222,45 @@ public sealed partial class BatchDownloadTests : IAsyncLifetime
         Assert.Contains(batches.Jobs.Single().Items, x => x.Phase == BatchItemPhase.Interrupted && x.Error.Contains("changed", StringComparison.Ordinal));
         Assert.Empty(files.Jobs); Assert.Empty(Directory.EnumerateFiles(Path.Combine(target, "bundle", "nested")));
     }
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task Pause_and_cancel_signal_the_active_range_before_returning(bool cancel)
+    {
+        var plan = await Plan();
+        var entered = new TaskCompletionSource<CancellationToken>(TaskCreationOptions.RunContinuationsAsynchronously);
+        async Task<FileResponse> BlockRange(FileRequest value, CancellationToken ct)
+        {
+            if (value.Operation == FileOperation.DownloadRead)
+            {
+                entered.TrySetResult(ct);
+                await Task.Delay(Timeout.Infinite, ct);
+            }
+            return await Rpc(value, ct);
+        }
+        await using var files = new WindowsDownloadManager(state);
+        await using var batches = new WindowsBatchDownloads(state, files);
+        var id = batches.Start(peer, plan, target, DownloadCollision.Fail, BlockRange);
+        var token = await entered.Task.WaitAsync(TimeSpan.FromSeconds(15));
+        Task? stopping = null;
+        // A queued cleanup worker cannot enter the ownership gate until this control
+        // returns. Signaling the active range must not depend on scheduling that worker.
+        lock (files.OwnershipGate)
+        {
+            if (cancel) stopping = batches.Cancel(id); else batches.Pause(id);
+            Assert.True(token.IsCancellationRequested, "The active read was still allowed after the stop control returned.");
+        }
+        if (stopping is not null) await stopping.WaitAsync(TimeSpan.FromSeconds(15));
+        else
+        {
+            await batches.WaitAsync(id).WaitAsync(TimeSpan.FromSeconds(15));
+            Assert.Equal(BatchPhase.Paused, batches.Jobs.Single().Phase);
+            await batches.Cancel(id).WaitAsync(TimeSpan.FromSeconds(15));
+        }
+        Assert.Equal(BatchPhase.Canceled, batches.Jobs.Single().Phase);
+        Assert.Empty(Directory.EnumerateFiles(target, "*", SearchOption.AllDirectories));
+        Assert.True(File.Exists(Path.Combine(source, "bundle", "nested", "maelezo-文書.bin")));
+    }
     public async Task DisposeAsync()
     {
         service.Dispose(); await sources.DisposeAsync(); Directory.Delete(sandbox, true);

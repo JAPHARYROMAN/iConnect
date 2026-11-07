@@ -91,6 +91,42 @@ class AndroidStorageTest {
         assertEquals(FileStatus.ACCESS_DENIED, service.execute(peer,
             request(FileOperation.READ_RANGE, entry.id, entry.version).setLength(1).build()).status)
     }
+    private fun rangeMutation(mode: String, expected: FileStatus) {
+        listOf(false, true).forEach { ticketed ->
+            withStorage { fixture, store, _, _ ->
+                val sources = AndroidDownloadSources(context, store)
+                val reader = AndroidFileService(context, store, sources)
+                try {
+                    val entry = file(reader)
+                    val read = if (ticketed) {
+                        val prepared = reader.execute(peer, request(FileOperation.PREPARE_DOWNLOAD, entry.id, entry.version).build())
+                        assertEquals(prepared.message, FileStatus.FILE_STATUS_OK, prepared.status)
+                        kotlinx.coroutines.withTimeout(15_000) {
+                            while (true) {
+                                val status = reader.execute(peer, request(FileOperation.DOWNLOAD_STATUS).setTransferId(prepared.download.id).build())
+                                assertEquals(status.message, FileStatus.FILE_STATUS_OK, status.status)
+                                if (status.download.state == DownloadState.DOWNLOAD_READY) break
+                                kotlinx.coroutines.delay(10)
+                            }
+                        }
+                        request(FileOperation.DOWNLOAD_READ).setTransferId(prepared.download.id).setLength(8).build()
+                    } else request(FileOperation.READ_RANGE, entry.id, entry.version).setLength(8).build()
+                    context.contentResolver.call(TestDocumentsProvider.CONTROL_URI, "creationMode", fixture.bundle.getString("root"),
+                        Bundle().apply { putString("mode", mode) })
+                    val result = reader.execute(peer, read)
+                    assertEquals("$mode, ticketed=$ticketed: ${result.message}", expected, result.status)
+                    assertTrue(result.content.isEmpty); assertEquals(0, result.entriesCount)
+                } finally { reader.close(); sources.shutdown() }
+            }
+        }
+    }
+    @Test fun rangesWithholdBytesWhenTheProviderChangesVersionDuringOpen() =
+        rangeMutation("changeVersionOnRead", FileStatus.CONFLICT)
+    @Test fun rangesWithholdBytesWhenTheProviderMovesTheSourceDuringOpen() =
+        rangeMutation("moveOutsideOnRead", FileStatus.ACCESS_DENIED)
+    @Test fun rangesWithholdBytesWhenAnAncestorBecomesExcludedDuringOpen() =
+        rangeMutation("excludeAncestorOnRead", FileStatus.ACCESS_DENIED)
+
     @Test fun createRequiresIndependentPermissionAndProviderSupport() = withStorage { _, store, service, grant ->
         val root = roots(service).entriesList.single()
         val epoch = service.execute(peer, request(FileOperation.MUTATION_CONTEXT).build()).mutationEpoch

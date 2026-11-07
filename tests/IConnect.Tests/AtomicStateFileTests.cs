@@ -21,9 +21,17 @@ public sealed class AtomicStateFileTests : IDisposable
         using var reader = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
         var denied = Assert.ThrowsAny<Exception>(() => File.Move(staged, path, true));
         Assert.Contains(denied.HResult & 0xffff, new[] { 5, 32, 33 });
-        var commit = Task.Run(() => AtomicStateFile.Commit(staged, path));
-        await Task.Delay(60); Assert.Equal("earlier", File.ReadAllText(path)); reader.Dispose();
-        await commit.WaitAsync(TimeSpan.FromSeconds(5));
+        using var started = new ManualResetEventSlim();
+        var commit = Task.Factory.StartNew(() => { started.Set(); AtomicStateFile.Commit(staged, path); },
+            CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+        try
+        {
+            Assert.True(started.Wait(TimeSpan.FromSeconds(5)));
+            // Release on this already-running test thread. A thread-pool continuation
+            // could otherwise retain the lock past the bounded retry window under load.
+            Thread.Sleep(60); Assert.Equal("earlier", File.ReadAllText(path));
+        }
+        finally { reader.Dispose(); await commit.WaitAsync(TimeSpan.FromSeconds(5)); }
         Assert.Equal("verified checkpoint", File.ReadAllText(path)); Assert.False(File.Exists(staged));
     }
     [Fact]

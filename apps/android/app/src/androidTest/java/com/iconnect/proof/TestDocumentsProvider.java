@@ -205,6 +205,12 @@ public final class TestDocumentsProvider extends DocumentsProvider {
         if (item == null || item.file == null) throw new FileNotFoundException();
         String ancestor = id;
         for (int i = 0; i < 64 && items.containsKey(ancestor) && items.get(ancestor).parent != null; i++) ancestor = items.get(ancestor).parent;
+        if ("r".equals(mode)) {
+            String fault = creationModes.get(ancestor);
+            if ("changeVersionOnRead".equals(fault)) item.modified++;
+            if ("moveOutsideOnRead".equals(fault)) item.parent = "outside";
+            if ("excludeAncestorOnRead".equals(fault)) items.get(item.parent).name = ".ssh";
+        }
         if ("r".equals(mode) && "slowRead".equals(creationModes.get(ancestor))) {
             android.os.SystemClock.sleep(20);
             if (signal != null) signal.throwIfCanceled();
