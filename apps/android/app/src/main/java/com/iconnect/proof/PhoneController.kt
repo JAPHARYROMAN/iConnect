@@ -136,12 +136,12 @@ class PhoneController internal constructor(private val application: Application,
     val localFiles = PhoneLocalBrowser(application)
     private val identity = LocalIdentity()
     private val preferences = application.getSharedPreferences("iconnect.proof", 0)
-    private val history=PhoneActivity(application)
     internal val networkTraffic=PhoneFileTrafficPolicy(android.os.SystemClock::elapsedRealtime)
     private val transferNetwork=runCatching {AndroidTransferNetworkSettings(application,networkTraffic)}.getOrElse {networkTraffic.configure(PhoneNetworkPreferences(),false); null}
     private val costMonitor=AndroidTransferCostMonitor(application,controllerScope,publish={cost->networkTraffic.observe(cost); mutable.update {it.copy(transferNetwork=it.transferNetwork.copy(cost=cost))}})
     private val savedPresence=runCatching {preferences.getString("presence.owner","")==identity.id && preferences.getBoolean("presence.enabled",false)}
     private val owner = AndroidOwnerPolicy(application, identity.id)
+    private val history=PhoneActivity(application,backupContext={identity.id+"|"+runCatching {owner.recoveryStamp}.getOrElse {"blocked"}},backupAvailable={uiVisible && closing==null})
     private val reconnect=AndroidReconnect(application,identity.id)
     private val reconnectSchedule=ReconnectSchedule(android.os.SystemClock::elapsedRealtime)
     private val presence=PresenceTracker(identity.id,android.os.SystemClock::elapsedRealtime)
@@ -898,6 +898,7 @@ class PhoneController internal constructor(private val application: Application,
         log(message)
     }
     private fun pausePeerWork(reason:PhoneConnectionEnd=PhoneConnectionEnd.OWNER) {
+        history.cancelBackupReview()
         sourceReviewEpoch++; downloads.invalidateSourceReviews(); incoming.invalidateWindowReviews()
         uploads.pauseSending()
         outgoingBatchSender.pauseAll()
@@ -1094,6 +1095,7 @@ class PhoneController internal constructor(private val application: Application,
         catch (_: Exception) { log("This download is still active or could not be removed.") } }
     fun close(): Job {
         closing?.let { return it }
+        history.cancelBackupReview()
         diagnostics.invalidate()
         reconnect.blockNow(); stopReconnectLoop()
         disconnect(); val localClosing = localFiles.close(); downloadSources.close()
@@ -1114,7 +1116,7 @@ class PhoneController internal constructor(private val application: Application,
         if(closing!=null) return
         uiVisible = visible
         refreshUploadPayloadEstimates()
-        if(!visible) {sourceReviewEpoch++; downloads.invalidateSourceReviews(); incoming.invalidateWindowReviews()}
+        if(!visible) {history.cancelBackupReview(); sourceReviewEpoch++; downloads.invalidateSourceReviews(); incoming.invalidateWindowReviews()}
         syncCostMonitor()
         localFiles.setVisible(visible)
         if (visible) {startReconnectLoop(); startPresenceLoop(); return}
@@ -1146,6 +1148,16 @@ class PhoneController internal constructor(private val application: Application,
     suspend fun configureActivity(days:Int) {check(uiVisible && closing==null); history.configure(days)}
     suspend fun clearActivity() {check(uiVisible && closing==null); history.clear()}
     suspend fun resetActivity() {check(uiVisible && closing==null); history.reset()}
+    suspend fun inspectActivityBackups(start:Int=0,continuing:()->Boolean={true}):PhoneActivityBackupInventory {
+        check(uiVisible && closing==null); return history.inspectBackups(start,continuing)
+    }
+    suspend fun reviewActivityBackup(id:String,continuing:()->Boolean={true}):PhoneActivityBackupReview {
+        check(uiVisible && closing==null); return history.reviewBackup(id,continuing)
+    }
+    suspend fun confirmActivityBackup(review:PhoneActivityBackupReview,continuing:()->Boolean={true}) {
+        check(uiVisible && closing==null); history.confirmBackup(review,continuing)
+    }
+    fun cancelActivityBackupReview()=history.cancelBackupReview()
     internal suspend fun flushActivity()=history.flush()
     fun stageUpload(entry:FileEntry)=guarded {
         check(uiVisible && !state.value.savingTrust && closing==null)
@@ -1469,6 +1481,7 @@ class PhoneController internal constructor(private val application: Application,
     fun retryRevocation() = guarded { check(uiVisible && !state.value.savingTrust); persistRevocations(emptySet()) }
     fun resetPairingData() {
         if (!uiVisible || state.value.savingTrust) return
+        history.cancelBackupReview()
         forgetPeer(); revocationWrites++; mutable.update { it.copy(savingTrust = true) }
         sourcePersistence.launch {
             val reset = runCatching { trustPersistence.withLock { owner.reset() } }

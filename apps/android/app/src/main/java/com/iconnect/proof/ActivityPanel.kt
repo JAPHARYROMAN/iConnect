@@ -33,6 +33,7 @@ internal fun ActivityPanel(model:PhoneController,state:ProofState) {
         Row(Modifier.fillMaxWidth()) {listOf(0,1,7,30,90).forEach {value->TextButton({days=value; action="retention"},enabled=view.ready && !busy && view.issue.isEmpty()) {Text(if(value==0) "Off" else "${value}d")}}}
         TextButton({action="clear"},enabled=view.ready && !busy && view.issue.isEmpty() && view.entries.isNotEmpty()) {Text("Clear local activity…")}
         if(view.issue.isNotEmpty()) TextButton({action="reset"},enabled=view.canReset && !busy) {Text("Preserve and reset activity…")}
+        ActivityBackupControls(model,view.ready && !busy)
         val pages=maxOf(1,(view.entries.size+49)/50); val selected=page.coerceIn(0,pages-1)
         Row {TextButton({page=selected-1},enabled=selected>0) {Text("Previous activity")}; Text("${selected+1} / $pages"); TextButton({page=selected+1},enabled=selected+1<pages) {Text("Next activity")}}
         if(view.ready && view.entries.isEmpty()) Text("No retained activity.")

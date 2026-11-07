@@ -15,6 +15,7 @@ import org.json.JSONObject
 import org.json.JSONTokener
 import java.io.File
 import java.io.RandomAccessFile
+import java.util.concurrent.atomic.AtomicLong
 
 enum class PhoneActivityKind {
     CONNECTION,PAIRING,REVOCATION,SHARING,SETTINGS,DOWNLOAD,LOCAL_COPY,INCOMING_COPY,PRIVATE_COPY,BATCH,BATCH_PREPARE,BATCH_SEND,BATCH_RECEIVE,FILE_REQUEST,FILE_CHANGE,RECOVERY,
@@ -50,6 +51,7 @@ internal class PhoneActivityCore(context:Context,private val now:()->Long=System
     private var durable=entries
     private var dirty=false
     private var issue=""
+    private var closed=false
     init {
         check(directory.mkdir() || directory.isDirectory)
         check(directory.canonicalFile.parentFile==context.filesDir.canonicalFile)
@@ -83,7 +85,7 @@ internal class PhoneActivityCore(context:Context,private val now:()->Long=System
     private fun string(row:JSONObject,key:String)=row.get(key) as? String?:error("Activity metadata is invalid.")
     private fun integer(row:JSONObject,key:String):Long=when(val value=row.get(key)) {is Int->value.toLong(); is Long->value; else->error("Activity metadata is invalid.")}
     private fun boundedInt(row:JSONObject,key:String,range:IntRange):Int {val value=integer(row,key); check(value>=range.first && value<=range.last); return value.toInt()}
-    private fun checkRoot() {val current=Os.lstat(directory.path); check(OsConstants.S_ISDIR(current.st_mode) && "${current.st_dev}:${current.st_ino}"==rootIdentity)}
+    private fun checkRoot() {check(!closed) {"Activity storage is closed."}; val current=Os.lstat(directory.path); check(OsConstants.S_ISDIR(current.st_mode) && "${current.st_dev}:${current.st_ino}"==rootIdentity)}
     private fun validate(row:PhoneActivityEntry) {
         check(Rules.tokenPattern.matches(row.id) && row.at in 0..StorageRules.MAX_TIMESTAMP && (row.peer.isEmpty() || row.peer.matches(Regex("[a-f0-9]{64}"))) &&
             row.bytes in -1..Long.MAX_VALUE && row.count in 1..1_000_000 && (row.operation==-1 || com.iconnect.protocol.FileOperation.forNumber(row.operation)!=null))
@@ -121,22 +123,27 @@ internal class PhoneActivityCore(context:Context,private val now:()->Long=System
         checkRoot(); check(issue.isNotEmpty()); val items=recovery.all(); check(items.isNotEmpty() && items.all {it.canArchive})
         items.forEach {recovery.archive(it.id)}; entries=emptyList(); durable=entries; days=30; version=""; issue=""; dirty=true; flush()
     }
-    override fun close() {try {flush()} finally {lease.release(); ownerFile.close()}}
+    fun backupManager(revision:AtomicLong,currentContext:()->String,available:()->Boolean,elapsed:()->Long=android.os.SystemClock::elapsedRealtime)=
+        AndroidActivityBackups(directory,rootIdentity,{checkRoot(); recovery.all().map {it.id}.toSet()},revision,currentContext,available,elapsed)
+    override fun close() {try {flush()} finally {closed=true; lease.release(); ownerFile.close()}}
 }
 
 /** Bounded write-behind avoids storage I/O under authorization or provider locks. */
-internal class PhoneActivity(context:Context,now:()->Long=System::currentTimeMillis) {
-    private data class Command(val event:PhoneActivityEvent?=null,val action:String="",val days:Int=30,val reply:CompletableDeferred<Unit>?=null)
+internal class PhoneActivity(context:Context,backupContext:()->String={"local"},backupAvailable:()->Boolean={true},now:()->Long=System::currentTimeMillis) {
+    private data class Command(val event:PhoneActivityEvent?=null,val action:String="",val days:Int=30,val reply:CompletableDeferred<Unit>?=null,
+        val backup:((AndroidActivityBackups)->Unit)?=null)
     private val writer=CoroutineScope(SupervisorJob()+Dispatchers.IO)
     private val queue=Channel<Command>(64)
     private val dropped=java.util.concurrent.atomic.AtomicLong()
     private val closed=java.util.concurrent.atomic.AtomicBoolean()
     private val lifecycle=Any()
     private val commands=Mutex()
+    private val backupRevision=AtomicLong()
     private val mutable=MutableStateFlow(PhoneActivityView())
     val state=mutable.asStateFlow()
     private val work=writer.launch {
         val core=runCatching {PhoneActivityCore(context,now)}.getOrElse {mutable.value=PhoneActivityView(ready=true,issue="Local activity storage is unavailable. Restore private storage access and reopen iConnect."); null}
+        val backups=core?.backupManager(backupRevision,backupContext,{!closed.get() && backupAvailable()})
         if(core!=null) mutable.value=core.view()
         for(first in queue) {
             val batch=mutableListOf(first)
@@ -145,6 +152,7 @@ internal class PhoneActivity(context:Context,now:()->Long=System::currentTimeMil
             try {
                 check(core!=null) {"Local activity storage is unavailable."}
                 for(command in batch) {
+                    if(command.backup!=null) {command.backup.invoke(requireNotNull(backups)); continue}
                     command.event?.let {if(!core.append(it)) dropped.incrementAndGet()}
                     when(command.action) {"configure"->core.configure(command.days); "clear"->core.clear(); "reset"->core.reset(); "close"->stopping=true}
                 }
@@ -175,7 +183,22 @@ internal class PhoneActivity(context:Context,now:()->Long=System::currentTimeMil
     suspend fun clear()=action("clear")
     suspend fun reset()=action("reset")
     suspend fun flush()=action("flush")
+    private suspend fun <T> backupOperation(operation:(AndroidActivityBackups,()->Boolean)->T):T {
+        val caller=currentCoroutineContext().job; val result=CompletableDeferred<T>(); val accepted=CompletableDeferred<Unit>()
+        commands.withLock {
+            check(!closed.get())
+            queue.send(Command(action="backup",reply=accepted,backup={manager->
+                try {result.complete(operation(manager) {caller.isActive})} catch(e:Exception) {result.completeExceptionally(e)}
+            }))
+        }
+        accepted.await(); return result.await()
+    }
+    suspend fun inspectBackups(start:Int,continuing:()->Boolean={true})=backupOperation {manager,active->manager.inspect(start) {active() && continuing()}}
+    suspend fun reviewBackup(id:String,continuing:()->Boolean={true})=backupOperation {manager,active->manager.review(id) {active() && continuing()}}
+    suspend fun confirmBackup(value:PhoneActivityBackupReview,continuing:()->Boolean={true})=backupOperation {manager,active->manager.confirm(value) {active() && continuing()}}
+    fun cancelBackupReview() {backupRevision.incrementAndGet()}
     suspend fun close()=withContext(NonCancellable) {
+        cancelBackupReview()
         val reply=commands.withLock {
             if(synchronized(lifecycle) {closed.compareAndSet(false,true)}) CompletableDeferred<Unit>().also {queue.send(Command(action="close",reply=it))} else null
         }
