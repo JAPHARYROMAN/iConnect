@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <ItemGroup>
+    <ProjectReference Include="../../shared/IConnect.Core/IConnect.Core.csproj" />
+  </ItemGroup>
+</Project>

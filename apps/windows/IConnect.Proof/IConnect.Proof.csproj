@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><PlatformTarget>x64</PlatformTarget><IncludeAttachmentWorker>true</IncludeAttachmentWorker></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../IConnect.Connectivity/IConnect.Connectivity.csproj" />
+    <ProjectReference Include="../IConnect.Storage.Windows/IConnect.Storage.Windows.csproj" />
+    <PackageReference Include="QRCoder" Version="1.8.1" />
+  </ItemGroup>
+</Project>

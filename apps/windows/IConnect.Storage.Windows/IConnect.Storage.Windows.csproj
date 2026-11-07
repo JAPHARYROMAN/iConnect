@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><PlatformTarget>x64</PlatformTarget><AllowUnsafeBlocks>true</AllowUnsafeBlocks></PropertyGroup>
+  <ItemGroup><ProjectReference Include="../../../shared/IConnect.Core/IConnect.Core.csproj" /></ItemGroup>
+  <ItemGroup><ProjectReference Include="../IConnect.Attachment.Worker/IConnect.Attachment.Worker.csproj" ReferenceOutputAssembly="false" /></ItemGroup>
+</Project>

@@ -1,0 +1,17 @@
+<Application x:Class="IConnect.Desktop.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls">
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries><controls:XamlControlsResources /></ResourceDictionary.MergedDictionaries>
+      <Color x:Key="SystemAccentColor">#007E88</Color>
+      <Color x:Key="SystemAccentColorDark1">#006B74</Color>
+      <Color x:Key="SystemAccentColorDark2">#005A61</Color>
+      <Color x:Key="SystemAccentColorDark3">#00454B</Color>
+      <Color x:Key="SystemAccentColorLight1">#259CA6</Color>
+      <Color x:Key="SystemAccentColorLight2">#55B9C1</Color>
+      <Color x:Key="SystemAccentColorLight3">#81D3D8</Color>
+    </ResourceDictionary>
+  </Application.Resources>
+</Application>

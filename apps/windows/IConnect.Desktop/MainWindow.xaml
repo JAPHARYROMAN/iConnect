@@ -1,0 +1,39 @@
+<Window x:Class="IConnect.Desktop.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid.RowDefinitions><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+    <NavigationView x:Name="Navigation" PaneDisplayMode="Auto" IsBackButtonVisible="Collapsed"
+        IsSettingsVisible="True" OpenPaneLength="240" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" SelectionChanged="NavigationChanged">
+      <NavigationView.PaneHeader>
+        <StackPanel Margin="16,16,16,20" Spacing="4">
+          <TextBlock Text="iConnect" FontSize="28" FontWeight="SemiBold" />
+          <TextBlock Text="Your devices. Your files." FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+        </StackPanel>
+      </NavigationView.PaneHeader>
+      <NavigationView.MenuItems>
+        <NavigationViewItem Content="Overview" Tag="home" AutomationProperties.AutomationId="nav-home"><NavigationViewItem.Icon><SymbolIcon Symbol="Home" /></NavigationViewItem.Icon></NavigationViewItem>
+        <NavigationViewItem Content="Devices" Tag="devices" AutomationProperties.AutomationId="nav-devices"><NavigationViewItem.Icon><SymbolIcon Symbol="Remote" /></NavigationViewItem.Icon></NavigationViewItem>
+        <NavigationViewItem Content="Phone files" Tag="files" AutomationProperties.AutomationId="nav-files"><NavigationViewItem.Icon><SymbolIcon Symbol="Folder" /></NavigationViewItem.Icon></NavigationViewItem>
+        <NavigationViewItem Content="On this computer" Tag="local" AutomationProperties.AutomationId="nav-local"><NavigationViewItem.Icon><SymbolIcon Symbol="Folder" /></NavigationViewItem.Icon></NavigationViewItem>
+        <NavigationViewItem Content="Transfers" Tag="transfers" AutomationProperties.AutomationId="nav-transfers"><NavigationViewItem.Icon><SymbolIcon Symbol="Download" /></NavigationViewItem.Icon></NavigationViewItem>
+        <NavigationViewItem Content="Shared locations" Tag="shares" AutomationProperties.AutomationId="nav-shares"><NavigationViewItem.Icon><SymbolIcon Symbol="Permissions" /></NavigationViewItem.Icon></NavigationViewItem>
+        <NavigationViewItem Content="Activity" Tag="history" AutomationProperties.AutomationId="nav-history"><NavigationViewItem.Icon><SymbolIcon Symbol="Clock" /></NavigationViewItem.Icon></NavigationViewItem>
+      </NavigationView.MenuItems>
+      <Grid>
+        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+        <InfoBar x:Name="Notification" Margin="32,8,32,0" IsOpen="False" IsClosable="True" />
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" HorizontalContentAlignment="Stretch">
+          <StackPanel x:Name="Page" Margin="32,24,32,32" Spacing="20" HorizontalAlignment="Stretch" />
+        </ScrollViewer>
+      </Grid>
+    </NavigationView>
+    <Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="0,1,0,0" Padding="20,12">
+      <Grid ColumnSpacing="16">
+        <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+        <TextBlock x:Name="StatusText" Text="Not connected" TextWrapping="Wrap" />
+        <TextBlock Grid.Column="1" Text="Direct connections · No file relay" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+      </Grid>
+    </Border>
+  </Grid>
+</Window>

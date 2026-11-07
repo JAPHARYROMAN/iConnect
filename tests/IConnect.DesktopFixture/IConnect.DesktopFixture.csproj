@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><PlatformTarget>x64</PlatformTarget><IncludeAttachmentWorker>true</IncludeAttachmentWorker></PropertyGroup>
+  <ItemGroup><ProjectReference Include="../../apps/windows/IConnect.AppModel/IConnect.AppModel.csproj" />
+    <Compile Include="../IConnect.InteropRunner/PreviewFixtures.cs" Link="PreviewFixtures.cs" />
+  </ItemGroup>
+</Project>

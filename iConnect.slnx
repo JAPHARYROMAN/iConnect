@@ -1,0 +1,27 @@
+<Solution>
+  <Folder Name="/apps/" />
+  <Folder Name="/apps/windows/">
+    <Project Path="apps/windows/IConnect.AppModel/IConnect.AppModel.csproj" />
+    <Project Path="apps/windows/IConnect.Attachment.Worker/IConnect.Attachment.Worker.csproj" />
+    <Project Path="apps/windows/IConnect.Connectivity/IConnect.Connectivity.csproj" />
+    <Project Path="apps/windows/IConnect.Desktop/IConnect.Desktop.csproj" />
+    <Project Path="apps/windows/IConnect.Proof/IConnect.Proof.csproj" />
+    <Project Path="apps/windows/IConnect.Preview.Windows/IConnect.Preview.Windows.csproj" />
+    <Project Path="apps/windows/IConnect.Preview.Worker/IConnect.Preview.Worker.csproj" />
+    <Project Path="apps/windows/IConnect.Storage.Windows/IConnect.Storage.Windows.csproj" />
+  </Folder>
+  <Folder Name="/backend/">
+    <Project Path="backend/IConnect.Rendezvous/IConnect.Rendezvous.csproj" />
+  </Folder>
+  <Folder Name="/shared/">
+    <Project Path="shared/IConnect.Core/IConnect.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/IConnect.Attachment.Fixture/IConnect.Attachment.Fixture.csproj" />
+    <Project Path="tests/IConnect.DesktopFixture/IConnect.DesktopFixture.csproj" />
+    <Project Path="tests/IConnect.InteropRunner/IConnect.InteropRunner.csproj" />
+    <Project Path="tests/IConnect.Tests/IConnect.Tests.csproj" />
+    <Project Path="tests/IConnect.Preview.Fixture/IConnect.Preview.Fixture.csproj" />
+    <Project Path="tests/IConnect.Preview.Tests/IConnect.Preview.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,14 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!-- Disposable document fixtures exist only in the separately installed test APK. -->
+        <provider android:name="com.iconnect.proof.TestDocumentsProvider"
+            android:authorities="com.iconnect.proof.test.documents" android:exported="true"
+            android:grantUriPermissions="true" android:permission="android.permission.MANAGE_DOCUMENTS">
+            <intent-filter>
+                <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
+            </intent-filter>
+        </provider>
+        <provider android:name="com.iconnect.proof.FixtureControlProvider"
+            android:authorities="com.iconnect.proof.test.fixtures" android:exported="true" />
+    </application>
+</manifest>

@@ -1,0 +1,16 @@
+<Project>
+  <Target Name="CopyAttachmentWorker" AfterTargets="Build" Condition="'$(IncludeAttachmentWorker)' == 'true'">
+    <ItemGroup>
+      <AttachmentWorkerFiles Include="$(MSBuildThisFileDirectory)apps/windows/IConnect.Attachment.Worker/bin/$(Configuration)/net10.0/win-x64/**/*" />
+    </ItemGroup>
+    <Error Condition="'@(AttachmentWorkerFiles)' == ''" Text="The Windows attachment-check helper was not built." />
+    <Copy SourceFiles="@(AttachmentWorkerFiles)" DestinationFiles="@(AttachmentWorkerFiles->'$(OutDir)AttachmentWorker/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+  <Target Name="PublishAttachmentWorker" AfterTargets="Publish" Condition="'$(IncludeAttachmentWorker)' == 'true'">
+    <ItemGroup>
+      <PublishedAttachmentWorkerFiles Include="$(MSBuildThisFileDirectory)apps/windows/IConnect.Attachment.Worker/bin/$(Configuration)/net10.0/win-x64/**/*" />
+    </ItemGroup>
+    <Error Condition="'@(PublishedAttachmentWorkerFiles)' == ''" Text="The Windows attachment-check helper was not built." />
+    <Copy SourceFiles="@(PublishedAttachmentWorkerFiles)" DestinationFiles="@(PublishedAttachmentWorkerFiles->'$(PublishDir)AttachmentWorker/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

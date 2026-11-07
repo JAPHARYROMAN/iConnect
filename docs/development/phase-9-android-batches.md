@@ -1,0 +1,46 @@
+# Android folder and batch receiving
+
+Implemented and verified 3 November 2026 (Africa/Nairobi). Android now receives selected files/folders from approved computer storage, complementing [Windows folder receiving](phase-8-windows-batches.md). The [full completion audit](completion.md) still contains substantial product, reliability, provider/device and release work.
+
+## Manifest and owner decisions
+
+The Android explorer offers selection boxes for up to 128 items on the current page. **Copy selected files and folders…** builds a local manifest, then asks the owner to review file/folder counts, transferable size, unavailable items and keep-both/skip/fail behavior. No local directories or provider files are created before confirmation. The source pairing generation, live session and selected destination must still match that reviewed plan.
+
+Discovery validates source grant/parent relationships, exact names, metadata versions, duplicate IDs/names, directory pagination and bounds. Invalid/ambiguous trees abort; unsupported names or denied branches remain explicit failed items. Limits match the Windows planner: 4,096 items, 32 source-path components, 2,048 component characters, 256 pages per directory, a 4 MiB manifest and 8 TiB total transferable file bytes. These are limits, not proven workload/throughput claims. Shared response validation also protects ordinary file RPC and rejects malformed descriptors in preparing, ready and failed states.
+
+Each durable batch contains the pinned peer identifier and exact local pairing generation. Re-pairing the same key does not authorize resuming an earlier batch. The controller checks current trust on every source request. Disconnect and activity stop pause batch work; forgetting a computer captures and cancels its existing batch IDs. New source work rebinds session-local references through the same current grant and exact component names, then checks the planned file version and size. Already prepared files retain their own source ticket and expected checksum. No manifest is sent to the coordinator and no wire capability or file-upload endpoint was added.
+
+## Provider-aware destination binding
+
+`SafDestination` keeps the original picker-selected tree and persistent OS permission as the authority for local publication. Created subfolders are recorded as provider document IDs plus actual names; they never become invented picker grants. Before publication, after creation, after writing and after read-back, the adapter checks the complete recorded ancestor path, directory type/capability and names. Moved or renamed parents are refused. Batch and child-job leases retain access independently of the selected destination and remote-sharing grants.
+
+The adapter enumerates bounded destination siblings, chooses an unused name where requested, and requires a newly returned document ID. Existing folders are never merged or rewritten. Directory creation has a durable intent before `createDocument`; a returned folder must have the expected ancestry and no existing children. Files use the existing private receiving/checkpoint/hash engine, then publish into the verified parent and pass full destination SHA-256 read-back before completion. The extended file journal keeps nested parent bindings, a batch owner ID and collision policy; old single-file journals still load with their original root destination.
+
+Android document providers do not supply Windows-style locked directory handles or a universal atomic no-replace operation. These checks rely on a compatible provider's document-ID, creation and ancestry contracts. They cannot prove a malicious provider honest or turn a provider's whole tree into an atomic filesystem snapshot. Unsupported providers fail closed; partial/uncertain copies are preserved. Physical provider compatibility and concurrent provider/local-owner mutation need broader testing.
+
+## Recovery and availability
+
+Eight batch records and two batch workers share the receiver's overall two-file limit. A child ID is saved before it is enqueued. The batch folds a completed file's receipt durably before removing its child record. Unstarted children can rebind source references after a session change. Saved items are preserved during pause and cancel; cancellation drains work, deletes only owned private partials and leaves provider copies/directories untouched. Terminal record removal is unavailable while child cleanup remains. Item results are paged in groups of 50 and distinguish completed, skipped, failed and interrupted outcomes. An overall completed state requires every item to have completed.
+
+An uncertain directory is never adopted automatically after a lost create receipt or interrupted identity save. **Review / skip uncertain folder…** keeps that possible folder and its contents, marks the branch skipped, and permits other selected work to resume. Interrupted file publication first checks the recorded copy without rewriting it. A lost or incomplete copy requires the explicit **Save another copy…** decision, preserving earlier copies. Verified staged data can be checked/published without additional source reads, while pending source data still requires the same current pairing and connection.
+
+Batches require foreground availability. Leaving the activity pauses their orchestration and active child work. A batch child cannot receive the single-file background continuation permission, and it is hidden from independent single-file transfer controls. There is no inferred batch background hosting or automatic resume after process death. Reopen, reconnect where source data is needed, and resume deliberately.
+
+Private journals are bounded to 8 MiB per batch, with reserved metadata headroom before scheduling another item. Long provider IDs, record limits, private staging space and the existing 128-child file-queue bound can stop a large/failed workload early. Those outcomes require cleanup or smaller selections; large/full-queue performance and queue-repair UX remain unproven.
+
+## Verification
+
+Debug app/test APK assembly, four JVM rules tests and lint pass. Lint reports **zero errors and 35 advisories**, including existing style/dependency advice and new URI/KTX suggestions. The complete Android instrumentation suite passed **52 tests in 11.138 seconds**. Nine new tests cover real nested provider publication, empty directories, preserving existing content, file/folder collision decisions, receiver restart and pending-source rebinding, checkpoint resume, moved ancestors, old pairing rejection, lost folder receipts with explicit skip, lost file receipts with explicit new copy, malformed manifests and malformed descriptors across all download states. Existing trust, URI ownership, source tickets, receiving, backup, Keystore and activity tests also pass.
+
+`BatchInteropTest` uses the actual Compose activity, app-scoped controller, authenticated native Windows source, private staging and document provider. The final run passed in **31.707 seconds**:
+
+1. Both fixture devices compared and signed the same pairing code. Android selected a Windows folder and a separate file, reviewed a six-item plan and started the copy.
+2. A gated binary source kept the batch active. Android refused single-file background authorization for that child, then stopped the activity. The batch paused, its child stopped, coordination disconnected and no transfer notification remained.
+3. Android reopened and reconnected through a new authenticated native session. The held file and still-unstarted items resumed using their recorded ownership and current source references.
+4. Android reported **`REAL_ANDROID_FOLDER_BATCH_VERIFIED 6 items 2097249 bytes`**. Every large-file byte matched; SHA-256 was `2ce3172ab5811f22d8e2d9d45d2c71397e38a636b4a5fd5a09517b7454fb2368`. Nested text matched, the empty directory remained empty, all six items completed and folded child records were removed.
+
+The earlier run also passed in 37.421 seconds. The existing background receiving/publication fixture passed again in **35.943 seconds**, including browsing denial, notification pause and exact provider-saved bytes. No Windows production code changed; its test runner builds with zero warnings/errors. These remain local emulator/fixture results. Activity/controller execution does not establish full touch, visual or accessibility coverage of every new dialog and recovery path.
+
+To reproduce, follow [interop setup](verification.md#reproduce-the-interoperability-check) using `com.iconnect.proof.BatchInteropTest`. Compare/approve both codes, wait for `PAIRED` and connect Windows. After `BATCH_FOREGROUND_PAUSE_VERIFIED` / `RECONNECT_FOR_BATCH`, run `release-background` and `connect` again. Require `REAL_ANDROID_FOLDER_BATCH_VERIFIED` and `OK (1 test)`. All automated approval and provider controls exist only in disposable test fixtures.
+
+Full crash/commit-point and provider mutation matrices, disk exhaustion and long IDs, queue repair, large/full manifests, expired source tickets, cross-page selection, real touch/accessibility tests, physical phones, independent networks, >4 GiB files, safe management operations, distribution/signing and independent security review remain outstanding.

@@ -1,0 +1,18 @@
+# Document build intermediates
+/tmp/pdfs/
+__pycache__/
+
+# Build output and local device state
+**/bin/
+**/obj/
+**/build/
+**/.gradle/
+**/.kotlin/
+**/local.properties
+.local/
+.tools/
+TestResults/
+*.user
+*.pfx
+*.jks
+*.keystore

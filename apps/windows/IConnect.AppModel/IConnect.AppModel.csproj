@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><PlatformTarget>x64</PlatformTarget></PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="IConnect.Tests" />
+    <ProjectReference Include="../IConnect.Connectivity/IConnect.Connectivity.csproj" />
+    <ProjectReference Include="../IConnect.Storage.Windows/IConnect.Storage.Windows.csproj" />
+  </ItemGroup>
+</Project>

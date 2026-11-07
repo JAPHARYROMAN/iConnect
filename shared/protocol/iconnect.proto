@@ -1,0 +1,300 @@
+syntax = "proto3";
+package iconnect.v1;
+option csharp_namespace = "IConnect.Protocol";
+option java_package = "com.iconnect.protocol";
+option java_multiple_files = true;
+
+// One binary WebSocket or DataChannel message contains one bounded Frame.
+message Frame {
+  uint32 version = 1;
+  string kind = 2;
+  bytes payload = 3;
+}
+message Challenge { bytes nonce = 1; }
+message Identity { bytes public_key = 1; string name = 2; }
+message Registration { Identity identity = 1; bytes signature = 2; bool signal_status = 3; }
+message Notice { string message = 1; repeated string capabilities = 2; }
+// Optional authenticated-coordinator observation, never direct authentication or file authority.
+// Sent only after presence-v1 is advertised in the registered notice.
+message PresenceUpdate { string request_id = 1; bool enabled = 2; repeated string peer_ids = 3; }
+message PeerAvailability { string peer_id = 1; bool available = 2; }
+message PresenceSnapshot { string request_id = 1; repeated PeerAvailability peers = 2; }
+message Invitation { string token = 1; int64 expires_at = 2; }
+message Claim { string token = 1; bytes host_public_key = 2; }
+message Pairing {
+  string transaction_id = 1;
+  string token = 2;
+  Identity host = 3;
+  Identity guest = 4;
+  int64 expires_at = 5;
+  bytes host_approval = 6;
+  bytes guest_approval = 7;
+}
+message Approval { string transaction_id = 1; bytes signature = 2; bool approved = 3; }
+message Signal {
+  string session_id = 1;
+  string from_device = 2;
+  string to_device = 3;
+  string kind = 4;
+  string body = 5;
+  string mid = 6;
+  bytes nonce = 7;
+  int64 created_at = 8;
+  bytes signature = 9;
+}
+// Optional coordinator failure notice; never a peer authentication or availability proof.
+message SignalUnavailable { string session_id = 1; string peer_id = 2; }
+message SessionHello { string device_id = 1; bytes nonce = 2; repeated string capabilities = 3; }
+message SessionProof { bytes signature = 1; }
+message TransferStart {
+  string transfer_id = 1;
+  string name = 2;
+  int64 size = 3;
+  bytes sha256 = 4;
+}
+message TransferChunk { string transfer_id = 1; int64 offset = 2; bytes data = 3; }
+message TransferAck { string transfer_id = 1; int64 offset = 2; }
+message TransferFinish { string transfer_id = 1; }
+message TransferResult { string transfer_id = 1; bytes sha256 = 2; }
+
+// Files are addressed with host-issued opaque IDs, never remote absolute paths.
+enum FileOperation {
+  FILE_OPERATION_UNSPECIFIED = 0;
+  LIST_ROOTS = 1;
+  LIST_DIRECTORY = 2;
+  GET_METADATA = 3;
+  READ_RANGE = 4;
+  SEARCH = 5;
+  CREATE_DIRECTORY = 6;
+  RENAME = 7;
+  COPY = 8;
+  MOVE = 9;
+  DELETE = 10;
+  RESTORE = 11;
+  PREPARE_DOWNLOAD = 12;
+  DOWNLOAD_STATUS = 13;
+  DOWNLOAD_READ = 14;
+  RELEASE_DOWNLOAD = 15;
+  CLOSE_LISTING = 16; // Cleanup only: matching peer, node and continuation; returns no file data.
+  MUTATION_STATUS = 17;
+  MUTATION_CONTEXT = 18;
+  LIST_MUTATIONS = 19;
+  RECOVERY_CONTEXT = 20;
+  LIST_DELETED = 21;
+  RECOVERY_STATUS = 22;
+  UPLOAD_CONTEXT = 23;
+  PREPARE_UPLOAD = 24;
+  UPLOAD_STATUS = 25;
+  UPLOAD_WRITE = 26;
+  FINISH_UPLOAD = 27;
+  CANCEL_UPLOAD = 28;
+  LIST_UPLOADS = 29;
+  RESOLVE_CREATED_DIRECTORY = 30;
+  UPLOAD_BATCH_CONTEXT = 31;
+  BEGIN_UPLOAD_BATCH = 32;
+  WRITE_UPLOAD_MANIFEST = 33;
+  SEAL_UPLOAD_BATCH = 34;
+  UPLOAD_BATCH_STATUS = 35;
+  CANCEL_UPLOAD_BATCH = 36;
+  CREATE_BATCH_DIRECTORY = 37;
+  UPLOAD_BATCH_ITEM_STATUS = 38;
+  PREPARE_BATCH_FILE = 39;
+  WRITE_BATCH_FILE = 40;
+  FINISH_BATCH_FILE = 41;
+  CANCEL_BATCH_FILE = 42;
+  FINISH_UPLOAD_BATCH = 43;
+  STOP_UPLOAD_BATCH = 44;
+  VERIFY_PUBLISHED_UPLOAD = 45;
+}
+enum FileStatus {
+  FILE_STATUS_OK = 0;
+  ACCESS_DENIED = 1;
+  NOT_FOUND = 2;
+  CONFLICT = 3;
+  UNSUPPORTED = 4;
+  INVALID_REQUEST = 5;
+  RESOURCE_EXHAUSTED = 6;
+  IO_ERROR = 7;
+  STALE_REFERENCE = 8;
+}
+message FileEntry {
+  string id = 1;
+  string grant_id = 2;
+  string parent_id = 3;
+  string name = 4;
+  bool is_directory = 5;
+  int64 size = 6;
+  int64 modified_at = 7;
+  uint32 permissions = 8;
+  string version = 9;
+  bool is_root = 10;
+}
+message FileRequest {
+  string request_id = 1;
+  FileOperation operation = 2;
+  string node_id = 3;
+  string destination_id = 4;
+  string name = 5;
+  string expected_version = 6;
+  string continuation = 7;
+  int64 offset = 8;
+  uint32 length = 9;
+  string query = 10;
+  string transfer_id = 11;
+  string mutation_id = 12;
+  string mutation_epoch = 13;
+  string deleted_id = 14;
+  UploadInfo upload = 15;
+  bytes content = 16;
+  UploadBatchHeader batch_header = 17;
+  optional uint32 batch_item_index = 18;
+}
+message FileResponse {
+  string request_id = 1;
+  FileStatus status = 2;
+  string message = 3;
+  repeated FileEntry entries = 4;
+  string continuation = 5;
+  bytes content = 6;
+  bool end_of_file = 7;
+  DownloadInfo download = 8;
+  MutationInfo mutation = 9;
+  repeated MutationInfo mutations = 10;
+  string mutation_epoch = 11;
+  repeated DeletedInfo deleted_items = 12;
+  UploadInfo upload = 13;
+  repeated UploadInfo uploads = 14;
+  UploadBatchReceipt batch = 15;
+  UploadBatchItemReceipt batch_item = 16;
+  PublishedUploadCheck published_upload_check = 17;
+}
+message PublishedUploadCheck {
+  string challenge = 1;
+  bool verified = 2;
+}
+enum UploadPhase {
+  UPLOAD_PENDING = 0;
+  UPLOAD_RECEIVING = 1;
+  UPLOAD_VERIFYING = 2;
+  UPLOAD_FINALIZING = 3;
+  UPLOAD_COMPLETED = 4;
+  UPLOAD_CANCELED = 5;
+  UPLOAD_REVIEW = 6;
+  UPLOAD_SKIPPED = 7;
+}
+enum UploadCollision { UPLOAD_FAIL = 0; UPLOAD_KEEP_BOTH = 1; UPLOAD_SKIP = 2; }
+message UploadInfo {
+  string id = 1;
+  string name = 2;
+  int64 size = 3;
+  bytes sha256 = 4;
+  int64 offset = 5;
+  UploadPhase phase = 6;
+  UploadCollision collision = 7;
+  string final_name = 8;
+  string message = 9;
+}
+// Outgoing-batch contracts. No live RPC/capability is enabled until the receiver
+// durably binds this intent to its current owner, peer and destination identity.
+message UploadBatchItem {
+  sint32 parent = 1; // -1 for a selected root; otherwise an earlier directory index.
+  string name = 2;
+  bool is_directory = 3;
+  int64 size = 4;
+  bytes sha256 = 5;
+  string error = 6; // Explicit source issue; no destination effect is permitted.
+}
+message UploadBatchManifest {
+  repeated UploadBatchItem items = 1;
+  UploadCollision collision = 2;
+}
+message UploadBatchHeader {
+  string id = 1;
+  string epoch = 2;
+  string grant_id = 3;
+  uint32 encoded_length = 4;
+  uint32 item_count = 5;
+  int64 total_bytes = 6;
+  bytes sha256 = 7;
+}
+enum UploadBatchPlanPhase {
+  UPLOAD_PLAN_RECEIVING = 0;
+  UPLOAD_PLAN_READY = 1;
+  UPLOAD_PLAN_CANCELED = 2;
+  UPLOAD_PLAN_STOPPING = 3;
+  UPLOAD_PLAN_STOPPED = 4;
+  UPLOAD_PLAN_COMPLETED = 5;
+}
+message UploadBatchReceipt {
+  UploadBatchHeader header = 1;
+  UploadBatchPlanPhase phase = 2;
+  uint32 manifest_offset = 3; // Volatile assembly progress; fetch status after reconnect.
+  string message = 4;
+  bool effects_started = 5; // Durable intent precedes the first destination effect.
+  bytes item_outcomes = 6; // Terminal plans only: one UploadBatchItemPhase byte per manifest item.
+}
+enum UploadBatchItemPhase {
+  BATCH_ITEM_PENDING = 0;
+  BATCH_ITEM_SUCCEEDED = 1;
+  BATCH_ITEM_SKIPPED = 2;
+  BATCH_ITEM_FAILED = 3;
+  BATCH_ITEM_REVIEW = 4;
+}
+message UploadBatchItemReceipt {
+  UploadBatchHeader header = 1;
+  uint32 index = 2;
+  string id = 3;
+  string resulting_name = 4;
+  UploadBatchItemPhase phase = 5;
+  string message = 6;
+  bool is_directory = 7;
+}
+enum DeletedState {
+  DELETE_PENDING = 0;
+  DELETED_STORED = 1;
+  RESTORE_PENDING = 2;
+  DELETED_RESTORED = 3;
+  DELETED_REVIEW = 4;
+}
+message DeletedInfo {
+  string id = 1;
+  string name = 2;
+  bool is_directory = 3;
+  int64 size = 4;
+  int64 deleted_at = 5;
+  DeletedState state = 6;
+  string message = 7;
+  string restored_name = 8;
+  bool can_restore = 9;
+}
+enum MutationPhase {
+  CHANGE_PENDING = 0;
+  CHANGE_SUCCEEDED = 1;
+  CHANGE_FAILED = 2;
+  CHANGE_REVIEW = 3;
+}
+message MutationInfo {
+  string id = 1;
+  FileOperation operation = 2;
+  MutationPhase phase = 3;
+  FileStatus status = 4;
+  string message = 5;
+  string resulting_name = 6;
+  int64 created_at = 7;
+  string requested_name = 8;
+}
+enum DownloadState {
+  DOWNLOAD_PREPARING = 0;
+  DOWNLOAD_READY = 1;
+  DOWNLOAD_FAILED = 2;
+}
+message DownloadInfo {
+  string id = 1;
+  string name = 2;
+  int64 size = 3;
+  string version = 4;
+  bytes sha256 = 5;
+  DownloadState state = 6;
+  int64 expires_at = 7;
+  int64 prepared_bytes = 8;
+}

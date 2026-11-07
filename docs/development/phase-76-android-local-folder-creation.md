@@ -1,0 +1,21 @@
+# Android offline folder creation
+
+The Android local explorer can create a folder in its current location without a paired device or coordinator. Open a local folder, enter a name, select the same root in Android's system picker, and confirm the exact parent and requested name. The picker grants a separate read/write lease for one operation. Canceling the picker or review leaves existing folders and sharing approvals alone.
+
+The review binds the selected local shortcut, root identity/name, exact parent identities/names and requested name. It expires within five minutes and is withdrawn when the app hides or closes. An already dispatched provider call can finish after withdrawal; its result requires inspection. One-operation access is released after completion, cancellation or withdrawal, and unused creation leases are reconciled on restart without releasing access held by other purposes. Receipts and local browsing shortcuts cannot authorize provider writes.
+
+The app checks the current OS permission and parent ancestry, bounds the sibling listing, refuses an existing case-insensitive name, and saves intent before calling the provider. A success receipt requires a new empty directory under the reviewed parent. A lost reply, invalid provider result or failed completion write retains uncertainty. Reopening a pending receipt never replays the provider call. SAF validation cannot undo effects already performed by the provider. Portable safe rename, move and deletion remain unsupported when the provider cannot supply the required guarantees.
+
+The local panel pages up to 128 receipts. Removing a receipt or preserving/removing damaged metadata leaves provider contents untouched. Unreadable or ambiguous history blocks creation until reviewed. General local activity records fixed action/outcome labels without folder names, provider identifiers or receipt IDs; the detailed receipts remain private on the phone.
+
+## Verification
+
+The reviewed debug, unsigned release, instrumentation, JVM and lint build passes in **3m 30s**. All **84 JVM tests** pass with zero failures/errors; lint has **zero errors and 69 existing warnings**. The initial lint failure was corrected by observing local browser state during composition. All **14 provider/storage tests** pass on both initial and reviewed builds, covering permission separation, exact roots, collisions, parent changes, expiry, foreground withdrawal, lost and invalid replies, journal faults, metadata recovery, quota reuse and exclusive ownership. An injected failure after provider creation preserves the pending receipt and one provider result; reopen requires review and never retries.
+
+The first two 15-case runs passed all provider cases but exposed naming-dialog readiness and picker navigation assumptions in the new UI test. A later isolated UI run found a restricted device-storage root with disabled confirmation. The test now requires the exact naming dialog, entered text, fixture root and enabled confirmation control. The test-only rebuilds pass in **1m 40s** and **1m 32s** with the reviewed production APK hash unchanged. The final expanded **39-case native focus** passes in **120.427s**, including all 15 new cases and 24 related local browser, picker, SAF and activity cases. The new UI journey exercises actual system picker cancellation, reviewed cancellation, confirmed creation and receipt-only removal.
+
+All **499 selected Android cases** pass in **1,465.206s (24m 25s)** with the same eight exclusions, 499 passing status codes and zero failing status codes. Built and installed application/test APK hashes match before/after and match each other. All eight Windows DLL hashes match the prior baseline; Windows GUI automation stays stopped after Escape. The owned emulator helper has exited and its serial is absent. The standalone coordinator is not launched. [Physical step 50](physical-network-validation.md) is prepared for later user execution.
+
+## Remaining work
+
+Physical device/provider and complete touch/accessibility, clock/lifecycle/power/crash/upgrade, full-capacity/performance and recovery matrices remain open. This local creation workflow does not establish portable Android rename, move or deletion, verified cross-volume/device moves or release readiness. See the [completion audit](completion.md).

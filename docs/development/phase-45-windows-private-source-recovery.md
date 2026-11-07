@@ -1,0 +1,39 @@
+# Windows private batch source recovery
+
+Windows now provides owner-reviewed recovery of a blocked private batch snapshot store. It preserves the complete metadata and payload tree under an app-private sibling archive, then opens an empty preparation store. It does not adopt unreadable ownership records, restore archived snapshots as sending instructions, contact a receiver, or change sharing approvals.
+
+## Preservation and retained sending controls
+
+The controller pauses batch preparation and sending and waits for both managers to become idle. The sender's own gate guards source reset admission and confirmation against starting a sender worker between review and reset. The source store also refuses recovery while preparation or verified file readers remain active.
+
+A single-use review binds the current local owner generation, root directory identity and complete bounded inventory, including native file versions, child directory identities, file/folder counts, byte count and unrecognized-entry count. Reviews expire after two minutes on a monotonic clock. Confirmation rechecks that state and holds a profile-level lease while releasing the inner store lease, preserving the entire directory by a handle-relative same-volume rename and opening a fresh directory and lease.
+
+The inventory supports the store's normal layout: regular top-level records and a single directory level of regular payload, manifest and receipt files. Unknown regular files and flat directories are preserved and counted explicitly. Additional nesting, redirects, hard links, excessive entry counts, excessive folder counts and excessive logical bytes are refused for local investigation. Native parent handles and original child directory identities constrain traversal during removal.
+
+Retained sender records remain in their separate store. Their original receiver headers, item attempts, result metadata and stop controls remain available when that sender state and pairing are valid. A resumed file send cannot use the preserved sources: archived ownership is never adopted as a replacement live snapshot. The native dialog explains that those private sources are no longer available for sending or resuming and that receiver copies may already exist. A real receiving-store case verifies that the retained original plan can still be stopped after private-source recovery without starting another admission.
+
+## Storage accounting and additional-copy decisions
+
+Preserving snapshots does not release their outgoing storage reservation. Every archive is inventoried at startup, before new batch preparation, and during reviewed recovery and cleanup. Its logical file bytes are charged once against the aggregate profile quota and conservatively against every peer quota because unreadable ownership cannot safely attribute those bytes to a peer. They are already materialized, so they do not also count as pending writes. Current single-file and batch reservations continue to share the same admission lock and worker pool.
+
+If an inventory cannot be established, new outgoing growth remains blocked. Existing retained reservations are also kept when a resource participant closes. Reopening reconstructs preserved bytes from the actual filesystem. Cleanup updates the reservation only after files have actually been deleted; interrupted or changed-entry cleanup retains remaining bytes.
+
+Before preserving a store, confirmation creates and flushes an empty, create-only profile marker for additional-copy review. It stays outside both the live snapshot store and preserved archives. Its presence requires future private batches to retain the additional-copy flag, including after every preserved archive has been removed and after restart. Interrupted marker creation remains conservative. Archive cleanup cannot clear this history. Coordinated rollback of the complete profile remains a separate unresolved gate.
+
+## Inspection and separate cleanup
+
+The Transfers page offers review, cancel and preserve/reset actions, lists up to eight preserved source stores, and exposes a read-only local inventory in pages of 50 entries. It shows the archive location and unrecognized-entry counts. A separate owner review is required to permanently remove an archive.
+
+Removal follows the reviewed postorder inventory, processes at most 64 files or directories per call, verifies each file's native version and each parent directory's original identity, and removes a directory only when empty. New or changed files are kept for fresh review. Current private snapshots, sender records, originals and received files remain outside that scope. Leaving the Transfers page stops the loop after the current bounded call. Current-process progress can be continued explicitly; after restart, the remaining entries require fresh review. A changed owner generation also ends the old deletion authorization. Peer revocation does not prevent local owner recovery.
+
+## Verification and remaining gates
+
+The final Release solution build, including the native WinUI page, passed with **zero warnings and errors in 8.74 seconds**. Evidence: `.tools/phase45-windows-verified-build.log`.
+
+The final focused selection passed **19 cases in 4 seconds**, covering damaged and missing parent records, damaged manifests, missing child receipts and payloads, uncommitted parent records, actual payload/receipt/original/receiver preservation, usable original receiver stop controls, forged/stale/changed-owner reviews, active work and reader refusal, changed/new archive files, bounded deletion, restart accounting, persistent copy review after full archive removal, hard links and unexpected nested folders, archive admission limits, and the real desktop controller's offline workflow. It also verifies that an owner-added child named `owner.lock` is counted as a preserved file; only the live root lease is omitted from the reset dialog's file total. Two resource-boundary cases check conservative per-peer and profile quota enforcement across distinct peers, participant close/reopen and absence of double pending-byte charging. Evidence: `.tools/phase45-windows-verified-source.log`.
+
+The final broad regression passed **438 cases in 2 minutes 37 seconds** on those same binaries, excluding the same three separate 4,096-item capacity cases as phase 43. It includes all 18 distinct new cases added for this phase. Evidence: `.tools/phase45-windows-verified-main.log`. The receiver fixtures use the existing accepting attachment-check fixture; native attachment-checker capacity remains a separate gate.
+
+Android code was unchanged and was not rerun for this Windows-only phase. Its verification at this point was the [phase-44](phase-44-android-sender-store-recovery.md) 270-case device / 39-case JVM result. The subsequent [Android private-source recovery phase](phase-46-android-private-source-recovery.md) implements the matching flow and also hardens both loaders for restoration of an older source store while its independent copy-review marker survives.
+
+Windows UI automation remains stopped following the user's physical Escape. Compilation and controller/domain tests do not establish a Windows visual or accessibility pass. Full-capacity archive review/removal performance, actual process/power-loss durability, supported filesystem/storage matrices, coordinated rollback, independent security review, Android private-source recovery, unidentified receiver-part management, encrypted cross-platform workflows and release gates remain in the [completion audit](completion.md). Archive inventory rescans are bounded but can be expensive at the largest supported store size; this phase does not establish their latency. Batch support remains unadvertised. The [physical-network kit](physical-network-validation.md) remains prepared for the user to run after implementation.

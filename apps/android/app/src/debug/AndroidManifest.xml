@@ -1,0 +1,8 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+    <!-- Debug transport is additionally restricted to emulator/loopback origins in Rules. -->
+    <application android:usesCleartextTraffic="true" tools:replace="android:usesCleartextTraffic">
+        <!-- Match the main declaration: lint also inspects this variant's source manifest. -->
+        <service android:name=".TransferService" android:exported="false" android:foregroundServiceType="dataSync" />
+        <service android:name=".BlockedPreviewService" android:exported="false" android:isolatedProcess="true" android:process=":preview_test" />
+    </application>
+</manifest>

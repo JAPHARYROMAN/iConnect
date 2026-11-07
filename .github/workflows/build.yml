@@ -1,0 +1,49 @@
+name: Build and test
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.4xx'
+      - run: dotnet restore iConnect.slnx --locked-mode
+      - run: dotnet build iConnect.slnx --no-restore --configuration Release
+      - name: Windows main regression
+        run: dotnet test tests/IConnect.Tests/IConnect.Tests.csproj --no-build --no-restore --configuration Release --filter "FullyQualifiedName!~Full_4096_item_file_plan&FullyQualifiedName!~Full4096ItemPrivateSnapshot&FullyQualifiedName!~Full4096ItemSender" --logger "console;verbosity=minimal"
+      - name: Windows receiver file capacity
+        run: dotnet test tests/IConnect.Tests/IConnect.Tests.csproj --no-build --no-restore --configuration Release --filter "FullyQualifiedName~BatchPlanAdmissionTests.Full_4096_item_file_plan" --logger "console;verbosity=minimal"
+      - name: Windows private snapshot capacity
+        run: dotnet test tests/IConnect.Tests/IConnect.Tests.csproj --no-build --no-restore --configuration Release --filter "FullyQualifiedName~BatchSourceTests.Full4096ItemPrivateSnapshot" --logger "console;verbosity=minimal"
+      - name: Windows private batch sender capacity
+        run: dotnet test tests/IConnect.Tests/IConnect.Tests.csproj --no-build --no-restore --configuration Release --filter "FullyQualifiedName~BatchSenderTests.Full4096ItemSender" --logger "console;verbosity=minimal"
+      - name: Windows isolated previews
+        run: dotnet test tests/IConnect.Preview.Tests/IConnect.Preview.Tests.csproj --no-build --no-restore --configuration Release --logger "console;verbosity=minimal"
+      - name: Verify unpackaged desktop publish assets
+        shell: pwsh
+        run: |
+          $destination = Join-Path $env:RUNNER_TEMP 'iconnect-desktop'
+          dotnet publish apps/windows/IConnect.Desktop/IConnect.Desktop.csproj -c Release --no-build --no-restore -o $destination
+          if ($LASTEXITCODE -ne 0) { throw 'Desktop publish failed.' }
+          foreach ($relative in @('App.xbf', 'MainWindow.xbf', 'IConnect.Desktop.pri', 'libDatachannel/datachannel.dll', 'PreviewWorker/IConnect.Preview.Worker.exe', 'PreviewWorker/coreclr.dll', 'PreviewWorker/WinRT.Runtime.dll', 'AttachmentWorker/IConnect.Attachment.Worker.exe', 'AttachmentWorker/coreclr.dll')) {
+            if (-not (Test-Path -LiteralPath (Join-Path $destination $relative) -PathType Leaf)) { throw "Missing published asset: $relative" }
+          }
+  android:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/android
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+      - run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+      - run: bash gradlew :app:assembleDebug :app:assembleDebugAndroidTest :app:assembleRelease :app:testDebugUnitTest :app:lintDebug --no-daemon

@@ -1,0 +1,29 @@
+[Unit]
+Description=iConnect rendezvous
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=exec
+User=iconnect-rendezvous
+Group=iconnect-rendezvous
+WorkingDirectory=/opt/iconnect-rendezvous
+Environment=DOTNET_ENVIRONMENT=Production
+Environment=Kestrel__Endpoints__Public__Url=https://0.0.0.0:8443
+Environment=Kestrel__Endpoints__Public__Certificate__Path=%d/certificate.pem
+Environment=Kestrel__Endpoints__Public__Certificate__KeyPath=%d/private-key.pem
+EnvironmentFile=/etc/iconnect-rendezvous/host.env
+LoadCredential=certificate.pem:/etc/iconnect-rendezvous/certificate.pem
+LoadCredential=private-key.pem:/etc/iconnect-rendezvous/private-key.pem
+ExecStart=/usr/bin/dotnet /opt/iconnect-rendezvous/IConnect.Rendezvous.dll
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=35s
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target

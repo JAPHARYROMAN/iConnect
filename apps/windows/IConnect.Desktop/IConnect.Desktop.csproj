@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <IncludeAttachmentWorker>true</IncludeAttachmentWorker>
+    <Version Condition="'$(IConnectDesktopVersion)' == ''">0.2.0-dev</Version>
+    <Version Condition="'$(IConnectDesktopVersion)' != ''">$(IConnectDesktopVersion)</Version>
+    <Product>iConnect</Product>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+    <PlatformTarget>x64</PlatformTarget>
+    <Platforms>x64</Platforms>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <UseWinUI>true</UseWinUI>
+    <WinUISDKReferences>false</WinUISDKReferences>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <SelfContained>true</SelfContained>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../IConnect.Connectivity/IConnect.Connectivity.csproj" />
+    <ProjectReference Include="../IConnect.Storage.Windows/IConnect.Storage.Windows.csproj" />
+    <ProjectReference Include="../IConnect.AppModel/IConnect.AppModel.csproj" />
+    <ProjectReference Include="../IConnect.Preview.Windows/IConnect.Preview.Windows.csproj" />
+    <ProjectReference Include="../IConnect.Preview.Worker/IConnect.Preview.Worker.csproj" ReferenceOutputAssembly="false" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7175" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.6.4" />
+    <PackageReference Include="QRCoder" Version="1.8.1" />
+    <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+  <Target Name="CopyPreviewWorker" AfterTargets="Build">
+    <ItemGroup>
+      <PreviewWorkerFiles Include="../IConnect.Preview.Worker/bin/$(Configuration)/net10.0-windows10.0.26100.0/win-x64/**/*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(PreviewWorkerFiles)" DestinationFiles="@(PreviewWorkerFiles->'$(OutDir)PreviewWorker/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+  <Target Name="PublishPreviewWorker" AfterTargets="Publish">
+    <ItemGroup>
+      <PublishedPreviewWorkerFiles Include="../IConnect.Preview.Worker/bin/$(Configuration)/net10.0-windows10.0.26100.0/win-x64/**/*" />
+      <!-- The unpackaged WinUI build emits XBF/PRI outside the SDK publish item graph. -->
+      <PublishedXamlFiles Include="$(OutDir)*.xbf;$(OutDir)$(AssemblyName).pri" />
+    </ItemGroup>
+    <Copy SourceFiles="@(PublishedPreviewWorkerFiles)" DestinationFiles="@(PublishedPreviewWorkerFiles->'$(PublishDir)PreviewWorker/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(PublishedXamlFiles)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

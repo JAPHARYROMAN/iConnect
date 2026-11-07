@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><PlatformTarget>x64</PlatformTarget><IncludeAttachmentWorker>true</IncludeAttachmentWorker></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../apps/windows/IConnect.Connectivity/IConnect.Connectivity.csproj" />
+    <ProjectReference Include="../../apps/windows/IConnect.Storage.Windows/IConnect.Storage.Windows.csproj" />
+  </ItemGroup>
+</Project>

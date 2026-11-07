@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net10.0": {
+      "QRCoder": {
+        "type": "Direct",
+        "requested": "[1.8.1, )",
+        "resolved": "1.8.1",
+        "contentHash": "aGfRFpU/IPexAtEOEXCNxC3fMCAqgn6kqALRvXt6LxVAW0VolSDGHiyrY+o2CJgTITOsMpsrsDi7svMJaJ9Vfg==",
+        "dependencies": {
+          "System.Drawing.Common": "6.0.0"
+        }
+      },
+      "Google.Protobuf": {
+        "type": "Transitive",
+        "resolved": "3.33.1",
+        "contentHash": "RztiFmX9aOWDwfhxFzx/nS4fjs4DX7ZC7/XBEBl56k15lPGBftvbSwZkeo1mMCJHrNp1kK5iQYrFXB4MqCmBCA=="
+      },
+      "MediaToolkit.WebRtc.Native.win-x64": {
+        "type": "Transitive",
+        "resolved": "0.24.6.1",
+        "contentHash": "wdGwTGJRzcj47RPl4xg2yxUQSJ8L1SE4CPRYM/+Ak1S08BahYrvGqcMCmdgn3qQMQ89cO3L3kXikH+aIy/D9eA=="
+      },
+      "Microsoft.Win32.SystemEvents": {
+        "type": "Transitive",
+        "resolved": "6.0.0",
+        "contentHash": "hqTM5628jSsQiv+HGpiq3WKBl2c8v1KZfby2J6Pr7pEPlK9waPdgEO6b8A/+/xn/yZ9ulv8HuqK71ONy2tg67A=="
+      },
+      "System.Drawing.Common": {
+        "type": "Transitive",
+        "resolved": "6.0.0",
+        "contentHash": "NfuoKUiP2nUWwKZN6twGqXioIe1zVD0RIj2t976A+czLHr2nY454RwwXs6JU9Htc6mwqL6Dn/nEL3dpVf2jOhg==",
+        "dependencies": {
+          "Microsoft.Win32.SystemEvents": "6.0.0"
+        }
+      },
+      "iconnect.connectivity": {
+        "type": "Project",
+        "dependencies": {
+          "IConnect.Core": "[1.0.0, )",
+          "IConnect.Storage.Windows": "[1.0.0, )",
+          "MediaToolkit.WebRtc.Native.win-x64": "[0.24.6.1, )"
+        }
+      },
+      "iconnect.core": {
+        "type": "Project",
+        "dependencies": {
+          "Google.Protobuf": "[3.33.1, )"
+        }
+      },
+      "iconnect.storage.windows": {
+        "type": "Project",
+        "dependencies": {
+          "IConnect.Core": "[1.0.0, )"
+        }
+      }
+    }
+  }
+}
