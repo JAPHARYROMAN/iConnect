@@ -8,6 +8,8 @@
         android:targetPackage="com.iconnect.proof" android:functionalTest="true" android:handleProfiling="false" />
     <instrumentation android:name="com.iconnect.proof.NativeUploadProbe"
         android:targetPackage="com.iconnect.proof" android:functionalTest="true" android:handleProfiling="false" />
+    <instrumentation android:name="com.iconnect.proof.NativeBatchProbe"
+        android:targetPackage="com.iconnect.proof" android:functionalTest="true" android:handleProfiling="false" />
     <application>
         <!-- Disposable document fixtures exist only in the separately installed test APK. -->
         <provider android:name="com.iconnect.proof.TestDocumentsProvider"

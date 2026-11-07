@@ -17,14 +17,15 @@ var run = options["--run"];
 var role = options["--role"];
 var expectedNative = options["--native-sha"];
 var suite = options.GetValueOrDefault("--suite", "frames");
+var batchSuite = suite is "batches" or "blind-batches";
 if (!Regex.IsMatch(run, "\\A[A-Za-z0-9_-]{43}\\z") || role is not ("windows" or "android") ||
-    !Regex.IsMatch(expectedNative, "\\A[a-f0-9]{64}\\z") || suite is not ("frames" or "uploads")) throw new ArgumentException("Invalid fixture options.");
+    !Regex.IsMatch(expectedNative, "\\A[a-f0-9]{64}\\z") || suite is not ("frames" or "uploads" or "batches" or "blind-batches")) throw new ArgumentException("Invalid fixture options.");
 var directory = Path.GetFullPath(options["--directory"]);
 if (Directory.Exists(directory) || File.Exists(directory)) throw new IOException("The fixture directory already exists.");
 Directory.CreateDirectory(directory);
 var inbox = Path.Combine(directory, "received");
 using var identity = DeviceIdentity.Ephemeral("Native interoperability fixture");
-using var deadline = new CancellationTokenSource(TimeSpan.FromMinutes(suite == "uploads" ? 5 : 3));
+using var deadline = new CancellationTokenSource(TimeSpan.FromMinutes(suite != "frames" ? 5 : 3));
 var outputGate = new object();
 void Emit(object value)
 {
@@ -56,7 +57,7 @@ if (first.RootElement.GetProperty("op").GetString() != "peer") throw new Invalid
 var peerKey = Decode(first.RootElement.GetProperty("key").GetString() ?? "");
 if (peerKey.Length is < 64 or > 256) throw new InvalidDataException("Invalid fixture peer key.");
 Pairing? pairing = null;
-if (suite == "uploads")
+if (suite != "frames")
 {
     var encodedPairing = first.RootElement.GetProperty("pairing").GetString() ?? "";
     if (encodedPairing.Length is < 1 or > 8192) throw new InvalidDataException("Pairing setup exceeds its fixture bound.");
@@ -69,7 +70,8 @@ if (suite == "uploads")
         throw new InvalidDataException("The guest's explicit mutual-pairing setup was rejected.");
     pairing.HostApproval = ByteString.CopyFrom(identity.Sign(ProtocolRules.PairingTranscript(pairing)));
 }
-await using var uploads = pairing is null ? null : new NativeUploadEndpoint(directory, identity, pairing);
+await using var uploads = pairing is null ? null : new NativeUploadEndpoint(directory, identity, pairing, listForBatches: suite == "batches");
+if (batchSuite) uploads!.PrepareBatchDataset();
 using var peer = new PeerSession(identity, peerKey, run, role == "windows", inbox, Report, fileService: uploads?.Service);
 var nativePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "libDatachannel", "datachannel.dll"));
 var loaded = Process.GetCurrentProcess().Modules.Cast<ProcessModule>().Single(module =>
@@ -122,14 +124,18 @@ try
                 if (uploads is not null)
                 {
                     if (sendingStarted) throw new InvalidDataException("The fixture allows one private upload.");
-                    sendingStarted = true; sending = uploads.SendAsync(peer, Emit, deadline.Token); break;
+                    sendingStarted = true; sending = batchSuite ? uploads.SendBatchAsync(peer, Emit, deadline.Token) : uploads.SendAsync(peer, Emit, deadline.Token); break;
                 }
                 await peer.SendTestFileAsync(deadline.Token);
                 if (sentHash is null) throw new InvalidDataException("The source hash was not observed.");
                 Emit(new { @event = "sent", sha256 = sentHash, bytes = 256 * 1024 });
                 break;
             case "check":
-                if (uploads is not null) { Emit(await uploads.CheckAsync(peer, deadline.Token)); break; }
+                if (uploads is not null)
+                {
+                    Emit(batchSuite ? await uploads.CheckBatchAsync(peer, value.GetProperty("names").EnumerateArray().Select(x => x.GetString() ?? "").ToArray(), deadline.Token) :
+                        await uploads.CheckAsync(peer, deadline.Token)); break;
+                }
                 var denied = await peer.RequestFilesAsync(new FileRequest { Operation = FileOperation.ListRoots }, deadline.Token);
                 if (denied.Status != FileStatus.AccessDenied || denied.Entries.Count != 0 || denied.Content.Length != 0)
                     throw new InvalidDataException("A peer without a storage service exposed file authority.");
@@ -146,7 +152,8 @@ try
                 Emit(new { @event = "verified", sentHash, receivedHash, bytes = 256 * 1024, localType = Kind(pair.Local), remoteType = Kind(pair.Remote) });
                 break;
             case "revoke" when uploads is not null:
-                uploads.Revoke(); Emit(new { @event = "revoked" }); break;
+                if (batchSuite) uploads.RevokeBatch(); else uploads.Revoke();
+                Emit(new { @event = "revoked" }); break;
             case "finish": return;
             default: throw new InvalidDataException("Unknown fixture command.");
         }
