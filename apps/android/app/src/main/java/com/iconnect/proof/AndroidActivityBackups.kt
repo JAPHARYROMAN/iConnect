@@ -104,7 +104,8 @@ internal class AndroidActivityBackups(private val directory:File,private val roo
     fun confirm(value:PhoneActivityBackupReview,continuing:()->Boolean) {
         val captured=pending; pending=null
         check(captured!=null && captured.value==value && captured.expires>=elapsed()) {"This activity-backup review changed, expired or was already used. Review it again."}
-        check(captured.context,captured.revision,continuing)
+        val continuingReview={val active=continuing(); check(captured.expires>=elapsed()) {"This activity-backup review expired. Review remaining metadata again."}; active}
+        check(captured.context,captured.revision,continuingReview)
         check(value.backup !in protectedIds()) {"Current recovery still needs this backup. It was kept."}
         val shelf=shelf()?:error("The activity backup is no longer available."); val archive=archive(shelf,value.backup)
         fun location() {root(); check(Location(directoryId(shelf),directoryId(archive))==captured.location) {"The backup location changed. Its contents were kept."}}
@@ -114,16 +115,17 @@ internal class AndroidActivityBackups(private val directory:File,private val roo
             captured.files.forEach {entry->
                 val file=File(archive,entry.name); check(file.canonicalFile.parentFile==archive.canonicalFile)
                 val fd=Os.open(file.path,OsConstants.O_RDONLY or OsConstants.O_NOFOLLOW or OsConstants.O_CLOEXEC,0); held.add(entry to fd)
-                check(read(file,fd,captured.context,captured.revision,continuing)==entry) {"The reviewed metadata changed. It was kept."}
+                check(read(file,fd,captured.context,captured.revision,continuingReview)==entry) {"The reviewed metadata changed. It was kept."}
             }
             location(); check(names(archive)==captured.files.map {it.name}) {"The backup inventory changed. Its contents were kept."}
             held.forEach {(entry,fd)->
-                check(captured.context,captured.revision,continuing); location(); check(value.backup !in protectedIds())
+                check(captured.context,captured.revision,continuingReview); location(); check(value.backup !in protectedIds())
                 val file=File(archive,entry.name)
                 check(stamp(Os.fstat(fd))==entry.version && stamp(Os.lstat(file.path))==entry.version) {"A reviewed metadata file changed. It was kept."}
+                check(captured.context,captured.revision,continuingReview)
                 Os.remove(file.path)
             }
-            check(captured.context,captured.revision,continuing); location()
+            check(captured.context,captured.revision,continuingReview); location()
             check(children(archive,1).isEmpty()) {"New backup contents were kept for another review."}; Os.remove(archive.path)
         } finally {held.forEach {(_,fd)->if(fd.valid()) Os.close(fd)}}
     }

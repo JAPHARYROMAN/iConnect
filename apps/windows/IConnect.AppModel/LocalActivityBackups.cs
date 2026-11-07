@@ -152,7 +152,13 @@ public sealed class LocalActivityBackups(LocalActivityStore store, Func<string> 
             Pending? captured; lock (pendingGate) { captured = pending; pending = null; }
             if (captured is null || captured.Value != value || captured.Expires < Now)
                 throw new IOException("This activity-backup review changed, expired or was already used. Review it again.");
-            Check(captured.Context, captured.Revision, continuing);
+            bool ContinuingReview()
+            {
+                var active = continuing();
+                if (captured.Expires < Now) throw new IOException("This activity-backup review expired. Review remaining metadata again.");
+                return active;
+            }
+            Check(captured.Context, captured.Revision, ContinuingReview);
             store.WithActivityBackupProtection((root, protectedIds) =>
             {
                 if (protectedIds.Contains(value.Backup)) throw new IOException("This backup is needed by current recovery. It was kept.");
@@ -171,15 +177,19 @@ public sealed class LocalActivityBackups(LocalActivityStore store, Func<string> 
                     {
                         var file = archive.OpenMutableChild(entry.Name);
                         held.Add(file);
-                        if (Read(file, entry.Name, captured.Context, captured.Revision, continuing) != entry)
+                        if (Read(file, entry.Name, captured.Context, captured.Revision, ContinuingReview) != entry)
                             throw new IOException("The reviewed activity bytes or native identity changed. Its contents were kept.");
                     }
                     if (!Names(archive).SequenceEqual(names)) throw new IOException("The activity backup inventory changed. Its contents were kept.");
                     foreach (var file in held)
-                    { Check(captured.Context, captured.Revision, continuing); file.RequireOnlyDefaultDataStream(); file.Delete(); file.Dispose(); removed++; }
-                    Check(captured.Context, captured.Revision, continuing);
+                    {
+                        Check(captured.Context, captured.Revision, ContinuingReview); file.RequireOnlyDefaultDataStream();
+                        Check(captured.Context, captured.Revision, ContinuingReview); file.Delete(); file.Dispose(); removed++;
+                    }
+                    Check(captured.Context, captured.Revision, ContinuingReview);
                     if (archive.EnumerateNames(default).Any()) throw new IOException("New backup contents were kept for a fresh review.");
                     archive.RequireOnlyDefaultDataStream();
+                    Check(captured.Context, captured.Revision, ContinuingReview);
                     archive.Delete(); return true;
                 }
                 catch (Exception error) when (removed > 0 && error is IOException or UnauthorizedAccessException)

@@ -89,6 +89,20 @@ class ActivityBackupTest {
             assertTrue(archive.exists())
         }
     }
+    @Test fun expiryDuringConfirmationKeepsUnremovedMetadataForAnotherReview()=fixture {context,root->
+        val (core,archive)=preserved(context); var time=1000L
+        core.use {
+            val manager=core.backupManager(AtomicLong(),{"owner-a"},{true},{time})
+            var review=manager.review(archive.name) {true}
+            assertThrows(IllegalStateException::class.java) {manager.confirm(review) {time=121_001; true}}
+            assertEquals(2,archive.listFiles()!!.size)
+            review=manager.review(archive.name) {true}; val first=File(archive,"activity.json")
+            assertThrows(IllegalStateException::class.java) {manager.confirm(review) {if(!first.exists()) time+=120_001; true}}
+            assertFalse(first.exists()); assertEquals("generated uncommitted activity",File(archive,"activity.json.new").readText())
+            assertTrue(File(root,"local-activity/activity.json").exists())
+            manager.confirm(manager.review(archive.name) {true}) {true}; assertFalse(archive.exists())
+        }
+    }
     @Test fun symlinksAndHardLinksCannotTurnOwnerFilesIntoRemovableActivityMetadata()=fixture {context,root->
         val (core,archive)=preserved(context)
         core.use {

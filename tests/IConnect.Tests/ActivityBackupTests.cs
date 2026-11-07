@@ -70,6 +70,33 @@ public sealed partial class DesktopModelTests
     }
 
     [Fact]
+    public void Activity_backup_expiry_during_confirmation_preserves_all_metadata()
+    {
+        var (store, archive) = ActivityBackupFixture(); long now = 1000;
+        using var manager = new LocalActivityBackups(store, () => "owner-a", () => true, () => now);
+        var review = manager.Review(Path.GetFileName(archive));
+        Assert.ThrowsAny<IOException>(() => manager.Confirm(review, () => { now = 121_001; return true; }));
+        Assert.Equal(2, Directory.GetFiles(archive).Length);
+        Assert.True(File.Exists(Path.Combine(state, "activity.json")));
+        manager.Confirm(manager.Review(Path.GetFileName(archive))); Assert.False(Directory.Exists(archive));
+    }
+
+    [Fact]
+    public void Activity_backup_expiry_after_first_deletion_preserves_remaining_metadata()
+    {
+        var (store, archive) = ActivityBackupFixture(); long now = 1000;
+        using var manager = new LocalActivityBackups(store, () => "owner-a", () => true, () => now);
+        var first = Path.Combine(archive, "activity.json"); var remaining = Path.Combine(archive, "activity.json.new");
+        var review = manager.Review(Path.GetFileName(archive));
+        Assert.ThrowsAny<IOException>(() => manager.Confirm(review, () => { if (!File.Exists(first)) now += 120_001; return true; }));
+        Assert.False(File.Exists(first)); Assert.Equal("generated uncommitted activity", File.ReadAllText(remaining));
+        Assert.True(File.Exists(Path.Combine(state, "activity.json")));
+        Assert.ThrowsAny<IOException>(() => manager.Confirm(review));
+        using var reopened = new LocalActivityBackups(store, () => "owner-a", () => true, () => now);
+        reopened.Confirm(reopened.Review(Path.GetFileName(archive))); Assert.False(Directory.Exists(archive));
+    }
+
+    [Fact]
     public void Activity_backup_location_replacement_cannot_adopt_matching_names_and_bytes()
     {
         var (store, archive) = ActivityBackupFixture();
