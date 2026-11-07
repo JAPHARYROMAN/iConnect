@@ -38,6 +38,10 @@ The download case pauses at the 4,294,967,296-byte checkpoint, reopens the recei
 
 Local Release verification passed the upload case in 15 minutes 15 seconds and the download case in 2 minutes 18 seconds. The initial offline case had an exact-offset assertion that did not account for throttled progress notifications. The corrected case passed in 1 minute 20 seconds, reopening its 2,149,580,800-byte checkpoint and independently verifying the original and published file hashes. The test project built with zero warnings or errors.
 
+The hosted Windows job for commit `ac84e75` passed all three cases in 6 minutes 52 seconds from a fresh checkout on 7 November 2026. Its Release test-project build had zero warnings or errors. [Hosted large-file job](https://github.com/JAPHARYROMAN/iConnect/actions/runs/42341929962/job/128311284621)
+
+The complete workflow also passed the other 859 main Windows cases, 10 isolated preview cases and desktop publish-asset checks. The Android job completed debug, test APK and unsigned release builds, JVM tests and debug lint. [Complete workflow](https://github.com/JAPHARYROMAN/iConnect/actions/runs/42341929962)
+
 Run the suite on Windows with at least 14 GiB free in the repository's filesystem. The fixtures use generated files under the repository's ignored `.local/large-file-tests` directory and remove their own files after their workers stop.
 
 ```powershell
@@ -47,4 +51,4 @@ dotnet test tests/IConnect.Tests/IConnect.Tests.csproj -c Release --no-build --n
     --filter 'FullyQualifiedName~LargeFileTests'
 ```
 
-The hosted workflow runs these cases in a separate Windows job. The fixtures use NTFS and in-process file-service requests with an accepting attachment checker. Android providers, encrypted transport, installed security scanners and physical-device execution remain separate verification requirements. Step 71 of the [physical-network procedure](physical-network-validation.md) prepares the operator checks.
+The hosted workflow runs these cases in a separate Windows job. Local execution used NTFS. Requests go through the in-process file service with an accepting attachment checker. Android providers, encrypted transport, installed security scanners and physical-device execution remain separate verification requirements. Step 71 of the [physical-network procedure](physical-network-validation.md) prepares the operator checks.
