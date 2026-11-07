@@ -25,14 +25,14 @@ The current package includes `libDatachannel/datachannel.dll` and the [embedded 
 
 ## Review a source-built transport
 
-The default build uses the restored NuGet transport. To review the [pinned-source candidate](native-transport-review.md), provide a completed source/notice bundle to the package builder. The builder checks its exact commits, hashes, x64 image and nonredirected file paths before publishing, then checks the staged copy. It replaces the DLL only in the new package payload and includes the source archives, notices and recipe under `PackageMetadata/NativeTransport/`.
+The default build uses the restored NuGet transport. To review the [pinned-source candidate](native-transport-review.md), provide a completed source/notice bundle to the package builder. The builder checks its exact commits, hashes, x64 image and nonredirected file paths before publishing, then checks the staged copy. It replaces the DLL only in the new package payload and includes the source archives, notices and recipe under `PackageMetadata/NativeTransport/`. Python 3.11 or newer also exports the [readable source-notice inventory](native-notice-review.md) under `PackageMetadata/NativeNotices/`; `-NoticePython` selects an explicit interpreter.
 
 ```powershell
 $bundle = ./tools/export-native-transport-sources.ps1
 $package = ./tools/package-windows.ps1 -PackageName iConnect.NativeReview -Version 1.0.0.0 `
     -Publisher $releasePublisher -Unsigned -NativeTransportBundle $bundle.Bundle
 ./tools/test-native-package.ps1 -Package $package.Path `
-    -Payload (Join-Path $package.WorkDirectory 'payload') -ExerciseGuards
+    -Payload (Join-Path $package.WorkDirectory 'payload') -ExerciseGuards -RequireNoticeInventory
 ./tools/review-release-dependencies.ps1 -Package $package.Path `
     -OutputDirectory .tools/native-package-review/new-review
 ```

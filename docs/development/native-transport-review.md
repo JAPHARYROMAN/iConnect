@@ -65,7 +65,11 @@ The package advisory lookup checks all 24 coordinates, using commit queries for 
 
 ## Direct Windows–Android transport follow-up
 
-The [direct native fixture](native-cross-platform.md) now builds both host and Android probe artifacts. A Windows-only host-control self-test passes, and real ADB setup-data read-back and emulator ownership guards pass. Actual Windows–Android execution is queued after the existing large-file/recovery sequence. It has not yet produced a cross-platform result and does not replace full pairing/controller/coordinator or physical-network verification.
+The [direct native fixture](native-cross-platform.md#executed-windowsandroid-result) passes both actual Windows–Android frame roles with matching bidirectional hashes. Ordinary-upload and folder-batch engine probes are separately prepared and queued behind the active large-file/activity sequence. Frame interoperability does not replace those engine checks, full pairing/controller/coordinator or physical-network verification.
+
+## Readable notice follow-up
+
+The [source-notice inventory](native-notice-review.md) preserves 855 matching comment blocks and 17 notice-document candidates from all seven archives, binds them to the candidate DLL and records unexamined/otherwise unclassified text for review. A new unsigned review package includes and verifies all 19 supplemental files alongside the original 25 bundle members. Five parser tests, eight reader refusals and the six existing package guards pass. Complete license coverage, actual linker closure, default adoption and production distribution approval remain open.
 
 ## Android artifact check
 

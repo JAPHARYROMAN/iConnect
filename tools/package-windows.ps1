@@ -17,7 +17,8 @@ param(
     [Parameter(Mandatory, ParameterSetName = 'Signed')]
     [uri]$TimestampServer,
     [switch]$NoRestore,
-    [string]$NativeTransportBundle
+    [string]$NativeTransportBundle,
+    [string]$NoticePython='python'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -88,6 +89,10 @@ if ($sourceNative) {
     # default transport. The repository's regular build output stays unchanged.
     $stagedNative = & (Join-Path $PSScriptRoot 'read-native-transport-bundle.ps1') -BundleDirectory $nativeMetadata
     Copy-Item -LiteralPath (Join-Path $stagedNative.Directory 'datachannel.dll') -Destination (Join-Path $payload 'libDatachannel/datachannel.dll') -Force
+    $noticeMetadata = Join-Path $payload 'PackageMetadata/NativeNotices'
+    & (Join-Path $PSScriptRoot 'export-native-notices.ps1') -BundleDirectory $stagedNative.Directory `
+        -ExpectedBinarySha256 $stagedNative.BinarySha256 -OutputDirectory $noticeMetadata -Python $NoticePython | Out-Host
+    $nativeNotices = & (Join-Path $PSScriptRoot 'read-native-notice-inventory.ps1') -InventoryDirectory $noticeMetadata -BundleDirectory $stagedNative.Directory
 }
 & (Join-Path $PSScriptRoot 'write-windows-release-sbom.ps1') -Payload $payload -ConnectivityAssets $connectivityAssets `
     -PackageName $PackageName -Version $Version
@@ -176,4 +181,5 @@ $hash = (Get-FileHash -LiteralPath $candidate -Algorithm SHA256).Hash.ToLowerInv
     Sha256 = $hash
     WorkDirectory = $work
     NativeTransport = if ($sourceNative) { 'PinnedSourceBundle' } else { 'NuGet' }
+    NativeNoticeInventorySha256 = if ($sourceNative) { $nativeNotices.InventorySha256 } else { $null }
 }

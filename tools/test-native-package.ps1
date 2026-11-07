@@ -3,7 +3,8 @@
 param(
     [Parameter(Mandatory)][string]$Package,
     [Parameter(Mandatory)][string]$Payload,
-    [switch]$ExerciseGuards
+    [switch]$ExerciseGuards,
+    [switch]$RequireNoticeInventory
 )
 $ErrorActionPreference='Stop'
 $repo=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
@@ -12,6 +13,11 @@ $packagePath=(Resolve-Path -LiteralPath $Package).Path
 if ([IO.Path]::GetExtension($packagePath) -ine '.msix') {throw 'Choose a source-backed Windows MSIX review package.'}
 $bundle=Join-Path $payload 'PackageMetadata/NativeTransport'
 $source=& (Join-Path $repo 'tools/read-native-transport-bundle.ps1') -BundleDirectory $bundle
+$noticeRoot=Join-Path $payload 'PackageMetadata/NativeNotices'
+if($RequireNoticeInventory -and !(Test-Path -LiteralPath $noticeRoot)) {throw 'The source-backed package requires its readable notice inventory.'}
+$notices=if(Test-Path -LiteralPath $noticeRoot) {
+    & (Join-Path $repo 'tools/read-native-notice-inventory.ps1') -InventoryDirectory $noticeRoot -BundleDirectory $bundle
+} else {$null}
 $fixtureRoot=Join-Path $repo ('.tools/native-package-verification/' + [guid]::NewGuid().ToString('N'))
 [void](New-Item -Path $fixtureRoot -ItemType Directory)
 $reportPath=Join-Path $fixtureRoot 'native-package-verification.json'
@@ -24,6 +30,9 @@ try {
     try {
         $expected=@([pscustomobject]@{RelativePath='libDatachannel/datachannel.dll';Sha256=$source.BinarySha256}) +
             @($source.Files | ForEach-Object {[pscustomobject]@{RelativePath=('PackageMetadata/NativeTransport/' + $_.RelativePath);Sha256=$_.Sha256}})
+        if($notices) {
+            $expected+=@($notices.Files|ForEach-Object {[pscustomobject]@{RelativePath=('PackageMetadata/NativeNotices/'+$_.RelativePath);Sha256=$_.Sha256}})
+        }
         foreach ($entryInfo in $expected) {
             $entries=@($zip.Entries | Where-Object FullName -ceq $entryInfo.RelativePath)
             if ($entries.Count -ne 1) {throw "Missing or duplicate packaged native entry: $($entryInfo.RelativePath)"}
@@ -49,6 +58,8 @@ try {
         $report.Components=$bom.components.Count
         $report.SourceFiles=$source.Files.Count
         $report.NativeSha256=$source.BinarySha256
+        $report.NativeNoticeInventorySha256=if($notices) {$notices.InventorySha256} else {$null}
+        $report.NativeNoticeFiles=if($notices) {$notices.Files.Count} else {0}
     } finally {$zip.Dispose()}
 } finally {$file.Dispose()}
 if (!$ExerciseGuards) {
