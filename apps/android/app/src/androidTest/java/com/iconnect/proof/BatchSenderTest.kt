@@ -351,6 +351,47 @@ class BatchSenderTest {
         assertFalse(f.record(id).readText().contains(f.tree.toString())); f.reopen(true); completed(f)
         repeat(f.row().next) {assertNotNull(f.sender.itemResult(id,it))}
     }}
+    @Test fun completedBatchChecksBindFreshChallengesAndRejectChangedParentEvidence()=runBlocking {fixture {f->
+        f.main {f.browser.browse(f.browser.state.value.rows.single().entry)}
+        withTimeout(20_000) {while(f.browser.state.value.busy || f.browser.state.value.rows.none {it.entry.name=="simu.txt"}) delay(15)}
+        lateinit var selected:List<LocalUploadSource>
+        f.main {selected=f.browser.captureBatch(f.browser.state.value.rows.filter {it.entry.name in setOf("simu.txt","zero.bin","Empty","Reports")}.map {it.entry})}
+        assertEquals(4,selected.size)
+        val source=f.sources.stage(f.approval,selected,UploadCollision.UPLOAD_KEEP_BOTH) {f.allowed.get()}
+        withTimeout(30_000) {f.sources.whenIdle()}; f.source=f.sources.state.value.single {it.id==source}
+        val id=f.queue(); f.send(id); completed(f); val row=f.row(); val saved=f.record(id).readBytes()
+        val h=UploadBatchHeader.parseFrom(Rules.decode(row.header))
+        for(kind in listOf("match","old-receipt","challenge","epoch","header","mixed","effect")) {
+            val seen=mutableListOf<String>()
+            val failure=runCatching {
+                withTimeout(15_000) {f.sender.verifyPublished(id,f.approval,{f.allowed.get()}) {request->
+                    assertEquals(FileOperation.VERIFY_PUBLISHED_BATCH,request.operation); assertEquals(h,request.batchHeader)
+                    seen+=request.mutationId
+                    val reply=f.request(FileRequest.newBuilder().setOperation(FileOperation.UPLOAD_BATCH_STATUS)
+                        .setTransferId(h.id).setMutationEpoch(h.epoch).build()).toBuilder()
+                    if(kind!="old-receipt") reply.setPublishedBatchCheck(PublishedBatchCheck.newBuilder()
+                        .setChallenge(if(kind=="challenge") StorageRules.token() else request.mutationId).setVerified(seen.size>1))
+                    if(kind=="epoch") reply.setMutationEpoch(StorageRules.token())
+                    if(kind=="header") reply.setBatch(reply.batch.toBuilder().setHeader(h.toBuilder().setSha256(ByteString.copyFrom(ByteArray(32)))))
+                    if(kind=="mixed") reply.setBatch(reply.batch.toBuilder().setItemOutcomes(ByteString.copyFrom(ByteArray(row.items) {2})))
+                    if(kind=="effect") reply.setBatch(reply.batch.toBuilder().setEffectsStarted(false))
+                    reply.build()
+                }}
+            }.exceptionOrNull()
+            f.sender.whenIdle()
+            if(kind=="match") {assertNull(failure); assertEquals(2,seen.size); assertEquals(1,seen.distinct().size)}
+            else {
+                assertTrue("$kind: $failure",failure !is CancellationException && (failure is IllegalArgumentException || failure is IllegalStateException))
+                assertEquals(1,seen.size)
+            }
+            assertArrayEquals(saved,f.record(id).readBytes()); assertFalse(f.row().active)
+        }
+        val entered=CompletableDeferred<Unit>()
+        val check=async {f.sender.verifyPublished(id,f.approval,{f.allowed.get()}) {entered.complete(Unit); awaitCancellation()}}
+        withTimeout(5_000) {entered.await()}; f.sender.pause(id)
+        assertTrue(runCatching {check.await()}.exceptionOrNull() is CancellationException)
+        f.sender.whenIdle(); assertArrayEquals(saved,f.record(id).readBytes())
+    }}
     @Test fun cleanSelectedFilesAndFoldersReportVerifiedCompletionOnBothSides()=runBlocking {fixture {f->
         f.main {f.browser.browse(f.browser.state.value.rows.single().entry)}
         withTimeout(20_000) {while(f.browser.state.value.busy || f.browser.state.value.rows.none {it.entry.name=="simu.txt"}) delay(15)}

@@ -64,6 +64,10 @@ public static class StorageRules
         if (response.PublishedUploadCheck is { } check &&
             (!ProtocolRules.TokenPattern().IsMatch(check.Challenge) || response.Upload?.Phase != UploadPhase.UploadCompleted))
             throw new InvalidDataException("Invalid published-copy check.");
+        if (response.PublishedBatchCheck is { } batchCheck &&
+            (response.Status != FileStatus.Ok || !UploadBatchRules.CanonicalToken(batchCheck.Challenge) || response.Batch is not { Phase: UploadBatchPlanPhase.UploadPlanCompleted } batch ||
+             batch.ItemOutcomes.Length == 0 || batch.ItemOutcomes.Any(x => x != 1) || response.MutationEpoch != batch.Header.Epoch))
+            throw new InvalidDataException("Invalid published-batch check.");
         if (response.Uploads.Count > PageSize) throw new InvalidDataException("The incoming-transfer response is too large.");
         foreach (var upload in response.Uploads) UploadRules.Validate(upload);
         if (response.MutationEpoch.Length != 0 && !ProtocolRules.TokenPattern().IsMatch(response.MutationEpoch) || response.Mutations.Count > 32)

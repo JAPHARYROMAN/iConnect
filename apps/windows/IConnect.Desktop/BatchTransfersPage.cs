@@ -198,7 +198,8 @@ public sealed partial class MainWindow
             else
             {
                 actions.Add(BatchAction("Review item results…", () => ShowBatchResultsAsync(row), !active));
-                if (active) actions.Add(Action("Pause this batch send", () => { Model.PauseOutgoingBatch(row.Id); return Task.CompletedTask; }));
+                if (active && row.Phase == BatchSendingPhase.Completed) actions.Add(Body("Waiting for the receiver's saved-batch check."));
+                if (active) actions.Add(Action(row.Phase == BatchSendingPhase.Completed ? "Stop waiting for batch check" : "Pause this batch send", () => { Model.PauseOutgoingBatch(row.Id); return Task.CompletedTask; }));
                 if (row.Archived)
                 {
                     actions.Add(BatchAction("Review restoring send…", () => ReviewBatchHistoryAsync(row, BatchHistoryAction.Restore)));
@@ -206,6 +207,12 @@ public sealed partial class MainWindow
                 }
                 else
                 {
+                    if (row.Phase == BatchSendingPhase.Completed && row.ReceiverOutcomes is { Length: > 0 } && row.ReceiverOutcomes.All(x => x == 1))
+                        actions.Add(Action("Verify saved batch", async () =>
+                        {
+                            await Model.VerifyPublishedBatchAsync(row.Id);
+                            await ShowAsync(Dialog("Saved batch verified", Body("The receiver checked the saved identities, file bytes and contents of every received folder at the time of this check. Received files remain untrusted."), "Close"));
+                        }, !active && online && Model.PublishedBatchCheckSupported));
                     if (row.Phase is not (BatchSendingPhase.Completed or BatchSendingPhase.Stopped or BatchSendingPhase.Stopping))
                     {
                         var target = Model.ReceivingLocation ?? Model.Breadcrumbs.LastOrDefault(); var started = row.Header is { Length: > 0 };

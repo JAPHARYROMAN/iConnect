@@ -25,9 +25,17 @@ public sealed partial class WindowsBatchPlans
         foreach (var receiver in fileReceivers.Values) receiver.Uploads.ClearPayloadRates();
     }
     public void PauseFileVerification()
-    { WindowsUploads[] snapshot; lock (gate) snapshot = fileReceivers.Values.Select(x => x.Uploads).ToArray(); foreach (var uploads in snapshot) uploads.PauseVerification(); }
+    { WindowsUploads[] snapshot; lock (gate) { CancelPublishedBatchChecks(null); snapshot = fileReceivers.Values.Select(x => x.Uploads).ToArray(); } foreach (var uploads in snapshot) uploads.PauseVerification(); }
     public Task WhenFilesIdleAsync(string? plan = null)
-    { WindowsUploads[] snapshot; lock (gate) snapshot = fileReceivers.Values.Where(x => plan is null || x.Batch == plan).Select(x => x.Uploads).ToArray(); return Task.WhenAll(snapshot.Select(x => x.WhenIdleAsync())); }
+    {
+        WindowsUploads[] snapshot; Task[] checks;
+        lock (gate)
+        {
+            snapshot = fileReceivers.Values.Where(x => plan is null || x.Batch == plan).Select(x => x.Uploads).ToArray();
+            checks = publishedBatchWork.Where(x => plan is null || x.Key == plan).Select(x => x.Value.Task).ToArray();
+        }
+        return Task.WhenAll(snapshot.Select(x => x.WhenIdleAsync()).Concat(checks));
+    }
     private bool IsFileItem(Row row, FileRequest request) => UploadBatchRules.HasManifest(row.Phase) && request.HasBatchItemIndex &&
         request.BatchItemIndex < Header(row).ItemCount && !AcceptedManifest(row, out _).Items[(int)request.BatchItemIndex].IsDirectory;
     private static UploadDestination LogicalFileTarget(Row row, UploadBatchManifest manifest, DirectoryChild child, Dictionary<uint, DirectoryChild> children)

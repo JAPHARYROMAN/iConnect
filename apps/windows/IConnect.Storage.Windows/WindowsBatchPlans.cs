@@ -64,6 +64,7 @@ public sealed partial class WindowsBatchPlans
         catch (Exception ex) when (StateRecovery.IsRecordFailure(ex))
         { records.Clear(); recovery.Block("Batch-plan metadata needs local review. Incoming writes are blocked; destination files are kept."); }
         grants.Changed += ClearFilePayloadRates;
+        grants.Changed += InvalidatePublishedBatchChecks;
     }
     private static UploadBatchHeader Header(Row row) => UploadBatchHeader.Parser.ParseFrom(row.Header);
     private UploadBatchHeader Validate(Envelope saved)
@@ -134,7 +135,7 @@ public sealed partial class WindowsBatchPlans
     {
         lock (gate)
         {
-            if (fileReceivers.Values.Any(x => !x.Uploads.IsIdle)) throw new IOException("Pause connections and wait for batch file verification before archiving history.");
+            if (publishedBatchWork.Count != 0 || fileReceivers.Values.Any(x => !x.Uploads.IsIdle)) throw new IOException("Pause connections and wait for batch file verification before archiving history.");
             if (Backups().Length >= 32) throw new IOException("Remove reviewed batch-plan backups before creating another archive.");
             foreach (var id in assemblies.Keys.ToArray()) EndAssembly(id);
             try
@@ -227,7 +228,9 @@ public sealed partial class WindowsBatchPlans
                 Authorize(row, peer, pairing);
                 if ((row.Retiring || row.Retired) && request.Operation is not (FileOperation.UploadBatchStatus or FileOperation.FinishUploadBatch or FileOperation.StopUploadBatch))
                     throw new StorageException(FileStatus.NotFound, "The receiver owner removed this plan's detailed item history. Its final parent receipt remains; no new copy is created.");
-                if (request.Operation is FileOperation.FinishUploadBatch or FileOperation.StopUploadBatch)
+                if (request.Operation == FileOperation.VerifyPublishedBatch)
+                    VerifyPublishedBatch(row, scope, request, result, ct);
+                else if (request.Operation is FileOperation.FinishUploadBatch or FileOperation.StopUploadBatch)
                     row = EndPlan(row, request, scope, ct);
                 else if (UploadBatchRules.IsTerminal(row.Phase) && request.Operation == FileOperation.UploadBatchItemStatus)
                     TerminalItem(row, request, result);
@@ -276,6 +279,7 @@ public sealed partial class WindowsBatchPlans
         WindowsUploads[] stopping;
         lock (gate)
         {
+            CancelPublishedBatchChecks(scope);
             foreach (var id in assemblies.Where(x => x.Value.Scope == scope).Select(x => x.Key).ToArray()) EndAssembly(id);
             var receivers = fileReceivers.Values;
             foreach (var receiver in receivers) receiver.Uploads.ClearPayloadScope(scope);

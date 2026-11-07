@@ -12,7 +12,8 @@ public static class UploadBatchRules
     public const int MaxItems = 4096, MaxRoots = 128, MaxDepth = 32, MaxPathChars = 2048, MaxEncodedBytes = 4 * 1024 * 1024;
     public const int MaxPlans = 8, MaxPeerPlans = 4;
     public const string Capability = "upload-batches-v1";
-    public static bool IsRpc(FileOperation operation) => operation is >= FileOperation.UploadBatchContext and <= FileOperation.StopUploadBatch;
+    public const string PublishedCheckCapability = "published-batch-check-v1";
+    public static bool IsRpc(FileOperation operation) => operation is >= FileOperation.UploadBatchContext and <= FileOperation.StopUploadBatch or FileOperation.VerifyPublishedBatch;
     public static bool HasManifest(UploadBatchPlanPhase phase) => phase is UploadBatchPlanPhase.UploadPlanReady or UploadBatchPlanPhase.UploadPlanStopping or UploadBatchPlanPhase.UploadPlanStopped or UploadBatchPlanPhase.UploadPlanCompleted;
     public static bool IsTerminal(UploadBatchPlanPhase phase) => phase is UploadBatchPlanPhase.UploadPlanCanceled or UploadBatchPlanPhase.UploadPlanStopped or UploadBatchPlanPhase.UploadPlanCompleted;
     public static void ValidateReceipt(UploadBatchReceipt receipt)

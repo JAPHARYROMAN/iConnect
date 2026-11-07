@@ -46,6 +46,7 @@ public sealed class PeerSession : IDisposable
     public bool IsClosed => Volatile.Read(ref disposed) != 0;
     private bool CanRequestFiles => !IsClosed && authenticated.Task.IsCompletedSuccessfully && remoteCapabilities.Contains(FileRpcPeer.Capability);
     public bool AcceptsFolderBatches => CanRequestFiles && remoteCapabilities.Contains(UploadBatchRules.Capability);
+    public bool AcceptsPublishedBatchChecks => AcceptsFolderBatches && remoteCapabilities.Contains(UploadBatchRules.PublishedCheckCapability);
     public bool AcceptsPublishedUploadChecks => CanRequestFiles && remoteCapabilities.Contains(UploadRules.Capability) &&
         remoteCapabilities.Contains(UploadRules.PublishedCheckCapability);
 
@@ -82,6 +83,7 @@ public sealed class PeerSession : IDisposable
             hello.Capabilities.Add(UploadRules.Capability);
             if (publishedUploadChecks) hello.Capabilities.Add(UploadRules.PublishedCheckCapability);
             if (folderBatchReception) hello.Capabilities.Add(UploadBatchRules.Capability);
+            if (folderBatchReception) hello.Capabilities.Add(UploadBatchRules.PublishedCheckCapability);
             hello.Capabilities.Add(ReadyCapability);
             Send("hello", hello);
             var deadline = DateTimeOffset.UtcNow.AddSeconds(10);
@@ -265,6 +267,8 @@ public sealed class PeerSession : IDisposable
         await Authenticated.WaitAsync(TimeSpan.FromSeconds(30), ct);
         if (UploadBatchRules.IsRpc(request.Operation) && !remoteCapabilities.Contains(UploadBatchRules.Capability))
             throw new NotSupportedException("This peer does not support folder-batch receiving.");
+        if (request.Operation == FileOperation.VerifyPublishedBatch && !AcceptsPublishedBatchChecks)
+            throw new NotSupportedException("This peer does not support fresh published-batch checks.");
         if (UploadRules.IsRpc(request.Operation) && !remoteCapabilities.Contains(UploadRules.Capability))
             throw new NotSupportedException("This device does not accept incoming file copies. Update it or receive from the other device's interface.");
         if (request.Operation == FileOperation.VerifyPublishedUpload && !AcceptsPublishedUploadChecks)

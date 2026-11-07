@@ -12,7 +12,8 @@ object UploadBatchRules {
     const val CAPABILITY="upload-batches-v1"
     const val MAX_PLANS=8
     const val MAX_PEER_PLANS=4
-    fun isRpc(operation:FileOperation)=operation!=FileOperation.UNRECOGNIZED && operation.number in 31..44
+    const val PUBLISHED_CHECK_CAPABILITY="published-batch-check-v1"
+    fun isRpc(operation:FileOperation)=operation==FileOperation.VERIFY_PUBLISHED_BATCH || operation!=FileOperation.UNRECOGNIZED && operation.number in 31..44
     fun hasManifest(phase:UploadBatchPlanPhase)=phase in setOf(UploadBatchPlanPhase.UPLOAD_PLAN_READY,UploadBatchPlanPhase.UPLOAD_PLAN_STOPPING,UploadBatchPlanPhase.UPLOAD_PLAN_STOPPED,UploadBatchPlanPhase.UPLOAD_PLAN_COMPLETED)
     fun terminal(phase:UploadBatchPlanPhase)=phase in setOf(UploadBatchPlanPhase.UPLOAD_PLAN_CANCELED,UploadBatchPlanPhase.UPLOAD_PLAN_STOPPED,UploadBatchPlanPhase.UPLOAD_PLAN_COMPLETED)
     fun validateReceipt(receipt:UploadBatchReceipt) {

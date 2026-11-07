@@ -61,6 +61,7 @@ class RtcTestSession(
     private val capabilities = mutableSetOf<String>()
     private val canRequestFiles get() = isAuthenticated && RemoteFiles.CAPABILITY in capabilities
     val acceptsFolderBatches get() = canRequestFiles && UploadBatchRules.CAPABILITY in capabilities
+    val acceptsPublishedBatchChecks get() = acceptsFolderBatches && UploadBatchRules.PUBLISHED_CHECK_CAPABILITY in capabilities
     val acceptsPublishedUploadChecks get() = canRequestFiles && UploadRules.CAPABILITY in capabilities &&
         UploadRules.PUBLISHED_CHECK_CAPABILITY in capabilities
     private val remoteFiles = RemoteFiles(::send, scope, Rules.id(peerKey), fileService, ::fail, requestAllowed = fileRequestAllowed,traffic=traffic)
@@ -371,6 +372,7 @@ class RtcTestSession(
     }
     suspend fun requestFiles(request: FileRequest): FileResponse {
         if(UploadBatchRules.isRpc(request.operation)) require(UploadBatchRules.CAPABILITY in capabilities) {"This peer does not support folder-batch receiving."}
+        if(request.operation==FileOperation.VERIFY_PUBLISHED_BATCH) require(UploadBatchRules.PUBLISHED_CHECK_CAPABILITY in capabilities) {"This computer does not support fresh published-batch checks."}
         if(UploadRules.isRpc(request.operation)) require(UploadRules.CAPABILITY in capabilities) {"This computer does not accept incoming file copies. Update it before sending."}
         if(request.operation==FileOperation.VERIFY_PUBLISHED_UPLOAD) require(UploadRules.PUBLISHED_CHECK_CAPABILITY in capabilities) {"This computer does not support a fresh published-copy check."}
         require(authenticated && !closed) { "Connect to the paired computer first." }

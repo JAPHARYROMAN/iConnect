@@ -1181,6 +1181,22 @@ class PhoneController internal constructor(private val application: Application,
         }
     }
     fun supportsPublishedUploadCheck()=session?.acceptsPublishedUploadChecks==true
+    fun supportsPublishedBatchCheck()=session?.acceptsPublishedBatchChecks==true
+    fun verifyPublishedBatch(id:String)=guarded {
+        val active=requireNotNull(session); val approval=requireNotNull(peerApproval?.takeIf(owner::isCurrent))
+        check(active.acceptsPublishedBatchChecks) {"The connected receiver does not support fresh saved-batch checks."}
+        val allowed={uiVisible && session===active && owner.isCurrent(approval) && state.value.authenticated && closing==null}
+        check(allowed() && !state.value.savingTrust)
+        controllerScope.launch {
+            try {
+                outgoingBatchSender.verifyPublished(id,approval,allowed) {request->
+                    withContext(Dispatchers.Main.immediate) {check(allowed()); active.requestFiles(request)}
+                }
+                if(allowed()) log("The receiver verified the saved batch at the time of this check. Received files remain untrusted.")
+            } catch(e:CancellationException) {throw e}
+            catch(e:Exception) {log(e.message?:"The saved batch could not be verified. Its copies and receipts were kept.")}
+        }
+    }
     fun verifyPublishedUpload(id:String)=guarded {
         val active=requireNotNull(session)
         val approval=requireNotNull(peerApproval?.takeIf(owner::isCurrent))

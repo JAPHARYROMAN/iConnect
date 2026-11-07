@@ -74,6 +74,7 @@ public sealed class NativeUploadEngineTests(ITestOutputHelper output)
             if (batch)
             {
                 await Task.WhenAll(hostFiles.SendBatchAsync(first, _ => { }, timeout.Token), guestFiles.SendBatchAsync(second, _ => { }, timeout.Token));
+                await Task.WhenAll(hostFiles.VerifyBatchAsync(first, timeout.Token), guestFiles.VerifyBatchAsync(second, timeout.Token));
                 hostFiles.RevokeBatch(); guestFiles.RevokeBatch();
             }
             else

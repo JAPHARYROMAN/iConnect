@@ -117,6 +117,12 @@ internal sealed partial class NativeUploadEndpoint
         emit(new { @event = "sent", sha256 = batchOriginalHash, bytes = BatchBytes, items = 6, preparations = batchBegins,
             lostAcknowledgements = 1, resumedOriginalReceipt = true, names = BatchResultNames });
     }
+    public Task VerifyBatchAsync(PeerSession peer, CancellationToken ct)
+    {
+        if (batchCompleted is null || !peer.AcceptsPublishedBatchChecks)
+            throw new InvalidOperationException("Finish this batch with a peer that supports fresh whole-batch checks.");
+        return batchSender!.VerifyPublishedAsync(batchCompleted.Id, peer.RequestFilesAsync, ct);
+    }
     public void RevokeBatch()
     {
         if (revoked || batchCompleted is null) throw new InvalidDataException("Finish the original batch before withdrawing its inbox.");

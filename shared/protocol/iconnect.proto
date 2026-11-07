@@ -105,6 +105,7 @@ enum FileOperation {
   FINISH_UPLOAD_BATCH = 43;
   STOP_UPLOAD_BATCH = 44;
   VERIFY_PUBLISHED_UPLOAD = 45;
+  VERIFY_PUBLISHED_BATCH = 46;
 }
 enum FileStatus {
   FILE_STATUS_OK = 0;
@@ -167,6 +168,11 @@ message FileResponse {
   UploadBatchReceipt batch = 15;
   UploadBatchItemReceipt batch_item = 16;
   PublishedUploadCheck published_upload_check = 17;
+  PublishedBatchCheck published_batch_check = 18;
+}
+message PublishedBatchCheck {
+  string challenge = 1;
+  bool verified = 2;
 }
 message PublishedUploadCheck {
   string challenge = 1;

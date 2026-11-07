@@ -30,7 +30,7 @@ public sealed partial class WindowsBatchPlans
     }
     private void InspectRetirement(Row row)
     {
-        if (!UploadBatchRules.IsTerminal(row.Phase) || row.Retiring || row.Retired || fileReceivers.Values.Any(x => x.Batch == Header(row).Id && !x.Uploads.IsIdle)) throw new IOException("Finish or stop this plan and wait for verification before removing item history.");
+        if (!UploadBatchRules.IsTerminal(row.Phase) || row.Retiring || row.Retired || publishedBatchWork.ContainsKey(Header(row).Id) || fileReceivers.Values.Any(x => x.Batch == Header(row).Id && !x.Uploads.IsIdle)) throw new IOException("Finish or stop this plan and wait for verification before removing item history.");
         if (records.Values.Count(x => x.Retiring || x.Retired) >= MaxRetiredPlans) throw new IOException("Compact receipt storage is full. After all plans finish, preserve and reset closed history before removing more item receipts.");
         if (UploadBatchRules.HasManifest(row.Phase))
         {

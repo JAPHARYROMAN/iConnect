@@ -85,6 +85,14 @@ public sealed partial class WindowsUploads
     { var saved = StateRecovery.Read<Cache>(scope.JournalPath, WindowsBatchUploadJournals.RecordLimit); Validate(saved); ValidateScope(saved, owner, scope); }
     internal static UploadInfo InspectScopedJournal(WindowsScopedUpload scope, string owner)
     { var saved = StateRecovery.Read<Cache>(scope.JournalPath, WindowsBatchUploadJournals.RecordLimit); Validate(saved); ValidateScope(saved, owner, scope); return Info(saved.Rows.Single()); }
+    internal static (UploadInfo Info, string Identity) InspectScopedPublished(WindowsScopedUpload scope, string owner)
+    {
+        var saved = StateRecovery.Read<Cache>(scope.JournalPath, WindowsBatchUploadJournals.RecordLimit);
+        Validate(saved); ValidateScope(saved, owner, scope); var row = saved.Rows.Single();
+        if (row.Phase != UploadPhase.UploadCompleted || row.SecurityPolicy != ReceivedFileSecurity.PolicyVersion || row.TemporaryIdentity.Length == 0)
+            throw new IOException("A batch file has no completed identity-bound attachment receipt.");
+        return (Info(row), row.TemporaryIdentity);
+    }
     internal static bool ScopedPartialExists(WindowsScopedUpload scope, string owner)
     {
         var saved = StateRecovery.Read<Cache>(scope.JournalPath, WindowsBatchUploadJournals.RecordLimit); Validate(saved); ValidateScope(saved, owner, scope); var row = saved.Rows.Single();

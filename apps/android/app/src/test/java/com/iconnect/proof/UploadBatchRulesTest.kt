@@ -6,6 +6,23 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class UploadBatchRulesTest {
+    @Test fun publishedBatchProofRequiresACompletedSuccessfulParentEvenWhilePending() {
+        val h=header(plan())
+        for(verified in listOf(false,true)) {
+            val response=FileResponse.newBuilder().setRequestId(StorageRules.token()).setMutationEpoch(h.epoch)
+                .setBatch(UploadBatchReceipt.newBuilder().setHeader(h).setPhase(UploadBatchPlanPhase.UPLOAD_PLAN_COMPLETED).setEffectsStarted(true)
+                    .setManifestOffset(h.encodedLength).setItemOutcomes(ByteString.copyFrom(byteArrayOf(1,1))))
+                .setPublishedBatchCheck(PublishedBatchCheck.newBuilder().setChallenge(StorageRules.token()).setVerified(verified)).build()
+            PhoneTransferManifests.validateResponse(FileResponse.parseFrom(response.toByteArray()))
+            val invalid=listOf(response.toBuilder().setPublishedBatchCheck(response.publishedBatchCheck.toBuilder().clearChallenge()),
+                response.toBuilder().clearBatch(),response.toBuilder().setMutationEpoch(StorageRules.token()),
+                response.toBuilder().setBatch(response.batch.toBuilder().setPhase(UploadBatchPlanPhase.UPLOAD_PLAN_STOPPED)),
+                response.toBuilder().setBatch(response.batch.toBuilder().setItemOutcomes(ByteString.copyFrom(byteArrayOf(1,2)))),
+                response.toBuilder().setStatus(FileStatus.CONFLICT))
+            invalid.forEach {assertThrows(IllegalArgumentException::class.java) {PhoneTransferManifests.validateResponse(it.build())}}
+        }
+        assertTrue(UploadBatchRules.isRpc(FileOperation.VERIFY_PUBLISHED_BATCH)); assertFalse(UploadRules.isRpc(FileOperation.VERIFY_PUBLISHED_BATCH))
+    }
     @Test fun terminalReceiptsHaveExactOutcomesAndCompletedPlansCannotHideUnresolvedItems() {
         val h=UploadBatchHeader.newBuilder().setId(MutationRules.newId()).setEpoch(StorageRules.token()).setGrantId(StorageRules.token()).setEncodedLength(1).setItemCount(2).setTotalBytes(0).setSha256(ByteString.copyFrom(ByteArray(32))).build()
         val receipt=UploadBatchReceipt.newBuilder().setHeader(h).setPhase(UploadBatchPlanPhase.UPLOAD_PLAN_COMPLETED).setManifestOffset(1).setEffectsStarted(true).setItemOutcomes(ByteString.copyFrom(byteArrayOf(1,3))).build()

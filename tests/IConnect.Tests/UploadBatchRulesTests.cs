@@ -9,6 +9,21 @@ namespace IConnect.Tests;
 
 public sealed class UploadBatchRulesTests
 {
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public void Published_batch_proof_requires_a_successful_exact_parent_even_while_pending(bool verified)
+    {
+        var h = Header(Plan());
+        var response = new FileResponse { RequestId = ProtocolRules.NewToken(), MutationEpoch = h.Epoch,
+            Batch = new() { Header = h, Phase = UploadBatchPlanPhase.UploadPlanCompleted, EffectsStarted = true, ManifestOffset = h.EncodedLength, ItemOutcomes = ByteString.CopyFrom([1, 1]) },
+            PublishedBatchCheck = new() { Challenge = ProtocolRules.NewToken(), Verified = verified } };
+        StorageRules.ValidateResponse(FileResponse.Parser.ParseFrom(response.ToByteArray()));
+        foreach (var change in new Action<FileResponse>[] { r => r.PublishedBatchCheck.Challenge = "", r => r.Batch = null,
+            r => r.MutationEpoch = ProtocolRules.NewToken(), r => r.Batch.Phase = UploadBatchPlanPhase.UploadPlanStopped,
+            r => r.Batch.ItemOutcomes = ByteString.CopyFrom([1, 2]), r => r.Status = FileStatus.Conflict })
+        { var changed = response.Clone(); change(changed); Assert.Throws<InvalidDataException>(() => StorageRules.ValidateResponse(changed)); }
+        Assert.True(UploadBatchRules.IsRpc(FileOperation.VerifyPublishedBatch)); Assert.False(UploadRules.IsRpc(FileOperation.VerifyPublishedBatch));
+    }
     private static UploadBatchManifest Plan(int count = 2)
     {
         var plan = new UploadBatchManifest { Collision = UploadCollision.UploadKeepBoth };

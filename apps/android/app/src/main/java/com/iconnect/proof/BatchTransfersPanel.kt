@@ -103,11 +103,14 @@ internal fun BatchTransfersPanel(model:PhoneController,state:ProofState,chooseLo
                 TextButton({run {purge(row.id)}},enabled=enabled) {Text("Continue history cleanup")}
             } else {
                 TextButton({results=row.id},enabled=enabled && !row.active) {Text("Review item results…")}
-                if(row.active) TextButton({model.pauseOutgoingBatch(row.id)},enabled=enabled) {Text("Pause this batch send")}
+                if(row.active && row.phase==PhoneBatchSendingPhase.COMPLETED) Text("Waiting for the receiver's saved-batch check.")
+                if(row.active) TextButton({model.pauseOutgoingBatch(row.id)},enabled=enabled) {Text(if(row.phase==PhoneBatchSendingPhase.COMPLETED) "Stop waiting for batch check" else "Pause this batch send")}
                 if(row.archived) {
                     TextButton({history(row,PhoneBatchHistoryAction.RESTORE)},enabled=enabled) {Text("Review restoring send…")}
                     TextButton({history(row,PhoneBatchHistoryAction.PURGE)},enabled=enabled) {Text("Review history purge…")}
                 } else {
+                    if(row.phase==PhoneBatchSendingPhase.COMPLETED && row.receiverOutcomes.isNotEmpty() && Rules.decode(row.receiverOutcomes).all {it==1.toByte()})
+                        TextButton({model.verifyPublishedBatch(row.id)},enabled=enabled && online && !row.active && model.supportsPublishedBatchCheck()) {Text("Verify saved batch")}
                     if(!row.active && row.phase !in setOf(PhoneBatchSendingPhase.COMPLETED,PhoneBatchSendingPhase.STOPPED,PhoneBatchSendingPhase.STOPPING)) {
                         val target=state.uploadDestination?:state.breadcrumbs.lastOrNull()
                         TextButton({prompt=BatchPrompt(if(row.header.isEmpty()) "Send this batch?" else "Check the original receiver plan?",

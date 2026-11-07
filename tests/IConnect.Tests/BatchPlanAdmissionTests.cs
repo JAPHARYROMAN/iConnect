@@ -14,9 +14,10 @@ public sealed partial class BatchPlanAdmissionTests
     {
         public DateTimeOffset Now = DateTimeOffset.UtcNow;
         public TimeSpan PayloadElapsed;
+        public Action? TimestampRead;
         public override DateTimeOffset GetUtcNow() => Now;
         public override long TimestampFrequency => TimeSpan.TicksPerSecond;
-        public override long GetTimestamp() => PayloadElapsed.Ticks;
+        public override long GetTimestamp() { TimestampRead?.Invoke(); return PayloadElapsed.Ticks; }
     }
     private sealed class Fixture : IAsyncDisposable
     {
