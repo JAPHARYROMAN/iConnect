@@ -180,7 +180,7 @@ public sealed class SecureWindowsDirectory : IDisposable
     }
     public SecureWindowsDirectory OpenChild(string name, bool directory = false) =>
         new(OpenRelative(Handle, name, directory, false, false), []);
-    internal SecureWindowsDirectory OpenMutableChild(string name) =>
+    public SecureWindowsDirectory OpenMutableChild(string name) =>
         new(OpenRelative(Handle, name, false, false, true), []);
     internal SecureWindowsDirectory OpenWritableMetadataChild(string name) =>
         new(OpenRelative(Handle, name, false, true, true), []);
@@ -217,6 +217,25 @@ public sealed class SecureWindowsDirectory : IDisposable
         finally { Marshal.FreeHGlobal(buffer); }
     }
     public void Write(long offset, ReadOnlySpan<byte> data) => RandomAccess.Write(Handle, data, offset);
+    public void RequireOnlyDefaultDataStream()
+    {
+        const int streamInfo = 7, endOfFile = 38, bufferSize = 1024, nameOffset = 24;
+        var buffer = Marshal.AllocHGlobal(bufferSize);
+        try
+        {
+            if (!Native.GetFileInformationByHandleEx(Handle, streamInfo, buffer, bufferSize))
+            {
+                var error = Marshal.GetLastWin32Error();
+                if (error == endOfFile && (Info.IsDirectory || Info.Size == 0)) return;
+                throw new IOException("Private metadata data streams could not be verified. Its contents were kept.");
+            }
+            var next = Marshal.ReadInt32(buffer); var length = Marshal.ReadInt32(buffer, 4);
+            if (Info.IsDirectory || next != 0 || length != 14 || Marshal.ReadInt64(buffer, 8) != Info.Size ||
+                Marshal.PtrToStringUni(IntPtr.Add(buffer, nameOffset), length / 2) != "::$DATA")
+                throw new IOException("Private metadata has additional or unverified data streams. Its contents were kept.");
+        }
+        finally { Marshal.FreeHGlobal(buffer); }
+    }
     public void SetLength(long size) => RandomAccess.SetLength(Handle, size);
     public void Flush() => RandomAccess.FlushToDisk(Handle);
 

@@ -147,6 +147,8 @@ public sealed partial class MainWindow : Window
     {
         if (closing) return;
         closing = true; availabilityTimer?.Stop(); transferNetworkMonitor?.Dispose();
+        activityBackupDialogEpoch++;
+        controller?.CancelActivityBackupReview();
         if (reconnect is not null) reconnect.SystemAvailable = false;
         activeDialog?.Hide();
         try
@@ -178,7 +180,12 @@ public sealed partial class MainWindow : Window
         if (currentPage == "local" && Model.LocalFiles.Healthy && !Model.LocalFiles.Busy) _ = RunAsync(() => Model.LocalFiles.BrowseAsync());
         Render();
     }
-    private void ClearPreviews() { controller?.FilePreview.Clear(); controller?.LocalFiles.FilePreview.Clear(); }
+    private void ClearPreviews()
+    {
+        activityBackupDialogEpoch++;
+        controller?.CancelActivityBackupReview();
+        controller?.FilePreview.Clear(); controller?.LocalFiles.FilePreview.Clear();
+    }
     private void Navigate(string tag)
     {
         Navigation.SelectedItem = tag == "settings" ? Navigation.SettingsItem :

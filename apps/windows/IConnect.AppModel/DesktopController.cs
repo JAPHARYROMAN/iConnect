@@ -352,6 +352,7 @@ public sealed partial class DesktopController : IAsyncDisposable
             catch (Exception ex) when (StateRecovery.IsRecordFailure(ex))
             { TransferNetworkIssue = "Transfer network settings could not be opened. Remote file content is paused; local browsing remains available. Restore access to private settings storage and restart."; NetworkTraffic.Configure(new(), healthy: false); }
             grants = new StorageGrantStore(directory, ownerBinding: trust.OwnerBinding); activity = new LocalActivityStore(directory); Availability = new DesktopAvailability(directory);
+            activityBackups = new LocalActivityBackups(activity, () => DiagnosticScope, () => !disposed);
             downloadSources = new DownloadSourceStore(grants, directory);
             downloads = new WindowsDownloadManager(directory);
             batches = new WindowsBatchDownloads(directory, downloads);
@@ -584,6 +585,7 @@ public sealed partial class DesktopController : IAsyncDisposable
     public async Task ResetOwnerPolicyAsync()
     {
         CancelDiagnosticReview();
+        CancelActivityBackupReview();
         receivingParts.ClearSelection();
         var stopping = DisconnectAsync();
         try { Availability.Pause(); Availability.SetOptions(false, false, false); }
@@ -936,7 +938,7 @@ public sealed partial class DesktopController : IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         if (disposed) return;
-        disposed = true; StopPayloadPulse(); CancelDiagnosticReview(); receivingParts.Dispose(); await DisconnectAsync();
+        disposed = true; StopPayloadPulse(); CancelDiagnosticReview(); activityBackups.Dispose(); receivingParts.Dispose(); await DisconnectAsync();
         await outgoingBatchSender.DisposeAsync(); await outgoingBatches.DisposeAsync(); await outgoing.DisposeAsync(); await LocalFiles.DisposeAsync(); await batches.DisposeAsync(); await downloads.DisposeAsync(); await downloadSources.DisposeAsync();
         TransferNetwork?.Dispose();
         await activityWriter.DisposeAsync(); grants.Activity = null;

@@ -532,6 +532,7 @@ public sealed partial class MainWindow
         {
             if (await ShowAsync(Dialog("Clear local activity?", Body("This removes the saved activity entries from this computer."), "Clear activity")) == ContentDialogResult.Primary) await Model.ClearActivity();
         }, Model.Activity.Count != 0 && Model.ActivityIssue.Length == 0));
+        Page.Children.Add(Action("Manage preserved activity backups…", ManageActivityBackupsAsync));
         if (Model.Activity.Count == 0) Page.Children.Add(Card("No recorded activity", "Connection, device and permission actions will appear here."));
         historyPage = Math.Clamp(historyPage, 0, Math.Max(0, (Model.Activity.Count - 1) / 50));
         Page.Children.Add(Row(Action("Previous page", () => { --historyPage; Render(); return Task.CompletedTask; }, historyPage > 0),

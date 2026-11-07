@@ -126,4 +126,12 @@ public sealed class LocalActivityStore
             Issue = ""; version = ""; entries = []; Save([], 30);
         }
     }
+    internal T WithActivityBackupProtection<T>(Func<SecureWindowsDirectory, IReadOnlySet<string>, T> action)
+    {
+        lock (gate)
+        {
+            using var root = Root();
+            return action(root, recovery.Issues.Select(x => x.Id).ToHashSet(StringComparer.Ordinal));
+        }
+    }
 }
