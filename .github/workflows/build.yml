@@ -15,7 +15,7 @@ jobs:
       - run: dotnet restore iConnect.slnx --locked-mode
       - run: dotnet build iConnect.slnx --no-restore --configuration Release
       - name: Windows main regression
-        run: dotnet test tests/IConnect.Tests/IConnect.Tests.csproj --no-build --no-restore --configuration Release --filter "FullyQualifiedName!~Full_4096_item_file_plan&FullyQualifiedName!~Full4096ItemPrivateSnapshot&FullyQualifiedName!~Full4096ItemSender" --logger "console;verbosity=minimal"
+        run: dotnet test tests/IConnect.Tests/IConnect.Tests.csproj --no-build --no-restore --configuration Release --filter "FullyQualifiedName!~Full_4096_item_file_plan&FullyQualifiedName!~Full4096ItemPrivateSnapshot&FullyQualifiedName!~Full4096ItemSender&FullyQualifiedName!~LargeFileTests" --logger "console;verbosity=minimal"
       - name: Windows receiver file capacity
         run: dotnet test tests/IConnect.Tests/IConnect.Tests.csproj --no-build --no-restore --configuration Release --filter "FullyQualifiedName~BatchPlanAdmissionTests.Full_4096_item_file_plan" --logger "console;verbosity=minimal"
       - name: Windows private snapshot capacity
@@ -33,6 +33,17 @@ jobs:
           foreach ($relative in @('App.xbf', 'MainWindow.xbf', 'IConnect.Desktop.pri', 'libDatachannel/datachannel.dll', 'PreviewWorker/IConnect.Preview.Worker.exe', 'PreviewWorker/coreclr.dll', 'PreviewWorker/WinRT.Runtime.dll', 'AttachmentWorker/IConnect.Attachment.Worker.exe', 'AttachmentWorker/coreclr.dll')) {
             if (-not (Test-Path -LiteralPath (Join-Path $destination $relative) -PathType Leaf)) { throw "Missing published asset: $relative" }
           }
+  windows-large-files:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.4xx'
+      - run: dotnet restore tests/IConnect.Tests/IConnect.Tests.csproj --locked-mode
+      - run: dotnet build tests/IConnect.Tests/IConnect.Tests.csproj --no-restore --configuration Release
+      - name: Windows large-file transfers and restart
+        run: dotnet test tests/IConnect.Tests/IConnect.Tests.csproj --no-build --no-restore --configuration Release --filter "FullyQualifiedName~LargeFileTests" --logger "console;verbosity=minimal"
   android:
     runs-on: ubuntu-latest
     defaults:

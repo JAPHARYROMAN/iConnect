@@ -17,7 +17,7 @@ $fixture = ./tools/field-network-test.ps1 -Mode Prepare
 $fixture | Format-List
 ```
 
-The helper creates a new run directory, a `share` subfolder, and `expected.json` beside it. It never deletes existing content, changes app/OS settings, pairs devices or sends data. The default binary is 8 MiB plus 17 bytes; there are also text/Unicode, zero-byte, nested and empty-folder fixtures. Transferring them in both directions consumes at least twice the generated size. Use `-SizeMiB 64` only if a larger test is needed to make interruption observable and that mobile-data use is acceptable.
+The helper creates a new run directory, a `share` subfolder, and `expected.json` beside it. It never deletes existing content, changes app/OS settings, pairs devices or sends data. The default binary is 8 MiB plus 17 bytes; there are also text/Unicode, zero-byte, nested and empty-folder fixtures. Transferring them in both directions consumes at least twice the generated size. Use `-SizeMiB 64` only if a larger test is needed to make interruption observable and that mobile-data use is acceptable. Step 71 has separate storage and data requirements for files over 4 GiB.
 
 If Documents is redirected, pass `-OutputDirectory` with an ordinary local folder such as one under Downloads. The helper refuses redirected path components. Keep `expected.json` beside the generated `share`, and approve only `share` in the app.
 
@@ -175,6 +175,8 @@ If direct connection fails, record the precise visible state, connection types, 
 
 70. **Windows byte updates during sending.** Use the generated `network.bin` and fixture folder with the sending controls in steps 13 and 16. During preparation, tab to **Pause this send** or **Stop preparing this batch**. Check that the prepared counts change while the same action stays focused. Repeat with larger generated fixtures if preparation ends before you can observe a change. Use separate empty destinations approved on the phone and a transfer limit that leaves time to observe several acknowledgements. Send each preparation, keeping focus on its Pause action while bytes change. Pause from the keyboard, check the saved checkpoint, and resume the original receipt. Watch for receiver verification and then completion. Confirm each expected file appears once in its destination and use the hash checks from steps 5 and 13. Record focus and screen-reader behavior during preparation, sending and the final receipt. [Windows sending progress](batch-payload-estimates.md#windows-byte-updates-during-sending)
 
+71. **Files over 4 GiB.** Check storage for the original, private staging and published copies on both devices. Prepare a separate run with `$large = ./tools/field-network-test.ps1 -Mode Prepare -SizeMiB 4352`. This creates a binary of 4.25 GiB plus 17 bytes. Each paired transfer uses more than 4 GiB of network data, plus retries. Run the paired portion when that data use is acceptable. Use fresh destinations and repeat the Windows offline copy from step 32 and both sending directions from steps 12 and 13. Include the remote-explorer copies from steps 4 and 5. Pause after the saved count passes 2 GiB, reopen and resume the original receipt. For paired copies, repeat across 4 GiB with a rate limit that leaves time to pause before completion. If an approval expires, follow steps 39–45 to review the retained source or write window and resume its original receipt. For folder copies, run the verifier from step 5 with the large run's manifest. For individual uploads, compare the returned file's length and SHA-256 with the manifest's network.bin entry, using the filename from its receipt. Retain originals and earlier verified copies. A provider or filesystem limitation must remain visible as an incomplete or unsupported result. Record each direction, destination provider, checkpoint and hash outcome separately. [Large-file verification](phase-12-progress-recovery.md#windows-files-over-4-gib)
+
 ## Result record
 
 Create a private report with the following fields. Use **Pass / Fail / Not run / Unsupported** for each check; include a reason for the latter three. Omit personal network addresses and pairing secrets.
@@ -196,6 +198,7 @@ Offline copy verification and saving / active file and final receipts / foregrou
 Windows progress refresh / keyboard focus and duplicate names / expanded batch results / dialog and screen-reader behavior:
 Windows receiving byte updates / keyboard controls / pause and final receipt:
 Windows sending byte updates / preparation and acknowledgement / keyboard and screen reader / checkpoint resume / final hashes:
+Files over 4 GiB / Windows offline and paired directions / Android provider / saved offsets after reopen / final lengths and hashes:
 Generated run ID / expected-manifest location:
 Fresh pairing / no automatic sharing:
 Authenticated direct connection on independent networks:
