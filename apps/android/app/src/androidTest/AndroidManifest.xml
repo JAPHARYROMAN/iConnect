@@ -1,4 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- AGP rewrites the first instrumentation entry to its configured JUnit runner. -->
+    <instrumentation android:name="androidx.test.runner.AndroidJUnitRunner"
+        android:targetPackage="com.iconnect.proof" android:functionalTest="true" android:handleProfiling="false" />
+    <instrumentation android:name="com.iconnect.proof.ProcessRestartProbe"
+        android:targetPackage="com.iconnect.proof" android:functionalTest="true" android:handleProfiling="false" />
     <application>
         <!-- Disposable document fixtures exist only in the separately installed test APK. -->
         <provider android:name="com.iconnect.proof.TestDocumentsProvider"
