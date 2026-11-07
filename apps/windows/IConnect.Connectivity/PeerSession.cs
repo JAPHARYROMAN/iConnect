@@ -69,6 +69,7 @@ public sealed class PeerSession : IDisposable
 
     public async Task RunAsync(CancellationToken ct)
     {
+        var failed = false;
         try
         {
             await Rtc.Opened.WaitAsync(TimeSpan.FromSeconds(30), ct);
@@ -93,12 +94,20 @@ public sealed class PeerSession : IDisposable
         }
         catch (Exception ex)
         {
+            failed = true;
             authenticated.TrySetException(ex);
             acknowledgement?.TrySetException(ex);
             result?.TrySetException(ex);
             throw;
         }
-        finally { Dispose(); await fileRpc.Completion; }
+        finally
+        {
+            Dispose();
+            try { await fileRpc.Completion; }
+            // The worker owns service cleanup. Its failure must not replace the
+            // authentication, protocol or cancellation failure already in flight.
+            catch (Exception) when (failed) { }
+        }
     }
 
     private byte[] Transcript()

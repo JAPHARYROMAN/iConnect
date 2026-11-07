@@ -1,0 +1,19 @@
+# Native session failure propagation and concurrent startup
+
+Windows now preserves an authentication, protocol or cancellation failure when the file-RPC worker's service cleanup also throws. Previously, `PeerSession.RunAsync` set its authentication task to the original failure, then its `finally` block awaited worker cleanup. A cleanup exception could replace the failure observed by the caller awaiting `RunAsync`.
+
+The concrete regression uses a real native peer that omits mutual-readiness support and an injected storage-service cleanup failure. Authentication correctly rejects that peer before any storage request, but the earlier run task reports the generated cleanup `IOException` instead of the same `InvalidDataException` published by authentication. The baseline passes two controls and fails this case. After the fix, all three cases pass: readiness refusal with ordinary cleanup, readiness refusal with failed cleanup, and a cleanup failure that remains observable when the message loop has no prior failure.
+
+`RunAsync` still disposes the transport and observes the worker's completion. When its main operation has already failed, the worker's secondary cleanup exception does not replace that failure. When there is no prior failure, the worker exception still propagates. Readiness, identity verification, file authority and timeouts remain required. This change concerns the awaited worker cleanup; it does not establish complete handling of every possible synchronous disposal or filesystem failure.
+
+## Concurrent native control
+
+`NativeHandshakeStressTests` exercises eight rounds of four simultaneous native peer pairs. All 32 pairs verify both identities and readiness, perform four roots requests in each direction and require all 256 requests to be denied without a storage service. No receiving directory is created. Each pair has its own bounded deadline, cancellation and teardown, and failures capture authentication/run/signaling exceptions before cleanup can change their stacks.
+
+The 12 focused default-transport cases pass, including this control, all three failure-propagation cases, ordinary uploads, both folder-inbox modes and existing compatibility checks. The desktop Release build completes in 40.13 seconds with zero warnings/errors. On the pinned source-built DLL `84a0a63dcc579d97e4afac959866f9e61e9584c18732045a48db673d8ec87dde`, all nine established native fixtures and eight additional startup/failure/upload/folder controls pass with zero failures/skips. The source-built evidence is `.tools/native-transport-verification/ee7dd853a5fb4208949245a8d1e832ab/`.
+
+The final selected Windows regression passes all **882 cases**, with zero failures/skips, in 3 minutes 47 seconds. Its established exclusions remain the three separate 4,096-item capacity cases and the large-file class. This result is retained in `.tools/phase122-tests/phase122-regression.trx`.
+
+The original intermittent GitHub connection closure has not been reproduced or assigned a verified cause. This cleanup regression is independently reproduced; its fix does not establish the cause of that closure. A passing bounded concurrent test is not sustained-load or physical-network evidence. Full controller/invitation/coordinator, wider concurrency/fault, physical-device and release/security gates remain open.
+
+Local reports are `.tools/phase122-tests/phase122-primary-baseline.trx`, `phase122-primary-fixed.trx`, `phase122-native-stress.trx`, the source-built directory above and the desktop/build logs under `.tools/phase122-*`. The frozen Windows–Android fixtures and the running Android sequence are preserved separately; this change does not replace their artifacts or establish their pending results.
