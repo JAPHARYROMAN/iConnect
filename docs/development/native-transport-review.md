@@ -14,14 +14,20 @@ On the review date, the published OpenSSL 3.6 advisory page listed fixed-version
 
 `tools/native-transport-sources.json` pins public libdatachannel 0.24.6 and OpenSSL 3.6.5 commits, all five recursive gitlinks and a hash-checked NASM 3.02 download. Checkouts and recursive revisions are verified. The assembler comes from [NASM's release server](https://www.nasm.us/pub/nasm/releasebuilds/3.02/win64/), with its archive hash checked against the [Scoop manifest](https://github.com/ScoopInstaller/Main/blob/master/bucket/nasm.json). No tag-signature verification is claimed. [libdatachannel release](https://github.com/paullouisageneau/libdatachannel/releases/tag/v0.24.6), [OpenSSL source revision](https://github.com/openssl/openssl/commit/c8bd5a57108599ac650bbae77fcabe3109dab2e8)
 
-The builder needs Windows MSVC x64, CMake, Ninja and Perl. Its source-preparation mode passes and rejects an unexpected local source file before compilation. The isolated OpenSSL source build and installation pass, producing static SSL/crypto libraries. The complete builder is now running. Full DLL compilation, runtime dependency inspection, application interoperability, notices and packaging integration are pending.
+The builder needs Windows MSVC x64, CMake, Ninja and Perl. Its source-preparation mode passes and rejects an unexpected local source file before compilation. The complete builder passes, producing static OpenSSL SSL/crypto libraries and `datachannel.dll` SHA-256 `84a0a63dcc579d97e4afac959866f9e61e9584c18732045a48db673d8ec87dde`. This is one observed build, not a byte-for-byte reproducibility claim. Notices and application packaging integration remain pending.
 
 ```powershell
 ./tools/build-native-transport.ps1 -PrepareOnly
 ./tools/build-native-transport.ps1 -Jobs 1
+# First build tests/IConnect.Tests in Release; -Dotnet can select an installed SDK.
+./tools/test-native-transport.ps1 -ArtifactDirectory (Join-Path $env:USERPROFILE '.cache/iconnect/native-transport/0246-openssl365/artifact')
 ```
 
 Sources and outputs use a cache under the user profile, with a default single worker. OpenSSL uses `VC-WIN64A no-shared`. The libdatachannel recipe retains media and WebSocket support, uses the pinned bundled dependencies and links OpenSSL statically. Its output is marked `BuildOnly`, includes source/payload hashes and has `applicationInteropVerified: false`. The candidate is not yet adopted by the application. Existing encrypted transport tests and remaining field/release gates must pass before adoption and distribution.
+
+The separate verifier passes nine application fixture cases without skips in an isolated copy of the Release test output. They cover native peer authentication and readiness, bidirectional file delivery, authorized browsing and revocation, folder publication, upload receipt resumption and local STUN binding. A loader assertion checks the actual process module's absolute path and SHA-256; it passes for the candidate and rejects a deliberately incorrect expected hash. The standard test output retains the existing NuGet binary.
+
+Before execution, the verifier checks the source-lock/evidence/payload hashes, x64 PE header, all 18 required C exports and direct DLL imports. The observed imports are `advapi32.dll`, `bcrypt.dll`, `crypt32.dll`, `kernel32.dll`, `user32.dll` and `ws2_32.dll`; unexpected external imports require review. It requires all nine cases across the five actual transport test classes, then checks that both candidate copies retain their hashes. The successful report is `.tools/native-transport-verification/14b08ca149bd4a3893b9ef23dc1a6247/native-verification.json`, marked `WindowsNativeFixturesPassed`. This local fixture proof does not execute upstream cryptographic tests or establish Android interoperability, physical-network behavior, complete license coverage or release readiness.
 
 ## Android artifact check
 

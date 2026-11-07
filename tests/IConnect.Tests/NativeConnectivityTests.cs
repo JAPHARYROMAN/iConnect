@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Security.Cryptography;
 using Google.Protobuf;
 using IConnect.Connectivity;
@@ -9,6 +10,23 @@ namespace IConnect.Tests;
 
 public sealed class NativeConnectivityTests
 {
+    [Fact]
+    public void Loaded_transport_is_the_application_local_native_binary()
+    {
+        using var native = new NativeRtc(loopbackOnly: true);
+        var expectedPath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "libDatachannel", "datachannel.dll"));
+        var module = Process.GetCurrentProcess().Modules.Cast<ProcessModule>().Single(item =>
+            string.Equals(Path.GetFullPath(item.FileName), expectedPath, StringComparison.OrdinalIgnoreCase));
+        Assert.NotEqual(IntPtr.Zero, module.BaseAddress);
+        var expectedHash = Environment.GetEnvironmentVariable("ICONNECT_EXPECTED_NATIVE_SHA256");
+        if (expectedHash is not null)
+        {
+            Assert.Matches("^[a-fA-F0-9]{64}$", expectedHash);
+            using var file = File.OpenRead(module.FileName);
+            Assert.Equal(expectedHash.ToLowerInvariant(), Convert.ToHexStringLower(SHA256.HashData(file)));
+        }
+    }
+
     [Theory]
     [InlineData(true)]
     [InlineData(false)]

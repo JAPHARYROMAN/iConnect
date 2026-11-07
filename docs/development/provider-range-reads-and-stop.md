@@ -14,6 +14,8 @@ Three new device tests mutate the provider during file opening: change its versi
 
 Debug, instrumentation and unsigned release APK builds pass. All 85 JVM tests pass without failures or skips. Debug lint reports zero errors and 68 warnings. The broader device run completes with 493 passing cases, four invitation-dependent interoperability skips and zero failures in 58 minutes 36 seconds. Together with the storage run, 517 device checks pass on the same production/test APKs. The generated large-file journeys are running; complete Android support above 4 GiB remains unproven.
 
+The first large-file case passes on 7 November at 11:23 Africa/Nairobi: a 4,295,229,457-byte download pauses and reopens its checkpoint at 4 GiB, resumes, explicitly publishes through the provider and independently verifies both source and output hashes. The offline-copy and upload cases are still pending; this single result does not establish the complete large-file matrix.
+
 `LargeFileTest` needs at least 18 GiB free in the app data filesystem; a separate disposable emulator with a 32 GiB data partition is used locally. Each of its three cases allows up to three hours. It generates every byte, crosses the real 2/4 GiB boundaries, reopens persisted checkpoints and independently hashes source and provider output. It uses native managers and a real test DocumentsProvider through in-process requests; encrypted transport, physical devices and other providers remain separate checks.
 
 ## Windows stop controls
