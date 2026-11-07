@@ -52,3 +52,7 @@ dotnet test tests/IConnect.Tests/IConnect.Tests.csproj -c Release --no-build --n
 ```
 
 The hosted workflow runs these cases in a separate Windows job. Local execution used NTFS. Requests go through the in-process file service with an accepting attachment checker. Android providers, encrypted transport, installed security scanners and physical-device execution remain separate verification requirements. Step 71 of the [physical-network procedure](physical-network-validation.md) prepares the operator checks.
+
+## Android large-file validation in progress
+
+`LargeFileTest` adds generated 4,295,229,457-byte provider files for Android download, upload and offline-copy journeys. It is backed up on `codex/android-large-file-validation` while device verification continues. Debug and instrumentation APK builds pass; the three large-file cases have not yet completed successfully. The first download is progressing slowly on the disposable API 35 emulator, and provider-call overhead is under investigation. This work does not establish Android support above 4 GiB yet.
