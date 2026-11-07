@@ -1,6 +1,6 @@
 # Android provider client during incoming publication
 
-Implementation built on 7 November 2026. Device verification and a completed measurement of the changed publication path remain pending. The original large-file run uses the earlier production APK and remains separate evidence.
+Implementation built and exercised in the focused device run on 7 November 2026. Completed large-file and performance measurements of the changed publication path remain pending. The original large-file run uses the earlier production APK and remains separate evidence.
 
 ## Observed cost
 
@@ -34,6 +34,6 @@ Debug, instrumentation and unsigned release builds pass in 9 minutes 4 seconds. 
 
 Evidence is retained locally in `.tools/phase112-android-build.log`, `.tools/phase112-apk-hashes.json`, `.tools/phase112-test-manifest.txt` and `.tools/phase112-publication-profile.txt`. These two regressions and the existing receiving/cancellation/recovery cases must execute against the changed APK. A guarded follow-up queues all 17 incoming-upload cases, a 519-case device regression including all four actual-capacity cases and the storage suite, then the changed upload journey above 4 GiB. The regression excludes the separately scheduled large-file class and four fresh-invitation interoperability classes; those exclusions are not passes.
 
-The new snapshot is saved separately and is not installed while the original large-file, corrected offline-copy, process-death and native interoperability sequence remains active. The follow-up requires that exact preceding sequence to complete successfully before changing either APK. Device results and a measured performance change remain pending.
+That initial snapshot remains saved separately and was not installed: the corrected offline case exposed the [native cancellation classification defect](provider-range-reads-and-stop.md#native-provider-cancellation-after-pause), and the preceding sequence stopped before the update. The subsequently fixed application `5f109a8c23e2adb4998058c340f61c1b7c8d956c416773f228c7c80f61ad0d25` and test APK `51624e52609edec71d2285951bcb73dfde6d7b0b971165babdfaa0fd8c25a99c` include this provider-client change. All 17 incoming-upload cases pass within the complete 45-case focused download/receiving/local-copy run, including both regressions above. The 521-case broader regression and full three-case large-file matrix are scheduled for this fixed build. A measured performance change remains pending.
 
 Other providers and physical devices, provider-process death, the broader crash/lifecycle matrices and independent security review remain required. The [completion audit](completion.md) retains those gates and the complete application objective.

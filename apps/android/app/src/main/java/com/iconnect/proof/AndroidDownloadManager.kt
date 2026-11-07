@@ -204,10 +204,16 @@ class AndroidDownloadManager internal constructor(private val context: Context, 
                 RandomAccessFile(part, "rw").use { it.fd.sync() }
                 checkpoint = checkpoint.copy(offset = received, chain = Rules.hex(chain)); put(checkpoint)
             }
-            val stopped = e is CancellationException
+            // Android provider calls can report OperationCanceledException after
+            // our job was canceled. Preserve Pause even when that native error
+            // reaches this catch before coroutine cancellation is observed.
+            val stopped = e is CancellationException || !currentCoroutineContext().isActive
             put(checkpoint.copy(phase = if (stopped) PhoneDownloadPhase.PAUSED else PhoneDownloadPhase.INTERRUPTED,
                 error = if (stopped) "" else failure(e)))
-            if (stopped) throw e
+            if (stopped) {
+                if (e is CancellationException) throw e
+                throw CancellationException("Download paused.").also { it.initCause(e) }
+            }
         }
     }
     fun publish(id: String, anotherCopy: Boolean = false) = owned(id, "") { publishCore(id, anotherCopy) }

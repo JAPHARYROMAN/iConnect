@@ -3,6 +3,7 @@ package com.iconnect.proof
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.OperationCanceledException
 import android.provider.DocumentsContract as Documents
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -17,6 +18,9 @@ import org.junit.runner.RunWith
 import java.io.File
 import java.io.RandomAccessFile
 import java.security.MessageDigest
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 
 @RunWith(AndroidJUnit4::class)
 class AndroidDownloadTest {
@@ -83,6 +87,55 @@ class AndroidDownloadTest {
     private fun childNames(tree: Uri): List<String> = context.contentResolver.query(
         Documents.buildChildDocumentsUriUsingTree(tree, Documents.getTreeDocumentId(tree)), arrayOf(Documents.Document.COLUMN_DISPLAY_NAME), null, null, null)!!.use {
         buildList { while (it.moveToNext()) add(it.getString(0)) }
+    }
+    @Test fun nativeProviderCancellationAfterPauseKeepsTheDurableCheckpointAndResumesOriginalTicket()=runBlocking {
+        fixture { _,tree,directory->
+            val source=Source(bytes())
+            val entered=CompletableDeferred<Unit>(); val release=CountDownLatch(1); val delivered=AtomicBoolean(false)
+            val checkpoint=1024L*1024; val id:String
+            AndroidDownloadManager(context,directory).use {manager->
+                id=manager.enqueue(peer,source.entry,tree)
+                val running=manager.resume(id,peer) {request->
+                    if(request.operation==FileOperation.DOWNLOAD_READ && request.offset==checkpoint) {
+                        entered.complete(Unit)
+                        check(release.await(10,TimeUnit.SECONDS)) {"The controlled provider call was not released."}
+                        delivered.set(true)
+                        throw OperationCanceledException("Generated native provider cancellation.")
+                    }
+                    source.request(request)
+                }
+                try {withTimeout(5_000) {entered.await()}; manager.pause(id)} finally {release.countDown()}
+                withTimeout(5_000) {running.join(); manager.state.first { !it.single().active }}
+                val paused=manager.state.value.single()
+                assertTrue(delivered.get()); assertEquals(PhoneDownloadPhase.PAUSED,paused.phase)
+                assertEquals(checkpoint,paused.offset); assertEquals(source.ticket,paused.ticket); assertEquals("",paused.error)
+            }
+            AndroidDownloadManager(context,directory).use {manager->
+                val saved=manager.state.value.single(); assertEquals(PhoneDownloadPhase.PAUSED,saved.phase)
+                assertEquals(checkpoint,saved.offset); assertEquals(source.ticket,saved.ticket)
+                source.offsets.clear(); manager.resume(id,peer,source::request).join()
+                assertEquals(checkpoint,source.offsets.first()); assertEquals(PhoneDownloadPhase.READY_TO_SAVE,manager.state.value.single().phase)
+                manager.publish(id).join(); val completed=manager.state.value.single()
+                assertEquals(PhoneDownloadPhase.COMPLETED,completed.phase); assertArrayEquals(source.bytes,content(Uri.parse(completed.published)))
+            }
+        }
+    }
+    @Test fun nativeProviderCancellationWithoutJobCancellationRemainsAnInterruptedError()=runBlocking {
+        fixture { _,tree,directory->
+            val source=Source(bytes(2*StorageRules.RANGE+17))
+            AndroidDownloadManager(context,directory).use {manager->
+                val id=manager.enqueue(peer,source.entry,tree)
+                manager.resume(id,peer) {request->
+                    if(request.operation==FileOperation.DOWNLOAD_READ) throw OperationCanceledException("Generated provider-side interruption.")
+                    source.request(request)
+                }.join()
+                val failed=manager.state.value.single()
+                assertEquals(PhoneDownloadPhase.INTERRUPTED,failed.phase); assertEquals(0L,failed.offset); assertTrue(failed.error.isNotEmpty())
+                manager.resume(id,peer,source::request).join(); manager.publish(id).join()
+                val completed=manager.state.value.single(); assertEquals(PhoneDownloadPhase.COMPLETED,completed.phase)
+                assertArrayEquals(source.bytes,content(Uri.parse(completed.published)))
+            }
+        }
     }
     @Test fun savingReportsProviderWaitAndRejectsGrowthBeyondTheVerifiedLength() = runBlocking {
         fixture { fixture, tree, directory ->
