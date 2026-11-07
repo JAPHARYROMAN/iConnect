@@ -99,3 +99,9 @@ The Windows fixture builds with zero warnings/errors and eight selected native c
 ```
 
 The Android batch probe has **not run**. It is queued after the complete three-case large-file matrix, activity-backup journeys and both ordinary-upload roles succeed. The large-file download case has passed and its offline-copy case is currently running. No installed APK was changed to prepare this fixture. The prior Windows checkpoint's GitHub build, capacity, preview, publish-asset and large-file checks all passed; its Android build/JVM/lint job passed too. Compilation, guard refusals and Windows controls do not establish cross-platform batch interoperability. Full controller/invitation/coordinator journeys, actual process death/reconnection, broader faults/provider compatibility, physical-network and release gates remain open.
+
+### Native connection diagnostic follow-up
+
+The `8d09a75` GitHub main regression failed one blind-inbox native control after 100 ms with `Direct connection ended`; the other 877 cases passed. Android and Windows large-file CI jobs passed. The reported stack ended in the signal-bridge cleanup. Native failure can share an exception instance across channel, authentication and drain tasks, so cleanup awaits can change the visible stack. The harness now captures the primary failure, authentication state and faulted authentication/run/bridge tasks before draining them. It preserves all transfer and authority assertions.
+
+The local 878-case selection passes in 5 minutes 6 seconds, and all eight focused native controls pass on the final diagnostic build. That build has zero warnings/errors. The CI connection failure has not been reproduced or assigned a verified cause; a passing local run does not close its reliability investigation. Evidence is in `.tools/phase121-tests/phase121-regression.trx` and `phase121-native-final.trx`.

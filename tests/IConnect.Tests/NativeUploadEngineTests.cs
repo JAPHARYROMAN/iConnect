@@ -6,10 +6,11 @@ using IConnect.Connectivity;
 using IConnect.Core;
 using IConnect.Protocol;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace IConnect.Tests;
 
-public sealed class NativeUploadEngineTests
+public sealed class NativeUploadEngineTests(ITestOutputHelper output)
 {
     private static string Sandbox()
     {
@@ -43,7 +44,7 @@ public sealed class NativeUploadEngineTests
     public async Task Native_folder_batches_resume_original_plans_preserve_complete_trees_and_refuse_withdrawn_inboxes(bool listing)
         => await Exercise(true, listing);
 
-    private static async Task Exercise(bool batch, bool listing = false)
+    private async Task Exercise(bool batch, bool listing = false)
     {
         using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(100));
         using var host = DeviceIdentity.Ephemeral("Generated native host"); using var guest = DeviceIdentity.Ephemeral("Generated native guest");
@@ -97,6 +98,18 @@ public sealed class NativeUploadEngineTests
                 }
                 else Assert.True(value.GetProperty("publishedCopyChecked").GetBoolean());
             }
+        }
+        catch (Exception failure)
+        {
+            // Native channel failure can be the same exception instance in the
+            // main operation and both drain tasks. Capture it before cleanup
+            // awaits change its stack, so CI retains the first failing action.
+            output.WriteLine("Primary native fixture failure before cleanup: " + failure);
+            output.WriteLine($"Batch={batch}; listing={listing}; hostAuth={first.Authenticated.Status}; guestAuth={second.Authenticated.Status}; hostClosed={first.IsClosed}; guestClosed={second.IsClosed}");
+            foreach (var task in new[] { first.Authenticated, second.Authenticated }) if (task.IsFaulted) output.WriteLine("Peer authentication failure before cleanup: " + task.Exception);
+            foreach (var task in loops) if (task.IsFaulted) output.WriteLine("Peer run failure before cleanup: " + task.Exception);
+            foreach (var task in bridges) if (task.IsFaulted) output.WriteLine("Signal bridge failure before cleanup: " + task.Exception);
+            throw;
         }
         finally
         {
