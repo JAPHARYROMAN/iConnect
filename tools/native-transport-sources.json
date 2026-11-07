@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "cacheKey": "0246-openssl365",
+  "libdatachannel": {
+    "repository": "https://github.com/paullouisageneau/libdatachannel.git",
+    "tag": "v0.24.6",
+    "commit": "6b1e2e620f1e37f0eafeee702eaea0043cb305fd",
+    "submodules": {
+      "deps/json": "55f93686c01528224f448c19128836e7df245f72",
+      "deps/libjuice": "b89c792e3612faf2f12cf35bcc56857313a06be3",
+      "deps/libsrtp": "24b3bf8f19b6f5ab4cd2bcceb4f4064efca86fd5",
+      "deps/plog": "94899e0b926ac1b0f4750bfbd495167b4a6ae9ef",
+      "deps/usrsctp": "fec583d54493f879d2ae44a743423bf8a04371ab"
+    }
+  },
+  "openssl": {
+    "repository": "https://github.com/openssl/openssl.git",
+    "tag": "openssl-3.6.5",
+    "commit": "c8bd5a57108599ac650bbae77fcabe3109dab2e8"
+  },
+  "nasm": {
+    "version": "3.02",
+    "url": "https://www.nasm.us/pub/nasm/releasebuilds/3.02/win64/nasm-3.02-win64.zip",
+    "sha256": "161d0bfaff53c2f9e9f3e69fd0672323ebabafd1268976a5cec11be92a19aee7",
+    "checksumReference": "https://github.com/ScoopInstaller/Main/blob/master/bucket/nasm.json"
+  }
+}

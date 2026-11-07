@@ -19,6 +19,8 @@ Before distributing a build, review findings against the affected versions, plat
 
 The dependency lookup covers known advisories indexed for the listed Maven and NuGet coordinates at the recorded time. Review native components bundled inside dependencies against their upstream advisories, including the WebRTC implementations. Keep separate evidence for the deployed coordinator, the operating-system runtimes, dependency licenses and the independent authentication, filesystem and preview isolation review.
 
+The [native transport follow-up](native-transport-review.md) records the current binary hashes, the Windows vendor-source provenance gap and the candidate build from pinned public source. It also records the fresh 68-coordinate Android package lookup. Native adoption and release review remain pending.
+
 Use the [security policy](../../SECURITY.md) for reporting and triage. Confirm the repository has a monitored private reporting channel before distributing release builds.
 
 ## Fixture evidence

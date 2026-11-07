@@ -1,0 +1,140 @@
+#Requires -Version 7.2
+[CmdletBinding()]
+param(
+    [string]$BuildDirectory,
+    [ValidateRange(1,8)][int]$Jobs = 1,
+    [switch]$PrepareOnly
+)
+$ErrorActionPreference = 'Stop'
+if (!$IsWindows) { throw 'This builder targets Windows x64 and requires MSVC.' }
+$lockPath = Join-Path $PSScriptRoot 'native-transport-sources.json'
+$lock = Get-Content -LiteralPath $lockPath -Raw | ConvertFrom-Json -AsHashtable
+if ($lock.schema -ne 1 -or $lock.cacheKey -cnotmatch '\A[A-Za-z0-9_-]{1,80}\z') { throw 'Unsupported native source lock.' }
+foreach ($component in @($lock.libdatachannel,$lock.openssl)) {
+    if ($component.commit -cnotmatch '\A[a-f0-9]{40}\z' -or $component.tag -cnotmatch '\A[A-Za-z0-9_.-]+\z' -or
+        $component.repository -cnotmatch '\Ahttps://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\.git\z') { throw 'Invalid native source coordinate.' }
+}
+if ($lock.nasm.url -cnotmatch '\Ahttps://www\.nasm\.us/pub/nasm/releasebuilds/[0-9.]+/win64/nasm-[0-9.]+-win64\.zip\z' -or
+    $lock.nasm.sha256 -cnotmatch '\A[a-f0-9]{64}\z') { throw 'Invalid assembler archive coordinate.' }
+if (!$BuildDirectory) { $BuildDirectory = Join-Path $env:USERPROFILE ('.cache/iconnect/native-transport/' + $lock.cacheKey) }
+$root = [IO.Path]::GetFullPath($BuildDirectory)
+# OpenSSL's Windows makefiles require a build path without whitespace.
+if ($root -match '[\s"%!^&|<>]') { throw 'Choose a native build directory without whitespace or command metacharacters.' }
+[void][IO.Directory]::CreateDirectory($root)
+try { $owner = [IO.File]::Open((Join-Path $root 'owner.lock'),[IO.FileMode]::OpenOrCreate,[IO.FileAccess]::ReadWrite,[IO.FileShare]::None) }
+catch { throw 'The native build cache is already in use or inaccessible.' }
+
+function Invoke-Git([string[]]$Arguments) {
+    $output = & git.exe @Arguments
+    if ($LASTEXITCODE -ne 0) { throw "Git failed while validating native sources (exit $LASTEXITCODE)." }
+    return $output
+}
+function Assert-Source([string]$Path,[string]$Commit) {
+    if ((Invoke-Git -Arguments @('-C',$Path,'rev-parse','HEAD')).Trim() -cne $Commit) { throw "Native source revision mismatch: $Path" }
+    if (Invoke-Git -Arguments @('-C',$Path,'status','--porcelain','--untracked-files=all')) { throw "Native source has local changes: $Path" }
+}
+function Source([string]$Name,[hashtable]$Component) {
+    $path = Join-Path $root $Name
+    if (!(Test-Path -LiteralPath $path)) {
+        [void](Invoke-Git -Arguments @('-c','advice.detachedHead=false','clone','--depth','1','--branch',$Component.tag,'--single-branch',$Component.repository,$path))
+    }
+    Assert-Source $path $Component.commit
+    return $path
+}
+function Hash([string]$Path) { return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant() }
+function CmdPath([string]$Path) {
+    if ($Path -match '["%!^&|<>\r\n]' -or $Path -match '[^\x20-\x7e]') { throw 'Unsupported native tool path.' }
+    return '"' + $Path + '"'
+}
+function Run-Driver([string]$Name,[string[]]$Commands) {
+    $driver = Join-Path $root ($Name + '.cmd')
+    $log = Join-Path $root ($Name + '.log')
+    [IO.File]::WriteAllLines($driver,$Commands,[Text.ASCIIEncoding]::new())
+    & $env:COMSPEC /d /c $driver *> $log
+    $result = $LASTEXITCODE
+    if ($result -ne 0) { Get-Content -LiteralPath $log -Tail 20; throw "Native stage '$Name' failed ($result). Inspect $log" }
+    Write-Host "Native stage '$Name' completed. Log: $log"
+}
+
+try {
+    $libSource = Source 'libdatachannel' $lock.libdatachannel
+    [void](Invoke-Git -Arguments @('-C',$libSource,'submodule','update','--init','--recursive','--depth','1'))
+    $modules = @(Invoke-Git -Arguments @('-C',$libSource,'submodule','status','--recursive'))
+    if ($modules.Count -ne $lock.libdatachannel.submodules.Count) { throw 'Unexpected native submodule inventory.' }
+    foreach ($line in $modules) {
+        if ($line -cnotmatch '\A ([a-f0-9]{40}) (deps/[A-Za-z0-9_-]+)(?: .*)?\z' -or
+            $lock.libdatachannel.submodules[$Matches[2]] -cne $Matches[1]) { throw 'A native submodule is missing or differs from its pinned gitlink.' }
+        Assert-Source (Join-Path $libSource $Matches[2]) $Matches[1]
+    }
+    $sslSource = Source 'openssl' $lock.openssl
+    $archive = Join-Path $root ('nasm-' + $lock.nasm.version + '-win64.zip')
+    if (!(Test-Path -LiteralPath $archive)) { Invoke-WebRequest -Uri $lock.nasm.url -OutFile $archive -TimeoutSec 60 }
+    if ((Hash $archive) -cne $lock.nasm.sha256) { throw 'Assembler archive hash mismatch.' }
+    $nasmDirectory = Join-Path $root 'nasm'
+    [void][IO.Directory]::CreateDirectory($nasmDirectory)
+    $zip = [IO.Compression.ZipFile]::OpenRead($archive)
+    try {
+        foreach ($name in @('nasm.exe','ndisasm.exe')) {
+            $entries = @($zip.Entries | Where-Object { $_.FullName -ceq ('nasm-' + $lock.nasm.version + '/' + $name) })
+            if ($entries.Count -ne 1 -or $entries[0].Length -gt 10MB) { throw 'Unexpected assembler archive member.' }
+            $target = Join-Path $nasmDirectory $name
+            if (!(Test-Path -LiteralPath $target)) { [IO.Compression.ZipFileExtensions]::ExtractToFile($entries[0],$target,$false) }
+            $stream = $entries[0].Open()
+            try { $expected = [Convert]::ToHexString([Security.Cryptography.SHA256]::HashData($stream)).ToLowerInvariant() }
+            finally { $stream.Dispose() }
+            if ((Hash $target) -cne $expected) { throw 'An extracted assembler executable changed.' }
+        }
+    } finally { $zip.Dispose() }
+    if ($PrepareOnly) {
+        [pscustomobject]@{ Stage='Prepared'; SourceLockSha256=(Hash $lockPath); Root=$root; Submodules=$modules.Count }
+        return
+    }
+
+    $cmake = (Get-Command cmake.exe -ErrorAction Stop).Source
+    [void](Get-Command ninja.exe -ErrorAction Stop)
+    $perl = (Get-Command perl.exe -ErrorAction Stop).Source
+    $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio/Installer/vswhere.exe'
+    $studio = (& $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath | Select-Object -First 1)
+    if (!$studio) { throw 'Install the MSVC x64 build tools and Windows SDK before compiling the native transport.' }
+    $vs = Join-Path $studio 'Common7/Tools/VsDevCmd.bat'
+    $sslBuild = Join-Path $root 'openssl-build'
+    $sslPrefix = Join-Path $root 'openssl-install'
+    $libBuild = Join-Path $root 'datachannel-build'
+    foreach ($directory in @($sslBuild,$libBuild)) { [void][IO.Directory]::CreateDirectory($directory) }
+    $environment = @('@echo off',('call ' + (CmdPath $vs) + ' -arch=x64 -host_arch=x64 -no_logo'),
+        'if errorlevel 1 exit /b 1',('set "PATH=' + $nasmDirectory + ';%PATH%"'),'set "CL="','set "_CL_="','set "LC_ALL=C"','set "LANG=C"')
+    Run-Driver 'build-openssl' ($environment + @(
+        ('cd /d ' + (CmdPath $sslBuild)),
+        ((CmdPath $perl) + ' ' + (CmdPath (Join-Path $sslSource 'Configure')) + ' VC-WIN64A no-shared --prefix=' + (CmdPath $sslPrefix)),
+        'if errorlevel 1 exit /b 1','nmake /nologo','if errorlevel 1 exit /b 1',
+        'nmake /nologo install_sw','if errorlevel 1 exit /b 1','exit /b 0'))
+    $configure = (CmdPath $cmake) + ' -S ' + (CmdPath $libSource) + ' -B ' + (CmdPath $libBuild) +
+        ' -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded' +
+        ' -DBUILD_SHARED_LIBS=ON -DBUILD_SHARED_DEPS_LIBS=OFF -DNO_EXAMPLES=ON -DNO_TESTS=OFF' +
+        ' -DUSE_NICE=OFF -DUSE_GNUTLS=OFF -DUSE_MBEDTLS=OFF -DPREFER_SYSTEM_LIB=OFF' +
+        ' -DOPENSSL_USE_STATIC_LIBS=TRUE -DOPENSSL_MSVC_STATIC_RT=TRUE -DOPENSSL_ROOT_DIR=' + (CmdPath $sslPrefix)
+    Run-Driver 'build-datachannel' ($environment + @($configure,'if errorlevel 1 exit /b 1',
+        ((CmdPath $cmake) + ' --build ' + (CmdPath $libBuild) + ' --target datachannel --parallel ' + $Jobs),
+        'if errorlevel 1 exit /b 1','exit /b 0'))
+    Assert-Source $libSource $lock.libdatachannel.commit
+    Assert-Source $sslSource $lock.openssl.commit
+    foreach ($module in $lock.libdatachannel.submodules.GetEnumerator()) { Assert-Source (Join-Path $libSource $module.Key) $module.Value }
+    $binary = Join-Path $libBuild 'datachannel.dll'
+    if (!(Test-Path -LiteralPath $binary)) { throw 'The expected Windows native DLL was not produced.' }
+    $artifact = Join-Path $root 'artifact'
+    [void][IO.Directory]::CreateDirectory($artifact)
+    Copy-Item -LiteralPath $binary -Destination (Join-Path $artifact 'datachannel.dll')
+    Copy-Item -LiteralPath $lockPath -Destination (Join-Path $artifact 'source-lock.json')
+    $evidence = [ordered]@{
+        schema=1; stage='BuildOnly'; sourceLockSha256=(Hash $lockPath); binarySha256=(Hash $binary)
+        libdatachannel=$lock.libdatachannel; openssl=$lock.openssl
+        nasmVersion=$lock.nasm.version; nasmSha256=(Hash (Join-Path $nasmDirectory 'nasm.exe'))
+        opensslLibSslSha256=(Hash (Join-Path $sslPrefix 'lib/libssl.lib'))
+        opensslLibCryptoSha256=(Hash (Join-Path $sslPrefix 'lib/libcrypto.lib'))
+        cmakeVersion=((& $cmake --version | Select-Object -First 1) -join '')
+        architecture='windows-x64'; runtime='MSVC static'; jobs=$Jobs
+        verifiedAtUtc=[DateTimeOffset]::UtcNow.ToString('o'); applicationInteropVerified=$false
+    }
+    $evidence | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $artifact 'build-evidence.json') -Encoding UTF8
+    [pscustomobject]@{ Stage='BuildOnly'; Artifact=$artifact; BinarySha256=$evidence.binarySha256; ApplicationInteropVerified=$false }
+} finally { $owner.Dispose() }
