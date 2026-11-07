@@ -54,6 +54,7 @@ public sealed class NativeConnectivityTests
         }
         void Send(string kind, IMessage payload) => legacy.Send(ProtocolRules.Pack(kind, payload).ToByteArray());
         var bridges = new[] { Bridge(current.Rtc, legacy), Bridge(legacy, current.Rtc) };
+        var verifiedReadinessRefusal = false;
         try
         {
             current.Rtc.Offer();
@@ -76,6 +77,7 @@ public sealed class NativeConnectivityTests
                 Assert.False(current.AcceptsFolderBatches);
                 Assert.False(current.AcceptsPublishedUploadChecks);
                 Assert.False(Directory.Exists(inbox));
+                verifiedReadinessRefusal = true;
                 return;
             }
 
@@ -109,7 +111,10 @@ public sealed class NativeConnectivityTests
                 catch (IOException ex) when (ex.Message == "Direct connection ended.") { }
             try { await running; }
             catch (OperationCanceledException) when (ct.IsCancellationRequested) { }
-            catch (IOException ex) when (ex.Message == "Direct connection ended." && current.Authenticated.IsCompletedSuccessfully) { }
+            // Closing the refused peer can end file-RPC draining before RunAsync
+            // propagates the handshake error. Only accept this after the exact
+            // readiness refusal and all no-authority assertions passed above.
+            catch (IOException ex) when (ex.Message == "Direct connection ended." && (current.Authenticated.IsCompletedSuccessfully || verifiedReadinessRefusal)) { }
             catch (InvalidDataException) when (!supportsReadiness && current.Authenticated.IsFaulted) { }
         }
     }

@@ -35,12 +35,22 @@ public sealed class NativeUploadEngineTests
     }
     [Fact]
     public async Task Native_upload_endpoints_resume_original_receipts_preserve_collision_files_and_refuse_withdrawn_inboxes()
+        => await Exercise(false);
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task Native_folder_batches_resume_original_plans_preserve_complete_trees_and_refuse_withdrawn_inboxes(bool listing)
+        => await Exercise(true, listing);
+
+    private static async Task Exercise(bool batch, bool listing = false)
     {
         using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(100));
         using var host = DeviceIdentity.Ephemeral("Generated native host"); using var guest = DeviceIdentity.Ephemeral("Generated native guest");
         var pair = Pair(host, guest); var sandbox = Sandbox();
-        await using var hostFiles = new NativeUploadEndpoint(Path.Combine(sandbox, "host"), host, pair);
-        await using var guestFiles = new NativeUploadEndpoint(Path.Combine(sandbox, "guest"), guest, pair);
+        await using var hostFiles = new NativeUploadEndpoint(Path.Combine(sandbox, "host"), host, pair, listing);
+        await using var guestFiles = new NativeUploadEndpoint(Path.Combine(sandbox, "guest"), guest, pair, listing);
+        if (batch) { hostFiles.PrepareBatchDataset(); guestFiles.PrepareBatchDataset(); }
         var session = ProtocolRules.NewToken();
         using var first = new PeerSession(host, guest.PublicKey, session, true, Path.Combine(sandbox, "host-inbox"), _ => { }, loopbackOnly: true, fileService: hostFiles.Service);
         using var second = new PeerSession(guest, host.PublicKey, session, false, Path.Combine(sandbox, "guest-inbox"), _ => { }, loopbackOnly: true, fileService: guestFiles.Service);
@@ -60,17 +70,32 @@ public sealed class NativeUploadEngineTests
                 var module = Process.GetCurrentProcess().Modules.Cast<ProcessModule>().Single(x => Path.GetFullPath(x.FileName).Equals(path, StringComparison.OrdinalIgnoreCase));
                 using var input = File.OpenRead(module.FileName); Assert.Equal(expected, Convert.ToHexStringLower(SHA256.HashData(input)));
             }
-            await Task.WhenAll(hostFiles.SendAsync(first, _ => { }, timeout.Token), guestFiles.SendAsync(second, _ => { }, timeout.Token));
-            hostFiles.Revoke(); guestFiles.Revoke();
-            var hostResult = JsonSerializer.SerializeToElement(await hostFiles.CheckAsync(first, timeout.Token));
-            var guestResult = JsonSerializer.SerializeToElement(await guestFiles.CheckAsync(second, timeout.Token));
+            if (batch)
+            {
+                await Task.WhenAll(hostFiles.SendBatchAsync(first, _ => { }, timeout.Token), guestFiles.SendBatchAsync(second, _ => { }, timeout.Token));
+                hostFiles.RevokeBatch(); guestFiles.RevokeBatch();
+            }
+            else
+            {
+                await Task.WhenAll(hostFiles.SendAsync(first, _ => { }, timeout.Token), guestFiles.SendAsync(second, _ => { }, timeout.Token));
+                hostFiles.Revoke(); guestFiles.Revoke();
+            }
+            var hostResult = JsonSerializer.SerializeToElement(batch ? await hostFiles.CheckBatchAsync(first, guestFiles.BatchResultNames, timeout.Token) : await hostFiles.CheckAsync(first, timeout.Token));
+            var guestResult = JsonSerializer.SerializeToElement(batch ? await guestFiles.CheckBatchAsync(second, hostFiles.BatchResultNames, timeout.Token) : await guestFiles.CheckAsync(second, timeout.Token));
             Assert.Equal(hostResult.GetProperty("sentHash").GetString(), guestResult.GetProperty("receivedHash").GetString());
             Assert.Equal(guestResult.GetProperty("sentHash").GetString(), hostResult.GetProperty("receivedHash").GetString());
             foreach (var value in new[] { hostResult, guestResult })
             {
-                Assert.Equal(NativeUploadEndpoint.PayloadBytes, value.GetProperty("bytes").GetInt32());
+                Assert.Equal(batch ? NativeUploadEndpoint.BatchBytes : NativeUploadEndpoint.PayloadBytes, value.GetProperty("bytes").GetInt32());
                 Assert.Equal(1, value.GetProperty("preparations").GetInt32()); Assert.Equal(1, value.GetProperty("lostAcknowledgements").GetInt32());
-                foreach (var field in new[] { "resumedOriginalReceipt", "collisionOriginalKept", "originalSourceKept", "publishedCopyChecked", "withdrawnInboxDenied" }) Assert.True(value.GetProperty(field).GetBoolean());
+                foreach (var field in new[] { "resumedOriginalReceipt", "collisionOriginalKept", "originalSourceKept", "withdrawnInboxDenied" }) Assert.True(value.GetProperty(field).GetBoolean());
+                if (batch)
+                {
+                    Assert.Equal(6, value.GetProperty("items").GetInt32());
+                    foreach (var field in new[] { "emptyDirectoriesKept", "unicodeNameTextKept", "zeroLengthFilesKept", "parentOutcomesMatch" }) Assert.True(value.GetProperty(field).GetBoolean());
+                    Assert.Equal(!listing, value.GetProperty("blindNamesRetained").GetBoolean());
+                }
+                else Assert.True(value.GetProperty("publishedCopyChecked").GetBoolean());
             }
         }
         finally

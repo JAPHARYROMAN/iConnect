@@ -5,7 +5,7 @@ using IConnect.Core;
 using IConnect.Protocol;
 using IConnect.Storage.Windows;
 
-internal sealed class NativeUploadEndpoint : IAsyncDisposable
+internal sealed partial class NativeUploadEndpoint : IAsyncDisposable
 {
     internal const int PayloadBytes = 2 * 1024 * 1024 + 17;
     private const string ExistingBytes = "Generated existing owner file; keep these bytes.";
@@ -22,7 +22,7 @@ internal sealed class NativeUploadEndpoint : IAsyncDisposable
     private bool lostAcknowledgement, revoked;
     public WindowsFileService Service { get; }
 
-    public NativeUploadEndpoint(string directory, DeviceIdentity identity, Pairing pairing)
+    public NativeUploadEndpoint(string directory, DeviceIdentity identity, Pairing pairing, bool listForBatches = false)
     {
         var transcript = ProtocolRules.PairingTranscript(pairing);
         if (!ProtocolRules.Verify(pairing.Host.PublicKey.ToByteArray(), transcript, pairing.HostApproval.ToByteArray()) ||
@@ -47,7 +47,8 @@ internal sealed class NativeUploadEndpoint : IAsyncDisposable
         File.WriteAllBytes(source, RandomNumberGenerator.GetBytes(PayloadBytes));
         originalHash = Digest(source);
         grants = new(profile, ownerBinding: binding);
-        grant = grants.Add(peerId, destination, StoragePermission.Write | StoragePermission.Create, "Fixture receive-only inbox");
+        batchListing = listForBatches;
+        grant = grants.Add(peerId, destination, StoragePermission.Write | StoragePermission.Create | (listForBatches ? StoragePermission.List : 0), "Fixture receiving inbox");
         Service = new(grants); Service.BindOwnerPolicy(binding, peerId, epoch);
         sender = NewSender();
     }
@@ -136,6 +137,9 @@ internal sealed class NativeUploadEndpoint : IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
+        if (batchSender is not null) await batchSender.DisposeAsync();
+        if (batchSources is not null) await batchSources.DisposeAsync();
+        await grants.BatchPlans.WhenFilesIdleAsync();
         await sender.DisposeAsync();
         grants.Uploads.PauseVerification(); await grants.Uploads.WhenIdleAsync();
         Service.Dispose(); trust.Dispose();

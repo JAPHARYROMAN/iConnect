@@ -6,7 +6,9 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../../apps/windows/IConnect.Attachment.Worker/AttachmentPathBinding.cs" Link="AttachmentPathBinding.cs" />
     <Compile Include="../IConnect.NativeInterop.Fixture/NativeUploadEndpoint.cs" Link="NativeUploadEndpoint.cs" />
+    <Compile Include="../IConnect.NativeInterop.Fixture/NativeBatchEndpoint.cs" Link="NativeBatchEndpoint.cs" />
     <ProjectReference Include="../IConnect.Attachment.Fixture/IConnect.Attachment.Fixture.csproj" ReferenceOutputAssembly="false" />
     <None Include="../../shared/test-vectors/stun-uris.tsv" Link="stun-uris.tsv" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../shared/test-vectors/upload-batches.json" Link="upload-batches.json" CopyToOutputDirectory="PreserveNewest" />

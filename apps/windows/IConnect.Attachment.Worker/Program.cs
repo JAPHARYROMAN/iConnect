@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
-using Microsoft.Win32.SafeHandles;
+using IConnect.Attachment.Worker;
 
 // This broker calls Windows attachment services at ordinary-user privilege.
 // It never launches the received file or displays a trust/policy prompt.
@@ -31,19 +31,29 @@ internal static class Program
             return new UTF8Encoding(false, true).GetString(bytes);
         }
         var path = Read(32_768); var expected = Read(64);
-        if (path.Length > 8448 || path.Any(char.IsControl) || path.Contains('/') || !path.StartsWith("\\\\?\\Volume{", StringComparison.OrdinalIgnoreCase) ||
-            expected.Length != 25 || expected[8] != ':' || expected.Where((_, i) => i != 8).Any(c => !char.IsAsciiHexDigitLower(c)) || input.BaseStream.ReadByte() != -1)
+        if (input.BaseStream.ReadByte() != -1)
             throw new InvalidDataException("Invalid local attachment binding.");
-        using var guard = CreateFileW(path, 1 | 0x80 | 0x100000, 3, 0, 3, 0x00200000, 0);
-        if (guard.IsInvalid || !GetFileInformationByHandle(guard, out var info) || (info.Attributes & 0x410) != 0 || info.Links != 1 ||
-            $"{info.Volume:x8}:{info.IndexHigh:x8}{info.IndexLow:x8}" != expected) throw new IOException("The attachment identity changed.");
+        using var binding = AttachmentPathBinding.Open(path, expected);
+        var result = SaveAtPath(path, out var rejectedPath);
+        if (rejectedPath && path.Length >= 260 && binding.TryShortParentPath() is { } alias)
+            return SaveAtPath(alias, out _);
+        return result;
+    }
+    [SupportedOSPlatform("windows")]
+    private static int SaveAtPath(string path, out bool rejectedPath)
+    {
+        rejectedPath = false;
         var type = Type.GetTypeFromCLSID(new Guid("4125dd96-e03a-4103-8f70-e0597d803b9c"), true)!;
         var instance = (IAttachmentExecute)Activator.CreateInstance(type)!;
         try
         {
             var client = new Guid("dc94fdda-80ed-4fe4-b9e3-159032f15d74");
             var hr = instance.SetClientGuid(ref client); if (hr != 0) return hr;
-            hr = instance.SetLocalPath(path); if (hr != 0) return hr;
+            hr = instance.SetLocalPath(path);
+            // A failed setter can leave the COM object with the rejected path.
+            // A bounded alias retry uses a fresh instance and still requires Save.
+            rejectedPath = hr == unchecked((int)0x80070057);
+            if (hr != 0) return hr;
             // A paired identity is not a verifiable web origin. Leaving Source and
             // Referrer unset retains the documented default Restricted Zone.
             return instance.Save();
@@ -66,14 +76,4 @@ internal static class Program
         [PreserveSig] int SaveWithUI(nint window);
         [PreserveSig] int ClearClientState();
     }
-    [StructLayout(LayoutKind.Sequential)] private struct FileTime { public uint Low, High; }
-    [StructLayout(LayoutKind.Sequential)] private struct FileInfo
-    {
-        public uint Attributes; public FileTime Created, Accessed, Written;
-        public uint Volume, SizeHigh, SizeLow, Links, IndexHigh, IndexLow;
-    }
-    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-    private static extern SafeFileHandle CreateFileW(string path, uint access, uint share, nint security, uint disposition, uint flags, nint template);
-    [DllImport("kernel32.dll", SetLastError = true)] [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool GetFileInformationByHandle(SafeFileHandle file, out FileInfo info);
 }
