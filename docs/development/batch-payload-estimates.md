@@ -31,6 +31,8 @@ The Transfers page updates existing labels for private snapshot preparation and 
 
 The Windows fixtures check that intermediate counts reach observers without requesting a page refresh, and that preparation completion, the original receipt baseline, pause and send completion still request one. Use [step 70 of the physical network test](physical-network-validation.md) to check the focused control, screen-reader behavior and final bytes on the paired devices.
 
+The local Windows Release build passed with zero warnings or errors. All 139 focused and 856 selected regression cases passed. A separate 4,096-item private snapshot and restart case also passed. The selected regression excluded the full receiver file and sender capacity cases. Eight Windows assembly hashes matched before and after verification. The built Android debug and test APKs matched the previously verified packages. Paired-device and native accessibility results remain to be recorded in step 70.
+
 ## Per-file verification
 
 The Windows Release build passed with zero warnings or errors. All 137 focused tests and 851 selected Windows tests passed. The selected run excluded three 4,096-item capacity cases. Android debug, test and unsigned release builds passed along with 84 JVM and 41 selected emulator tests. Lint reported zero errors and 71 warnings. The initial emulator run had two UI failures while unrelated Android system dialogs covered the app. Both passed on the same APKs after reboot, along with the rest of the selection.

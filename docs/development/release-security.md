@@ -28,3 +28,11 @@ Both embedded inventories passed the CycloneDX 1.6 schema check. OSV returned ze
 The inventory audit found that an earlier Windows MSIX omitted its WebRTC DLL. The rebuilt package and CI-style publish contain the resolved DLL, and the published copy loaded with the expected native exports.
 
 The Windows Release build passed with zero warnings or errors, along with 838 selected Windows tests and 10 isolated preview tests. The selected run excluded three capacity tests. Android debug, test and unsigned release builds passed, as did a disposable-signed release build and all 84 JVM tests. Debug lint reported zero errors and 71 warnings.
+
+## Hosted build verification
+
+On 7 November 2026, the hosted workflow for commit `9a7ffe0` passed both platform jobs. Windows built Release with zero warnings or errors. All 856 main regression cases, the three separate 4,096-item capacity cases and 10 isolated preview cases passed. Desktop publishing also passed its checks for compiled XAML, resources, the native transport and both workers. The sender capacity case completed in 19 minutes 57 seconds. [GitHub run](https://github.com/JAPHARYROMAN/iConnect/actions/runs/42337462066)
+
+The Ubuntu Android job built debug, instrumentation-test and unsigned release APKs, then completed its JVM test and debug lint tasks. SDK setup specifies `platform-tools` explicitly to avoid the retired `tools` package in the setup action's default list. [Android job](https://github.com/JAPHARYROMAN/iConnect/actions/runs/42337462066/job/128297521644), [setup action inputs](https://github.com/android-actions/setup-android/blob/v3/action.yml)
+
+The hosted Android job builds the instrumentation APK. Its device execution is covered by the separate emulator and field records. The Windows sender capacity fixture uses an accepting attachment checker. Installed security-provider, signed-package, accessibility and physical-network verification remain in the [completion audit](completion.md).
