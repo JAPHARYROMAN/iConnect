@@ -1,6 +1,7 @@
 package com.iconnect.proof
 
 import android.content.Context
+import android.content.ContentResolver
 import android.net.Uri
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
@@ -369,11 +370,17 @@ class AndroidIncomingUploads internal constructor(private val context:Context,pr
     private suspend fun verifyPublish(id:String,allowed:()->Boolean,signal:CancellationSignal,progress:PhoneIncomingFinalizationTracker) {
         try {
             var row=synchronized(gate) {records.getValue(id)}; checkAllowed(row,allowed,signal)
-            val destination=SafDestination(context,Uri.parse(row.target.tree),row.target.parents,signal)
+            val tree=Uri.parse(row.target.tree)
+            // Retain only this attempt's provider connection, never permission or
+            // metadata. Every existing per-range and final validation still runs.
+            val client=requireNotNull(context.contentResolver.acquireUnstableContentProviderClient(tree)) {"The destination provider is unavailable."}
+            client.use {
+            val provider=ContentResolver.wrap(it)
+            val destination=SafDestination(context,tree,row.target.parents,signal,provider)
             if(row.published.isNotEmpty()) {
                 val uri=Uri.parse(row.published); destination.child(uri); requireName(row,destination,uri)
                 progress.begin(PhoneIncomingFinalizationStage.CHECKING_PROVIDER_BYTES)
-                check(hashProvider(row,uri,allowed,signal,progress::advance)==row.hash) {"The recorded provider copy is incomplete or changed. It was kept."}
+                check(hashProvider(row,uri,allowed,signal,progress::advance,provider)==row.hash) {"The recorded provider copy is incomplete or changed. It was kept."}
                 checkAllowed(row,allowed,signal); destination.child(uri); requireName(row,destination,uri)
                 synchronized(gate) {authorize(row,allowed); put(row.copy(phase=UploadPhase.UPLOAD_COMPLETED,message="Recorded provider copy verified without rewriting it.")); runCatching {deletePrivate(row)}}; return
             }
@@ -397,13 +404,13 @@ class AndroidIncomingUploads internal constructor(private val context:Context,pr
                 val name=if(blind) uniqueName(row.name) else SafDestination.unusedName(row.name,previous.values)
                 synchronized(gate) {authorize(row,allowed); row=put(row.copy(phase=UploadPhase.UPLOAD_FINALIZING,finalName=name,message="Provider publication is pending; an interrupted copy will be preserved."))}
                 checkAllowed(row,allowed,signal)
-                val uri=requireNotNull(Docs.createDocument(context.contentResolver,destination.parent,"application/octet-stream",name))
+                val uri=requireNotNull(Docs.createDocument(provider,destination.parent,"application/octet-stream",name))
                 check(uri.scheme=="content" && uri.authority==Uri.parse(row.target.tree).authority && uri.userInfo==null && uri.query==null && uri.fragment==null && uri.toString().length<=16_384 && Docs.getDocumentId(uri) !in previous)
                 destination.child(uri)
                 synchronized(gate) {authorize(row,allowed); row=put(row.copy(published=uri.toString()))}
                 val actual=destination.created(uri,previous); check(actual==name) {"The provider changed the requested name; its empty new document was kept for review."}
                 checkAllowed(row,allowed,signal); Os.lseek(fd,0,OsConstants.SEEK_SET)
-                withProvider(uri,"rw",signal) {descriptor->
+                withProvider(uri,"rw",signal,provider) {descriptor->
                     val stat=Os.fstat(descriptor.fileDescriptor)
                     if(!OsConstants.S_ISREG(stat.st_mode) || stat.st_nlink!=1L || stat.st_size!=0L) throw UnsupportedOperationException("Provider did not return a supported empty new file.")
                     Os.lseek(descriptor.fileDescriptor,0,OsConstants.SEEK_SET)
@@ -418,8 +425,9 @@ class AndroidIncomingUploads internal constructor(private val context:Context,pr
                 }
                 checkAllowed(row,allowed,signal); destination.child(uri)
                 progress.begin(PhoneIncomingFinalizationStage.CHECKING_PROVIDER_BYTES)
-                check(hashProvider(row,uri,allowed,signal,progress::advance)==row.hash) {"The provider copy did not verify; it was kept."}
+                check(hashProvider(row,uri,allowed,signal,progress::advance,provider)==row.hash) {"The provider copy did not verify; it was kept."}
                 destination.child(uri); requireName(row,destination,uri); synchronized(gate) {authorize(row,allowed); put(row.copy(phase=UploadPhase.UPLOAD_COMPLETED,message="Provider copy reread and verified; the identified private stage can be cleaned up.")); runCatching {deletePrivate(row)}}
+            }
             }
             }
         } catch(e:Exception) {
@@ -431,9 +439,10 @@ class AndroidIncomingUploads internal constructor(private val context:Context,pr
             }
         } finally {synchronized(gate) {work.remove(id)?.permit?.close(); emit()}}
     }
-    private suspend fun hashProvider(row:Row,uri:Uri,allowed:()->Boolean,signal:CancellationSignal,progress:((Long)->Unit)?=null):String {
+    private suspend fun hashProvider(row:Row,uri:Uri,allowed:()->Boolean,signal:CancellationSignal,progress:((Long)->Unit)?=null,
+        provider:ContentResolver=context.contentResolver):String {
         val hash=MessageDigest.getInstance("SHA-256"); var count=0L
-        withProvider(uri,"r",signal) {descriptor->ParcelFileDescriptor.AutoCloseInputStream(descriptor).use {input->
+        withProvider(uri,"r",signal,provider) {descriptor->ParcelFileDescriptor.AutoCloseInputStream(descriptor).use {input->
             val bytes=ByteArray(StorageRules.RANGE)
             while(true) {checkAllowed(row,allowed,signal); val n=input.read(bytes); if(n<0) break; count+=n; check(count<=row.size); hash.update(bytes,0,n); progress?.invoke(count)}
         }}
@@ -443,11 +452,12 @@ class AndroidIncomingUploads internal constructor(private val context:Context,pr
         val name=destination.name(uri); val grant=synchronized(gate) {grants.get(row.target.grant,row.peer)}
         check(name==row.finalName && grants.visible(grant,name)) {"The provider copy was renamed or excluded; it was kept."}
     }
-    private suspend fun <T> withProvider(uri:Uri,mode:String,signal:CancellationSignal,action:suspend (ParcelFileDescriptor)->T):T=coroutineScope {
+    private suspend fun <T> withProvider(uri:Uri,mode:String,signal:CancellationSignal,provider:ContentResolver=context.contentResolver,
+        action:suspend (ParcelFileDescriptor)->T):T=coroutineScope {
         val opened=AtomicReference<ParcelFileDescriptor?>()
         val finished=java.util.concurrent.atomic.AtomicBoolean(false)
         val watcher=launch(Dispatchers.IO,start=CoroutineStart.UNDISPATCHED) {try {awaitCancellation()} finally {if(!finished.get()) {signal.cancel(); runCatching {opened.get()?.close()}}}}
-        try {val descriptor=requireNotNull(context.contentResolver.openFileDescriptor(uri,mode,signal)); opened.set(descriptor); currentCoroutineContext().ensureActive(); descriptor.use {action(it)}}
+        try {val descriptor=requireNotNull(provider.openFileDescriptor(uri,mode,signal)); opened.set(descriptor); currentCoroutineContext().ensureActive(); descriptor.use {action(it)}}
         finally {finished.set(true); runCatching {opened.getAndSet(null)?.close()}; withContext(NonCancellable) {watcher.cancelAndJoin()}}
     }
     private fun uniqueName(name:String):String {

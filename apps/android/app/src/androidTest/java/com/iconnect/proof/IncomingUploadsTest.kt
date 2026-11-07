@@ -1,7 +1,9 @@
 package com.iconnect.proof
 
 import android.content.Context
+import android.content.ContentResolver
 import android.content.ContextWrapper
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.DocumentsContract as Docs
@@ -71,6 +73,45 @@ class IncomingUploadsTest {
         suspend fun close() {service.close(); incoming.shutdown(); grants.batchPlans.shutdown(); AndroidSafAccess(context).reconcile("incoming:",emptyMap()); AndroidSafAccess(context).reconcile("batch-incoming:",emptyMap()); grants.all().forEach {grants.remove(it.id)}; base.contentResolver.call(TestDocumentsProvider.CONTROL_URI,"dispose",data.getString("root"),null)
             listOf("iconnect.proof","iconnect.storage","iconnect.saf-access").forEach {base.deleteSharedPreferences(prefix+it)}; root.deleteRecursively()}
     }
+    @Test fun leasedDestinationStillRequiresCurrentPersistedAndroidAccess()=runBlocking {
+        val f=Fixture()
+        try {
+            val resolver=f.context.contentResolver
+            requireNotNull(resolver.acquireUnstableContentProviderClient(f.tree)).use {client->
+                val destination=SafDestination(f.context,f.tree,provider=ContentResolver.wrap(client))
+                destination.validate()
+                resolver.releasePersistableUriPermission(f.tree,Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                assertFalse(resolver.persistedUriPermissions.any {it.uri==f.tree && it.isReadPermission && it.isWritePermission})
+                val failure=runCatching {destination.validate()}.exceptionOrNull()
+                assertTrue("A held provider must not retain withdrawn OS access.",failure is IllegalStateException)
+                assertEquals("Choose this destination again to restore Android access.",failure?.message)
+            }
+        } finally {f.close()}
+    }
+
+    @Test fun leasedPublicationRefusesAProviderCopyMovedDuringReadBack()=runBlocking {
+        val f=Fixture()
+        try {
+            f.initialize()
+            val original=f.read("simu.txt")
+            val bytes=ByteArray(65_537) {(it*13%251).toByte()}
+            val row=f.begin(f.descriptor(bytes,"moved-during-check.bin")); f.write(row,bytes)
+            f.mode("moveOutsideOnRead")
+            val receipt=f.finish(row)
+            assertEquals(receipt.message,UploadPhase.UPLOAD_REVIEW,receipt.phase)
+            val part=File(f.root,"incoming-uploads").listFiles()!!.single {it.name.endsWith(".part")}
+            assertArrayEquals(bytes,part.readBytes())
+            val remaining=f.children()
+            assertFalse(remaining.containsValue(receipt.finalName))
+            f.mode("normal")
+            f.restart(selectTarget=false,reopenGrants=true)
+            assertEquals(UploadPhase.UPLOAD_REVIEW,f.finish(receipt).phase)
+            assertEquals(remaining,f.children())
+            assertArrayEquals(bytes,part.readBytes())
+            assertArrayEquals(original,f.read("simu.txt"))
+        } finally {f.close()}
+    }
+
     @Test fun completedPublicationRequiresFreshChallengeAndRefusesChangedProviderBytes()=runBlocking {
         val f=Fixture()
         try {

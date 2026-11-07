@@ -1,6 +1,7 @@
 package com.iconnect.proof
 
 import android.content.Context
+import android.content.ContentResolver
 import android.net.Uri
 import android.os.CancellationSignal
 import android.provider.DocumentsContract as Docs
@@ -9,8 +10,11 @@ data class SafFolderBinding(val id: String, val name: String)
 enum class PhoneCollision { KEEP_BOTH, SKIP, FAIL }
 
 /** A selected OS tree plus exact provider IDs. A child folder never becomes a new picker grant. */
-class SafDestination(private val context: Context, val tree: Uri, val parents: List<SafFolderBinding> = emptyList(), private val signal:CancellationSignal?=null) {
-    private val resolver = context.contentResolver
+class SafDestination(private val context: Context, val tree: Uri, val parents: List<SafFolderBinding> = emptyList(), private val signal:CancellationSignal?=null,
+    private val provider:ContentResolver=context.contentResolver) {
+    // A wrapped provider client cannot supply OS URI-grant state. Always query the
+    // application's resolver for current permission, even while a client is held.
+    private val accessResolver = context.contentResolver
     private val rootId = Docs.getTreeDocumentId(tree)
     val parent get() = document(parents.lastOrNull()?.id ?: rootId)
     private fun document(id: String) = Docs.buildDocumentUriUsingTree(tree, id)
@@ -20,13 +24,13 @@ class SafDestination(private val context: Context, val tree: Uri, val parents: L
     }
     fun validate() {
         signal?.throwIfCanceled()
-        check(resolver.persistedUriPermissions.any { it.uri == tree && it.isReadPermission && it.isWritePermission }) {
+        check(accessResolver.persistedUriPermissions.any { it.uri == tree && it.isReadPermission && it.isWritePermission }) {
             "Choose this destination again to restore Android access." }
         directory(document(rootId), checkName = false)
         parents.forEachIndexed { index, binding ->
             val uri = document(binding.id)
-            check(Docs.isChildDocument(resolver, document(rootId), uri) &&
-                Docs.findDocumentPath(resolver, uri)?.path == listOf(rootId) + parents.take(index + 1).map { it.id }) {
+            check(Docs.isChildDocument(provider, document(rootId), uri) &&
+                Docs.findDocumentPath(provider, uri)?.path == listOf(rootId) + parents.take(index + 1).map { it.id }) {
                 "A destination folder moved outside its recorded parent. Review the destination." }
             check(directory(uri) == binding.name) { "A destination folder was renamed. Review it before starting a new copy." }
         }
@@ -36,14 +40,14 @@ class SafDestination(private val context: Context, val tree: Uri, val parents: L
         validate()
         check(uri.scheme == "content" && uri.authority == tree.authority && uri.toString().length <= 16_384)
         val id = Docs.getDocumentId(uri)
-        check(id != rootId && parents.none { it.id == id } && Docs.isChildDocument(resolver, document(rootId), uri) &&
-            Docs.findDocumentPath(resolver, uri)?.path == listOf(rootId) + parents.map { it.id } + id) {
+        check(id != rootId && parents.none { it.id == id } && Docs.isChildDocument(provider, document(rootId), uri) &&
+            Docs.findDocumentPath(provider, uri)?.path == listOf(rootId) + parents.map { it.id } + id) {
             "The provider document moved outside its recorded destination." }
     }
     fun children(maximumItems:Int=65_536, maximumChars:Int=4*1024*1024): Map<String, String> {
         require(maximumItems in 1..65_536 && maximumChars in 1..4*1024*1024)
         validate(); val result = linkedMapOf<String, String>(); var chars=0L
-        resolver.query(Docs.buildChildDocumentsUriUsingTree(tree, parents.lastOrNull()?.id ?: rootId),
+        provider.query(Docs.buildChildDocumentsUriUsingTree(tree, parents.lastOrNull()?.id ?: rootId),
             arrayOf(Docs.Document.COLUMN_DOCUMENT_ID, Docs.Document.COLUMN_DISPLAY_NAME), null, null, null,signal)?.use {
             while (it.moveToNext()) {
                 signal?.throwIfCanceled()
@@ -61,16 +65,16 @@ class SafDestination(private val context: Context, val tree: Uri, val parents: L
         child(uri); check(Docs.getDocumentId(uri) !in previous) { "The provider returned an existing document. It was left untouched." }
         return name(uri)
     }
-    fun name(uri: Uri): String = resolver.query(uri, arrayOf(Docs.Document.COLUMN_DISPLAY_NAME), null, null, null,signal)?.use {
+    fun name(uri: Uri): String = provider.query(uri, arrayOf(Docs.Document.COLUMN_DISPLAY_NAME), null, null, null,signal)?.use {
         check(it.moveToFirst()); it.getString(0).also(StorageRules::name)
     } ?: error("The provider document is unavailable.")
     fun createdFolder(uri: Uri, previous: Map<String, String>): SafFolderBinding {
         created(uri, previous); val name = directory(uri)
         val binding = SafFolderBinding(Docs.getDocumentId(uri), name)
-        check(SafDestination(context, tree, parents + binding,signal).children(1,8192).isEmpty()) { "The provider returned a folder with existing content. It was left untouched." }
+        check(SafDestination(context, tree, parents + binding,signal,provider).children(1,8192).isEmpty()) { "The provider returned a folder with existing content. It was left untouched." }
         return binding
     }
-    private fun directory(uri: Uri, checkName: Boolean = true): String = resolver.query(uri, arrayOf(Docs.Document.COLUMN_MIME_TYPE, Docs.Document.COLUMN_FLAGS,
+    private fun directory(uri: Uri, checkName: Boolean = true): String = provider.query(uri, arrayOf(Docs.Document.COLUMN_MIME_TYPE, Docs.Document.COLUMN_FLAGS,
         Docs.Document.COLUMN_DISPLAY_NAME), null, null, null,signal)?.use {
         check(it.moveToFirst() && it.getString(0) == Docs.Document.MIME_TYPE_DIR && it.getInt(1) and Docs.Document.FLAG_DIR_SUPPORTS_CREATE != 0) {
             "The provider does not support a writable destination folder." }
