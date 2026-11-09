@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "observedDate": "2026-11-09",
+  "timeZone": "Africa/Nairobi",
+  "device": {
+    "kind": "disposable Android emulator",
+    "avd": "iconnect-large-files",
+    "serial": "emulator-5568",
+    "apiLevel": 35
+  },
+  "applicationSha256": "5f109a8c23e2adb4998058c340f61c1b7c8d956c416773f228c7c80f61ad0d25",
+  "instrumentationApkSha256": "51624e52609edec71d2285951bcb73dfde6d7b0b971165babdfaa0fd8c25a99c",
+  "test": "com.iconnect.proof.LargeFileTest#uploadAndIncomingProviderOver4GiBReopenTheOriginalReceipts",
+  "datasetBytes": 4295229457,
+  "timeoutMilliseconds": 10800000,
+  "elapsedSeconds": 10800.904,
+  "testsRun": 1,
+  "failures": 1,
+  "outcome": "failed",
+  "exception": "kotlinx.coroutines.TimeoutCancellationException",
+  "testStatusCode": -2,
+  "instrumentationCode": -1,
+  "output": "android-large-upload-timeout-2026-11-09.txt",
+  "outputSha256": "2cb37541a21a619100f0fff1849c5551a7d56c8da5923b506724e8422f8546fc",
+  "separateProviderObservation": {
+    "localTime": "2026-11-09T11:44:21+03:00",
+    "fileBytes": 4295229457,
+    "finalHashVerificationProven": false,
+    "successfulPublicationProven": false
+  },
+  "earlierInterruptedMatrix": {
+    "download": "passed",
+    "offlineCopy": "passed",
+    "upload": "terminal result missing",
+    "sameContinuousRunAsThisResult": false
+  },
+  "dependentValidators": {
+    "foundation": "failed",
+    "ordinaryProviderReadCancellation": "stopped at predecessor gate; device cases not executed",
+    "publishedBatchCancellation": "stopped at predecessor gate; device cases not executed",
+    "windowsOriginalFolderRecovery": "stopped at predecessor gate; cross-platform cases not executed"
+  },
+  "completeLargeFileMatrixProven": false,
+  "physicalNetworkValidationProven": false,
+  "fullApplicationComplete": false
+}

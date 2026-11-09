@@ -1,0 +1,2 @@
+# Preserve the captured instrumentation bytes and their published SHA-256.
+android-large-upload-timeout-2026-11-09.txt -text whitespace=cr-at-eol
