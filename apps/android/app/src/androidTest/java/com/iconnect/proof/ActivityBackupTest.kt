@@ -3,6 +3,8 @@ package com.iconnect.proof
 import android.content.Context
 import android.content.ContextWrapper
 import android.system.Os
+import android.system.ErrnoException
+import android.system.OsConstants
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.*
@@ -103,15 +105,25 @@ class ActivityBackupTest {
             manager.confirm(manager.review(archive.name) {true}) {true}; assertFalse(archive.exists())
         }
     }
-    @Test fun symlinksAndHardLinksCannotTurnOwnerFilesIntoRemovableActivityMetadata()=fixture {context,root->
+    @Test fun symlinksAreKeptAndHardLinkAliasingIsRefusedOrBlockedByTheOs()=fixture {context,root->
         val (core,archive)=preserved(context)
         core.use {
             val manager=core.backupManager(AtomicLong(),{"owner-a"},{true}); val target=File(root,"owner.txt").apply {writeText("generated owner bytes")}
             val path=File(archive,"activity.json"); check(path.delete()); Os.symlink(target.path,path.path)
             assertTrue(manager.inspect(0) {true}.entries.isEmpty()); assertTrue(runCatching {manager.review(archive.name) {true}}.isFailure)
-            assertEquals("generated owner bytes",target.readText()); Os.remove(path.path); Os.link(target.path,path.path)
-            assertTrue(manager.inspect(0) {true}.entries.isEmpty()); assertThrows(IllegalStateException::class.java) {manager.review(archive.name) {true}}
-            assertEquals("generated owner bytes",target.readText()); assertTrue(path.exists())
+            assertEquals("generated owner bytes",target.readText()); Os.remove(path.path)
+            val linked=try {Os.link(target.path,path.path); true} catch(e:ErrnoException) {
+                if(e.errno!=OsConstants.EACCES && e.errno!=OsConstants.EPERM) throw e
+                assertFalse(path.exists())
+                android.util.Log.i("ActivityBackupTest","OS policy refused hard-link creation; application rejection of an existing hard link was not exercised.")
+                false
+            }
+            if(linked) {
+                assertEquals(2L,Os.lstat(target.path).st_nlink)
+                assertTrue(manager.inspect(0) {true}.entries.isEmpty()); assertThrows(IllegalStateException::class.java) {manager.review(archive.name) {true}}
+                assertTrue(path.exists())
+            }
+            assertEquals("generated owner bytes",target.readText())
         }
     }
     @Test fun replacedRecoveryShelfWithMatchingNamesAndBytesIsNeverAdoptedByOldReview()=fixture {context,root->

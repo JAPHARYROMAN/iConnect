@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "stage": "AndroidActivityBackupFocusedValidationPassed",
+  "checkedAtUtc": "2026-11-09T19:05:53.589435+00:00",
+  "applicationSha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e",
+  "testSha256": "1a6185259a4b097ddde6a4b28c003727304e48bbb654788e1befc7d289a87f18",
+  "productionApkUnchangedFromLargeFileValidation": true,
+  "focusedCases": 34,
+  "newBackupCases": 12,
+  "baselineExpiryFailureReproduced": true,
+  "expectedBaselineFailures": 1,
+  "correctedExpiryCases": 1,
+  "focusedFailures": 0,
+  "focusedSkipped": 0,
+  "logs": {
+    "baseline-expiry": {
+      "sha256": "ff314393586b33f6560a367688f712e11aa9210f7c9356237803d0641e4a2100",
+      "assessment": {
+        "Tests": 1,
+        "ExpectedExpiryFailure": true,
+        "LogSha256": "ff314393586b33f6560a367688f712e11aa9210f7c9356237803d0641e4a2100",
+        "CompletedAtUtc": "2026-11-09T18:01:33.0434303+00:00"
+      }
+    },
+    "fixed-expiry": {
+      "sha256": "66679b9134b286c14a570eaac2718c178af91257dc03de0a556489cdb2d77ff6",
+      "assessment": {
+        "Tests": 1,
+        "ExpectedExpiryFailure": false,
+        "LogSha256": "66679b9134b286c14a570eaac2718c178af91257dc03de0a556489cdb2d77ff6",
+        "CompletedAtUtc": "2026-11-09T18:01:42.9516423+00:00"
+      }
+    },
+    "activity-and-lifecycle": {
+      "sha256": "5db99ee2afc7ec3913e785c5c50265a611ef36a1384a1fcc7a9443bd2e1ffef5",
+      "assessment": {
+        "Tests": 34,
+        "ExpectedExpiryFailure": false,
+        "LogSha256": "5db99ee2afc7ec3913e785c5c50265a611ef36a1384a1fcc7a9443bd2e1ffef5",
+        "CompletedAtUtc": "2026-11-09T18:02:12.9296421+00:00"
+      }
+    }
+  },
+  "originalFocusedFailure": {
+    "logSha256": "11773916c7a0e7e3314afac3ea50704052d22a33ed49c1648bf99083b75b5315",
+    "cases": 34,
+    "failures": 2,
+    "testSha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294",
+    "reasons": [
+      "OS SELinux policy denied hard-link fixture creation",
+      "Replacement Compose view had not been observed before reopening the backup panel"
+    ]
+  },
+  "hardLinkCreationOsRefusalObserved": true,
+  "hardLinkPolicyLogSha256": "11f4bc886a1b842e1f0b38f496db5a8782a6f675e761be4338bc32feefe0018e",
+  "applicationRejectionOfExistingHardLinkExercised": false,
+  "symlinkRejectionExercised": true,
+  "actualNativeUiJourneyPassed": true,
+  "windowsUiVerified": false,
+  "physicalDeviceVerified": false,
+  "fullRegressionComplete": false,
+  "fullApplicationComplete": false
+}

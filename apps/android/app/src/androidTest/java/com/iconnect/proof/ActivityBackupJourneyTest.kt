@@ -123,7 +123,8 @@ class ActivityBackupJourneyTest {
             waitFor("closed background review") {all().none {it.text?.toString()=="Remove this activity backup?"}}
             assertEquals(2,f.archive.listFiles()!!.size)
             review(); type("REMOVE"); scenario.onActivity {it.setContent {Text("Another local view")}}
-            instrumentation.waitForIdleSync(); assertEquals(2,f.archive.listFiles()!!.size)
+            waitFor("replacement view after review disposal") {all().any {it.text?.toString()=="Another local view"}}
+            assertEquals(2,f.archive.listFiles()!!.size)
             show(); review(); type("REMOVE"); click("Remove activity backup")
             waitFor("selected backup removal") {!f.archive.exists()}
             waitFor("removal result") {all().any {it.text?.toString()?.startsWith("The reviewed activity backup was removed.")==true}}
