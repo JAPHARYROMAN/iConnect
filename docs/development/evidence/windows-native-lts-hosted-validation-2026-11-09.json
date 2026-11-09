@@ -1,0 +1,88 @@
+{
+  "schema": 1,
+  "stage": "HostedLtsWindowsCasesPassedWithPackageHarnessFailure",
+  "checkedAtUtc": "2026-11-09T19:59:20.533425+00:00",
+  "runId": 42680355898,
+  "commit": "3a463c9e13037b5630b4aae487f8b0b10e57176b",
+  "workflowConclusion": "failure",
+  "allWorkflowJobsPassed": false,
+  "nativeArtifact": {
+    "ArtifactId": 13703790395,
+    "ArtifactZipSha256": "0f9512c5cf20d819cb311deecc33c043ce551a965c791462dbbf1f1e79d81e15",
+    "BinarySha256": "b6754d710354814d395d4710263bf8b7ad25c8326876fb24cffc711d05d07e10",
+    "RunId": 42680355898,
+    "CheckedAtUtc": "2026-11-09T19:22:56.9725306+00:00",
+    "OpenSsl": "openssl-3.5.9",
+    "BundleEvidenceSha256": "2819941d335ffa720aee8d0ad0cc87641d27e5e9d0a62dfdea22e71e1893c608",
+    "SupportUntil": "2030-04-08",
+    "Stage": "HostedLtsArtifactIndependentlyVerified",
+    "SourceComponents": 7,
+    "VerifiedFiles": 31
+  },
+  "windowsCases": 975,
+  "windowsFailures": 0,
+  "windowsSkipped": 0,
+  "suites": [
+    {
+      "name": "main",
+      "cases": 959,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "name": "receiver-capacity",
+      "cases": 1,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "name": "snapshot-capacity",
+      "cases": 1,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "name": "sender-capacity",
+      "cases": 1,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "name": "previews",
+      "cases": 10,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "name": "large-files",
+      "cases": 3,
+      "failures": 0,
+      "skipped": 0
+    }
+  ],
+  "mainJobId": 129380107998,
+  "largeFileJobId": 129380107607,
+  "mainLogSha256": "a7b4714002fb43467c9674b3ee011aac3e28fa6b2ff3e1760a088a391418baa2",
+  "largeFileLogSha256": "971d4282b97ae85a79d7369563a73db86a4993da38c65d31b1f1f3c5d7a7290c",
+  "logCaptureNormalization": "CRLF normalized to LF",
+  "ordinaryPublishInventoryStepPassed": true,
+  "ordinaryDevelopmentFileVersion": "0.2.0.0",
+  "explicitUnsignedPackageVersion": "1.0.0.0",
+  "packageGuardFailure": {
+    "control": "application-version-mismatch-refused",
+    "actualBinaryVersion": "1.0.0.0",
+    "deliberatelyWrongInventoryVersion": "2.0.0.0",
+    "inventoryWasCorrectlyRefused": true,
+    "assertionExpectedOutdatedExactMessage": true,
+    "diagnosticMessageChangeIntroducedLocally": true
+  },
+  "fixedGuardCheck": {
+    "guards": 7,
+    "nativeSha256": "8acf23bee1fda8fd7448157f05096a368993b5dbfee19fe4eedf9621f4816428",
+    "historical36InspectionFixture": true,
+    "currentLtsPackageGuardsQualified": false,
+    "guardReportSha256": "30d1f792341ffd2bdcaf291941e5ee56c1a9ace937824e34dff4f17086eae923"
+  },
+  "physicalSeparateNetworksVerified": false,
+  "fullApplicationComplete": false
+}

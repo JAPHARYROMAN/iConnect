@@ -143,7 +143,8 @@ if ((Get-FileHash (Join-Path $default 'PackageMetadata/sbom.cdx.json') -Algorith
 $checks+=@{Case='existing-inventory-preserved';Passed=$true}
 $wrongVersion=Make-Payload 'application-version-mismatch' $vendor
 $differentVersion=if ($applicationVersion -ceq '1.0.0.0') {'2.0.0.0'} else {'1.0.0.0'}
-try { Write-Inventory $wrongVersion $differentVersion; throw 'A different desktop version was mislabeled.' } catch { if ($_.Exception.Message -cne 'The desktop binary does not match the inventory version.') { throw } }
+$expectedVersionError="The desktop binary does not match the inventory version. Binary: $applicationVersion; inventory: $differentVersion."
+try { Write-Inventory $wrongVersion $differentVersion; throw 'A different desktop version was mislabeled.' } catch { if ($_.Exception.Message -cne $expectedVersionError) { throw } }
 if (Test-Path -LiteralPath (Join-Path $wrongVersion 'PackageMetadata/sbom.cdx.json')) { throw 'An inventory was created with a different desktop version.' }
 $checks+=@{Case='application-version-mismatch-refused';Passed=$true}
 $unlabelled=Make-Payload 'unlabelled-replacement' (Join-Path $bundle 'datachannel.dll')
