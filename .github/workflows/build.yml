@@ -13,6 +13,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m unittest discover -s tests/tools -p test_native_notice_inventory.py -v
+      - run: python -m unittest discover -s tests/tools -p test_android_ci_build.py -v
   windows:
     runs-on: windows-latest
     steps:
@@ -64,8 +65,11 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
       - uses: android-actions/setup-android@v3
         with:
           packages: platform-tools
       - run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
-      - run: bash gradlew :app:assembleDebug :app:assembleDebugAndroidTest :app:assembleRelease :app:testDebugUnitTest :app:lintDebug --no-daemon
+      - run: python ../../tools/build_android_ci.py
