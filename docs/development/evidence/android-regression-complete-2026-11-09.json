@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "stage": "CorrectedFullAndroidRegressionPassed",
+  "checkedAtUtc": "2026-11-09T21:47:25.271539+00:00",
+  "applicationSha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e",
+  "testSha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e",
+  "unsignedReleaseSha256": "535a0c1d79ba9dea836ce63a1261b543c18bddfd43c079ee4490b9483e619f2a",
+  "releaseAdvisoryLookup": {
+    "checkedAtUtc": "2026-11-09T18:18:45.6028586+03:00",
+    "coordinates": 68,
+    "findings": [],
+    "sbomSha256": "aaf9a129220a2ab1486baa8e3d3ee2a79ec6ecb4a6d56dbf8664ddbef7b9dfe7",
+    "committedRecordSha256": "2a37485c8b7c663975e59b2ad80c30ea2fd571b33a61f97f1c95a6c796a15456",
+    "existingExactArtifactLookupReused": true,
+    "deviceValidationUsesSeparateDebugApk": true,
+    "completeSecurityReview": false
+  },
+  "classes": 73,
+  "cases": 552,
+  "passed": 552,
+  "failed": 0,
+  "skipped": 0,
+  "runnerCompleted": true,
+  "runnerLogSha256": "62dfbfaff7924df6befe5b1d4b967a8428f9a0874ceba5e6202c856b7a558618",
+  "adbExitCode": 0,
+  "adbExitCapturedBeforePostRunObservations": true,
+  "exitCaptureSha256": "99e23858c64b2fbb36848eb1413e2feb5567383ed1eed5c054519bfe6014be1e",
+  "capturedApks": [
+    {
+      "name": "after-production-1.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "after-tests-1.apk",
+      "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+    },
+    {
+      "name": "before-production-1.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "before-tests-1.apk",
+      "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+    },
+    {
+      "name": "focused-production-1.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "focused-tests-1.apk",
+      "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+    }
+  ],
+  "sourcePlanSha256": "a2199000ab17a079be75715334f21ea9234ddfe3fa11adbbdec881d198b48e8b",
+  "artifactManifestSha256": "75fb149e4194f0e1f8646b02e9279c6321fc0c19a9d0cfd4272882eed5b603e2",
+  "outerResultSha256": "2d658a2f3cac20527d3f424631221dce0f35ebbc8c78e71f9b21ed36204cc2e2",
+  "actualResultSha256": "859c627d8f7c22fb0ee4156955cd9c1f28d6eb9ebb027a93da1193018be98259",
+  "discoveryOnlyCountedAsExecution": false,
+  "productionApkUnchangedByFixtureRepairs": true,
+  "earlier14FailureRunPreserved": true,
+  "earlierInterruptedRunPreserved": true,
+  "timingLimitation": "A host clock gap overlaps execution; elapsed durations are not performance benchmarks.",
+  "physicalDeviceVerified": false,
+  "physicalSeparateNetworksVerified": false,
+  "fullApplicationComplete": false
+}
