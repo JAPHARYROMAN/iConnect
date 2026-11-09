@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "payloadBytes": 67108881,
+  "rangeBytes": 32768,
+  "sha256": "cf6cd9a135742379a3d185bedc95520cf0664d93655adb520b28fec7709c6487",
+  "phases": [
+    {
+      "wallMillis": 575.8664,
+      "processCpuMillis": 538,
+      "processBinderSent": null,
+      "name": "sourceGeneration"
+    },
+    {
+      "wallMillis": 43555.0269,
+      "processCpuMillis": 16199,
+      "processBinderSent": null,
+      "name": "privateSnapshotPreparation"
+    },
+    {
+      "wallMillis": 32516.5043,
+      "processCpuMillis": 12402,
+      "processBinderSent": null,
+      "name": "payloadAndSenderHash"
+    },
+    {
+      "wallMillis": 26424.3415,
+      "processCpuMillis": 10639,
+      "processBinderSent": null,
+      "name": "receiverFinalization"
+    },
+    {
+      "wallMillis": 181.6771,
+      "processCpuMillis": 122,
+      "processBinderSent": null,
+      "name": "independentSourceAndOutputHash"
+    }
+  ],
+  "localRequests": {
+    "GET_METADATA": {
+      "calls": 1,
+      "wallMillis": 19.381
+    },
+    "LIST_DIRECTORY": {
+      "calls": 1,
+      "wallMillis": 32.1772
+    },
+    "LIST_ROOTS": {
+      "calls": 1,
+      "wallMillis": 48.0616
+    },
+    "READ_RANGE": {
+      "calls": 2049,
+      "wallMillis": 42606.4757
+    }
+  },
+  "receivingRequests": {
+    "FINISH_UPLOAD": {
+      "calls": 1,
+      "wallMillis": 5.2152
+    },
+    "PREPARE_UPLOAD": {
+      "calls": 1,
+      "wallMillis": 68.7571
+    },
+    "UPLOAD_CONTEXT": {
+      "calls": 1,
+      "wallMillis": 3.7289
+    },
+    "UPLOAD_STATUS": {
+      "calls": 83,
+      "wallMillis": 176.3431
+    },
+    "UPLOAD_WRITE": {
+      "calls": 2049,
+      "wallMillis": 21831.2507
+    }
+  },
+  "sampledFinalizationStages": [
+    {
+      "stage": "CHECKING_PRIVATE_BYTES",
+      "offset": 131072,
+      "sinceProbeStart": {
+        "wallMillis": 77522.3566,
+        "processCpuMillis": 29919,
+        "processBinderSent": null
+      }
+    },
+    {
+      "stage": "PREPARING_PROVIDER_DOCUMENT",
+      "offset": 0,
+      "sinceProbeStart": {
+        "wallMillis": 79046.6663,
+        "processCpuMillis": 30941,
+        "processBinderSent": null
+      }
+    },
+    {
+      "stage": "WRITING_PROVIDER_DOCUMENT",
+      "offset": 65536,
+      "sinceProbeStart": {
+        "wallMillis": 79146.6374,
+        "processCpuMillis": 30979,
+        "processBinderSent": null
+      }
+    },
+    {
+      "stage": "SYNCING_PROVIDER_DOCUMENT",
+      "offset": 0,
+      "sinceProbeStart": {
+        "wallMillis": 101604.1734,
+        "processCpuMillis": 39109,
+        "processBinderSent": null
+      }
+    },
+    {
+      "stage": "CHECKING_PROVIDER_BYTES",
+      "offset": 0,
+      "sinceProbeStart": {
+        "wallMillis": 101763.29,
+        "processCpuMillis": 39250,
+        "processBinderSent": null
+      }
+    }
+  ],
+  "samplingIntervalMillis": 20,
+  "total": {
+    "wallMillis": 104124.7716,
+    "processCpuMillis": 40675,
+    "processBinderSent": null
+  },
+  "sourceAndOutputIndependentlyVerified": true,
+  "collisionOriginalKept": true,
+  "counterScope": "Target process, including probe/polling/GC; provider-process CPU is excluded. Short sampled stages can be missed.",
+  "encryptedTransportVerified": false,
+  "largeFileMatrixProven": false,
+  "physicalNetworkVerified": false,
+  "fullCompletion": false
+}

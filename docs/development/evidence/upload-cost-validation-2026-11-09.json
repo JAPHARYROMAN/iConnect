@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "recordedUtc": "2026-11-09T10:53:46.094839+00:00",
+  "buildSourceParent": "e0d041e75c34fb231e73fefd7825f0543153325e",
+  "buildStartedBeforeCommit": true,
+  "sourceHashConvention": "Captured working-tree bytes and equivalent LF-normalized committed text are both recorded.",
+  "sourceInputs": [
+    {
+      "path": "apps/android/app/src/main/java/com/iconnect/proof/Rules.kt",
+      "capturedWorkingTreeSha256": "60fa9c3a66b4ef16e1e3041049fde35efebb3084a4c0fa33fc07b8f0b63c4e55",
+      "canonicalLfSha256": "60fa9c3a66b4ef16e1e3041049fde35efebb3084a4c0fa33fc07b8f0b63c4e55"
+    },
+    {
+      "path": "apps/android/app/src/main/java/com/iconnect/proof/StorageRules.kt",
+      "capturedWorkingTreeSha256": "0cba5c3131de5bdb2c0522acfcd4cca0b7219a04a51e9bd242a8217211b37660",
+      "canonicalLfSha256": "0cba5c3131de5bdb2c0522acfcd4cca0b7219a04a51e9bd242a8217211b37660"
+    },
+    {
+      "path": "apps/android/app/src/main/java/com/iconnect/proof/AndroidFileService.kt",
+      "capturedWorkingTreeSha256": "4bfa1e7bf0655d5b70d3dadf64b880d538eb23413aeae3cc484972b08a4a5136",
+      "canonicalLfSha256": "4bfa1e7bf0655d5b70d3dadf64b880d538eb23413aeae3cc484972b08a4a5136"
+    },
+    {
+      "path": "apps/android/app/src/test/java/com/iconnect/proof/HexEncodingTest.kt",
+      "capturedWorkingTreeSha256": "4624c56a3745cedb99a64eb8b06737f2b8e2fdabe2df58e8c750f5e2998d81f3",
+      "canonicalLfSha256": "4624c56a3745cedb99a64eb8b06737f2b8e2fdabe2df58e8c750f5e2998d81f3"
+    },
+    {
+      "path": "apps/android/app/src/androidTest/java/com/iconnect/proof/UploadCostProbe.kt",
+      "capturedWorkingTreeSha256": "aaecf5b1a62ab453e9bd01a2c48d658fd43cb172c3310d925bee9816590393d8",
+      "canonicalLfSha256": "aaecf5b1a62ab453e9bd01a2c48d658fd43cb172c3310d925bee9816590393d8"
+    },
+    {
+      "path": "apps/android/app/src/androidTest/AndroidManifest.xml",
+      "capturedWorkingTreeSha256": "bb81227066192db08dc8800a1066598e053f81d3ab636563464f5ccd7d28f41b",
+      "canonicalLfSha256": "bb81227066192db08dc8800a1066598e053f81d3ab636563464f5ccd7d28f41b"
+    }
+  ],
+  "unchangedLargeFileTestSha256": "a3748095cdd5faa77dfb00d835c8f009badde920708a7dddf5ad7110a835e908",
+  "build": {
+    "tasks": [
+      ":app:assembleDebug",
+      ":app:assembleDebugAndroidTest",
+      ":app:testDebugUnitTest",
+      ":app:lintDebug",
+      ":app:assembleRelease"
+    ],
+    "outcome": "BUILD SUCCESSFUL",
+    "duration": "8m 48s",
+    "rawLog": "upload-cost-build-2026-11-09.txt",
+    "logSha256": "62680cc9707cb74259e9c74ac14d4c4291fc1729bd7b90aa3019565667164929",
+    "jvm": {
+      "tests": 89,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "jvmSuites": [
+      {
+        "name": "com.iconnect.proof.CopyPayloadEstimatesTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "reportSha256": "3b6f4536a0ff150855ca38cc7e7174ddae4eab57c1f8c4994fecda83747de604"
+      },
+      {
+        "name": "com.iconnect.proof.CreatedDirectoryReferencesTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "reportSha256": "55603f38c35dc7656aa18070b16f43706e7cdb178ff958d0b192f6ff796340c1"
+      },
+      {
+        "name": "com.iconnect.proof.HexEncodingTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "reportSha256": "55116aef6e3ac4f2a2a9c00d2abf4c2422c54c01d8803e2ca9ec4df7c0dee885"
+      },
+      {
+        "name": "com.iconnect.proof.PhoneBatchSourceApprovalTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "reportSha256": "52bccae0798cdb2aac496b5efbd628ba5f0bc18b9130755762f2d849b3d0bc99"
+      },
+      {
+        "name": "com.iconnect.proof.PhoneFileTrafficPolicyTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "reportSha256": "0ab144c506ab7842dcd2a5531a65042ce612e8e5a523472c1283618330b8ce43"
+      },
+      {
+        "name": "com.iconnect.proof.PhonePayloadRateTrackerTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "reportSha256": "548d3e94c352ef2e9001abb86028f04a3605e8748366834688d72f75ce053735"
+      },
+      {
+        "name": "com.iconnect.proof.PhoneTransferTimeEstimateTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "reportSha256": "36439d669fb919144764d2bf0bbda8bee8a150e1eb368023862692b7c8ae4f3a"
+      },
+      {
+        "name": "com.iconnect.proof.PresenceTrackerTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "reportSha256": "e01eb0d2b13a1b701ae0d8b67972fc8328a3d200488a61c3d23e788e52993d33"
+      },
+      {
+        "name": "com.iconnect.proof.PreviewRulesTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "reportSha256": "7933a19d55cde062cc38745efbd9a2b17aba002c77c8b30c378403448e01478a"
+      },
+      {
+        "name": "com.iconnect.proof.ReconnectScheduleTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "reportSha256": "316215cbf7f76e6a0c977221a846155935f8f669cd2d6ac94ed71d0c83181f2c"
+      },
+      {
+        "name": "com.iconnect.proof.RulesTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "reportSha256": "2c733b64c95bdcf7d7c895793a22379fb60838e7e2d3e1ceb8a276ebff8b627a"
+      },
+      {
+        "name": "com.iconnect.proof.UploadBatchRulesTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "reportSha256": "beb16e471f59c730f084051bfb350fd2b6095576f1aafbba612806e52404f2f8"
+      },
+      {
+        "name": "com.iconnect.proof.UploadRulesTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "reportSha256": "aad5a0c2d532a31fa702f218ebb4f60f19af947c8c033dfa4edea2e2cc3cb4e4"
+      }
+    ],
+    "lintSeverities": {
+      "Warning": 71
+    },
+    "unsignedReleaseSha256": "80a5f6fbd70d841a6221c3680cf078a82fde0aff4701ef450df240db1d99294e"
+  },
+  "diagnostic": {
+    "payloadBytes": 67108881,
+    "rangesPerDirection": 2049,
+    "rangeBytes": 32768,
+    "freshRandomPayloadEachRun": true,
+    "sameInstrumentationSha256": "846d48913b41be129b94e8d4cb0822e64c5a5e4b6aacc5f93f1338c082cbb95c",
+    "emulator": {
+      "serial": "emulator-5568",
+      "avd": "iconnect-large-files",
+      "api": 35
+    },
+    "before": {
+      "profile": "upload-cost-before-2026-11-09.json",
+      "profileSha256": "dc6911941fa2ec75a97ea3bb4356e9bf247ae1428d71e2d1cfe08e364f0c5739",
+      "rawInstrumentation": "upload-cost-before-2026-11-09.txt",
+      "rawInstrumentationSha256": "e349e5ff3aa08f5b707eed4acefa029c47d35028feeeecc58dde162d499ef970",
+      "applicationSha256": "dd6f88a4198ad991e9e2c5c3ebde43b6b480cdb19a9e81a941d86e19baff6e9c",
+      "testSha256": "846d48913b41be129b94e8d4cb0822e64c5a5e4b6aacc5f93f1338c082cbb95c"
+    },
+    "after": {
+      "profile": "upload-cost-after-2026-11-09.json",
+      "profileSha256": "de8ad0c205696f0a64dfa0b762a0447dd736260f60f8396fe65e5dbf51f451c4",
+      "rawInstrumentation": "upload-cost-after-2026-11-09.txt",
+      "rawInstrumentationSha256": "abdc6c02be8c3be53c9b9266b1df9982e1e5fa2969364f62ff81fcf2834b2cdf",
+      "applicationSha256": "6eab422c1c0eab6d96742f2cca4f0a137fc8872773c45f1def3758985f440c29",
+      "testSha256": "846d48913b41be129b94e8d4cb0822e64c5a5e4b6aacc5f93f1338c082cbb95c"
+    }
+  },
+  "deviceRegression": {
+    "Cases": 77,
+    "Skipped": 0,
+    "LogSha256": "45de9d928363bad98bae8b5ec706dc1edc6cf7e86ca08bdde423e3a175f06b1f",
+    "ApplicationSha256": "6eab422c1c0eab6d96742f2cca4f0a137fc8872773c45f1def3758985f440c29",
+    "TestSha256": "846d48913b41be129b94e8d4cb0822e64c5a5e4b6aacc5f93f1338c082cbb95c",
+    "FullCompletion": false,
+    "ExcludedClasses": "",
+    "Classes": "com.iconnect.proof.IncomingReadCancellationTest,com.iconnect.proof.IncomingUploadsTest,com.iconnect.proof.IncomingWindowRecoveryTest,com.iconnect.proof.PublishedBatchCheckTest,com.iconnect.proof.BatchSenderTest#completedBatchChecksBindFreshChallengesAndRejectChangedParentEvidence,com.iconnect.proof.BatchSenderTest#stoppingCompletedBatchCheckUsesNegotiatedRemoteCancellationAndKeepsCompletedHistory,com.iconnect.proof.BatchSenderTest#canceledPublishedBatchCheckReturnsAfterTheOutgoingControlIsReleased,com.iconnect.proof.BatchSenderTest#failedPublishedBatchCheckReturnsAfterTheOutgoingControlIsReleased,com.iconnect.proof.AndroidStorageTest",
+    "PhysicalNetworkVerified": false,
+    "Failures": 0,
+    "rawInstrumentation": "upload-cost-regression-2026-11-09.txt"
+  },
+  "largeFileMatrixProven": false,
+  "physicalNetworkVerified": false,
+  "encryptedTransportVerifiedByDiagnostic": false,
+  "fullCompletion": false,
+  "remainingLargeUploadFailure": "android-large-upload-timeout-2026-11-09.json"
+}

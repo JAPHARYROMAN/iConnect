@@ -153,7 +153,7 @@ class AndroidFileService internal constructor(context: Context, private val gran
         }.also {reply->
             // Successful range/status polling would overwhelm history and does
             // not itself establish file completion. Refusals remain observable.
-            val quiet=request.operation in setOf(FileOperation.READ_RANGE,FileOperation.DOWNLOAD_READ,FileOperation.DOWNLOAD_STATUS,FileOperation.UPLOAD_WRITE,FileOperation.WRITE_BATCH_FILE,FileOperation.UPLOAD_STATUS,FileOperation.UPLOAD_BATCH_ITEM_STATUS,FileOperation.VERIFY_PUBLISHED_UPLOAD,FileOperation.VERIFY_PUBLISHED_BATCH,FileOperation.CANCEL_PUBLISHED_BATCH_CHECK)
+            val quiet=request.operation in quietOperations
             if(Rules.tokenPattern.matches(request.requestId) && (!quiet || reply.status!=FileStatus.FILE_STATUS_OK)) try {
                 activity(PhoneActivityEvent(PhoneActivityKind.FILE_REQUEST,when(reply.status) {FileStatus.FILE_STATUS_OK->PhoneActivityOutcome.ACCEPTED; FileStatus.ACCESS_DENIED,FileStatus.UNSUPPORTED->PhoneActivityOutcome.REFUSED; else->PhoneActivityOutcome.FAILED},
                     peer,operation=if(request.operation==FileOperation.UNRECOGNIZED) -1 else request.operation.number))
@@ -518,6 +518,7 @@ class AndroidFileService internal constructor(context: Context, private val gran
         if(!closed.get() && Rules.tokenPattern.matches(request.requestId)) batchPlanHost?.cancelPublishedCheckNow(peer,downloadScope,request)
     }
     companion object {
+        private val quietOperations=setOf(FileOperation.READ_RANGE,FileOperation.DOWNLOAD_READ,FileOperation.DOWNLOAD_STATUS,FileOperation.UPLOAD_WRITE,FileOperation.WRITE_BATCH_FILE,FileOperation.UPLOAD_STATUS,FileOperation.UPLOAD_BATCH_ITEM_STATUS,FileOperation.VERIFY_PUBLISHED_UPLOAD,FileOperation.VERIFY_PUBLISHED_BATCH,FileOperation.CANCEL_PUBLISHED_BATCH_CHECK)
         private val projection = arrayOf(Documents.Document.COLUMN_DOCUMENT_ID, Documents.Document.COLUMN_DISPLAY_NAME,
             Documents.Document.COLUMN_MIME_TYPE, Documents.Document.COLUMN_SIZE, Documents.Document.COLUMN_LAST_MODIFIED, Documents.Document.COLUMN_FLAGS)
     }

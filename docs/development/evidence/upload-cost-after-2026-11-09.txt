@@ -1,0 +1,30 @@
+INSTRUMENTATION_STATUS: uploadCostPhase=source generation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=sourceGeneration completed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=private source preparation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=privateSnapshotPreparation completed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=payload and sender hash
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver CHECKING_PRIVATE_BYTES
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver PREPARING_PROVIDER_DOCUMENT
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver WRITING_PROVIDER_DOCUMENT
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver SYNCING_PROVIDER_DOCUMENT
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver CHECKING_PROVIDER_BYTES
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=payloadAndSenderHash completed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiverFinalization completed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=independent hashes
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=independentSourceAndOutputHash completed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: uploadCostResult={"schemaVersion":1,"payloadBytes":67108881,"rangeBytes":32768,"sha256":"e783ee846ddefee2c2cf6a3d9019fc684b165f1fe628d20d38cb85f14a1c57bd","phases":[{"wallMillis":1575.1998,"processCpuMillis":1457,"processBinderSent":null,"name":"sourceGeneration"},{"wallMillis":68310.7395,"processCpuMillis":26752,"processBinderSent":null,"name":"privateSnapshotPreparation"},{"wallMillis":55765.3589,"processCpuMillis":24265,"processBinderSent":null,"name":"payloadAndSenderHash"},{"wallMillis":37388.6833,"processCpuMillis":16305,"processBinderSent":null,"name":"receiverFinalization"},{"wallMillis":172.2067,"processCpuMillis":154,"processBinderSent":null,"name":"independentSourceAndOutputHash"}],"localRequests":{"GET_METADATA":{"calls":1,"wallMillis":25.8496},"LIST_DIRECTORY":{"calls":1,"wallMillis":86.0045},"LIST_ROOTS":{"calls":1,"wallMillis":148.8539},"READ_RANGE":{"calls":2049,"wallMillis":66443.1983}},"receivingRequests":{"FINISH_UPLOAD":{"calls":1,"wallMillis":10.5838},"PREPARE_UPLOAD":{"calls":1,"wallMillis":105.1568},"UPLOAD_CONTEXT":{"calls":1,"wallMillis":5.6867},"UPLOAD_STATUS":{"calls":117,"wallMillis":260.5348},"UPLOAD_WRITE":{"calls":2049,"wallMillis":36955.3971}},"sampledFinalizationStages":[{"stage":"CHECKING_PRIVATE_BYTES","offset":229376,"sinceProbeStart":{"wallMillis":127052.5359,"processCpuMillis":53945,"processBinderSent":null}},{"stage":"PREPARING_PROVIDER_DOCUMENT","offset":0,"sinceProbeStart":{"wallMillis":129459.2787,"processCpuMillis":55743,"processBinderSent":null}},{"stage":"WRITING_PROVIDER_DOCUMENT","offset":32768,"sinceProbeStart":{"wallMillis":129522.9984,"processCpuMillis":55770,"processBinderSent":null}},{"stage":"SYNCING_PROVIDER_DOCUMENT","offset":0,"sinceProbeStart":{"wallMillis":162003.7526,"processCpuMillis":68652,"processBinderSent":null}},{"stage":"CHECKING_PROVIDER_BYTES","offset":720896,"sinceProbeStart":{"wallMillis":162084.2651,"processCpuMillis":68702,"processBinderSent":null}}],"samplingIntervalMillis":20,"total":{"wallMillis":164594.2006,"processCpuMillis":70387,"processBinderSent":null},"sourceAndOutputIndependentlyVerified":true,"collisionOriginalKept":true,"counterScope":"Target process, including probe\/polling\/GC; provider-process CPU is excluded. Short sampled stages can be missed.","encryptedTransportVerified":false,"largeFileMatrixProven":false,"physicalNetworkVerified":false,"fullCompletion":false}
+INSTRUMENTATION_CODE: -1

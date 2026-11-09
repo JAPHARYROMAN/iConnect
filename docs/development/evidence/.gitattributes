@@ -9,3 +9,7 @@ sender-control-release-before-2026-11-09.txt -text whitespace=cr-at-eol
 sender-control-release-after-2026-11-09.txt -text whitespace=cr-at-eol
 sender-control-fixture-prototype-before-2026-11-09.txt -text whitespace=cr-at-eol
 sender-control-fixture-prototype-candidate-2026-11-09.txt -text whitespace=cr-at-eol
+upload-cost-before-2026-11-09.txt -text whitespace=cr-at-eol
+upload-cost-after-2026-11-09.txt -text whitespace=cr-at-eol
+upload-cost-regression-2026-11-09.txt -text whitespace=cr-at-eol
+upload-cost-build-2026-11-09.txt -text whitespace=cr-at-eol

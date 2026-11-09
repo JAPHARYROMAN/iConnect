@@ -18,6 +18,7 @@ internal class UnsupportedProtocolVersionException : IllegalArgumentException() 
 }
 
 object Rules {
+    private const val HEX_DIGITS="0123456789abcdef"
     const val MAX_FRAME = 64 * 1024
     const val CHUNK = 16 * 1024
     const val MAX_FILE = 1024 * 1024
@@ -39,7 +40,15 @@ object Rules {
     fun b64(bytes: ByteArray): String = Base64.getUrlEncoder().withoutPadding().encodeToString(bytes)
     fun decode(value: String): ByteArray = Base64.getUrlDecoder().decode(value)
     fun digest(bytes: ByteArray): ByteArray = MessageDigest.getInstance("SHA-256").digest(bytes)
-    fun hex(bytes: ByteArray): String = bytes.joinToString("") { "%02x".format(it.toInt() and 255) }
+    fun hex(bytes: ByteArray): String {
+        val result=CharArray(bytes.size*2)
+        bytes.forEachIndexed {index,byte->
+            val value=byte.toInt() and 255
+            result[index*2]=HEX_DIGITS[value ushr 4]
+            result[index*2+1]=HEX_DIGITS[value and 15]
+        }
+        return String(result)
+    }
     fun id(publicKey: ByteArray): String {
         val key = KeyFactory.getInstance("EC").generatePublic(X509EncodedKeySpec(publicKey)) as ECPublicKey
         val expected = AlgorithmParameters.getInstance("EC").apply { init(ECGenParameterSpec("secp256r1")) }

@@ -7,6 +7,9 @@ import java.security.SecureRandom
 class StorageFailure(val status: FileStatus, message: String) : Exception(message)
 
 object StorageRules {
+    private val reservedDeviceNames=setOf("CON", "PRN", "AUX", "NUL", "CONIN$", "CONOUT$")
+    private val reservedDevicePort=Regex("(?:COM|LPT)[1-9¹²³]")
+    private val protectedFolders=setOf(".ssh", ".aws", ".azure", ".gnupg", ".kube", ".codex", ".git", "android")
     const val LIST = 1
     const val READ = 2
     const val WRITE = 4
@@ -32,15 +35,15 @@ object StorageRules {
         val stem = value.substringBefore('.').uppercase(java.util.Locale.ROOT)
         if (value.length !in 1..255 || value == "." || value == ".." || value.endsWith('.') || value.endsWith(' ') ||
             value.any { Character.isISOControl(it) || it in "<>:\"/\\|?*" } ||
-            value.startsWith(".iconnect-", true) || stem in setOf("CON", "PRN", "AUX", "NUL", "CONIN$", "CONOUT$") ||
-            Regex("(?:COM|LPT)[1-9¹²³]").matches(stem) ||
+            value.startsWith(".iconnect-", true) || stem in reservedDeviceNames ||
+            reservedDevicePort.matches(stem) ||
             !Charsets.UTF_8.newEncoder().canEncode(value))
             throw StorageFailure(FileStatus.INVALID_REQUEST, "Choose a supported file or folder name.")
     }
     fun visible(value: String, exclusions: Set<String>): Boolean = try {
         name(value)
-        value.lowercase(java.util.Locale.ROOT) !in exclusions && value.lowercase(java.util.Locale.ROOT) !in
-            setOf(".ssh", ".aws", ".azure", ".gnupg", ".kube", ".codex", ".git", "android")
+        val folded=value.lowercase(java.util.Locale.ROOT)
+        folded !in exclusions && folded !in protectedFolders
     } catch (_: StorageFailure) { false }
     fun version(id: String, size: Long, modified: Long): String = Rules.hex(MessageDigest.getInstance("SHA-256")
         .digest("$id:$size:$modified".toByteArray(Charsets.UTF_8)))
