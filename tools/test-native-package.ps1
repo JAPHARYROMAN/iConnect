@@ -52,6 +52,21 @@ try {
         foreach ($component in $source.Components) {
             $entries=@($bom.components | Where-Object purl -ceq $component.Purl)
             if ($entries.Count -ne 1 -or $entries[0].scope -cne $component.Scope -or $entries[0].version -cne $component.Version) {throw 'The packaged source inventory is incomplete or inconsistent.'}
+            foreach ($patch in $component.SourcePatches) {
+                $expectedProperties=@(
+                    @{name='iconnect:source:patch:id';value=$patch.id}
+                    @{name='iconnect:source:patch:sha256';value=$patch.patchSha256}
+                    @{name='iconnect:source:patch:path';value=('PackageMetadata/NativeTransport/recipe/' + $patch.patchFile)}
+                    @{name='iconnect:source:postimage:normalization';value='UTF-8 with LF'}
+                )
+                foreach ($name in $patch.postImages.Keys) {
+                    $expectedProperties+=@{name=('iconnect:source:postimage:' + $name + ':sha256');value=$patch.postImages[$name]}
+                }
+                foreach ($property in $expectedProperties) {
+                    $matches=@($entries[0].properties | Where-Object name -ceq $property.name)
+                    if ($matches.Count -ne 1 -or $matches[0].value -cne $property.value) {throw 'The packaged inventory omits or misstates a native source patch.'}
+                }
+            }
         }
         if (@($bom.components | Where-Object purl -like 'pkg:github/*').Count -ne $source.Components.Count -or
             ($bom.components | Where-Object name -ceq 'libdatachannel').hashes.content -cne $source.BinarySha256) {throw 'The packaged native inventory does not describe the selected binary.'}

@@ -2,6 +2,7 @@
 [CmdletBinding()]
 param([Parameter(Mandatory)][string]$BundleDirectory)
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'native-transport-patches.ps1')
 $root = (Resolve-Path -LiteralPath $BundleDirectory).Path
 $rootPrefix = $root.TrimEnd([IO.Path]::DirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
 function Assert-Regular([string]$Relative,[long]$Maximum) {
@@ -37,10 +38,14 @@ function Verify([string]$Relative,[string]$Expected,[long]$Maximum) {
     if ((Hash $path) -cne $Expected) { throw "Native bundle file changed: $Relative" }
     $verified.Add([pscustomobject]@{ RelativePath=$Relative; Path=$path; Sha256=$Expected })
 }
+$build = Json 'build-evidence.json' 64KB
+$nativePatches = @(Get-IConnectNativeSourcePatches $build)
 $required = @('datachannel.dll','build-evidence.json','source-lock.json','README.txt') +
     @('build-native-transport.ps1','native-transport-sources.json','test-native-transport.ps1',
         'export-native-transport-sources.ps1','review-native-transport.ps1' | ForEach-Object { 'recipe/' + $_ })
-$allowed = $required + @('recipe/read-native-transport-bundle.ps1')
+$patchRecipe = @('recipe/native-transport-patches.ps1','recipe/native-sctp-initialization.json')
+if ($nativePatches.Count) { $required += $patchRecipe + @($nativePatches | ForEach-Object { 'recipe/' + $_.patchFile }) }
+$allowed = $required + @('recipe/read-native-transport-bundle.ps1') + $patchRecipe
 foreach ($name in $required) { if (!$manifest.files.Contains($name)) { throw "Native bundle is missing $name." } }
 foreach ($name in $manifest.files.Keys) {
     if ($name -cnotin $allowed) { throw 'Unexpected native bundle recipe or payload entry.' }
@@ -48,7 +53,12 @@ foreach ($name in $manifest.files.Keys) {
 }
 if ($manifest.files['datachannel.dll'] -cne $manifest.binarySha256 -or $manifest.files['source-lock.json'] -cne $lockHash -or
     $manifest.files['recipe/native-transport-sources.json'] -cne $lockHash) { throw 'Native bundle payload or source lock is inconsistent.' }
-$build = Json 'build-evidence.json' 64KB
+foreach ($patch in $nativePatches) {
+    if ($manifest.files['recipe/' + $patch.patchFile] -cne $patch.patchSha256 -or
+        $manifest.files['recipe/native-sctp-initialization.json'] -cne (Hash (Join-Path $PSScriptRoot 'native-sctp-initialization.json'))) {
+        throw 'Native bundle lacks the pinned patch and modified-source definition.'
+    }
+}
 if ($build.schema -ne 1 -or $build.stage -cne 'BuildOnly' -or $build.architecture -cne 'windows-x64' -or
     $build.runtime -cne 'MSVC static' -or $build.binarySha256 -cne $manifest.binarySha256 -or
     $build.sourceLockSha256 -cne $lockHash -or $build.libdatachannel.commit -cne $lock.libdatachannel.commit -or
@@ -87,6 +97,7 @@ foreach ($spec in $specs) {
         Scope=if ($spec.name -eq 'json') {'excluded'} else {'required'}
         SourceArchive=$archive; SourceArchiveSha256=$component.sourceArchiveSha256
         RootLicense=$notice; RootLicenseSha256=$component.rootLicenseSha256
+        SourcePatches=@($nativePatches | Where-Object { $spec.name -ceq 'libdatachannel' })
     }
 }
 $manifestPath = Assert-Regular 'bundle-evidence.json' 1MB

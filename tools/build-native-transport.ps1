@@ -3,10 +3,14 @@
 param(
     [string]$BuildDirectory,
     [ValidateRange(1,8)][int]$Jobs = 1,
-    [switch]$PrepareOnly
+    [switch]$PrepareOnly,
+    [switch]$SctpInitializationFix
 )
 $ErrorActionPreference = 'Stop'
 if (!$IsWindows) { throw 'This builder targets Windows x64 and requires MSVC.' }
+. (Join-Path $PSScriptRoot 'native-transport-patches.ps1')
+$nativePatches = @()
+if ($SctpInitializationFix) { $nativePatches = @(Get-IConnectNativeSctpPatch) }
 $lockPath = Join-Path $PSScriptRoot 'native-transport-sources.json'
 $lock = Get-Content -LiteralPath $lockPath -Raw | ConvertFrom-Json -AsHashtable
 if ($lock.schema -ne 1 -or $lock.cacheKey -cnotmatch '\A[A-Za-z0-9_-]{1,80}\z') { throw 'Unsupported native source lock.' }
@@ -16,7 +20,10 @@ foreach ($component in @($lock.libdatachannel,$lock.openssl)) {
 }
 if ($lock.nasm.url -cnotmatch '\Ahttps://www\.nasm\.us/pub/nasm/releasebuilds/[0-9.]+/win64/nasm-[0-9.]+-win64\.zip\z' -or
     $lock.nasm.sha256 -cnotmatch '\A[a-f0-9]{64}\z') { throw 'Invalid assembler archive coordinate.' }
-if (!$BuildDirectory) { $BuildDirectory = Join-Path $env:USERPROFILE ('.cache/iconnect/native-transport/' + $lock.cacheKey) }
+if (!$BuildDirectory) {
+    $cache = $lock.cacheKey + $(if ($SctpInitializationFix) { '-sctp-init1' } else { '' })
+    $BuildDirectory = Join-Path $env:USERPROFILE ('.cache/iconnect/native-transport/' + $cache)
+}
 $root = [IO.Path]::GetFullPath($BuildDirectory)
 # OpenSSL's Windows makefiles require a build path without whitespace.
 if ($root -match '[\s"%!^&|<>]') { throw 'Choose a native build directory without whitespace or command metacharacters.' }
@@ -29,16 +36,17 @@ function Invoke-Git([string[]]$Arguments) {
     if ($LASTEXITCODE -ne 0) { throw "Git failed while validating native sources (exit $LASTEXITCODE)." }
     return $output
 }
-function Assert-Source([string]$Path,[string]$Commit) {
-    if ((Invoke-Git -Arguments @('-C',$Path,'rev-parse','HEAD')).Trim() -cne $Commit) { throw "Native source revision mismatch: $Path" }
-    if (Invoke-Git -Arguments @('-C',$Path,'status','--porcelain','--untracked-files=all')) { throw "Native source has local changes: $Path" }
+function Assert-Source([string]$Path,[string]$Commit,[object[]]$Patches = @()) {
+    Assert-IConnectNativeSource $Path $Commit $Patches
 }
 function Source([string]$Name,[hashtable]$Component) {
     $path = Join-Path $root $Name
     if (!(Test-Path -LiteralPath $path)) {
-        [void](Invoke-Git -Arguments @('-c','advice.detachedHead=false','clone','--depth','1','--branch',$Component.tag,'--single-branch',$Component.repository,$path))
+        [void](Invoke-Git -Arguments @('-c','advice.detachedHead=false','clone','-c','core.autocrlf=false','--depth','1','--branch',$Component.tag,'--single-branch',$Component.repository,$path))
     }
-    Assert-Source $path $Component.commit
+    if ($Name -ceq 'libdatachannel' -and $nativePatches.Count) {
+        Initialize-IConnectNativeSourcePatch $path $Component.commit $nativePatches
+    } else { Assert-Source $path $Component.commit }
     return $path
 }
 function Hash([string]$Path) { return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant() }
@@ -116,7 +124,7 @@ try {
     Run-Driver 'build-datachannel' ($environment + @($configure,'if errorlevel 1 exit /b 1',
         ((CmdPath $cmake) + ' --build ' + (CmdPath $libBuild) + ' --target datachannel --parallel ' + $Jobs),
         'if errorlevel 1 exit /b 1','exit /b 0'))
-    Assert-Source $libSource $lock.libdatachannel.commit
+    Assert-Source $libSource $lock.libdatachannel.commit $nativePatches
     Assert-Source $sslSource $lock.openssl.commit
     foreach ($module in $lock.libdatachannel.submodules.GetEnumerator()) { Assert-Source (Join-Path $libSource $module.Key) $module.Value }
     $binary = Join-Path $libBuild 'datachannel.dll'
@@ -125,6 +133,15 @@ try {
     [void][IO.Directory]::CreateDirectory($artifact)
     Copy-Item -LiteralPath $binary -Destination (Join-Path $artifact 'datachannel.dll')
     Copy-Item -LiteralPath $lockPath -Destination (Join-Path $artifact 'source-lock.json')
+    if ($nativePatches.Count) {
+        Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'native-sctp-initialization.json') -Destination $artifact
+        foreach ($patch in $nativePatches) {
+            $target = Join-Path $artifact $patch.patchFile
+            [void][IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($target))
+            Copy-Item -LiteralPath (Join-Path $PSScriptRoot $patch.patchFile) -Destination $target
+        }
+        Assert-IConnectNativePatchArtifacts $artifact $nativePatches
+    }
     $evidence = [ordered]@{
         schema=1; stage='BuildOnly'; sourceLockSha256=(Hash $lockPath); binarySha256=(Hash $binary)
         libdatachannel=$lock.libdatachannel; openssl=$lock.openssl
@@ -134,6 +151,7 @@ try {
         cmakeVersion=((& $cmake --version | Select-Object -First 1) -join '')
         architecture='windows-x64'; runtime='MSVC static'; jobs=$Jobs
         verifiedAtUtc=[DateTimeOffset]::UtcNow.ToString('o'); applicationInteropVerified=$false
+        nativePatches=$nativePatches
     }
     $evidence | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $artifact 'build-evidence.json') -Encoding UTF8
     [pscustomobject]@{ Stage='BuildOnly'; Artifact=$artifact; BinarySha256=$evidence.binarySha256; ApplicationInteropVerified=$false }

@@ -5,6 +5,7 @@ param(
     [string]$Destination
 )
 $ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'native-transport-patches.ps1')
 $lockPath = Join-Path $PSScriptRoot 'native-transport-sources.json'
 $lock = Get-Content -LiteralPath $lockPath -Raw | ConvertFrom-Json -AsHashtable
 if ($lock.schema -ne 1 -or $lock.cacheKey -cnotmatch '\A[A-Za-z0-9_-]{1,80}\z' -or $lock.libdatachannel.submodules.Count -ne 5) {
@@ -24,12 +25,8 @@ function Invoke-Git([string[]]$Arguments) {
     if ($LASTEXITCODE -ne 0) { throw "Native source export failed (git exit $LASTEXITCODE)." }
     return $output
 }
-function Assert-Source([string]$Path,[string]$Commit) {
-    if ($Commit -cnotmatch '\A[a-f0-9]{40}\z' -or
-        (Invoke-Git -Arguments @('-C',$Path,'rev-parse','HEAD')).Trim() -cne $Commit -or
-        (Invoke-Git -Arguments @('-C',$Path,'status','--porcelain','--untracked-files=all'))) {
-        throw "Native source revision or worktree mismatch: $Path"
-    }
+function Assert-Source([string]$Path,[string]$Commit,[object[]]$Patches = @()) {
+    Assert-IConnectNativeSource $Path $Commit $Patches
 }
 
 try {
@@ -37,6 +34,8 @@ try {
     $buildEvidence = Join-Path $artifact 'build-evidence.json'
     if ((Get-Item -LiteralPath $buildEvidence).Length -gt 64KB) { throw 'Native build evidence is oversized.' }
     $evidence = Get-Content -LiteralPath $buildEvidence -Raw | ConvertFrom-Json -AsHashtable
+    $nativePatches = @(Get-IConnectNativeSourcePatches $evidence)
+    Assert-IConnectNativePatchArtifacts $artifact $nativePatches
     $binary = Join-Path $artifact 'datachannel.dll'
     $sourceLockHash = Hash $lockPath
     if ($evidence.schema -ne 1 -or $evidence.stage -cne 'BuildOnly' -or
@@ -61,7 +60,7 @@ try {
             $component.repository = (Invoke-Git -Arguments @('-C',$libSource,'config','-f','.gitmodules','--get',('submodule.' + $module + '.url'))).Trim()
         }
         $component.source = Join-Path $root $component.path
-        Assert-Source $component.source $component.commit
+        Assert-Source $component.source $component.commit $(if ($component.name -ceq 'libdatachannel') { $nativePatches } else { @() })
     }
     # Do not create output until all preflight checks pass. Failures after this point
     # preserve the partial bundle without a completed bundle-evidence.json marker.
@@ -90,13 +89,20 @@ try {
                 role=if ($component.name -eq 'json') { 'Pinned source; examples disabled in this build' } else { 'Transport source input' }
             }
         } finally { $zip.Dispose() }
-        Assert-Source $component.source $component.commit
+        Assert-Source $component.source $component.commit $(if ($component.name -ceq 'libdatachannel') { $nativePatches } else { @() })
     }
     $files = @{}
-    foreach ($name in @('build-native-transport.ps1','native-transport-sources.json','test-native-transport.ps1','export-native-transport-sources.ps1','review-native-transport.ps1','read-native-transport-bundle.ps1')) {
+    foreach ($name in @('build-native-transport.ps1','native-transport-sources.json','test-native-transport.ps1','export-native-transport-sources.ps1','review-native-transport.ps1','read-native-transport-bundle.ps1','native-transport-patches.ps1','native-sctp-initialization.json')) {
         $relative = 'recipe/' + $name
         Copy-Item -LiteralPath (Join-Path $PSScriptRoot $name) -Destination (Join-Path $destinationPath $relative)
         $files[$relative] = Hash (Join-Path $destinationPath $relative)
+    }
+    foreach ($patch in $nativePatches) {
+        $relative = 'recipe/' + $patch.patchFile
+        $target = Join-Path $destinationPath $relative
+        [void][IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($target))
+        Copy-Item -LiteralPath (Join-Path $PSScriptRoot $patch.patchFile) -Destination $target
+        $files[$relative] = Hash $target
     }
     foreach ($name in @('datachannel.dll','build-evidence.json','source-lock.json')) {
         Copy-Item -LiteralPath (Join-Path $artifact $name) -Destination (Join-Path $destinationPath $name)
@@ -115,6 +121,11 @@ recipe/ records the build, source lock, application fixture verifier and exporte
 NASM and the compiler/toolchain are not redistributed in this bundle.
 The builder verifies Git checkouts; exported archives are source snapshots and
 do not replace those checkouts when running the builder.
+When build-evidence.json lists nativePatches, the libdatachannel archive is the
+pinned upstream base. Apply its exact recipe/native-patches/*.patch files to
+reconstruct the modified source; recipe/native-sctp-initialization.json records
+the patch bytes and resulting file hashes (UTF-8 with LF). The recipe builder's
+-SctpInitializationFix switch performs and validates that application.
 
 bundle-evidence.json is written only after export completes. It binds the source
 archives, root licenses, recipe and build evidence to this exact DLL. This bundle

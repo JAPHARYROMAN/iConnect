@@ -1,0 +1,844 @@
+{
+  "SchemaVersion": 1,
+  "ObservedAtUtc": "2026-11-09T13:05:29Z",
+  "SourceParent": "632e24f1777f8d4e17c8e7c66d5c4ad991fb89c2",
+  "ManagedInputs": [
+    {
+      "Path": "apps/windows/IConnect.Connectivity/NativeRtc.cs",
+      "Sha256": "7d86ec3cffe37a8f8cb7325762af3edf8e8152e94b3ddcffc87b3ba4072c399b"
+    },
+    {
+      "Path": "apps/windows/IConnect.Connectivity/NativeTransportEvents.cs",
+      "Sha256": "03b4da3692a35cb4c14f1344c4172e842aa0e7a9a75ffdfed1d38656f87c5198"
+    }
+  ],
+  "ManagedTestAssemblySha256": "c080c7a62260c844ff92ffdf50355ebe9680014d88988cc54b66afbcc2e7c5c7",
+  "ScheduledSourcesDifferOnlyByMutex": true,
+  "DiagnosticSchedulingPatchSha256": "b113210d59bd93b69c3ea87eda650f232f167285f96536ff6843a6b0679b23b2",
+  "Control": {
+    "Build": {
+      "Variant": "Control",
+      "SourceLockSha256": "d8d8c75efa7114c6c7df7984fc199415dafa222de5ba95506d86847313ab0b53",
+      "SourceFiles": [
+        {
+          "Sha256": "b287943128d19f5ff5245d1d0cab49396f861b19d2773f10209a71725363ec66",
+          "Path": "src/impl/peerconnection.hpp"
+        },
+        {
+          "Sha256": "32d6a690fa736be2dc3dee08ffb7d2b71fcc50e6c85402575b88ba3fe7e71fc3",
+          "Path": "src/impl/peerconnection.cpp"
+        }
+      ],
+      "DiagnosticSctpPauseMs": 600,
+      "UpstreamCommit": "6b1e2e620f1e37f0eafeee702eaea0043cb305fd",
+      "Binary": "datachannel.dll",
+      "Stage": "BuildOnlyDiagnosticScheduling",
+      "DiagnosticRemoteDescriptionPauseMs": 200,
+      "FullCompletion": false,
+      "BinarySha256": "8e78bb8b2864054053405e202d9bba5800728f10c1acb8f009cae0071e230610",
+      "NoProductionAdoption": true,
+      "ReferenceFixSha256": "ecb09364ce5510bcf7109bf672de1caf526717f3f393586ee767b8920d23d7b1",
+      "FixApplied": false
+    },
+    "Stage": "InvestigatorStoppedNativeStall",
+    "SelectedCases": 4,
+    "CompletedCounters": {
+      "total": 3,
+      "executed": 3,
+      "passed": 3,
+      "failed": 0,
+      "error": 0,
+      "timeout": 0,
+      "aborted": 0,
+      "inconclusive": 0,
+      "passedButRunAborted": 0,
+      "notRunnable": 0,
+      "notExecuted": 0,
+      "disconnected": 0,
+      "warning": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "pending": 0
+    },
+    "TrxRunOutcome": "Failed",
+    "LogSha256": "70f5c19d117500cb57eb613fe31e0c6c9939662e8d1a515f7651bdc9ce247d77",
+    "TrxSha256": "e2c481016592a51e078a9fcc2da8cdcdf422d2e511d14eb1cd4c8ab16303f515",
+    "RecoveredHookRing": {
+      "QueuedRecords": 1116,
+      "CreatedPeers": 22,
+      "DtlsConstructors": 22,
+      "SctpConstructors": 26,
+      "QueueCapacity": 2048,
+      "ConfiguredDropThreshold": 4096,
+      "NoDropsInferredFromQueueCapacityAndHookCode": true
+    },
+    "PrivateHeapSha256": "bb12b593b76fff845995691cc9f02aa93b2d027f8bc13c37dd0105340f6c056b",
+    "PrivateRingObjectsSha256": "06f181b7e140b1a443cbf173c709af384b9e002ac06433ced981fdd4e8dee71d",
+    "ManagedStacksSha256": "161f18c1568a1ee1661114b5e4c3608d2d08681e4caca9e6b9a13a1271d075d7",
+    "StoppedAtUtc": "2026-11-09T12:49:39.2121789+00:00",
+    "StartedAtUtc": "2026-11-09T12:29:57.0903737+00:00",
+    "Complete": false,
+    "PassingStressClaim": false
+  },
+  "FixedDiagnosticBuild": {
+    "UpstreamCommit": "6b1e2e620f1e37f0eafeee702eaea0043cb305fd",
+    "NoProductionAdoption": true,
+    "Stage": "BuildOnlyDiagnosticScheduling",
+    "DiagnosticSctpPauseMs": 600,
+    "DiagnosticRemoteDescriptionPauseMs": 200,
+    "Binary": "datachannel.dll",
+    "SourceLockSha256": "d8d8c75efa7114c6c7df7984fc199415dafa222de5ba95506d86847313ab0b53",
+    "SourceFiles": [
+      {
+        "Sha256": "ac41e6ae648649fc6857ec89a1d9c159d212e762123bf211eaed0ef5050687eb",
+        "Path": "src/impl/peerconnection.hpp"
+      },
+      {
+        "Sha256": "6ee61fd48e9baad0642dde2d4bc9c332a42fb725cd27c66cb032b7124953f78f",
+        "Path": "src/impl/peerconnection.cpp"
+      }
+    ],
+    "BinarySha256": "ed18955ebc4687f5c6dac47283a729505ebee07c76e92c5ab1f33bba710caba2",
+    "Variant": "Fixed",
+    "FullCompletion": false,
+    "ReferenceFixSha256": "ecb09364ce5510bcf7109bf672de1caf526717f3f393586ee767b8920d23d7b1",
+    "FixApplied": true
+  },
+  "FixedDiagnosticTrace": {
+    "NativeSha256": "ed18955ebc4687f5c6dac47283a729505ebee07c76e92c5ab1f33bba710caba2",
+    "TestAssemblySha256": "c080c7a62260c844ff92ffdf50355ebe9680014d88988cc54b66afbcc2e7c5c7",
+    "NotExecuted": 0,
+    "TestExitCode": 0,
+    "HookSha256": "feee500c821849410a70ef3ebfe44f0d9bb2e4b36252e6b1d93fae03b588cc8f",
+    "Passed": 4,
+    "LogSha256": "a7977207f37a85667587a6417cfc3470160ec097cca33cda0c40c8e9c8180352",
+    "NativeTraceSha256": "354819988854d745d6095cad1e7c0dd7540e93c62239d3390d915c39e4ab751e",
+    "Total": 4,
+    "Failed": 0,
+    "FullCompletion": false,
+    "NativeTrace": "native-13900.log",
+    "DiagnosticOnly": true,
+    "Counters": {
+      "CreatedPeers": 70,
+      "DtlsConstructors": 70,
+      "SctpConstructors": 70,
+      "MetadataErrors": 0,
+      "Dropped": 0
+    }
+  },
+  "OrdinaryPatchedMainRegression": {
+    "NativeSha256": "abc7e3132e706356b1ec472ce6a1de185cceb6af11ee0cbc9668b1a4b9ac398a",
+    "Counters": {
+      "total": 958,
+      "executed": 958,
+      "passed": 958,
+      "failed": 0,
+      "error": 0,
+      "timeout": 0,
+      "aborted": 0,
+      "inconclusive": 0,
+      "passedButRunAborted": 0,
+      "notRunnable": 0,
+      "notExecuted": 0,
+      "disconnected": 0,
+      "warning": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "pending": 0
+    },
+    "ReportedDuration": "5.3500 Minutes",
+    "LogSha256": "0021d691ef931540d250a743bffb5533b0600d893ea69f96ef7a717f2142a3bb",
+    "TrxSha256": "03491ef12bf33c72515396442119e4b1e8de3b63c447e8003a00cb7c2e205157"
+  },
+  "OrdinaryPatchedTwoCpuFailure": {
+    "Samples": [
+      {
+        "Total": 4,
+        "RootAffinity": 3,
+        "LogSha256": "add3a72fbd21895fd822e7cee06e11d97d79fa1bde4ad9d5d3c297fbdb2e762b",
+        "NotExecuted": 0,
+        "Failed": 0,
+        "ChildObservations": [
+          {
+            "Name": "conhost",
+            "Pid": 42764,
+            "Affinity": 3
+          },
+          {
+            "Name": "dotnet",
+            "Pid": 52784,
+            "Affinity": 3
+          },
+          {
+            "Name": "testhost",
+            "Pid": 32032,
+            "Affinity": 3
+          },
+          {
+            "Name": "conhost",
+            "Pid": 54004,
+            "Affinity": 3
+          }
+        ],
+        "Sample": 1,
+        "ExitCode": 0,
+        "TrxSha256": "3e67ee62319c51f9bc2c57714d4f082fb9425cf1fe32c3a01ea2da9030691749",
+        "Passed": 4
+      },
+      {
+        "Total": 4,
+        "RootAffinity": 3,
+        "LogSha256": "5c7920eb1eddc5f2293dcb45e42e1a4dc3637c7383bf0e1478babb36f21228b8",
+        "NotExecuted": 0,
+        "Failed": 1,
+        "ChildObservations": [
+          {
+            "Name": "conhost",
+            "Pid": 4576,
+            "Affinity": 3
+          },
+          {
+            "Name": "dotnet",
+            "Pid": 41820,
+            "Affinity": 3
+          },
+          {
+            "Name": "testhost",
+            "Pid": 17248,
+            "Affinity": 3
+          },
+          {
+            "Name": "conhost",
+            "Pid": 49580,
+            "Affinity": 3
+          }
+        ],
+        "Sample": 2,
+        "ExitCode": 1,
+        "TrxSha256": "74bbeea1a12a5831a0a17d5d19e92bb97de15a2fc89cb5fc3775f65e5211b135",
+        "Passed": 3
+      }
+    ],
+    "StoppedOnFirstFailure": true,
+    "FailureClass": "NativeHandshakeStressTests",
+    "Round": 2,
+    "Pair": 1,
+    "Host": {
+      "ConnectionState": 4,
+      "IceState": 2,
+      "ChannelAttached": true,
+      "ChannelOpened": false,
+      "History": [
+        1,
+        4
+      ]
+    },
+    "Guest": {
+      "ConnectionState": 4,
+      "IceState": 4,
+      "ChannelAttached": false,
+      "ChannelOpened": false,
+      "History": [
+        1,
+        4
+      ]
+    },
+    "Resolved": false,
+    "ConcurrentContext": [
+      "Two isolated diagnostic native compilations",
+      "Selected main regression on a separate test host"
+    ]
+  },
+  "TracedPatchedTwoCpuSequence": {
+    "Samples": [
+      {
+        "TrxSha256": "c0a82c416213ca8b9f7afa19bc974a8c80f2260895289b8d4f33c4bcd5619b6b",
+        "NotExecuted": 0,
+        "ChildObservations": [
+          {
+            "Pid": 11176,
+            "Affinity": 3,
+            "Name": "conhost"
+          },
+          {
+            "Pid": 24244,
+            "Affinity": 3,
+            "Name": "dotnet"
+          },
+          {
+            "Pid": 35808,
+            "Affinity": 3,
+            "Name": "testhost"
+          },
+          {
+            "Pid": 16436,
+            "Affinity": 3,
+            "Name": "conhost"
+          }
+        ],
+        "Failed": 0,
+        "Passed": 4,
+        "ExitCode": 0,
+        "Sample": 1,
+        "Total": 4,
+        "LogSha256": "84b3b89325f9f69bfdaf70f5eb50fbfcddaf682884468677e2f4cf21ed2a8bee",
+        "RootAffinity": 3
+      },
+      {
+        "TrxSha256": "f254440deeaa7263651c6c8cc1e96d36de922e4c204e02c15bfb0f8ae6d3ff87",
+        "NotExecuted": 0,
+        "ChildObservations": [
+          {
+            "Pid": 43412,
+            "Affinity": 3,
+            "Name": "conhost"
+          },
+          {
+            "Pid": 9960,
+            "Affinity": 3,
+            "Name": "dotnet"
+          },
+          {
+            "Pid": 39184,
+            "Affinity": 3,
+            "Name": "testhost"
+          },
+          {
+            "Pid": 22960,
+            "Affinity": 3,
+            "Name": "conhost"
+          }
+        ],
+        "Failed": 0,
+        "Passed": 4,
+        "ExitCode": 0,
+        "Sample": 2,
+        "Total": 4,
+        "LogSha256": "93cc7dd0e2d9af8ac0056436d8f5b8559082a696d5de89dd89a73f2abb016003",
+        "RootAffinity": 3
+      },
+      {
+        "TrxSha256": "ef30179431ba90e4cd70e4af0c653331dc3d57b0e38344d0e8b9ed5ce10cb038",
+        "NotExecuted": 0,
+        "ChildObservations": [
+          {
+            "Pid": 35084,
+            "Affinity": 3,
+            "Name": "conhost"
+          },
+          {
+            "Pid": 51088,
+            "Affinity": 3,
+            "Name": "dotnet"
+          },
+          {
+            "Pid": 14928,
+            "Affinity": 3,
+            "Name": "testhost"
+          },
+          {
+            "Pid": 26848,
+            "Affinity": 3,
+            "Name": "conhost"
+          }
+        ],
+        "Failed": 0,
+        "Passed": 4,
+        "ExitCode": 0,
+        "Sample": 3,
+        "Total": 4,
+        "LogSha256": "0136d7556bfb3e7f95214659860545b1b635f59df914628cdd39bf064e56220c",
+        "RootAffinity": 3
+      },
+      {
+        "TrxSha256": "6583a32a43f87119c587a2a85ec165726316be946195dba5e17b3f8834c8c181",
+        "NotExecuted": 0,
+        "ChildObservations": [
+          {
+            "Pid": 36792,
+            "Affinity": 3,
+            "Name": "conhost"
+          },
+          {
+            "Pid": 11328,
+            "Affinity": 3,
+            "Name": "dotnet"
+          },
+          {
+            "Pid": 23616,
+            "Affinity": 3,
+            "Name": "testhost"
+          },
+          {
+            "Pid": 54488,
+            "Affinity": 3,
+            "Name": "conhost"
+          }
+        ],
+        "Failed": 0,
+        "Passed": 4,
+        "ExitCode": 0,
+        "Sample": 4,
+        "Total": 4,
+        "LogSha256": "9395bccfe5d4b91689f2d54ed987c1076eda14c2dd25dba3d94ab24ec8a50308",
+        "RootAffinity": 3
+      },
+      {
+        "TrxSha256": "bfa357d16c7f28a4bef4bbc7a01fbd75c2de72d7989df4516ca0bd10e541d55f",
+        "NotExecuted": 0,
+        "ChildObservations": [
+          {
+            "Pid": 2204,
+            "Affinity": 3,
+            "Name": "conhost"
+          },
+          {
+            "Pid": 19292,
+            "Affinity": 3,
+            "Name": "dotnet"
+          },
+          {
+            "Pid": 52116,
+            "Affinity": 3,
+            "Name": "testhost"
+          },
+          {
+            "Pid": 12592,
+            "Affinity": 3,
+            "Name": "conhost"
+          }
+        ],
+        "Failed": 0,
+        "Passed": 4,
+        "ExitCode": 0,
+        "Sample": 5,
+        "Total": 4,
+        "LogSha256": "74456b8e45606a582fe118cbefca2a857951b18b37fdbdf8a1acaffb9bad4952",
+        "RootAffinity": 3
+      },
+      {
+        "TrxSha256": "9341aabf32725568b65df409a7beb33a86cac836bebc169ba44859e54b23a139",
+        "NotExecuted": 0,
+        "ChildObservations": [
+          {
+            "Pid": 47596,
+            "Affinity": 3,
+            "Name": "conhost"
+          },
+          {
+            "Pid": 28096,
+            "Affinity": 3,
+            "Name": "dotnet"
+          },
+          {
+            "Pid": 23084,
+            "Affinity": 3,
+            "Name": "testhost"
+          },
+          {
+            "Pid": 42536,
+            "Affinity": 3,
+            "Name": "conhost"
+          }
+        ],
+        "Failed": 0,
+        "Passed": 4,
+        "ExitCode": 0,
+        "Sample": 6,
+        "Total": 4,
+        "LogSha256": "6ed8e3aa4a1e397f9754b38d72d3a3645b2e19f27ff4fdf6c8c1193fb80696ee",
+        "RootAffinity": 3
+      },
+      {
+        "TrxSha256": "57a5b6c578a781d62c6f0bc68bdf0f7c067f3d0a9eb59202726fec5058691e3e",
+        "NotExecuted": 0,
+        "ChildObservations": [
+          {
+            "Pid": 37060,
+            "Affinity": 3,
+            "Name": "conhost"
+          },
+          {
+            "Pid": 16980,
+            "Affinity": 3,
+            "Name": "dotnet"
+          },
+          {
+            "Pid": 12548,
+            "Affinity": 3,
+            "Name": "testhost"
+          },
+          {
+            "Pid": 2796,
+            "Affinity": 3,
+            "Name": "conhost"
+          }
+        ],
+        "Failed": 0,
+        "Passed": 4,
+        "ExitCode": 0,
+        "Sample": 7,
+        "Total": 4,
+        "LogSha256": "2f725f388de3d5ed7d70954f5968984066fd25584108b509dcc172f4b3f1978c",
+        "RootAffinity": 3
+      },
+      {
+        "TrxSha256": "34e1c6fee660057add7ef59e7bea23219f30b1ff5013bacc0ccf6d926fca3025",
+        "NotExecuted": 0,
+        "ChildObservations": [
+          {
+            "Pid": 31332,
+            "Affinity": 3,
+            "Name": "conhost"
+          },
+          {
+            "Pid": 40224,
+            "Affinity": 3,
+            "Name": "dotnet"
+          },
+          {
+            "Pid": 10912,
+            "Affinity": 3,
+            "Name": "testhost"
+          },
+          {
+            "Pid": 18540,
+            "Affinity": 3,
+            "Name": "conhost"
+          }
+        ],
+        "Failed": 0,
+        "Passed": 4,
+        "ExitCode": 0,
+        "Sample": 8,
+        "Total": 4,
+        "LogSha256": "60afc4601b272d2a34722a06cde449e03e85a8c9cc4d9eb6580d972e88097b2d",
+        "RootAffinity": 3
+      },
+      {
+        "TrxSha256": "3eaea5a636ab091b1040394cd36a87ae9922aefb598112329f60ec0b83b257f7",
+        "NotExecuted": 0,
+        "ChildObservations": [
+          {
+            "Pid": 52788,
+            "Affinity": 3,
+            "Name": "conhost"
+          },
+          {
+            "Pid": 52844,
+            "Affinity": 3,
+            "Name": "dotnet"
+          },
+          {
+            "Pid": 17196,
+            "Affinity": 3,
+            "Name": "testhost"
+          },
+          {
+            "Pid": 26440,
+            "Affinity": 3,
+            "Name": "conhost"
+          }
+        ],
+        "Failed": 0,
+        "Passed": 4,
+        "ExitCode": 0,
+        "Sample": 9,
+        "Total": 4,
+        "LogSha256": "2e9cc8c4e2fcc80e0be923dfae179640b3757d30ab071c46bd29c92281cf5294",
+        "RootAffinity": 3
+      },
+      {
+        "TrxSha256": "b256d9d28b468daebb050c37a2ac33e69e00e9e23512f0be20aed64dcabe7875",
+        "NotExecuted": 0,
+        "ChildObservations": [
+          {
+            "Pid": 38860,
+            "Affinity": 3,
+            "Name": "conhost"
+          },
+          {
+            "Pid": 8008,
+            "Affinity": 3,
+            "Name": "dotnet"
+          },
+          {
+            "Pid": 4444,
+            "Affinity": 3,
+            "Name": "testhost"
+          },
+          {
+            "Pid": 48732,
+            "Affinity": 3,
+            "Name": "conhost"
+          }
+        ],
+        "Failed": 0,
+        "Passed": 4,
+        "ExitCode": 0,
+        "Sample": 10,
+        "Total": 4,
+        "LogSha256": "951d0b4da7493a887c163eb8c593435eb7fa9ee0c75c859ddcd33413e2c1d64f",
+        "RootAffinity": 3
+      }
+    ],
+    "NativeTraces": [
+      {
+        "File": "native-10912.log",
+        "Sha256": "eed49fbde641528b178e0f48a939f7096736ffc28d633b6f39eece5a061a937c",
+        "Counters": {
+          "CreatedPeers": 70,
+          "DtlsConstructors": 70,
+          "SctpConstructors": 70,
+          "MetadataErrors": 0,
+          "Dropped": 0
+        }
+      },
+      {
+        "File": "native-12548.log",
+        "Sha256": "ed158b8f1f21815443ba1465b6f5efa95a71c552d7a2af39605064fbbd5d06ad",
+        "Counters": {
+          "CreatedPeers": 70,
+          "DtlsConstructors": 70,
+          "SctpConstructors": 70,
+          "MetadataErrors": 0,
+          "Dropped": 0
+        }
+      },
+      {
+        "File": "native-14928.log",
+        "Sha256": "76e26be84446550fefa11e3a889fd913653984e064261ba4fd6741f169e48ea3",
+        "Counters": {
+          "CreatedPeers": 70,
+          "DtlsConstructors": 70,
+          "SctpConstructors": 70,
+          "MetadataErrors": 0,
+          "Dropped": 0
+        }
+      },
+      {
+        "File": "native-17196.log",
+        "Sha256": "5cb8e3da1dfa9f80a061fbe5953aec5e312181e56d74fc173cff29ba43bfbbab",
+        "Counters": {
+          "CreatedPeers": 70,
+          "DtlsConstructors": 70,
+          "SctpConstructors": 70,
+          "MetadataErrors": 0,
+          "Dropped": 0
+        }
+      },
+      {
+        "File": "native-23084.log",
+        "Sha256": "4685880a663ed6a04287ccad62a052e1668fa621618994814e806e861edb21a0",
+        "Counters": {
+          "CreatedPeers": 70,
+          "DtlsConstructors": 70,
+          "SctpConstructors": 70,
+          "MetadataErrors": 0,
+          "Dropped": 0
+        }
+      },
+      {
+        "File": "native-23616.log",
+        "Sha256": "3f76a264d4b32a6992e712cb9ddce1570b32d57581b7996e6b39155e3d35e6d8",
+        "Counters": {
+          "CreatedPeers": 70,
+          "DtlsConstructors": 70,
+          "SctpConstructors": 70,
+          "MetadataErrors": 0,
+          "Dropped": 0
+        }
+      },
+      {
+        "File": "native-35808.log",
+        "Sha256": "e58d3ec51506a2be1397d69b4212c47b7db50dcc107594daab0b5c0c949b9d42",
+        "Counters": {
+          "CreatedPeers": 70,
+          "DtlsConstructors": 70,
+          "SctpConstructors": 70,
+          "MetadataErrors": 0,
+          "Dropped": 0
+        }
+      },
+      {
+        "File": "native-39184.log",
+        "Sha256": "0aee5fbc63dac0cfa89a86a66483fb5458b5cf460074c5abcc9f6380c98ab347",
+        "Counters": {
+          "CreatedPeers": 70,
+          "DtlsConstructors": 70,
+          "SctpConstructors": 70,
+          "MetadataErrors": 0,
+          "Dropped": 0
+        }
+      },
+      {
+        "File": "native-4444.log",
+        "Sha256": "74dd4807837fbe352e732f4e0ce846f6c21a41cdf85a7879b204e36679f6d5df",
+        "Counters": {
+          "CreatedPeers": 70,
+          "DtlsConstructors": 70,
+          "SctpConstructors": 70,
+          "MetadataErrors": 0,
+          "Dropped": 0
+        }
+      },
+      {
+        "File": "native-52116.log",
+        "Sha256": "7db313e28bc4f8f6ed5d370560581b5374be9ca1699dbf3b683eb6baec871eeb",
+        "Counters": {
+          "CreatedPeers": 70,
+          "DtlsConstructors": 70,
+          "SctpConstructors": 70,
+          "MetadataErrors": 0,
+          "Dropped": 0
+        }
+      }
+    ],
+    "CaseExecutions": 40,
+    "ConcurrentPairs": 320,
+    "IceFailureCaptured": false,
+    "IceFailureResolved": false
+  },
+  "Tooling": {
+    "SourceInputs": [
+      {
+        "Path": "tools/build-native-transport.ps1",
+        "Sha256": "a66f64e03e265414df7765e33e59be60142d746b31f8b6e1a8592f305a49efd2"
+      },
+      {
+        "Path": "tools/native-transport-patches.ps1",
+        "Sha256": "b15305bb7ed91a9cc335d34e60945cd9d562e484f0c4a80574640cb4db46ef49"
+      },
+      {
+        "Path": "tools/native-sctp-initialization.json",
+        "Sha256": "5ceb1da60c6c5b0ddacd0ac9382d9c6747ac8de6491fe097f04dc16f7184215b"
+      },
+      {
+        "Path": "tools/native-patches/serialize-sctp-initialization.patch",
+        "Sha256": "ecb09364ce5510bcf7109bf672de1caf526717f3f393586ee767b8920d23d7b1"
+      },
+      {
+        "Path": "tools/test-native-transport.ps1",
+        "Sha256": "0bd691e0bc60d0d595b4b3fe3cb8654040d608d086911987ffb5e44db33e2a78"
+      },
+      {
+        "Path": "tools/export-native-transport-sources.ps1",
+        "Sha256": "66b7b8e1f10bafc73e321ef5ebbd379c14d1f0d6ede802e1f292b2b3efa209f9"
+      },
+      {
+        "Path": "tools/read-native-transport-bundle.ps1",
+        "Sha256": "5ca16de8770fe1e556957edffba2cc2eb6a13a8d960277f44d7ce94e90a79102"
+      },
+      {
+        "Path": "tools/write-windows-release-sbom.ps1",
+        "Sha256": "d6ca240270dc2a9db917bf39834b1f766b4354a07f4f0ba1ec41ca90b64b01ab"
+      },
+      {
+        "Path": "tools/test-native-package.ps1",
+        "Sha256": "754e7bafd1e0cd3463ec89f7b4e7518da0bd86658f18408d256da5d8866f2e76"
+      },
+      {
+        "Path": "apps/windows/IConnect.Connectivity/NativeRtc.cs",
+        "Sha256": "7d86ec3cffe37a8f8cb7325762af3edf8e8152e94b3ddcffc87b3ba4072c399b"
+      },
+      {
+        "Path": "apps/windows/IConnect.Connectivity/NativeTransportEvents.cs",
+        "Sha256": "03b4da3692a35cb4c14f1344c4172e842aa0e7a9a75ffdfed1d38656f87c5198"
+      }
+    ],
+    "AllToolTests": {
+      "Passed": 39,
+      "Failed": 0,
+      "Skipped": 0,
+      "LogSha256": "649018b78e0226346ea17670ffd56d1c4ab3cfd6cbe533a46fd5c39d70923043"
+    },
+    "ActualPinnedSourceGuards": {
+      "Cases": [
+        {
+          "Name": "OriginalPinnedSource",
+          "Outcome": "Accepted"
+        },
+        {
+          "Name": "PinnedPatchApplication",
+          "Outcome": "Accepted"
+        },
+        {
+          "Name": "IdempotentPinnedPatch",
+          "Outcome": "Accepted"
+        },
+        {
+          "Message": "content differs",
+          "Name": "AlteredPatchedSource",
+          "Outcome": "ExpectedRejection"
+        },
+        {
+          "Message": "changes exceed",
+          "Name": "UntrackedSourceInput",
+          "Outcome": "ExpectedRejection"
+        },
+        {
+          "Message": "changes exceed",
+          "Name": "ChangedSourceIndex",
+          "Outcome": "ExpectedRejection"
+        },
+        {
+          "Message": "revision differs",
+          "Name": "WrongSourceRevision",
+          "Outcome": "ExpectedRejection"
+        },
+        {
+          "Message": "local changes",
+          "Name": "PatchedSourcePresentedAsUnmodified",
+          "Outcome": "ExpectedRejection"
+        },
+        {
+          "Name": "PinnedPatchedSourceAfterControls",
+          "Outcome": "Accepted"
+        }
+      ],
+      "DefinitionSha256": "5ceb1da60c6c5b0ddacd0ac9382d9c6747ac8de6491fe097f04dc16f7184215b",
+      "Stage": "RealPinnedSourceGuardsPassed"
+    },
+    "UnpatchedExportCompatibility": {
+      "BinarySha256": "84a0a63dcc579d97e4afac959866f9e61e9584c18732045a48db673d8ec87dde",
+      "CorrectedObservation": "Initial observation used @($null).Count; the validated source patch inventory is empty.",
+      "NativePatches": 0,
+      "Files": 27,
+      "Components": 7,
+      "Stage": "UnpatchedExportAndReadPassed",
+      "BundleEvidenceSha256": "219d18e11fa72a40dab388293b6b2e957a00a3ac709394537872a51277790dc8",
+      "InitialObservationSha256": "b820ea0693278324d08fd06646626eff6efafe60a04a5e8fa73ccc6971d11555"
+    },
+    "TestAndCiSourceInputs": [
+      {
+        "Path": "tests/tools/test_native_transport_patches.py",
+        "Sha256": "86d9415de3b857da1f324b82e5c9387f3b277d9ee3f698571dbba5d286519b26"
+      },
+      {
+        "Path": ".github/workflows/build.yml",
+        "Sha256": "b3954b1010751240f89023e669ec171a19d296e44b053c37b1d8c215b05b1377"
+      }
+    ]
+  },
+  "PublicBuildAndValidation": {
+    "PreparedPatchedInputs": true,
+    "ObservedBuildStage": "BuildingPatchedTransport",
+    "ObservedValidatorStage": "WaitingForOwnedPublicBuild",
+    "PublicArtifactAndPackageResultPending": true
+  },
+  "PreviousHostedCheckpoint": {
+    "Commit": "632e24f1777f8d4e17c8e7c66d5c4ad991fb89c2",
+    "RunUrl": "https://github.com/JAPHARYROMAN/iConnect/actions/runs/42616652796",
+    "Jobs": {
+      "windows": "success",
+      "windows-large-files": "success",
+      "android": "success",
+      "native-notice-tools": "success"
+    }
+  },
+  "RawNativeLogsOrHeapPublished": false,
+  "DuplicateInitializationReproduced": true,
+  "DefaultAdopted": false,
+  "AllNativeIssuesResolved": false,
+  "FullCompletion": false
+}

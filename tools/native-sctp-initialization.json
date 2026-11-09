@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "id": "serialize-sctp-initialization-v1",
+  "baseCommit": "6b1e2e620f1e37f0eafeee702eaea0043cb305fd",
+  "patchFile": "native-patches/serialize-sctp-initialization.patch",
+  "patchSha256": "ecb09364ce5510bcf7109bf672de1caf526717f3f393586ee767b8920d23d7b1",
+  "postImages": {
+    "src/impl/peerconnection.cpp": "4345ea0a2f9169ae91a43dbddfe1dbc43cb6648cd7737892ced70c84e57ce8b9",
+    "src/impl/peerconnection.hpp": "76484bdbc1784867ef81d67d5210947f53d43eb1a96f7ae28e03637ef49a96c6"
+  }
+}

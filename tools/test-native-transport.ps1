@@ -6,12 +6,15 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 if (!$IsWindows) { throw 'The native transport fixtures require Windows x64.' }
+. (Join-Path $PSScriptRoot 'native-transport-patches.ps1')
 $repo = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $artifact = (Resolve-Path -LiteralPath $ArtifactDirectory).Path
 function Hash([string]$Path) { return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant() }
 $manifestPath = Join-Path $artifact 'build-evidence.json'
 if ((Get-Item -LiteralPath $manifestPath).Length -gt 64KB) { throw 'Native build evidence is oversized.' }
 $evidence = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json -AsHashtable
+$nativePatches = @(Get-IConnectNativeSourcePatches $evidence)
+Assert-IConnectNativePatchArtifacts $artifact $nativePatches
 $binary = Join-Path $artifact 'datachannel.dll'
 $binarySize = (Get-Item -LiteralPath $binary).Length
 if ($binarySize -lt 64 -or $binarySize -gt 128MB) { throw 'Invalid native PE size.' }

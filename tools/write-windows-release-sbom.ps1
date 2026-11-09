@@ -74,6 +74,17 @@ if ($sourceNative) {
         if ($nativeComponent.Name -ceq 'libdatachannel') {
             $component.hashes=@([ordered]@{alg='SHA-256';content=$payloadDigest})
             $component.properties+=@([ordered]@{name='iconnect:payload:libDatachannel/datachannel.dll:sha256';value=$payloadDigest})
+            foreach ($patch in $nativeComponent.SourcePatches) {
+                $component.properties+=@(
+                    [ordered]@{name='iconnect:source:patch:id';value=$patch.id}
+                    [ordered]@{name='iconnect:source:patch:sha256';value=$patch.patchSha256}
+                    [ordered]@{name='iconnect:source:patch:path';value=('PackageMetadata/NativeTransport/recipe/' + $patch.patchFile)}
+                    [ordered]@{name='iconnect:source:postimage:normalization';value='UTF-8 with LF'}
+                )
+                foreach ($name in @($patch.postImages.Keys | Sort-Object -CaseSensitive)) {
+                    $component.properties+=@([ordered]@{name=('iconnect:source:postimage:' + $name + ':sha256');value=$patch.postImages[$name]})
+                }
+            }
         }
         $components[$nativeComponent.Purl]=$component
     }

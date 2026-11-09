@@ -1,0 +1,21 @@
+diff --git a/src/impl/peerconnection.cpp b/src/impl/peerconnection.cpp
+--- a/src/impl/peerconnection.cpp
++++ b/src/impl/peerconnection.cpp
+@@ -307,6 +307,8 @@
+ 		if (auto transport = std::atomic_load(&mSctpTransport))
+ 			return transport;
+ 
++		// Diagnostic scheduling only: hold the original empty-member interval open.
++		std::this_thread::sleep_for(std::chrono::milliseconds(600));
+ 		PLOG_VERBOSE << "Starting SCTP transport";
+ 
+ 		auto lower = std::atomic_load(&mDtlsTransport);
+@@ -1163,6 +1165,8 @@
+ 		mRemoteDescription->addCandidates(std::move(existingCandidates));
+ 	}
+ 
++	// Diagnostic scheduling only: let the existing DTLS callback overlap this caller.
++	std::this_thread::sleep_for(std::chrono::milliseconds(200));
+ 	auto dtlsTransport = std::atomic_load(&mDtlsTransport);
+ 	if (!dtlsTransport) {
+ 		// ICE might have connected before the remote fingerprint was committed.
