@@ -14,7 +14,7 @@ Get-FileHash (Join-Path $windowsDirectory 'libDatachannel/datachannel.dll') -Alg
     -BundleDirectory (Join-Path $windowsDirectory 'PackageMetadata/NativeTransport')
 ```
 
-The runtime hash must match the verified bundle's binary hash, and both ordered correction IDs must be present. `57f119d4…` identifies the local no-delay build validated on 9 November; a separately compiled hosted build may have a different binary hash and must retain its own build/source evidence. Hash verification alone does not establish a trusted production signature.
+The runtime hash must match the verified bundle's binary hash, both ordered correction IDs must be present, and application selection must accept the current supported source lock. `016d8b44…` identifies the local OpenSSL 3.5.9 LTS build under qualification on 9 November. The earlier `57f119d4…` binary uses the unsupported 3.6 line and is retained only as historical evidence. A separately compiled hosted build may have a different binary hash and must retain its own build/source evidence. See [the LTS baseline and remaining qualification](native-openssl-lts.md). Hash verification alone does not establish a trusted production signature.
 
 Use a reachable HTTPS coordinator with its normal certificate validation and a deliberately selected STUN service. Keep Windows on one internet connection and the physical phone on mobile data with Wi-Fi off. Record both connection types and which device initiates each attempt. The app uses direct connections and has no relay fallback, so an unreachable network pair must be reported as a failed attempt.
 

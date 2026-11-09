@@ -1,0 +1,121 @@
+{
+  "schema": 1,
+  "stage": "LtsApplicationMainAndPublishPassed",
+  "checkedAtUtc": "2026-11-09T19:12:53.683745+00:00",
+  "nativeSha256": "016d8b449da214db2fc34ce900d13c539c2b56d885af9fbd870f326005249c68",
+  "mainCases": 959,
+  "mainFailures": 0,
+  "mainSkipped": 0,
+  "mainTrxSha256": "8be06788b797c717abb7491e5b64f685ab1d24f071b2bb9313ece7b0a82e41aa",
+  "nativeFixtures": {
+    "schema": 1,
+    "stage": "WindowsNativeFixturesPassed",
+    "binarySha256": "016d8b449da214db2fc34ce900d13c539c2b56d885af9fbd870f326005249c68",
+    "sourceLockSha256": "aabf9896378a9d304980d586a501f668739ea2a4b07ea7dc8dd8ac4fbef743ce",
+    "imports": [
+      "advapi32.dll",
+      "bcrypt.dll",
+      "crypt32.dll",
+      "kernel32.dll",
+      "user32.dll",
+      "ws2_32.dll"
+    ],
+    "requiredExports": [
+      "rtcAddRemoteCandidate",
+      "rtcCreateDataChannel",
+      "rtcCreatePeerConnection",
+      "rtcDeleteDataChannel",
+      "rtcDeletePeerConnection",
+      "rtcGetBufferedAmount",
+      "rtcGetDataChannelLabel",
+      "rtcGetSelectedCandidatePair",
+      "rtcIsOpen",
+      "rtcSendMessage",
+      "rtcSetDataChannelCallback",
+      "rtcSetIceStateChangeCallback",
+      "rtcSetLocalCandidateCallback",
+      "rtcSetLocalDescription",
+      "rtcSetLocalDescriptionCallback",
+      "rtcSetMessageCallback",
+      "rtcSetOpenCallback",
+      "rtcSetRemoteDescription",
+      "rtcSetStateChangeCallback"
+    ],
+    "testAssemblySha256": "a883831cd98a1623858363ee94a1ce83a2eaa1b25513346a20e790b0bb02a089",
+    "passed": 9,
+    "skipped": 0,
+    "classes": [
+      "NativeConnectivityTests",
+      "StunConnectivityTests",
+      "TransferNetworkNativeTests",
+      "FileRpcNativeTests",
+      "UploadOperationNativeTests"
+    ],
+    "checkedAtUtc": "2026-11-09T19:07:55.6826281+00:00",
+    "androidInteropVerified": false,
+    "fieldAndReleaseGatesComplete": false
+  },
+  "nativeFixturesOverlapMainSelection": true,
+  "publish": {
+    "InventoryVersion": "0.2.0.0",
+    "BundleEvidenceSha256": "88d87dc9236694a442c43bd3182203f9982a03c8121d253a29713f037ac4145c",
+    "OriginalCiVersionRefused": true,
+    "Components": 24,
+    "Stage": "OrdinaryDevelopmentPublishVersionVerified",
+    "NativeSha256": "016d8b449da214db2fc34ce900d13c539c2b56d885af9fbd870f326005249c68",
+    "SignedOrInstalled": false,
+    "NoIncorrectInventoryWritten": true,
+    "InventorySha256": "d7d8f4dd04b3b98d03a67bedab11e22990b0c49ece206537ad58c7f4dfe1e945",
+    "CheckedAtUtc": "2026-11-09T19:11:20.0320358+00:00",
+    "ApplicationVersion": "0.2.0.0"
+  },
+  "nativeAdvisoryReview": {
+    "schema": 1,
+    "stage": "NativeCommitAdvisoryLookup",
+    "source": "https://api.osv.dev/v1/querybatch",
+    "binarySha256": "016d8b449da214db2fc34ce900d13c539c2b56d885af9fbd870f326005249c68",
+    "sourceLockSha256": "aabf9896378a9d304980d586a501f668739ea2a4b07ea7dc8dd8ac4fbef743ce",
+    "bundleEvidenceSha256": "88d87dc9236694a442c43bd3182203f9982a03c8121d253a29713f037ac4145c",
+    "checkedAtUtc": "2026-11-09T19:09:46.7920359+00:00",
+    "checkedCommits": 7,
+    "components": [
+      {
+        "name": "json",
+        "commit": "55f93686c01528224f448c19128836e7df245f72"
+      },
+      {
+        "name": "libdatachannel",
+        "commit": "6b1e2e620f1e37f0eafeee702eaea0043cb305fd"
+      },
+      {
+        "name": "libjuice",
+        "commit": "b89c792e3612faf2f12cf35bcc56857313a06be3"
+      },
+      {
+        "name": "libsrtp",
+        "commit": "24b3bf8f19b6f5ab4cd2bcceb4f4064efca86fd5"
+      },
+      {
+        "name": "openssl",
+        "commit": "45e844fa2a14ec92d146bd8f5778ac130b6625fb"
+      },
+      {
+        "name": "plog",
+        "commit": "94899e0b926ac1b0f4750bfbd495167b4a6ae9ef"
+      },
+      {
+        "name": "usrsctp",
+        "commit": "fec583d54493f879d2ae44a743423bf8a04371ab"
+      }
+    ],
+    "findings": [],
+    "completeSecurityReview": false,
+    "productionReleaseApproved": false
+  },
+  "nativeAdvisoryReviewSha256": "eb7370d9360a7ff1a24b18f3934ac09ec05f8a67673d7d203c187d2aabf06e9c",
+  "remainingWindowsSplitComplete": false,
+  "constrainedStressComplete": false,
+  "currentWindowsAndroidInteropComplete": false,
+  "physicalSeparateNetworksVerified": false,
+  "fullApplicationComplete": false
+}
