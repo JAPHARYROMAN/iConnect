@@ -23,6 +23,13 @@ public sealed class UploadBatchRulesTests
             r => r.Batch.ItemOutcomes = ByteString.CopyFrom([1, 2]), r => r.Status = FileStatus.Conflict })
         { var changed = response.Clone(); change(changed); Assert.Throws<InvalidDataException>(() => StorageRules.ValidateResponse(changed)); }
         Assert.True(UploadBatchRules.IsRpc(FileOperation.VerifyPublishedBatch)); Assert.False(UploadRules.IsRpc(FileOperation.VerifyPublishedBatch));
+        var canceled = response.Clone(); canceled.PublishedBatchCheck.Verified = false; canceled.PublishedBatchCheck.Canceled = true;
+        StorageRules.ValidateResponse(canceled);
+        canceled.PublishedBatchCheck.Verified = true;
+        Assert.Throws<InvalidDataException>(() => StorageRules.ValidateResponse(canceled));
+        Assert.True(UploadBatchRules.IsRpc(FileOperation.CancelPublishedBatchCheck));
+        Assert.False(UploadRules.IsRpc(FileOperation.CancelPublishedBatchCheck));
+        Assert.False(FileTrafficPolicy.IsContentOperation(FileOperation.CancelPublishedBatchCheck));
     }
     private static UploadBatchManifest Plan(int count = 2)
     {

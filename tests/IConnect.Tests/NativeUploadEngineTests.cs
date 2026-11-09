@@ -93,7 +93,7 @@ public sealed class NativeUploadEngineTests(ITestOutputHelper output)
                 if (batch)
                 {
                     Assert.Equal(6, value.GetProperty("items").GetInt32());
-                    foreach (var field in new[] { "emptyDirectoriesKept", "unicodeNameTextKept", "zeroLengthFilesKept", "parentOutcomesMatch", "publishedBatchChecked" }) Assert.True(value.GetProperty(field).GetBoolean());
+                    foreach (var field in new[] { "emptyDirectoriesKept", "unicodeNameTextKept", "zeroLengthFilesKept", "parentOutcomesMatch", "publishedBatchChecked", "publishedBatchCanceled" }) Assert.True(value.GetProperty(field).GetBoolean());
                     Assert.Equal(!listing, value.GetProperty("blindNamesRetained").GetBoolean());
                 }
                 else Assert.True(value.GetProperty("publishedCopyChecked").GetBoolean());

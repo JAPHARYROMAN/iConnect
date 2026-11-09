@@ -29,7 +29,7 @@ public sealed record WindowsActivityEvent(WindowsActivityKind Kind, WindowsActiv
     {
         if (status == FileStatus.Ok && operation is FileOperation.ReadRange or FileOperation.DownloadRead or FileOperation.DownloadStatus or
             FileOperation.UploadWrite or FileOperation.WriteBatchFile or FileOperation.UploadStatus or FileOperation.UploadBatchItemStatus or
-            FileOperation.VerifyPublishedUpload or FileOperation.VerifyPublishedBatch) return null;
+            FileOperation.VerifyPublishedUpload or FileOperation.VerifyPublishedBatch or FileOperation.CancelPublishedBatchCheck) return null;
         return new(WindowsActivityKind.FileRequest, status switch
         { FileStatus.Ok => WindowsActivityOutcome.Accepted, FileStatus.AccessDenied or FileStatus.Unsupported => WindowsActivityOutcome.Refused, _ => WindowsActivityOutcome.Failed }, peer, Operation: operation);
     }

@@ -13,7 +13,8 @@ public static class UploadBatchRules
     public const int MaxPlans = 8, MaxPeerPlans = 4;
     public const string Capability = "upload-batches-v1";
     public const string PublishedCheckCapability = "published-batch-check-v1";
-    public static bool IsRpc(FileOperation operation) => operation is >= FileOperation.UploadBatchContext and <= FileOperation.StopUploadBatch or FileOperation.VerifyPublishedBatch;
+    public const string PublishedCheckCancelCapability = "published-batch-cancel-v1";
+    public static bool IsRpc(FileOperation operation) => operation is >= FileOperation.UploadBatchContext and <= FileOperation.StopUploadBatch or FileOperation.VerifyPublishedBatch or FileOperation.CancelPublishedBatchCheck;
     public static bool HasManifest(UploadBatchPlanPhase phase) => phase is UploadBatchPlanPhase.UploadPlanReady or UploadBatchPlanPhase.UploadPlanStopping or UploadBatchPlanPhase.UploadPlanStopped or UploadBatchPlanPhase.UploadPlanCompleted;
     public static bool IsTerminal(UploadBatchPlanPhase phase) => phase is UploadBatchPlanPhase.UploadPlanCanceled or UploadBatchPlanPhase.UploadPlanStopped or UploadBatchPlanPhase.UploadPlanCompleted;
     public static void ValidateReceipt(UploadBatchReceipt receipt)

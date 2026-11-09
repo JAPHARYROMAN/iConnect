@@ -10,7 +10,7 @@ public sealed partial class BatchSenderTests
 {
     [Theory]
     [InlineData("match")] [InlineData("old-receipt")] [InlineData("challenge")]
-    [InlineData("epoch")] [InlineData("header")] [InlineData("mixed")] [InlineData("effect")]
+    [InlineData("epoch")] [InlineData("header")] [InlineData("mixed")] [InlineData("effect")] [InlineData("canceled")]
     public async Task Saved_batch_check_requires_fresh_evidence_for_the_exact_completed_parent(string kind)
     {
         await using var f = new Fixture(); var id = await f.Queue();
@@ -26,6 +26,7 @@ public sealed partial class BatchSenderTests
             var response = await f.Request(new() { Operation = FileOperation.UploadBatchStatus, TransferId = request.TransferId, MutationEpoch = request.MutationEpoch }, ct);
             if (kind == "old-receipt") return response;
             response.PublishedBatchCheck = new() { Challenge = kind == "challenge" ? ProtocolRules.NewToken() : request.MutationId, Verified = calls.Count > 1 };
+            if (kind == "canceled") response.PublishedBatchCheck.Canceled = true;
             if (kind == "epoch") response.MutationEpoch = ProtocolRules.NewToken();
             if (kind == "header") response.Batch.Header.Sha256 = ByteString.CopyFrom(new byte[32]);
             if (kind == "mixed") response.Batch.ItemOutcomes = ByteString.CopyFrom(Enumerable.Repeat((byte)2, row.Items).ToArray());
@@ -51,5 +52,36 @@ public sealed partial class BatchSenderTests
         Assert.Equal(BatchSendingPhase.Completed, Assert.Single(f.Sender.All).Phase);
         Assert.Equal(row.Header, Assert.Single(f.Sender.All).Header);
         Assert.True(File.Exists(Path.Combine(f.Original, "file.bin")));
+    }
+
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public async Task Saved_batch_check_stop_cancels_only_the_matching_remote_challenge_when_negotiated(bool negotiated)
+    {
+        await using var f = new Fixture(); var id = await f.Queue();
+        await f.Sender.SendAsync(id, await f.Target(), f.Request); var before = Assert.Single(f.Sender.All);
+        var entered = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        string challenge = ""; var stops = 0;
+        var checking = f.Sender.VerifyPublishedAsync(id, async (request, token) =>
+        {
+            if (request.Operation == FileOperation.CancelPublishedBatchCheck)
+            {
+                stops++; Assert.Equal(challenge, request.MutationId);
+                Assert.Equal(UploadBatchHeader.Parser.ParseFrom(before.Header), request.BatchHeader);
+                return await f.Request(request, token);
+            }
+            challenge = request.MutationId; var result = await f.Request(request, token);
+            Assert.False(result.PublishedBatchCheck.Verified); entered.TrySetResult();
+            await Task.Delay(Timeout.Infinite, token); return result;
+        }, CancellationToken.None, negotiated);
+        await entered.Task.WaitAsync(TimeSpan.FromSeconds(5)); f.Sender.Pause(id);
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => checking.WaitAsync(TimeSpan.FromSeconds(8)));
+        Assert.Equal(negotiated, stops > 0); Assert.False(f.Sender.Active(id));
+        if (!negotiated) f.Service.Dispose();
+        await f.Receiver.BatchPlans.WhenFilesIdleAsync().WaitAsync(TimeSpan.FromSeconds(3));
+        var after = Assert.Single(f.Sender.All);
+        Assert.Equal(before.Header, after.Header); Assert.Equal(before.ReceiverOutcomes, after.ReceiverOutcomes);
+        Assert.Equal(BatchSendingPhase.Completed, after.Phase); Assert.True(File.Exists(Path.Combine(f.Original, "file.bin")));
+        if (negotiated) await f.Sender.VerifyPublishedAsync(id, f.Request);
     }
 }

@@ -199,7 +199,9 @@ public sealed partial class MainWindow
             {
                 actions.Add(BatchAction("Review item results…", () => ShowBatchResultsAsync(row), !active));
                 if (active && row.Phase == BatchSendingPhase.Completed) actions.Add(Body("Waiting for the receiver's saved-batch check."));
-                if (active) actions.Add(Action(row.Phase == BatchSendingPhase.Completed ? "Stop waiting for batch check" : "Pause this batch send", () => { Model.PauseOutgoingBatch(row.Id); return Task.CompletedTask; }));
+                if (active) actions.Add(Action(row.Phase == BatchSendingPhase.Completed ?
+                    Model.PublishedBatchCheckCancellationSupported ? "Stop batch check" : "Stop waiting for batch check" : "Pause this batch send",
+                    () => { Model.PauseOutgoingBatch(row.Id); return Task.CompletedTask; }));
                 if (row.Archived)
                 {
                     actions.Add(BatchAction("Review restoring send…", () => ReviewBatchHistoryAsync(row, BatchHistoryAction.Restore)));

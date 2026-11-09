@@ -32,7 +32,7 @@ object PhoneTransferManifests {
             UploadBatchRules.canonicalToken(response.publishedUploadCheck.challenge) && response.hasUpload() &&
                 response.upload.phase==UploadPhase.UPLOAD_COMPLETED)
         if(response.hasPublishedBatchCheck()) require(
-            response.status==FileStatus.FILE_STATUS_OK && UploadBatchRules.canonicalToken(response.publishedBatchCheck.challenge) && response.hasBatch() &&
+            response.status==FileStatus.FILE_STATUS_OK && !(response.publishedBatchCheck.verified && response.publishedBatchCheck.canceled) && UploadBatchRules.canonicalToken(response.publishedBatchCheck.challenge) && response.hasBatch() &&
                 response.batch.phase==UploadBatchPlanPhase.UPLOAD_PLAN_COMPLETED && response.batch.itemOutcomes.size()>0 &&
                 response.batch.itemOutcomes.toByteArray().all {it==1.toByte()} && response.mutationEpoch==response.batch.header.epoch)
         require(response.uploadsCount<=32); response.uploadsList.forEach(UploadRules::validate)

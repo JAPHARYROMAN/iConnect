@@ -67,6 +67,7 @@ class RemoteFiles(private val send: (String, com.google.protobuf.MessageLite) ->
         if (frame.kind != "file-request") return false
         val request = FileRequest.parseFrom(frame.payload)
         require(Rules.tokenPattern.matches(request.requestId))
+        service?.interruptPublishedBatchCheck(peerId,request)
         if (!incoming.trySend(request).isSuccess) send("file-response", FileResponse.newBuilder().setRequestId(request.requestId)
             .setStatus(FileStatus.RESOURCE_EXHAUSTED).setMessage("Too many document operations. Retry shortly.").build())
         return true

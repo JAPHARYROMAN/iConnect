@@ -50,6 +50,7 @@ public sealed class ProofClient : IAsyncDisposable
     public Task? SessionAuthenticated => session?.Authenticated;
     public bool AcceptsFolderBatches { get { lock (gate) return session?.AcceptsFolderBatches == true; } }
     public bool AcceptsPublishedBatchChecks { get { lock (gate) return session?.AcceptsPublishedBatchChecks == true; } }
+    public bool AcceptsPublishedBatchCheckCancellation { get { lock (gate) return session?.AcceptsPublishedBatchCheckCancellation == true; } }
     public bool AcceptsPublishedUploadChecks { get { lock (gate) return session?.AcceptsPublishedUploadChecks == true; } }
     public bool PairingActive => pending is { } pairing && pairing.ExpiresAt > DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() || token is not null && invitationExpiry > DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
     public bool SignallingRefreshNeeded { get { lock (gate) return sessionIds.Count >= 32 || seenSignals.Count >= 1024; } }

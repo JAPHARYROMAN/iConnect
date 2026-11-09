@@ -181,6 +181,20 @@ class UploadBatchRulesTest {
         for(value in 31..44) {val operation=FileOperation.forNumber(value); assertTrue(UploadBatchRules.isRpc(operation)); assertFalse(UploadRules.isRpc(operation)); assertFalse(MutationRules.isRpc(operation))}
         assertFalse(UploadBatchRules.isRpc(FileOperation.PREPARE_UPLOAD)); assertFalse(UploadBatchRules.isRpc(FileOperation.UNRECOGNIZED))
     }
+    @Test fun canceledBatchChecksAreControlResponsesAndNeverSuccessfulProofs() {
+        assertEquals("published-batch-cancel-v1",UploadBatchRules.PUBLISHED_CHECK_CANCEL_CAPABILITY)
+        val operation=FileOperation.CANCEL_PUBLISHED_BATCH_CHECK
+        assertTrue(UploadBatchRules.isRpc(operation)); assertFalse(UploadRules.isRpc(operation)); assertFalse(MutationRules.isRpc(operation))
+        assertFalse(PhoneFileTrafficPolicy.contentOperation(operation))
+        val h=header(plan())
+        val receipt=UploadBatchReceipt.newBuilder().setHeader(h).setPhase(UploadBatchPlanPhase.UPLOAD_PLAN_COMPLETED)
+            .setManifestOffset(h.encodedLength).setItemOutcomes(ByteString.copyFrom(ByteArray(h.itemCount) {1}))
+        val reply=FileResponse.newBuilder().setRequestId(StorageRules.token()).setMutationEpoch(h.epoch).setBatch(receipt)
+            .setPublishedBatchCheck(PublishedBatchCheck.newBuilder().setChallenge(StorageRules.token()).setCanceled(true)).build()
+        PhoneTransferManifests.validateResponse(reply)
+        assertThrows(IllegalArgumentException::class.java) {PhoneTransferManifests.validateResponse(reply.toBuilder()
+            .setPublishedBatchCheck(reply.publishedBatchCheck.toBuilder().setVerified(true)).build())}
+    }
     @Test fun scopedDirectoryReceiptCannotChangeTheParentIndexKindOrIdentity() {
         val h=header(plan()); val peer="a".repeat(64)
         val receipt=UploadBatchItemReceipt.newBuilder().setHeader(h).setIndex(0).setId(UploadBatchRules.childId(peer,h,0,true)).setIsDirectory(true)

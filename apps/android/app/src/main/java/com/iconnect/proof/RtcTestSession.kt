@@ -62,6 +62,7 @@ class RtcTestSession(
     private val canRequestFiles get() = isAuthenticated && RemoteFiles.CAPABILITY in capabilities
     val acceptsFolderBatches get() = canRequestFiles && UploadBatchRules.CAPABILITY in capabilities
     val acceptsPublishedBatchChecks get() = acceptsFolderBatches && UploadBatchRules.PUBLISHED_CHECK_CAPABILITY in capabilities
+    val acceptsPublishedBatchCheckCancellation get() = acceptsPublishedBatchChecks && UploadBatchRules.PUBLISHED_CHECK_CANCEL_CAPABILITY in capabilities
     val acceptsPublishedUploadChecks get() = canRequestFiles && UploadRules.CAPABILITY in capabilities &&
         UploadRules.PUBLISHED_CHECK_CAPABILITY in capabilities
     private val remoteFiles = RemoteFiles(::send, scope, Rules.id(peerKey), fileService, ::fail, requestAllowed = fileRequestAllowed,traffic=traffic)
@@ -211,6 +212,7 @@ class RtcTestSession(
             .also {if(fileService?.supportsIncoming==true) it.addCapabilities(UploadRules.CAPABILITY)
                 .addCapabilities(UploadRules.PUBLISHED_CHECK_CAPABILITY).addCapabilities(UploadBatchRules.CAPABILITY)
                 .addCapabilities(UploadBatchRules.PUBLISHED_CHECK_CAPABILITY)
+                .addCapabilities(UploadBatchRules.PUBLISHED_CHECK_CANCEL_CAPABILITY)
                 if(fileService?.supportsCreatedDirectoryReferences==true) it.addCapabilities(MutationRules.CREATED_FOLDERS_CAPABILITY)}.build())
     }
     private fun transcript(): ByteArray = Rules.session(sessionId, if(initiator) identity.id else Rules.id(peerKey), if(initiator) Rules.id(peerKey) else identity.id,
@@ -374,6 +376,7 @@ class RtcTestSession(
     suspend fun requestFiles(request: FileRequest): FileResponse {
         if(UploadBatchRules.isRpc(request.operation)) require(UploadBatchRules.CAPABILITY in capabilities) {"This peer does not support folder-batch receiving."}
         if(request.operation==FileOperation.VERIFY_PUBLISHED_BATCH) require(UploadBatchRules.PUBLISHED_CHECK_CAPABILITY in capabilities) {"This computer does not support fresh published-batch checks."}
+        if(request.operation==FileOperation.CANCEL_PUBLISHED_BATCH_CHECK) require(acceptsPublishedBatchCheckCancellation) {"This computer does not support stopping a saved-batch check."}
         if(UploadRules.isRpc(request.operation)) require(UploadRules.CAPABILITY in capabilities) {"This computer does not accept incoming file copies. Update it before sending."}
         if(request.operation==FileOperation.VERIFY_PUBLISHED_UPLOAD) require(UploadRules.PUBLISHED_CHECK_CAPABILITY in capabilities) {"This computer does not support a fresh published-copy check."}
         require(authenticated && !closed) { "Connect to the paired computer first." }

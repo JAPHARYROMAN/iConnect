@@ -208,6 +208,9 @@ internal class PhoneBatchSender(private val context:Context,private val owner:An
     fun send(id:String,destination:FileEntry?,allowed:()->Boolean,request:suspend (FileRequest)->FileResponse)=start(id,destination,allowed,request,false)
     fun stop(id:String,allowed:()->Boolean,request:suspend (FileRequest)->FileResponse)=start(id,null,allowed,request,true)
     internal suspend fun verifyPublished(id:String,approval:PeerApproval,allowed:()->Boolean,request:suspend (FileRequest)->FileResponse) {
+        verifyPublished(id,approval,allowed,false,request)
+    }
+    internal suspend fun verifyPublished(id:String,approval:PeerApproval,allowed:()->Boolean,cancelReceiver:Boolean,request:suspend (FileRequest)->FileResponse) {
         val result=CompletableDeferred<Unit>()
         val job=synchronized(gate) {
             ready(); val row=rows.getValue(id)
@@ -216,7 +219,7 @@ internal class PhoneBatchSender(private val context:Context,private val owner:An
                 row.receiverOutcomes.isNotEmpty() && Rules.decode(row.receiverOutcomes).all {it==1.toByte()}) {"Choose a fully copied completed batch with retained receiver history."}
             check(id !in work && work.size<2) {"This batch or two outgoing batch controls are already active."}
             val pending=lifetime.launch(start=CoroutineStart.LAZY) {
-                try {requirePublishedBatchProof(row,allowed,request); result.complete(Unit)}
+                try {requirePublishedBatchProof(row,allowed,cancelReceiver,request); result.complete(Unit)}
                 catch(e:Exception) {result.completeExceptionally(e)}
             }
             val done=CompletableDeferred<Unit>(); work[id]=pending; completions[id]=done
@@ -232,23 +235,42 @@ internal class PhoneBatchSender(private val context:Context,private val owner:An
         try {result.await(); job.join()}
         catch(e:CancellationException) {job.cancel(); throw e}
     }
-    private suspend fun requirePublishedBatchProof(row:PhoneBatchSend,allowed:()->Boolean,request:suspend (FileRequest)->FileResponse) {
+    private suspend fun requirePublishedBatchProof(row:PhoneBatchSend,allowed:()->Boolean,cancelReceiver:Boolean,request:suspend (FileRequest)->FileResponse) {
         val h=header(row); val challenge=StorageRules.token(); val started=android.os.SystemClock.elapsedRealtime()
         val value=FileRequest.newBuilder().setOperation(FileOperation.VERIFY_PUBLISHED_BATCH).setTransferId(h.id)
             .setMutationEpoch(h.epoch).setBatchHeader(h).setMutationId(challenge).build()
-        while(android.os.SystemClock.elapsedRealtime()-started<10*60_000L) {
-            currentCoroutineContext().ensureActive(); authorize(row); check(allowed()) {"The authenticated receiving session changed."}
-            val reply=PhoneTransferManifests.checked(request,value)
-            currentCoroutineContext().ensureActive(); authorize(row); check(allowed()) {"The authenticated receiving session changed."}
-            val receipt=UploadBatchRules.checkReceipt(h,reply)
-            check(receipt.phase==UploadBatchPlanPhase.UPLOAD_PLAN_COMPLETED && Rules.b64(receipt.itemOutcomes.toByteArray())==row.receiverOutcomes &&
-                (!row.effectsStarted || receipt.effectsStarted) && reply.hasPublishedBatchCheck() && reply.publishedBatchCheck.challenge==challenge) {
-                "The receiver did not return a matching fresh check for this whole batch."
+        var verified=false
+        try {
+            while(android.os.SystemClock.elapsedRealtime()-started<10*60_000L) {
+                currentCoroutineContext().ensureActive(); authorize(row); check(allowed()) {"The authenticated receiving session changed."}
+                val reply=PhoneTransferManifests.checked(request,value)
+                currentCoroutineContext().ensureActive(); authorize(row); check(allowed()) {"The authenticated receiving session changed."}
+                val receipt=UploadBatchRules.checkReceipt(h,reply)
+                check(receipt.phase==UploadBatchPlanPhase.UPLOAD_PLAN_COMPLETED && Rules.b64(receipt.itemOutcomes.toByteArray())==row.receiverOutcomes &&
+                    (!row.effectsStarted || receipt.effectsStarted) && reply.hasPublishedBatchCheck() && reply.publishedBatchCheck.challenge==challenge && !reply.publishedBatchCheck.canceled) {
+                    "The receiver did not return a matching fresh check for this whole batch."
+                }
+                if(reply.publishedBatchCheck.verified) {verified=true; return}
+                delay(300)
             }
-            if(reply.publishedBatchCheck.verified) return
-            delay(300)
+            error("The receiver did not finish its saved-batch check before the time limit.")
+            } finally {if(cancelReceiver && !verified) cancelPublishedBatchProof(row,allowed,value,request)}
+    }
+    private suspend fun cancelPublishedBatchProof(row:PhoneBatchSend,allowed:()->Boolean,original:FileRequest,request:suspend (FileRequest)->FileResponse)=withContext(NonCancellable) {
+        try {withTimeout(5_000) {
+            val value=original.toBuilder().setOperation(FileOperation.CANCEL_PUBLISHED_BATCH_CHECK).build()
+            while(true) {
+                authorize(row); check(allowed())
+                val reply=PhoneTransferManifests.checked(request,value); val receipt=UploadBatchRules.checkReceipt(original.batchHeader,reply)
+                check(receipt.phase==UploadBatchPlanPhase.UPLOAD_PLAN_COMPLETED && Rules.b64(receipt.itemOutcomes.toByteArray())==row.receiverOutcomes &&
+                    (!row.effectsStarted || receipt.effectsStarted) && reply.hasPublishedBatchCheck() &&
+                    reply.publishedBatchCheck.challenge==original.mutationId && !reply.publishedBatchCheck.verified)
+                if(reply.publishedBatchCheck.canceled) return@withTimeout
+                delay(100)
+            }
+        }} catch(_:Exception) {
+            // A lost stop acknowledgement does not replace the original result.
         }
-        error("The receiver did not finish its saved-batch check before the time limit.")
     }
     private fun start(id:String,destination:FileEntry?,allowed:()->Boolean,request:suspend (FileRequest)->FileResponse,stop:Boolean):Job=synchronized(gate) {
         ready(); val row=rows.getValue(id); check(current(row) && allowed()); check(id !in work && work.size<2) {"This batch or two outgoing batch controls are already active."}

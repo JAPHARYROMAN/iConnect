@@ -54,7 +54,10 @@ class AndroidFileService internal constructor(context: Context, private val gran
         return runInterruptible(Dispatchers.IO) {
             // Cancel only an already-bound worker before either service/owner lock.
             // Durable stop and all filesystem actions still require authorization below.
-            if(!closed.get() && Rules.tokenPattern.matches(request.requestId)) batchPlanHost?.pauseForStop(peer,request)
+            if(!closed.get() && Rules.tokenPattern.matches(request.requestId)) {
+                batchPlanHost?.pauseForStop(peer,request)
+                interruptPublishedBatchCheck(peer,request)
+            }
             synchronized(lock) {
                 check(!closed.get())
                 val signal = CancellationSignal()
@@ -138,13 +141,13 @@ class AndroidFileService internal constructor(context: Context, private val gran
                 catch (_: UnsupportedOperationException) { clearPage(); error(request, FileStatus.UNSUPPORTED, "The document provider does not support this safe operation.") }
                 catch (_: IOException) { clearPage(); error(request, FileStatus.IO_ERROR, "The document provider could not finish this operation.") }
                 catch (_: IllegalArgumentException) { clearPage(); error(request, FileStatus.INVALID_REQUEST, "The document request is invalid.") }
-                catch(e:IllegalStateException) {if(UploadRules.isRpc(request.operation) || request.operation==FileOperation.VERIFY_PUBLISHED_BATCH) error(request,FileStatus.CONFLICT,"Incoming copy could not be confirmed. Review its receipt and the preserved files.") else throw e}
+                catch(e:IllegalStateException) {if(UploadRules.isRpc(request.operation) || request.operation in setOf(FileOperation.VERIFY_PUBLISHED_BATCH,FileOperation.CANCEL_PUBLISHED_BATCH_CHECK)) error(request,FileStatus.CONFLICT,"Incoming copy could not be confirmed. Review its receipt and the preserved files.") else throw e}
                 finally { activeSignal = null; activeRequest = null; if (closed.get()) clear() }
             }
         }.also {reply->
             // Successful range/status polling would overwhelm history and does
             // not itself establish file completion. Refusals remain observable.
-            val quiet=request.operation in setOf(FileOperation.READ_RANGE,FileOperation.DOWNLOAD_READ,FileOperation.DOWNLOAD_STATUS,FileOperation.UPLOAD_WRITE,FileOperation.WRITE_BATCH_FILE,FileOperation.UPLOAD_STATUS,FileOperation.UPLOAD_BATCH_ITEM_STATUS,FileOperation.VERIFY_PUBLISHED_UPLOAD,FileOperation.VERIFY_PUBLISHED_BATCH)
+            val quiet=request.operation in setOf(FileOperation.READ_RANGE,FileOperation.DOWNLOAD_READ,FileOperation.DOWNLOAD_STATUS,FileOperation.UPLOAD_WRITE,FileOperation.WRITE_BATCH_FILE,FileOperation.UPLOAD_STATUS,FileOperation.UPLOAD_BATCH_ITEM_STATUS,FileOperation.VERIFY_PUBLISHED_UPLOAD,FileOperation.VERIFY_PUBLISHED_BATCH,FileOperation.CANCEL_PUBLISHED_BATCH_CHECK)
             if(Rules.tokenPattern.matches(request.requestId) && (!quiet || reply.status!=FileStatus.FILE_STATUS_OK)) try {
                 activity(PhoneActivityEvent(PhoneActivityKind.FILE_REQUEST,when(reply.status) {FileStatus.FILE_STATUS_OK->PhoneActivityOutcome.ACCEPTED; FileStatus.ACCESS_DENIED,FileStatus.UNSUPPORTED->PhoneActivityOutcome.REFUSED; else->PhoneActivityOutcome.FAILED},
                     peer,operation=if(request.operation==FileOperation.UNRECOGNIZED) -1 else request.operation.number))
@@ -504,6 +507,9 @@ class AndroidFileService internal constructor(context: Context, private val gran
         // Do not block the UI behind a slow provider call; the worker owns final cleanup.
         if (Thread.holdsLock(lock)) clear()
         else CoroutineScope(Dispatchers.IO).launch { synchronized(lock) { clear() } }
+    }
+    internal fun interruptPublishedBatchCheck(peer:String,request:FileRequest) {
+        if(!closed.get() && Rules.tokenPattern.matches(request.requestId)) batchPlanHost?.cancelPublishedCheckNow(peer,downloadScope,request)
     }
     companion object {
         private val projection = arrayOf(Documents.Document.COLUMN_DOCUMENT_ID, Documents.Document.COLUMN_DISPLAY_NAME,

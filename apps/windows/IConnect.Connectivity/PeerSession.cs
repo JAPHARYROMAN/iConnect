@@ -47,6 +47,7 @@ public sealed class PeerSession : IDisposable
     private bool CanRequestFiles => !IsClosed && authenticated.Task.IsCompletedSuccessfully && remoteCapabilities.Contains(FileRpcPeer.Capability);
     public bool AcceptsFolderBatches => CanRequestFiles && remoteCapabilities.Contains(UploadBatchRules.Capability);
     public bool AcceptsPublishedBatchChecks => AcceptsFolderBatches && remoteCapabilities.Contains(UploadBatchRules.PublishedCheckCapability);
+    public bool AcceptsPublishedBatchCheckCancellation => AcceptsPublishedBatchChecks && remoteCapabilities.Contains(UploadBatchRules.PublishedCheckCancelCapability);
     public bool AcceptsPublishedUploadChecks => CanRequestFiles && remoteCapabilities.Contains(UploadRules.Capability) &&
         remoteCapabilities.Contains(UploadRules.PublishedCheckCapability);
 
@@ -84,6 +85,7 @@ public sealed class PeerSession : IDisposable
             if (publishedUploadChecks) hello.Capabilities.Add(UploadRules.PublishedCheckCapability);
             if (folderBatchReception) hello.Capabilities.Add(UploadBatchRules.Capability);
             if (folderBatchReception) hello.Capabilities.Add(UploadBatchRules.PublishedCheckCapability);
+            if (folderBatchReception) hello.Capabilities.Add(UploadBatchRules.PublishedCheckCancelCapability);
             hello.Capabilities.Add(ReadyCapability);
             Send("hello", hello);
             var deadline = DateTimeOffset.UtcNow.AddSeconds(10);
@@ -269,6 +271,8 @@ public sealed class PeerSession : IDisposable
             throw new NotSupportedException("This peer does not support folder-batch receiving.");
         if (request.Operation == FileOperation.VerifyPublishedBatch && !AcceptsPublishedBatchChecks)
             throw new NotSupportedException("This peer does not support fresh published-batch checks.");
+        if (request.Operation == FileOperation.CancelPublishedBatchCheck && !AcceptsPublishedBatchCheckCancellation)
+            throw new NotSupportedException("This peer does not support stopping a saved-batch check.");
         if (UploadRules.IsRpc(request.Operation) && !remoteCapabilities.Contains(UploadRules.Capability))
             throw new NotSupportedException("This device does not accept incoming file copies. Update it or receive from the other device's interface.");
         if (request.Operation == FileOperation.VerifyPublishedUpload && !AcceptsPublishedUploadChecks)

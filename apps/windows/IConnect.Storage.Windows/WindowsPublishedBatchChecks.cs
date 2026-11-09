@@ -1,5 +1,6 @@
 using IConnect.Core;
 using IConnect.Protocol;
+using System.Collections.Concurrent;
 
 namespace IConnect.Storage.Windows;
 
@@ -20,21 +21,59 @@ public sealed partial class WindowsBatchPlans
         internal Task Task { get; set; } = Task.CompletedTask;
         internal long? FinishedAt { get; set; }
         internal Action? Validate { get; set; }
+        internal int StopRequested;
     }
     private readonly Dictionary<string, PublishedBatchCheckWork> publishedBatchChecks = [];
-    private readonly Dictionary<string, PublishedBatchCheckWork> publishedBatchWork = [];
+    private readonly ConcurrentDictionary<string, PublishedBatchCheckWork> publishedBatchWork = new();
 
-    private FileResponse VerifyPublishedBatch(Row row, string scope, FileRequest request, FileResponse response, CancellationToken ct)
+    private static bool PublishedBatchCheckShape(string scope, FileRequest request) =>
+        scope.Length != 0 && UploadBatchRules.CanonicalToken(request.MutationId) && request.BatchHeader is not null &&
+        !request.HasBatchItemIndex && request.Upload is null && request.Content.Length == 0 && request.Offset == 0 && request.Length == 0 &&
+        request.NodeId.Length == 0 && request.DestinationId.Length == 0 && request.Name.Length == 0 && request.ExpectedVersion.Length == 0 &&
+        request.Continuation.Length == 0 && request.Query.Length == 0 && request.DeletedId.Length == 0;
+
+    internal void InterruptPublishedBatchCheck(string peer, string scope, FileRequest request)
+    {
+        // Only interrupt already admitted work before a blocked collection can hold its owner gate.
+        // The normal handler still authorizes the request and acknowledges actual resource release.
+        if (request.Operation == FileOperation.CancelPublishedBatchCheck && PublishedBatchCheckShape(scope, request) &&
+            publishedBatchWork.TryGetValue(request.TransferId, out var check) && check.Row.Peer == peer && check.Scope == scope &&
+            check.Epoch == request.MutationEpoch && check.Challenge == request.MutationId && Header(check.Row).Equals(request.BatchHeader))
+            try { Interlocked.Exchange(ref check.StopRequested, 1); check.Cancellation.Cancel(); } catch (ObjectDisposedException) { }
+    }
+
+    private UploadBatchHeader PublishedBatchCheckHeader(Row row, string scope, FileRequest request)
     {
         var header = Header(row);
-        if (scope.Length == 0 || !UploadBatchRules.CanonicalToken(request.MutationId) || request.BatchHeader is null || !request.BatchHeader.Equals(header) ||
-            request.HasBatchItemIndex || request.Upload is not null || request.Content.Length != 0 || request.Offset != 0 || request.Length != 0 ||
-            request.NodeId.Length != 0 || request.DestinationId.Length != 0 || request.Name.Length != 0 || request.ExpectedVersion.Length != 0 ||
-            request.Continuation.Length != 0 || request.Query.Length != 0 || request.DeletedId.Length != 0)
+        if (!PublishedBatchCheckShape(scope, request) || !header.Equals(request.BatchHeader))
             throw new StorageException(FileStatus.InvalidRequest, "Use a fresh challenge and the original whole-batch intent.");
         if (row.Phase != UploadBatchPlanPhase.UploadPlanCompleted || row.Retiring || row.Retired ||
             row.Outcomes is not { Length: > 0 } || row.Outcomes.Any(x => x != 1))
             throw new StorageException(FileStatus.Conflict, "Choose a fully successful completed batch with retained item history.");
+        return header;
+    }
+
+    private FileResponse CancelPublishedBatchCheck(Row row, string scope, FileRequest request, FileResponse response)
+    {
+        var header = PublishedBatchCheckHeader(row, scope, request);
+        var pending = publishedBatchChecks.GetValueOrDefault(header.Id);
+        var worker = publishedBatchWork.GetValueOrDefault(header.Id);
+        var check = pending ?? worker;
+        if (check is not null)
+        {
+            if (check.Scope != scope || check.Challenge != request.MutationId || check.Row != row || check.Epoch != context.Epoch)
+                throw new StorageException(FileStatus.Conflict, "Only the original session and challenge can stop this batch check.");
+            publishedBatchChecks.Remove(header.Id);
+            ReleasePublishedBatchCheck(check);
+            if (worker == check) { Interlocked.Exchange(ref check.StopRequested, 1); check.Cancellation.Cancel(); }
+        }
+        response.PublishedBatchCheck = new() { Challenge = request.MutationId, Canceled = !publishedBatchWork.ContainsKey(header.Id) };
+        return response;
+    }
+
+    private FileResponse VerifyPublishedBatch(Row row, string scope, FileRequest request, FileResponse response, CancellationToken ct)
+    {
+        var header = PublishedBatchCheckHeader(row, scope, request);
 
         foreach (var pair in publishedBatchChecks.Where(x => x.Value.FinishedAt is { } end &&
                      grants.Clock.GetElapsedTime(end) >= PublishedBatchCheckLifetime).ToArray())
@@ -43,6 +82,8 @@ public sealed partial class WindowsBatchPlans
         {
             if (previous.Scope != scope || previous.Challenge != request.MutationId || previous.Row != row || previous.Epoch != context.Epoch)
                 throw new StorageException(FileStatus.Conflict, "A different check for this batch is awaiting completion or collection.");
+            if (Volatile.Read(ref previous.StopRequested) != 0)
+                throw new StorageException(FileStatus.Conflict, "This saved-batch check was stopped. Its copies and receipts were kept.");
             if (previous.FinishedAt is not null)
             {
                 try
@@ -67,7 +108,7 @@ public sealed partial class WindowsBatchPlans
             var cancellation = CancellationTokenSource.CreateLinkedTokenSource(ct);
             cancellation.CancelAfter(TimeSpan.FromMinutes(10) + PublishedBatchCheckLifetime);
             var check = new PublishedBatchCheckWork(row, context.Epoch, scope, request.MutationId, cancellation, slot);
-            publishedBatchChecks.Add(header.Id, check); publishedBatchWork.Add(header.Id, check);
+            publishedBatchChecks.Add(header.Id, check); publishedBatchWork[header.Id] = check;
             check.Task = Task.Run(() => CheckPublishedBatchAsync(check));
         }
         response.PublishedBatchCheck = new() { Challenge = request.MutationId };
@@ -160,15 +201,15 @@ public sealed partial class WindowsBatchPlans
             {
                 if (publishedBatchChecks.GetValueOrDefault(id) == check)
                 {
-                    if (check.Validate is not null) publishedBatchChecks.Remove(id);
-                    else check.FinishedAt = grants.Clock.GetTimestamp();
+                    if (check.Validate is not null && Volatile.Read(ref check.StopRequested) == 0) publishedBatchChecks.Remove(id);
+                    else { check.Validate = null; check.FinishedAt = grants.Clock.GetTimestamp(); }
                 }
             }
         }
         finally
         {
             for (var index = opened.Count - 1; index >= 0; index--) opened[index].Dispose();
-            lock (gate) { publishedBatchWork.Remove(id); check.Slot.Dispose(); check.Cancellation.Dispose(); }
+            lock (gate) { publishedBatchWork.TryRemove(id, out _); check.Slot.Dispose(); check.Cancellation.Dispose(); }
         }
 
         T Current<T>(Func<T> action) => grants.WithAuthorization(() => { lock (gate) { RequireCurrent(); return action(); } });

@@ -4,7 +4,7 @@ using IConnect.Protocol;
 
 namespace IConnect.Storage.Windows;
 
-public sealed class WindowsFileService : IFileService
+public sealed class WindowsFileService : IFileService, IPublishedBatchCheckCancellation
 {
     public void BindOwnerPolicy(WindowsOwnerBinding binding)
     {
@@ -88,6 +88,7 @@ public sealed class WindowsFileService : IFileService
     {
         if (!ProtocolRules.TokenPattern().IsMatch(request.RequestId))
             return Error(request.RequestId, FileStatus.InvalidRequest, "Invalid file request identifier.");
+        InterruptPublishedBatchCheck(peerId, request);
         await operationGate.WaitAsync(cancellationToken);
         try
         {
@@ -104,6 +105,12 @@ public sealed class WindowsFileService : IFileService
         catch (UnauthorizedAccessException) { return Error(request.RequestId, FileStatus.AccessDenied, "The operating system denied access."); }
         catch (IOException) { return Error(request.RequestId, FileStatus.IoError, "The filesystem operation could not finish."); }
         finally { ClearInvalidatedCursors(); operationGate.Release(); }
+    }
+
+    public void InterruptPublishedBatchCheck(string peer, FileRequest request)
+    {
+        if (!disposed && ProtocolRules.TokenPattern().IsMatch(request.RequestId))
+            Volatile.Read(ref batchPlanHost)?.InterruptPublishedBatchCheck(peer, downloadScope, request);
     }
 
     private FileResponse Execute(string peer, FileRequest request, CancellationToken ct)

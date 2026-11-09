@@ -61,6 +61,7 @@ public sealed class FileRpcPeer : IDisposable
         if (frame.Kind != "file-request") return false;
         var request = FileRequest.Parser.ParseFrom(frame.Payload);
         if (!ProtocolRules.TokenPattern().IsMatch(request.RequestId)) throw new InvalidDataException("Invalid file request identifier.");
+        (service as IPublishedBatchCheckCancellation)?.InterruptPublishedBatchCheck(peerId, request);
         if (!incoming.Writer.TryWrite(request))
             send(ProtocolRules.Pack("file-response", new FileResponse
             { RequestId = request.RequestId, Status = FileStatus.ResourceExhausted, Message = "Too many file operations. Retry shortly." }));

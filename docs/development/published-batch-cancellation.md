@@ -1,0 +1,27 @@
+# Stopping a saved-batch check
+
+Windows and Android negotiate `published-batch-cancel-v1` alongside whole-batch verification. **Stop batch check** stops the sender's wait and requests cancellation of the matching receiver check. Peers without this capability retain **Stop waiting** and the existing receiver deadlines. This operation preserves the completed copies, original sources and durable receipts.
+
+## Protocol and resource ownership
+
+Operation 47, `CANCEL_PUBLISHED_BATCH_CHECK`, carries the original batch ID, complete header, history epoch and fresh verification challenge. It accepts no item index, paths, ranges, payload, standalone upload or unrelated operation fields. The normal handler requires the original peer, current pairing and receiving approval, successful completed parent and retained history. A different session or challenge cannot take over an outstanding check.
+
+`PublishedBatchCheck.canceled` is separate from `verified`. Both flags being true is an invalid response. A cancellation response can be pending while the worker unwinds; `canceled=true` acknowledges that its file/provider handles and shared verification permit have been released. Repeating a stop after release is harmless. A fresh check uses a new challenge and rechecks the original completed copies.
+
+The RPC frame handler can interrupt only already-admitted work matching the exact peer, private session scope, header, epoch and challenge. This cleanup path runs before the request queue and owner gate: a stop must be able to interrupt a provider open already blocking result collection. The queued handler still performs authorization and reports resource release. A stopped result cannot be collected as success or restart itself while queued requests drain.
+
+After cancellation, refusal or the ten-minute sender deadline, a capable sender makes a best-effort stop request under an independent five-second cleanup deadline. It polls the bound acknowledgement while the receiver releases resources. A lost acknowledgement preserves the caller's original failure or cancellation. Disconnect and receiver withdrawal retain their existing cancellation behavior.
+
+## Verification checkpoint
+
+A Windows regression executed against the earlier handler fails at the missing operation (`InvalidRequest`), then passes with cancellation implemented. All 71 focused receiver, sender and protocol cases pass. They include 17 malformed/foreign-request variants, session isolation, repeated cancellation, file-pin and slot release, unchanged history, subsequent verification and negotiated/legacy sender behavior. A real RPC-queue control demonstrates that a queued stop arrives after collection; the early interruption path prevents that collection from succeeding.
+
+All 929 selected Windows regression cases pass with zero failures/skips; the existing three capacity exclusions and large-file suite selection remain unchanged. Desktop and standalone native-fixture Release builds have zero warnings/errors. The pinned source-built transport passes its nine standard cases plus nine additional native/session/junction cases, including the updated batch cancellation probes. These are Windows controls and do not establish Windows–Android cancellation interoperability.
+
+Android debug and instrumentation APKs compile, and the corrected JVM task passes. The first build stopped at a new test's incorrect receipt setter; the correction removes that nonexistent field. Lint and unsigned Release checks are still in progress. New provider-backed Android cases cover blocked hashing, blocked collection through the real RPC queue, exact request binding and both negotiated sender modes. Compilation is separate from executing those cases.
+
+The next device sequence must wait for the existing large-file, activity and ordinary-read validation owners to finish. It must use identical instrumentation with distinct baseline and candidate apps, reproduce only the exact unsupported-stop assertion, pass the 51 selected receiving/sender cases and verify frozen artifacts before and after execution. Seven local parser controls accept that assertion and refuse unrelated failures, timeout, duplicates, crash, missing completion and skipped results.
+
+The native Windows–Android probes now require cancellation negotiation, stop a pending check in each sending direction, require a resource-release acknowledgement and complete a fresh check before withdrawing their inboxes. [The cancellation matrix driver](../../tools/test-native-batch-cancellation.ps1) wraps the preserved Unicode-safe driver and requires both cancellation and fresh verification on both endpoints in every selected listing/blind and initiator case. These new native cases are pending execution; earlier passing batch reports cover verification without this added stop behavior.
+
+Full 4,096-item check capacity, physical providers/networks, complete controller and accessibility journeys, lifecycle and interruption matrices, independent review and release approval remain open. Full application completion remains false.

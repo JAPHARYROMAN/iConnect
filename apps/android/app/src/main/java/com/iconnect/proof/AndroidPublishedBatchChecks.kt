@@ -36,20 +36,39 @@ internal class AndroidPublishedBatchChecks(private val context:Context,private v
         var saved:PublishedBatchSnapshot?=null
         var stamps:Map<Int,String> = emptyMap()
         var metadata:List<ProviderMetadata> = emptyList()
+        @Volatile var stopRequested=false
     }
     private val gate=grants.owner.gate
     private val lifetime=CoroutineScope(SupervisorJob()+Dispatchers.IO)
     private val checks=ConcurrentHashMap<String,Check>()
     private val workers=ConcurrentHashMap<String,Check>()
 
-    fun execute(row:AndroidBatchPlans.Row,scope:String,request:FileRequest,allowed:()->Boolean,rpcSignal:CancellationSignal):PublishedBatchCheck {
-        require(scope.isNotEmpty() && UploadBatchRules.canonicalToken(request.mutationId) && request.hasBatchHeader() && request.batchHeader==row.header &&
+    private fun shape(scope:String,request:FileRequest)=scope.isNotEmpty() && UploadBatchRules.canonicalToken(request.mutationId) && request.hasBatchHeader() &&
             !request.hasBatchItemIndex() && !request.hasUpload() && request.content.isEmpty && request.offset==0L && request.length==0 &&
             request.nodeId.isEmpty() && request.destinationId.isEmpty() && request.name.isEmpty() && request.expectedVersion.isEmpty() &&
-            request.continuation.isEmpty() && request.query.isEmpty() && request.deletedId.isEmpty()) {"Use a fresh challenge and the original whole-batch intent."}
+            request.continuation.isEmpty() && request.query.isEmpty() && request.deletedId.isEmpty()
+
+    fun cancelNow(peer:String,scope:String,request:FileRequest) {
+        if(request.operation!=FileOperation.CANCEL_PUBLISHED_BATCH_CHECK || !shape(scope,request)) return
+        val check=workers[request.transferId]?:return
+        if(check.row.peer==peer && check.scope==scope && check.challenge==request.mutationId && check.row.header==request.batchHeader &&
+            check.row.header.epoch==request.mutationEpoch) cancel(check)
+    }
+
+    fun execute(row:AndroidBatchPlans.Row,scope:String,request:FileRequest,allowed:()->Boolean,rpcSignal:CancellationSignal):PublishedBatchCheck {
+        require(shape(scope,request) && request.batchHeader==row.header) {"Use a fresh challenge and the original whole-batch intent."}
         if(row.phase!=UploadBatchPlanPhase.UPLOAD_PLAN_COMPLETED || row.retiring || row.retired || row.outcomes.isEmpty() ||
             Rules.decode(row.outcomes).any {it!=1.toByte()})
             throw StorageFailure(FileStatus.CONFLICT,"Choose a fully successful completed batch with retained item history.")
+        if(request.operation==FileOperation.CANCEL_PUBLISHED_BATCH_CHECK) {
+            val previous=checks[row.header.id]?:workers[row.header.id]
+            if(previous!=null) {
+                if(previous.row!=row || previous.scope!=scope || previous.challenge!=request.mutationId)
+                    throw StorageFailure(FileStatus.CONFLICT,"Only the original session and challenge can stop this batch check.")
+                checks.remove(row.header.id,previous); cancel(previous)
+            }
+            return PublishedBatchCheck.newBuilder().setChallenge(request.mutationId).setCanceled(!workers.containsKey(row.header.id)).build()
+        }
         checks.values.filter {it.finishedAt?.let {end->now()-end !in 0L until COLLECTION_MS}==true}.forEach {old->
             if(checks.remove(old.row.header.id,old)) cancel(old)
         }
@@ -57,6 +76,7 @@ internal class AndroidPublishedBatchChecks(private val context:Context,private v
         if(previous!=null) {
             if(previous.row!=row || previous.scope!=scope || previous.challenge!=request.mutationId)
                 throw StorageFailure(FileStatus.CONFLICT,"A different check for this batch is awaiting completion or collection.")
+            if(previous.stopRequested) throw StorageFailure(FileStatus.CONFLICT,"This saved-batch check was stopped. Its copies and receipts were kept.")
             if(previous.finishedAt!=null) {
                 previous.collector.set(rpcSignal)
                 try {
@@ -129,8 +149,8 @@ internal class AndroidPublishedBatchChecks(private val context:Context,private v
             check.signal.cancel(); check.collector.get()?.cancel()
             synchronized(gate) {
                 if(checks[check.row.header.id]===check) {
-                    if(check.saved!=null) checks.remove(check.row.header.id,check)
-                    else check.finishedAt=now()
+                    if(check.saved!=null && !check.stopRequested) checks.remove(check.row.header.id,check)
+                    else {check.saved=null; check.finishedAt=now()}
                 }
             }
         }
@@ -215,7 +235,7 @@ internal class AndroidPublishedBatchChecks(private val context:Context,private v
         return "${s.st_dev}:${s.st_ino}:${s.st_size}:${s.st_mtim.tv_sec}:${s.st_mtim.tv_nsec}:${s.st_ctim.tv_sec}:${s.st_ctim.tv_nsec}"
     }
     private fun cancel(check:Check) {
-        check.signal.cancel(); check.collector.get()?.cancel(); check.collected.complete(Unit); check.job.cancel()
+        check.stopRequested=true; check.signal.cancel(); check.collector.get()?.cancel(); check.collected.complete(Unit); check.job.cancel()
     }
     fun cancelScopeNow(scope:String) {checks.values.filter {it.scope==scope}.forEach {checks.remove(it.row.header.id,it); cancel(it)}}
     fun cancelAllNow() {checks.values.forEach {checks.remove(it.row.header.id,it); cancel(it)}}

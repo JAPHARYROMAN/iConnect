@@ -57,6 +57,129 @@ class PublishedBatchCheckTest {
         val f=IncomingUploadsTest.Fixture(mask); try {action(f)} finally {f.close()}
     }
     private fun history(f:IncomingUploadsTest.Fixture)=File(f.root,"incoming-batch-plans").listFiles()!!.associate {it.name to it.readBytes().toList()}
+    // Raw operation value also lets this one method run against the pre-cancellation app.
+    private suspend fun stop(f:IncomingUploadsTest.Fixture,original:FileRequest):FileResponse=withTimeout(5_000) {
+        val value=original.toBuilder().setOperationValue(47).build()
+        while(true) {
+            val reply=f.raw(value)
+            assertEquals("Stopping a saved batch check must be supported.",FileStatus.FILE_STATUS_OK,reply.status)
+            PhoneTransferManifests.validateResponse(reply)
+            assertFalse(reply.publishedBatchCheck.verified)
+            if(reply.publishedBatchCheck.canceled) return@withTimeout reply
+            delay(10)
+        }
+        @Suppress("UNREACHABLE_CODE") error("No stop acknowledgement")
+    }
+    private suspend fun blocked(f:IncomingUploadsTest.Fixture,saved:Saved) {
+        withTimeout(5_000) {while(!f.base.contentResolver.call(TestDocumentsProvider.CONTROL_URI,"openProbe",saved.file,null)!!.getBoolean("entered")) delay(10)}
+        assertTrue(f.base.contentResolver.call(TestDocumentsProvider.CONTROL_URI,"openProbe",saved.file,null)!!.getBoolean("cancelable"))
+    }
+    private fun release(f:IncomingUploadsTest.Fixture,saved:Saved) {
+        f.base.contentResolver.call(TestDocumentsProvider.CONTROL_URI,"openProbe",saved.file,Bundle().apply {putBoolean("release",true)})
+        f.mode("")
+    }
+
+    @Test fun cancelingSavedBatchCheckReleasesBlockedReadsAndPreservesCopiesAndReceipts()=runBlocking {fixture {f->
+        val saved=publish(f); val before=history(f); val value=request(saved)
+        try {
+            f.mode("blockRead"); assertFalse(f.call(value).publishedBatchCheck.verified); blocked(f,saved)
+            val stopped=stop(f,value)
+            assertEquals(value.mutationId,stopped.publishedBatchCheck.challenge); assertEquals(saved.header,stopped.batch.header)
+            assertTrue(stopped.content.isEmpty); assertEquals(0,stopped.entriesCount)
+            withTimeout(3_000) {f.grants.batchPlans.whenFilesIdle()}
+            assertFalse(f.base.contentResolver.call(TestDocumentsProvider.CONTROL_URI,"openProbe",saved.file,null)!!.getBoolean("entered"))
+            val first=f.grants.reserveIncomingVerification()!!; val second=f.grants.reserveIncomingVerification()!!
+            try {assertNull(f.grants.reserveIncomingVerification())} finally {first.close(); second.close()}
+            release(f,saved); assertEquals(before,history(f)); assertArrayEquals("abc".toByteArray(),f.read(f.children(saved.folder).getValue(saved.file),saved.folder))
+            assertTrue(stop(f,value).publishedBatchCheck.canceled)
+            assertTrue(collect(f,request(saved)).publishedBatchCheck.verified)
+            withTimeout(3_000) {f.grants.batchPlans.whenFilesIdle()}; assertEquals(before,history(f))
+        } finally {release(f,saved)}
+    }}
+
+    @Test fun cancelingSavedBatchCheckRejectsForeignOrAlteredRequests()=runBlocking {fixture {f->
+        val saved=publish(f); val before=history(f); val value=request(saved)
+        try {
+            f.mode("blockRead"); f.call(value); blocked(f,saved)
+            for(change in listOf("bad-challenge","foreign-challenge","header","item","destination","node","name","version","continuation","query","deleted","offset","length","content","upload","epoch","peer")) {
+                val bad=value.toBuilder().setOperationValue(47)
+                when(change) {
+                    "bad-challenge"->bad.setMutationId("not-a-token")
+                    "foreign-challenge"->bad.setMutationId(StorageRules.token())
+                    "header"->bad.setBatchHeader(saved.header.toBuilder().setTotalBytes(4))
+                    "item"->bad.setBatchItemIndex(0)
+                    "destination"->bad.setDestinationId(StorageRules.token())
+                    "node"->bad.setNodeId(StorageRules.token())
+                    "name"->bad.setName("another.bin")
+                    "version"->bad.setExpectedVersion("a".repeat(64))
+                    "continuation"->bad.setContinuation(StorageRules.token())
+                    "query"->bad.setQuery("another")
+                    "deleted"->bad.setDeletedId(StorageRules.token())
+                    "offset"->bad.setOffset(1)
+                    "length"->bad.setLength(1)
+                    "content"->bad.setContent(ByteString.copyFrom(byteArrayOf(1)))
+                    "upload"->bad.setUpload(UploadInfo.getDefaultInstance())
+                    "epoch"->bad.setMutationEpoch(StorageRules.token())
+                }
+                val denied=f.raw(bad.build(),if(change=="peer") "d".repeat(64) else f.approval.id)
+                assertNotEquals(change,FileStatus.FILE_STATUS_OK,denied.status); assertFalse(denied.hasPublishedBatchCheck())
+                assertTrue(change,f.base.contentResolver.call(TestDocumentsProvider.CONTROL_URI,"openProbe",saved.file,null)!!.getBoolean("entered"))
+            }
+            assertTrue(stop(f,value).publishedBatchCheck.canceled)
+            withTimeout(3_000) {f.grants.batchPlans.whenFilesIdle()}; assertEquals(before,history(f))
+        } finally {release(f,saved)}
+    }}
+
+    @Test fun cancelingSavedBatchCheckCannotTakeOverAnotherSession()=runBlocking {fixture {f->
+        val saved=publish(f); val value=request(saved)
+        val other=AndroidFileService(f.context,f.grants,incoming=f.incoming)
+        try {
+            f.mode("blockRead"); f.call(value); blocked(f,saved)
+            val reply=other.execute(f.approval.id,value.toBuilder().setRequestId(StorageRules.token()).setOperationValue(47).build())
+            assertEquals(FileStatus.CONFLICT,reply.status)
+            assertTrue(f.base.contentResolver.call(TestDocumentsProvider.CONTROL_URI,"openProbe",saved.file,null)!!.getBoolean("entered"))
+            assertTrue(stop(f,value).publishedBatchCheck.canceled)
+        } finally {release(f,saved); other.close()}
+    }}
+
+    @Test fun cancellationFrameInterruptsBlockedCollectionBeforeTheRpcWorkerCanHandleIt()=runBlocking {fixture {f->
+        val saved=publish(f); val before=history(f); val value=request(saved)
+        val scope=CoroutineScope(SupervisorJob()+Dispatchers.IO)
+        lateinit var client:RemoteFiles; lateinit var server:RemoteFiles
+        val failures=java.util.concurrent.ConcurrentLinkedQueue<String>()
+        client=RemoteFiles({kind,payload->server.handle(Rules.parse(Rules.pack(kind,payload)))},scope,f.approval.id,null,{failures.add(it)})
+        server=RemoteFiles({kind,payload->client.handle(Rules.parse(Rules.pack(kind,payload)))},scope,f.approval.id,f.service,{failures.add(it)})
+        var collector:Deferred<FileResponse>?=null
+        try {
+            // Observe the first hash read without changing bytes or metadata.
+            f.base.contentResolver.call(TestDocumentsProvider.CONTROL_URI,"readFault",saved.file,Bundle().apply {putString("fault","observe")})
+            assertFalse(f.call(value).publishedBatchCheck.verified)
+            withTimeout(5_000) {while(f.base.contentResolver.call(TestDocumentsProvider.CONTROL_URI,"readCount",saved.file,null)!!.getInt("count")<1) delay(10)}
+            f.mode("blockRead")
+            collector=scope.async {withTimeout(10_000) {
+                while(true) {
+                    val reply=client.request(value)
+                    if(reply.status!=FileStatus.FILE_STATUS_OK || reply.publishedBatchCheck.verified) return@withTimeout reply
+                    delay(10)
+                }
+                @Suppress("UNREACHABLE_CODE") error("No collection response")
+            }}
+            blocked(f,saved)
+            withTimeout(3_000) {
+                while(true) {
+                    val reply=client.request(value.toBuilder().setOperationValue(47).build())
+                    assertEquals(reply.message,FileStatus.FILE_STATUS_OK,reply.status)
+                    if(reply.publishedBatchCheck.canceled) break
+                    delay(10)
+                }
+            }
+            assertEquals(FileStatus.CONFLICT,collector.await().status)
+            withTimeout(3_000) {f.grants.batchPlans.whenFilesIdle()}
+            assertTrue(failures.toString(),failures.isEmpty()); assertEquals(before,history(f))
+        } finally {
+            release(f,saved); collector?.cancelAndJoin(); client.close(); server.close(); scope.cancel()
+        }
+    }}
 
     @Test fun verifiesActualCollisionAndBlindNamesWithoutChangingCopiesOrMetadata()=runBlocking {
         for(mask in listOf(15,12)) fixture(mask) {f->

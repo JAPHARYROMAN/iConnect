@@ -141,6 +141,7 @@ internal class AndroidBatchPlans(private val context:Context,private val grants:
     fun continueOrphanPartRemoval(allowed:()->Boolean={true}):Boolean=grants.authorized {synchronized(gate) {ready(); files().continueOrphanRemoval(allowed)}}
     fun pauseFiles() {publishedChecks.cancelAllNow(); fileHost?.pauseAll()}
     fun cancelPublishedChecksNow() {publishedChecks.cancelAllNow()}
+    fun cancelPublishedCheckNow(peer:String,scope:String,request:FileRequest) {publishedChecks.cancelNow(peer,scope,request)}
     fun readFileProgress(peer: String, pairing: String, limit: Long) = fileHost?.readFileProgress(peer, pairing, limit).orEmpty()
     fun clearFilePayloadRates() {fileHost?.clearFilePayloadRates()}
     fun cancelFileScopeNow(scope:String) {publishedChecks.cancelScopeNow(scope); fileHost?.cancelScope(scope)}
@@ -187,7 +188,7 @@ internal class AndroidBatchPlans(private val context:Context,private val grants:
             authorize(row,peer,allowed,signal)
             if((row.retiring || row.retired) && request.operation !in setOf(FileOperation.UPLOAD_BATCH_STATUS,FileOperation.FINISH_UPLOAD_BATCH,FileOperation.STOP_UPLOAD_BATCH)) throw StorageFailure(FileStatus.NOT_FOUND,"The receiver owner removed this plan's detailed item history. Final parent outcomes remain; no new copy is created.")
             when(request.operation) {
-                FileOperation.VERIFY_PUBLISHED_BATCH->result.setPublishedBatchCheck(publishedChecks.execute(row,scope,request,allowed,signal))
+                FileOperation.VERIFY_PUBLISHED_BATCH,FileOperation.CANCEL_PUBLISHED_BATCH_CHECK->result.setPublishedBatchCheck(publishedChecks.execute(row,scope,request,allowed,signal))
                 FileOperation.WRITE_UPLOAD_MANIFEST->{
                     if(row.phase!=UploadBatchPlanPhase.UPLOAD_PLAN_RECEIVING) throw StorageFailure(FileStatus.CONFLICT,"This plan no longer accepts manifest chunks.")
                     val work=assemblies.getOrPut(row.header.id) {AssemblyWork(scope,UploadBatchAssembly(row.header))}

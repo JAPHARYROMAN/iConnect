@@ -20,6 +20,7 @@ internal sealed partial class NativeUploadEndpoint
     private int batchBegins;
     private bool batchLost;
     private bool batchPublishedChecked;
+    private bool batchPublishedCanceled;
     private readonly bool batchListing;
 
     public void PrepareBatchDataset()
@@ -70,7 +71,7 @@ internal sealed partial class NativeUploadEndpoint
     }
     public async Task SendBatchAsync(PeerSession peer, Action<object> emit, CancellationToken ct)
     {
-        if (batchSender is not null || batchOriginal.Length == 0 || !peer.AcceptsFolderBatches || !peer.AcceptsPublishedBatchChecks) throw new InvalidDataException("Prepare one dataset and use authenticated batch peers with fresh destination checks.");
+        if (batchSender is not null || batchOriginal.Length == 0 || !peer.AcceptsFolderBatches || !peer.AcceptsPublishedBatchChecks || !peer.AcceptsPublishedBatchCheckCancellation) throw new InvalidDataException("Prepare one dataset and use authenticated batch peers with cancellable destination checks.");
         var context = await peer.RequestFilesAsync(new() { Operation = FileOperation.UploadContext }, ct);
         if (context.Status != FileStatus.Ok || context.Entries.Count != 1) throw new InvalidDataException("Expected one receiving inbox.");
         target = context.Entries.Single();
@@ -115,15 +116,44 @@ internal sealed partial class NativeUploadEndpoint
             !batchCompleted.Header!.SequenceEqual(savedHeader) || batchCompleted.Outcomes?.Any(x => x != 1) != false ||
             !batchCompleted.Outcomes.SequenceEqual(batchCompleted.ReceiverOutcomes!) || Tree(batchOriginal).Hash != batchOriginalHash)
             throw new InvalidDataException("The exact parent plan or complete item outcomes were not retained.");
+        await CancelBatchProofAsync(peer, ct);
         await VerifyBatchAsync(peer, ct); batchPublishedChecked = true;
-        emit(new { @event = "sent", sha256 = batchOriginalHash, bytes = BatchBytes, items = 6, preparations = batchBegins, publishedBatchChecked = batchPublishedChecked,
+        emit(new { @event = "sent", sha256 = batchOriginalHash, bytes = BatchBytes, items = 6, preparations = batchBegins, publishedBatchChecked = batchPublishedChecked, publishedBatchCanceled = batchPublishedCanceled,
             lostAcknowledgements = 1, resumedOriginalReceipt = true, names = BatchResultNames });
     }
     public Task VerifyBatchAsync(PeerSession peer, CancellationToken ct)
     {
         if (batchCompleted is null || !peer.AcceptsPublishedBatchChecks)
             throw new InvalidOperationException("Finish this batch with a peer that supports fresh whole-batch checks.");
-        return batchSender!.VerifyPublishedAsync(batchCompleted.Id, peer.RequestFilesAsync, ct);
+        return batchSender!.VerifyPublishedAsync(batchCompleted.Id, peer.RequestFilesAsync, ct, peer.AcceptsPublishedBatchCheckCancellation);
+    }
+    private async Task CancelBatchProofAsync(PeerSession peer, CancellationToken ct)
+    {
+        using var stopping = CancellationTokenSource.CreateLinkedTokenSource(ct);
+        FileRequest? original = null;
+        async Task<FileResponse> Request(FileRequest value, CancellationToken token)
+        {
+            var response = await peer.RequestFilesAsync(value, token);
+            if (value.Operation == FileOperation.VerifyPublishedBatch)
+            {
+                if (original is not null || response.Status != FileStatus.Ok || response.PublishedBatchCheck is not { Verified: false, Canceled: false })
+                    throw new InvalidDataException("Expected one pending native batch check before cancellation.");
+                original = value.Clone(); stopping.Cancel(); stopping.Token.ThrowIfCancellationRequested();
+            }
+            if (value.Operation != FileOperation.CancelPublishedBatchCheck || original is null || value.MutationId != original.MutationId ||
+                value.TransferId != original.TransferId || value.MutationEpoch != original.MutationEpoch || !value.BatchHeader.Equals(original.BatchHeader))
+                throw new InvalidDataException("Cancellation did not retain the exact native proof scope.");
+            if (response.Status == FileStatus.Ok && response.PublishedBatchCheck is { Canceled: true, Verified: false }) batchPublishedCanceled = true;
+            return response;
+        }
+        try
+        {
+            await batchSender!.VerifyPublishedAsync(batchCompleted!.Id, Request, stopping.Token, cancelReceiver: true);
+            throw new InvalidDataException("Stopping the native check did not cancel its caller.");
+        }
+        catch (OperationCanceledException) when (stopping.IsCancellationRequested && !ct.IsCancellationRequested) { }
+        if (!batchPublishedCanceled || batchSender!.All.Single().Phase != BatchSendingPhase.Completed)
+            throw new InvalidDataException("The remote batch check did not acknowledge resource release with completed history retained.");
     }
     public void RevokeBatch()
     {
@@ -169,6 +199,6 @@ internal sealed partial class NativeUploadEndpoint
         return new { @event = "verified", suite = "batches", sentHash = batchOriginalHash, receivedHash = checkedTree.Hash,
             bytes = BatchBytes, items = 6, preparations = batchBegins, lostAcknowledgements = 1, resumedOriginalReceipt = true,
             collisionOriginalKept = true, originalSourceKept = true, emptyDirectoriesKept = true, unicodeNameTextKept = true,
-            zeroLengthFilesKept = true, parentOutcomesMatch = true, blindNamesRetained = !batchListing, withdrawnInboxDenied = true, publishedBatchChecked = batchPublishedChecked };
+            zeroLengthFilesKept = true, parentOutcomesMatch = true, blindNamesRetained = !batchListing, withdrawnInboxDenied = true, publishedBatchChecked = batchPublishedChecked, publishedBatchCanceled = batchPublishedCanceled };
     }
 }

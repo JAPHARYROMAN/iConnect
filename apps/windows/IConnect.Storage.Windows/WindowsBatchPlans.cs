@@ -230,6 +230,8 @@ public sealed partial class WindowsBatchPlans
                     throw new StorageException(FileStatus.NotFound, "The receiver owner removed this plan's detailed item history. Its final parent receipt remains; no new copy is created.");
                 if (request.Operation == FileOperation.VerifyPublishedBatch)
                     VerifyPublishedBatch(row, scope, request, result, ct);
+                else if (request.Operation == FileOperation.CancelPublishedBatchCheck)
+                    CancelPublishedBatchCheck(row, scope, request, result);
                 else if (request.Operation is FileOperation.FinishUploadBatch or FileOperation.StopUploadBatch)
                     row = EndPlan(row, request, scope, ct);
                 else if (UploadBatchRules.IsTerminal(row.Phase) && request.Operation == FileOperation.UploadBatchItemStatus)

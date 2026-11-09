@@ -100,6 +100,7 @@ public sealed partial class DesktopController : IAsyncDisposable
     public bool OutgoingBatchPreparing(string id) => outgoingBatches.Active(id);
     public bool BatchReceiverSupported => PeerAuthenticated && client?.AcceptsFolderBatches == true;
     public bool PublishedBatchCheckSupported => PeerAuthenticated && client?.AcceptsPublishedBatchChecks == true;
+    public bool PublishedBatchCheckCancellationSupported => PublishedBatchCheckSupported && client?.AcceptsPublishedBatchCheckCancellation == true;
     public bool PublishedUploadCheckSupported => PeerAuthenticated && client?.AcceptsPublishedUploadChecks == true;
     public bool IsCurrentBatchAuthority(UploadAuthority authority) => CurrentUploadAuthority(authority);
     public string BatchPeerName(UploadAuthority authority) => CurrentUploadAuthority(authority) ? RequirePeer(authority.Peer).Name : "Earlier pairing · " + authority.Peer[..8];
@@ -196,7 +197,8 @@ public sealed partial class DesktopController : IAsyncDisposable
         if (!PublishedBatchCheckSupported || ActivePeerId != row.Authority.Peer)
             throw new InvalidOperationException("Connect to the original paired device with saved-batch checking enabled.");
         var request = RequireClient().CaptureFileRequester(row.Authority.Peer);
-        return outgoingBatchSender.VerifyPublishedAsync(id, request.Invoke, connectionLifetime!.Token);
+        return outgoingBatchSender.VerifyPublishedAsync(id, request.Invoke, connectionLifetime!.Token,
+            cancelReceiver: RequireClient().AcceptsPublishedBatchCheckCancellation);
     }
     public OutgoingBatchItemResult OutgoingBatchResult(string id, int index) => outgoingBatchSender.ItemResult(id, index);
     public async Task LoadReceivingLocations()

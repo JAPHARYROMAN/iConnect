@@ -351,6 +351,39 @@ class BatchSenderTest {
         assertFalse(f.record(id).readText().contains(f.tree.toString())); f.reopen(true); completed(f)
         repeat(f.row().next) {assertNotNull(f.sender.itemResult(id,it))}
     }}
+    @Test fun stoppingCompletedBatchCheckUsesNegotiatedRemoteCancellationAndKeepsCompletedHistory()=runBlocking {
+        for(negotiated in listOf(false,true)) fixture {f->
+            f.main {f.browser.browse(f.browser.state.value.rows.single().entry)}
+            withTimeout(20_000) {while(f.browser.state.value.busy || f.browser.state.value.rows.none {it.entry.name=="simu.txt"}) delay(15)}
+            lateinit var selected:List<LocalUploadSource>
+            f.main {selected=f.browser.captureBatch(f.browser.state.value.rows.filter {it.entry.name in setOf("simu.txt","zero.bin","Empty","Reports")}.map {it.entry})}
+            assertEquals(4,selected.size)
+            val source=f.sources.stage(f.approval,selected,UploadCollision.UPLOAD_KEEP_BOTH) {f.allowed.get()}
+            withTimeout(30_000) {f.sources.whenIdle()}; f.source=f.sources.state.value.single {it.id==source}
+            val id=f.queue(); f.send(id); completed(f)
+            val before=f.record(id).readBytes(); val bytes=f.sourceBytes("simu.txt")
+            val entered=CompletableDeferred<FileRequest>(); val stops=java.util.concurrent.CopyOnWriteArrayList<FileRequest>()
+            val checking=async(Dispatchers.IO) {runCatching {
+                f.sender.verifyPublished(id,f.approval,{f.allowed.get()},negotiated) {value->
+                    when(value.operation) {
+                        FileOperation.VERIFY_PUBLISHED_BATCH->{f.request(value); entered.complete(value); awaitCancellation()}
+                        FileOperation.CANCEL_PUBLISHED_BATCH_CHECK->{stops.add(value); f.request(value)}
+                        else->error("Unexpected batch check operation")
+                    }
+                }
+            }}
+            val original=withTimeout(5_000) {entered.await()}; f.sender.pause(id)
+            assertTrue(withTimeout(8_000) {checking.await()}.exceptionOrNull() is CancellationException)
+            withTimeout(3_000) {f.sender.whenIdle()}
+            assertEquals(negotiated,stops.isNotEmpty())
+            stops.forEach {assertEquals(original.mutationId,it.mutationId); assertEquals(original.batchHeader,it.batchHeader); assertEquals(original.mutationEpoch,it.mutationEpoch); assertEquals(original.transferId,it.transferId)}
+            if(negotiated) withTimeout(3_000) {f.receiver.grants.batchPlans.whenFilesIdle()}
+            else {f.receiver.service.suspendAvailability(); withTimeout(3_000) {f.receiver.grants.batchPlans.whenFilesIdle()}; f.receiver.restart()}
+            assertArrayEquals(before,f.record(id).readBytes()); assertArrayEquals(bytes,f.sourceBytes("simu.txt")); completed(f)
+            f.sender.verifyPublished(id,f.approval,{f.allowed.get()},true) {f.request(it)}
+        }
+    }
+
     @Test fun completedBatchChecksBindFreshChallengesAndRejectChangedParentEvidence()=runBlocking {fixture {f->
         f.main {f.browser.browse(f.browser.state.value.rows.single().entry)}
         withTimeout(20_000) {while(f.browser.state.value.busy || f.browser.state.value.rows.none {it.entry.name=="simu.txt"}) delay(15)}
@@ -361,7 +394,7 @@ class BatchSenderTest {
         withTimeout(30_000) {f.sources.whenIdle()}; f.source=f.sources.state.value.single {it.id==source}
         val id=f.queue(); f.send(id); completed(f); val row=f.row(); val saved=f.record(id).readBytes()
         val h=UploadBatchHeader.parseFrom(Rules.decode(row.header))
-        for(kind in listOf("match","old-receipt","challenge","epoch","header","mixed","effect")) {
+        for(kind in listOf("match","old-receipt","challenge","epoch","header","mixed","effect","canceled")) {
             val seen=mutableListOf<String>()
             val failure=runCatching {
                 withTimeout(15_000) {f.sender.verifyPublished(id,f.approval,{f.allowed.get()}) {request->
@@ -375,6 +408,7 @@ class BatchSenderTest {
                     if(kind=="header") reply.setBatch(reply.batch.toBuilder().setHeader(h.toBuilder().setSha256(ByteString.copyFrom(ByteArray(32)))))
                     if(kind=="mixed") reply.setBatch(reply.batch.toBuilder().setItemOutcomes(ByteString.copyFrom(ByteArray(row.items) {2})))
                     if(kind=="effect") reply.setBatch(reply.batch.toBuilder().setEffectsStarted(false))
+                    if(kind=="canceled") reply.setPublishedBatchCheck(reply.publishedBatchCheck.toBuilder().setCanceled(true))
                     reply.build()
                 }}
             }.exceptionOrNull()

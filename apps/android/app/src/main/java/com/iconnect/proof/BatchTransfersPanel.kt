@@ -104,7 +104,8 @@ internal fun BatchTransfersPanel(model:PhoneController,state:ProofState,chooseLo
             } else {
                 TextButton({results=row.id},enabled=enabled && !row.active) {Text("Review item results…")}
                 if(row.active && row.phase==PhoneBatchSendingPhase.COMPLETED) Text("Waiting for the receiver's saved-batch check.")
-                if(row.active) TextButton({model.pauseOutgoingBatch(row.id)},enabled=enabled) {Text(if(row.phase==PhoneBatchSendingPhase.COMPLETED) "Stop waiting for batch check" else "Pause this batch send")}
+                if(row.active) TextButton({model.pauseOutgoingBatch(row.id)},enabled=enabled) {Text(if(row.phase==PhoneBatchSendingPhase.COMPLETED)
+                    if(model.supportsPublishedBatchCheckCancellation()) "Stop batch check" else "Stop waiting for batch check" else "Pause this batch send")}
                 if(row.archived) {
                     TextButton({history(row,PhoneBatchHistoryAction.RESTORE)},enabled=enabled) {Text("Review restoring send…")}
                     TextButton({history(row,PhoneBatchHistoryAction.PURGE)},enabled=enabled) {Text("Review history purge…")}

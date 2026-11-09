@@ -73,7 +73,7 @@ class NativeBatchProbe:Instrumentation() {
         val ready=CompletableDeferred<Unit>(); val sent=CompletableDeferred<Unit>(); val verified=CompletableDeferred<JSONObject>(); val finished=CompletableDeferred<Unit>()
         val signals=AtomicInteger()
         var peer:RtcTestSession?=null; var browser:PhoneLocalBrowser?=null; var sources:AndroidBatchSources?=null; var sender:PhoneBatchSender?=null; var commands:Job?=null
-        var target:FileEntry?=null; var completed:PhoneBatchSend?=null; var begins=0; var lost=false; var revoked=false; var success=false
+        var target:FileEntry?=null; var completed:PhoneBatchSend?=null; var begins=0; var lost=false; var revoked=false; var success=false; var publishedBatchCanceled=false
         suspend fun raw(value:FileRequest)=withContext(Dispatchers.Main.immediate) {requireNotNull(peer).requestFiles(value)}
         suspend fun waitFor(label:String,condition:()->Boolean) {withTimeout(45_000) {while(!condition()) {check(peer?.isClosed!=true) {"Native peer ended while waiting for $label."}; delay(15)}}}
         try {
@@ -114,7 +114,7 @@ class NativeBatchProbe:Instrumentation() {
                                 .put("sentHash",documents.original.hash).put("receivedHash",received.hash).put("bytes",NativeBatchDocuments.BYTES).put("items",6)
                                 .put("preparations",begins).put("lostAcknowledgements",1).put("resumedOriginalReceipt",true)
                                 .put("collisionOriginalKept",true).put("originalSourceKept",true).put("emptyDirectoriesKept",true).put("unicodeNameTextKept",true)
-                                .put("zeroLengthFilesKept",true).put("parentOutcomesMatch",true).put("blindNamesRetained",!listing).put("withdrawnInboxDenied",true).put("publishedBatchChecked",true)
+                                .put("zeroLengthFilesKept",true).put("parentOutcomesMatch",true).put("blindNamesRetained",!listing).put("withdrawnInboxDenied",true).put("publishedBatchChecked",true).put("publishedBatchCanceled",publishedBatchCanceled)
                             status(result); verified.complete(result)
                         }
                         "finish"->{check(verified.isCompleted); finished.complete(Unit); return@launch}
@@ -126,6 +126,7 @@ class NativeBatchProbe:Instrumentation() {
             withTimeout(40_000) {ready.await()}; status(JSONObject().put("event","authenticated"))
             check(requireNotNull(peer).acceptsFolderBatches)
             check(requireNotNull(peer).acceptsPublishedBatchChecks)
+            check(requireNotNull(peer).acceptsPublishedBatchCheckCancellation)
             val receiving=raw(FileRequest.newBuilder().setOperation(FileOperation.UPLOAD_CONTEXT).build())
             check(receiving.status==FileStatus.FILE_STATUS_OK && receiving.entriesCount==1); target=receiving.entriesList.single()
             val roots=raw(FileRequest.newBuilder().setOperation(FileOperation.LIST_ROOTS).build())
@@ -167,10 +168,25 @@ class NativeBatchProbe:Instrumentation() {
             check(done.phase==PhoneBatchSendingPhase.COMPLETED && done.next==6 && done.header==stopped.header && begins==1 &&
                 done.outcomes==done.receiverOutcomes && Rules.decode(done.outcomes).let {it.size==6 && it.all {outcome->outcome.toInt()==1}})
             documents.verifyOriginal()
-            manager.verifyPublished(id,approval,{policy.isCurrent(approval)},::request)
+            var checkRequest:FileRequest?=null
+            val canceled=runCatching {manager.verifyPublished(id,approval,{policy.isCurrent(approval)},true) {value->
+                val response=request(value)
+                if(value.operation==FileOperation.VERIFY_PUBLISHED_BATCH) {
+                    check(checkRequest==null && response.status==FileStatus.FILE_STATUS_OK && response.hasPublishedBatchCheck() && !response.publishedBatchCheck.verified && !response.publishedBatchCheck.canceled)
+                    checkRequest=value
+                    throw CancellationException("Generated stop of a pending native batch check.")
+                }
+                val original=requireNotNull(checkRequest)
+                check(value.operation==FileOperation.CANCEL_PUBLISHED_BATCH_CHECK && value.mutationId==original.mutationId && value.transferId==original.transferId &&
+                    value.mutationEpoch==original.mutationEpoch && value.batchHeader==original.batchHeader)
+                if(response.status==FileStatus.FILE_STATUS_OK && response.hasPublishedBatchCheck() && response.publishedBatchCheck.canceled && !response.publishedBatchCheck.verified) publishedBatchCanceled=true
+                response
+            }}.exceptionOrNull()
+            check(canceled is CancellationException && publishedBatchCanceled && manager.state.value.single().phase==PhoneBatchSendingPhase.COMPLETED)
+            manager.verifyPublished(id,approval,{policy.isCurrent(approval)},true,::request)
             val names=JSONArray((0 until 6).map {manager.itemResult(id,it).name})
             sent.complete(Unit); status(JSONObject().put("event","sent").put("sha256",documents.original.hash).put("bytes",NativeBatchDocuments.BYTES).put("items",6)
-                .put("preparations",begins).put("lostAcknowledgements",1).put("resumedOriginalReceipt",true).put("names",names).put("publishedBatchChecked",true))
+                .put("preparations",begins).put("lostAcknowledgements",1).put("resumedOriginalReceipt",true).put("names",names).put("publishedBatchChecked",true).put("publishedBatchCanceled",publishedBatchCanceled))
             val result=verified.await(); finished.await(); success=true; result
         } catch(failure:Throwable) {
             failure.addSuppressed(IOException("Native batch peer messages before cleanup: "+messages.joinToString(" | ")))

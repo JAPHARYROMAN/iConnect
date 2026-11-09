@@ -25,6 +25,13 @@ public interface IFileService : IDisposable
     Task<FileResponse> ExecuteAsync(string peerId, FileRequest request, CancellationToken cancellationToken);
 }
 
+// Only interrupts an already bound check. The queued handler still authorizes
+// the request and acknowledges that its resources have actually been released.
+public interface IPublishedBatchCheckCancellation
+{
+    void InterruptPublishedBatchCheck(string peer, FileRequest request);
+}
+
 public static class StorageRules
 {
     public const int PageSize = 32;
@@ -65,7 +72,7 @@ public static class StorageRules
             (!ProtocolRules.TokenPattern().IsMatch(check.Challenge) || response.Upload?.Phase != UploadPhase.UploadCompleted))
             throw new InvalidDataException("Invalid published-copy check.");
         if (response.PublishedBatchCheck is { } batchCheck &&
-            (response.Status != FileStatus.Ok || !UploadBatchRules.CanonicalToken(batchCheck.Challenge) || response.Batch is not { Phase: UploadBatchPlanPhase.UploadPlanCompleted } batch ||
+            (response.Status != FileStatus.Ok || batchCheck.Verified && batchCheck.Canceled || !UploadBatchRules.CanonicalToken(batchCheck.Challenge) || response.Batch is not { Phase: UploadBatchPlanPhase.UploadPlanCompleted } batch ||
              batch.ItemOutcomes.Length == 0 || batch.ItemOutcomes.Any(x => x != 1) || response.MutationEpoch != batch.Header.Epoch))
             throw new InvalidDataException("Invalid published-batch check.");
         if (response.Uploads.Count > PageSize) throw new InvalidDataException("The incoming-transfer response is too large.");
