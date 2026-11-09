@@ -53,12 +53,13 @@ class LocalFoldersUiTest {
     }
     @Test fun nativeFolderNamePickerCancelApproveCreateAndReceiptRemovalPreserveOriginals():Unit=runBlocking {
         val fixture=requireNotNull(context.contentResolver.call(TestDocumentsProvider.CONTROL_URI,"fixture",null,Bundle().apply {putBoolean("pickerRoot",true)}))
-        val tree=Uri.parse(fixture.getString("tree")); var model:PhoneController?=null
+        val tree=Uri.parse(fixture.getString("tree")); var model:PhoneController?=null; var approvalsBefore:List<AndroidStorageGrant>?=null
         fun children()=context.contentResolver.query(Docs.buildChildDocumentsUriUsingTree(tree,fixture.getString("root")),arrayOf(Docs.Document.COLUMN_DISPLAY_NAME),null,null,null)!!.use {cursor->buildList {while(cursor.moveToNext()) add(cursor.getString(0))}}
         val file=Docs.buildDocumentUriUsingTree(tree,fixture.getString("file")); val original=context.contentResolver.openInputStream(file)!!.use {it.readBytes()}
+        UiExistingApproval(context,tree,fixture.getInt("flags")).use { existing ->
         try {ActivityScenario.launch(MainActivity::class.java).use {scenario->
             lateinit var browser:PhoneLocalBrowser
-            scenario.onActivity {activity->model=(activity.application as IConnectApplication).controller(); browser=requireNotNull(model).localFiles; browser.add(tree,fixture.getInt("flags"))}
+            scenario.onActivity {activity->model=(activity.application as IConnectApplication).controller(); approvalsBefore=requireNotNull(model).state.value.phoneShares.toList(); check(approvalsBefore!!.any {it.id==existing.grantId}); browser=requireNotNull(model).localFiles; browser.add(tree,fixture.getInt("flags"))}
             waitFor("local root") {!browser.state.value.busy && browser.state.value.rows.any {it.entry.grantId==browser.state.value.locations.firstOrNull {location->location.tree==tree}?.id}}
             click("On this phone · local folders"); click("Open local folder")
             waitFor("source folder") {!browser.state.value.busy && browser.state.value.breadcrumbs.size==1}
@@ -83,7 +84,7 @@ class LocalFoldersUiTest {
             reopen()
             start("UI created folder"); chooseFolder(); waitFor("final creation review") {manager.state.value.review?.name=="UI created folder" && !manager.state.value.busy}
             click("Create folder"); waitFor("durable local result") {!manager.state.value.busy && manager.state.value.receipts.any {it.name=="UI created folder" && it.phase==PhoneLocalFolderPhase.CREATED}}
-            assertEquals(1,children().count {it=="UI created folder"}); assertTrue(requireNotNull(model).state.value.phoneShares.isEmpty()); assertFalse(requireNotNull(model).state.value.connected)
+            assertEquals(1,children().count {it=="UI created folder"}); assertEquals(requireNotNull(approvalsBefore).toSet(),requireNotNull(model).state.value.phoneShares.toSet()); assertFalse(requireNotNull(model).state.value.connected)
             click("Remove folder receipt…"); click("Keep receipt"); assertTrue(manager.state.value.receipts.any {it.name=="UI created folder"})
             click("Remove folder receipt…"); click("Remove receipt"); waitFor("removed metadata only") {manager.state.value.receipts.none {it.name=="UI created folder"}}
             assertEquals(1,children().count {it=="UI created folder"}); assertArrayEquals(original,context.contentResolver.openInputStream(file)!!.use {it.readBytes()})
@@ -95,6 +96,7 @@ class LocalFoldersUiTest {
                 val closing=withContext(Dispatchers.Main) {controller.close()}; closing.join(); withContext(Dispatchers.Main) {(context.applicationContext as IConnectApplication).releaseClosed(controller)}
             }
             context.contentResolver.call(TestDocumentsProvider.CONTROL_URI,"dispose",fixture.getString("root"),null)
+        }
         }
     }
 }

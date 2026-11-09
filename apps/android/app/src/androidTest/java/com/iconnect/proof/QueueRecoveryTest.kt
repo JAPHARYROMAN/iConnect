@@ -13,15 +13,22 @@ import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class QueueRecoveryTest {
-    private val context get() = InstrumentationRegistry.getInstrumentation().targetContext
+    private var isolatedContext: Context? = null
+    private val context get() = checkNotNull(isolatedContext) { "Open an isolated storage fixture first." }
     private val peer = "b".repeat(64)
     private suspend fun fixture(body: suspend (Uri, Int, File) -> Unit) {
-        val fixture = requireNotNull(context.contentResolver.call(TestDocumentsProvider.CONTROL_URI, "fixture", null, null))
-        val tree = Uri.parse(fixture.getString("tree")); val flags = fixture.getInt("flags")
-        val access = AndroidSafAccess(context); access.selectDestination(tree, flags)
-        val directory = File(context.filesDir, "queue-recovery-${StorageRules.token()}"); check(directory.mkdir())
-        try { body(tree, flags, directory) }
-        finally { access.clearDestination(); directory.deleteRecursively(); context.contentResolver.call(TestDocumentsProvider.CONTROL_URI, "dispose", fixture.getString("root"), null) }
+        check(isolatedContext==null)
+        IsolatedStorageContext().use { isolated ->
+            isolatedContext=isolated
+            try {
+                val fixture = requireNotNull(context.contentResolver.call(TestDocumentsProvider.CONTROL_URI, "fixture", null, null))
+                val tree = Uri.parse(fixture.getString("tree")); val flags = fixture.getInt("flags")
+                val access = AndroidSafAccess(context); access.selectDestination(tree, flags)
+                val directory = File(context.filesDir, "queue-recovery-${StorageRules.token()}"); check(directory.mkdir())
+                try { body(tree, flags, directory) }
+                finally { access.clearDestination(); directory.deleteRecursively(); context.contentResolver.call(TestDocumentsProvider.CONTROL_URI, "dispose", fixture.getString("root"), null) }
+            } finally {isolatedContext=null}
+        }
     }
     private fun entry() = FileEntry.newBuilder().setId(StorageRules.token()).setGrantId(StorageRules.token()).setName("download.txt")
         .setVersion("a".repeat(64)).setSize(17).setPermissions(StorageRules.READ_ONLY).build()

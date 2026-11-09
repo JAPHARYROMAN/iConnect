@@ -18,10 +18,11 @@ class LocalBrowserUiTest {
     @Test fun nativeLocalImagePreviewCanRotateZoomAndCloseWithoutSharingTheFolder() {
         val context=instrumentation.targetContext
         val fixture=requireNotNull(context.contentResolver.call(TestDocumentsProvider.CONTROL_URI,"fixture",null,Bundle().apply { putBoolean("media",true) }))
-        val tree=Uri.parse(fixture.getString("tree")); var controller: PhoneController?=null
+        val tree=Uri.parse(fixture.getString("tree")); var controller: PhoneController?=null; var approvalsBefore:List<AndroidStorageGrant>?=null
+        UiExistingApproval(context,tree,fixture.getInt("flags")).use { existing ->
         try { ActivityScenario.launch(MainActivity::class.java).use { scenario ->
             lateinit var browser: PhoneLocalBrowser
-            scenario.onActivity { activity -> val model=(activity.application as IConnectApplication).controller(); controller=model; browser=model.localFiles; browser.add(tree,fixture.getInt("flags")) }
+            scenario.onActivity { activity -> val model=(activity.application as IConnectApplication).controller(); controller=model; approvalsBefore=model.state.value.phoneShares.toList(); check(approvalsBefore!!.any {it.id==existing.grantId}); browser=model.localFiles; browser.add(tree,fixture.getInt("flags")) }
             waitFor("media local shortcut") { !browser.state.value.busy && browser.state.value.rows.size==1 }
             click("On this phone · local folders"); click("Open local folder")
             waitFor("media local files") { !browser.state.value.busy && browser.state.value.rows.any { it.entry.name=="fixture.png" } }
@@ -34,7 +35,7 @@ class LocalBrowserUiTest {
             }
             instrumentation.waitForIdleSync()
             click("Preview"); waitFor("native isolated image") { browser.preview.state.value.frame!=null && !browser.preview.state.value.busy }
-            assertEquals(android.graphics.Color.RED,browser.preview.state.value.frame!!.bitmap.getPixel(0,0)); assertTrue(controller!!.state.value.phoneShares.isEmpty())
+            assertEquals(android.graphics.Color.RED,browser.preview.state.value.frame!!.bitmap.getPixel(0,0)); assertEquals(requireNotNull(approvalsBefore).toSet(),controller!!.state.value.phoneShares.toSet())
             click("Zoom in"); click("Rotate preview"); click("Reset view"); click("Close preview")
             waitFor("closed preview") { browser.preview.state.value.frame==null && browser.preview.state.value.name.isEmpty() }
             scenario.onActivity { browser.inspect(browser.state.value.rows.single().entry,true) }
@@ -45,6 +46,7 @@ class LocalBrowserUiTest {
             controller?.let { model -> lateinit var closing:Job; instrumentation.runOnMainSync { closing=model.close() }; runBlocking { closing.join() }; instrumentation.runOnMainSync { (context.applicationContext as IConnectApplication).releaseClosed(model) } }
             LocalDocumentLocations(context).all().filter { it.tree==tree }.forEach { LocalDocumentLocations(context).remove(it.id) }
             context.contentResolver.call(TestDocumentsProvider.CONTROL_URI,"dispose",fixture.getString("root"),null)
+        }
         }
     }
     private val instrumentation get() = InstrumentationRegistry.getInstrumentation()

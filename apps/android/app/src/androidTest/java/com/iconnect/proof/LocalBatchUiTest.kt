@@ -41,10 +41,11 @@ class LocalBatchUiTest {
     @Test fun selectFolderPlanCancelPickerThenCopyAndRemoveOnlyItsHistory(): Unit = runBlocking {
         val from = requireNotNull(context.contentResolver.call(TestDocumentsProvider.CONTROL_URI, "fixture", null, null))
         val to = requireNotNull(context.contentResolver.call(TestDocumentsProvider.CONTROL_URI, "fixture", null, Bundle().apply { putBoolean("pickerRoot", true) }))
-        val sourceTree = Uri.parse(from.getString("tree")); var model: PhoneController? = null
+        val sourceTree = Uri.parse(from.getString("tree")); var model: PhoneController? = null; var approvalsBefore:List<AndroidStorageGrant>?=null
+        UiExistingApproval(context,sourceTree,from.getInt("flags")).use { existing ->
         try { ActivityScenario.launch(MainActivity::class.java).use { scenario ->
             lateinit var browser: PhoneLocalBrowser
-            scenario.onActivity { activity -> val controller = (activity.application as IConnectApplication).controller(); model = controller; browser = controller.localFiles; browser.add(sourceTree, from.getInt("flags")) }
+            scenario.onActivity { activity -> val controller = (activity.application as IConnectApplication).controller(); model = controller; approvalsBefore=controller.state.value.phoneShares.toList(); check(approvalsBefore!!.any {it.id==existing.grantId}); browser = controller.localFiles; browser.add(sourceTree, from.getInt("flags")) }
             waitFor("local shortcut") { !browser.state.value.busy && browser.state.value.rows.size == 1 }
             click("On this phone · local folders"); click("Open local folder")
             waitFor("source listing") { !browser.state.value.busy && browser.state.value.breadcrumbs.size == 1 }
@@ -72,7 +73,7 @@ class LocalBatchUiTest {
             val row = browser.localBatches.state.value.items.single().batch!!; assertEquals(id, row.id); assertTrue(row.peer.isEmpty() && row.epoch.isEmpty())
             val original = android.provider.DocumentsContract.buildDocumentUriUsingTree(sourceTree, from.getString("nested")); val published = Uri.parse(row.items.single { !it.source.directory }.published)
             val expected = context.contentResolver.openInputStream(original)!!.use { it.readBytes() }; assertArrayEquals(expected, context.contentResolver.openInputStream(published)!!.use { it.readBytes() })
-            assertTrue(requireNotNull(model).state.value.phoneShares.isEmpty()); assertFalse(requireNotNull(model).state.value.connected)
+            assertEquals(requireNotNull(approvalsBefore).toSet(),requireNotNull(model).state.value.phoneShares.toSet()); assertFalse(requireNotNull(model).state.value.connected)
             click("Remove local batch record…"); click("Confirm local batch action"); waitFor("removed history") { browser.localBatches.state.value.items.isEmpty() }
             assertArrayEquals(expected, context.contentResolver.openInputStream(published)!!.use { it.readBytes() })
         } } finally {
@@ -85,6 +86,7 @@ class LocalBatchUiTest {
                 instrumentation.runOnMainSync { (context.applicationContext as IConnectApplication).releaseClosed(controller) }
             }
             listOf(from, to).forEach { context.contentResolver.call(TestDocumentsProvider.CONTROL_URI, "dispose", it.getString("root"), null) }
+        }
         }
     }
 }

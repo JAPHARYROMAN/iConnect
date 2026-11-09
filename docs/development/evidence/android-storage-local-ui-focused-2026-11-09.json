@@ -1,0 +1,153 @@
+{
+  "schema": 1,
+  "stage": "AndroidStorageAndLocalUiFocusedValidationPassed",
+  "checkedAtUtc": "2026-11-09T19:58:14.910078+00:00",
+  "applicationSha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e",
+  "testSha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e",
+  "productionApkUnchangedFromLargeFileValidation": true,
+  "unsignedReleaseApkSha256": "535a0c1d79ba9dea836ce63a1261b543c18bddfd43c079ee4490b9483e619f2a",
+  "focusedCases": 34,
+  "storageAndRecoveryCases": 29,
+  "nativeLocalUiCases": 5,
+  "failures": 0,
+  "skipped": 0,
+  "groups": [
+    {
+      "group": "storage",
+      "cases": 29,
+      "assessment": {
+        "cases": 29,
+        "failures": 0,
+        "skipped": 0,
+        "testCases": [
+          "com.iconnect.proof.AndroidStorageTest#livePermissionsExclusionsExpiryAndRevocationApplyToIssuedReferences",
+          "com.iconnect.proof.AndroidStorageTest#rangesWithholdBytesWhenTheProviderMovesTheSourceDuringOpen",
+          "com.iconnect.proof.AndroidStorageTest#queuedSourcePreparationCanRestartAfterAvailabilityEndsBeforeItExecutes",
+          "com.iconnect.proof.AndroidStorageTest#statusPollingAndRepeatedRangesDoNotRenewIdleBackgroundAuthority",
+          "com.iconnect.proof.AndroidStorageTest#failedIntentCommitMakesNoFolderAndHistoryResetRejectsOldContext",
+          "com.iconnect.proof.AndroidStorageTest#rangesWithholdBytesWhenAnAncestorBecomesExcludedDuringOpen",
+          "com.iconnect.proof.AndroidStorageTest#inactiveAvailabilityDeniesExistingReferencesWithoutWideningOrRemovingTheGrant",
+          "com.iconnect.proof.AndroidStorageTest#createRequiresIndependentPermissionAndProviderSupport",
+          "com.iconnect.proof.AndroidStorageTest#lostProviderFolderReceiptIsReviewedAndNeverReplayed",
+          "com.iconnect.proof.AndroidStorageTest#backgroundSourcePolicyAllowsOnlyTheSelectedLiveTicket",
+          "com.iconnect.proof.AndroidStorageTest#oldPeerCleanupCannotRemoveANewerSendingTicket",
+          "com.iconnect.proof.AndroidStorageTest#releasingOneTicketDoesNotRevokeAnotherDownloadOfTheSameFile",
+          "com.iconnect.proof.AndroidStorageTest#staleVersionsAndUnboundedRangesAreRejected",
+          "com.iconnect.proof.AndroidStorageTest#realFrameworkPermissionRevocationDeniesReads",
+          "com.iconnect.proof.AndroidStorageTest#sourceDownloadTicketsArePersistentPeerBoundAndRecheckReadPermission",
+          "com.iconnect.proof.AndroidStorageTest#directoryPagingStaysBoundedAndReturnsEachAccessibleItem",
+          "com.iconnect.proof.AndroidStorageTest#rangesWithholdBytesWhenTheProviderChangesVersionDuringOpen",
+          "com.iconnect.proof.AndroidStorageTest#createReceiptSurvivesSessionRestartAndCannotBeRepurposed",
+          "com.iconnect.proof.AndroidStorageTest#providerReturningAFileForFolderCreationIsNotReportedAsSuccess",
+          "com.iconnect.proof.AndroidStorageTest#providerCreatingFolderUnderAnotherApprovedParentRequiresReview",
+          "com.iconnect.proof.AndroidStorageTest#pendingPrivateReceiptAfterRestartDoesNotAdoptAnExistingFolder",
+          "com.iconnect.proof.AndroidStorageTest#grantsArePersistedPerPeerAndNoPathsCrossTheProtocol",
+          "com.iconnect.proof.AndroidStorageTest#providerMovesAndRenamedExcludedAncestorsCannotEscapePolicy",
+          "com.iconnect.proof.AndroidStorageTest#sendingPausePersistsAndResumeCannotOverrideANewerPause",
+          "com.iconnect.proof.QueueRecoveryTest#unreadableBatchDoesNotReleaseRecordedDestinationAccessBeforeItsOwnerArchivesIt",
+          "com.iconnect.proof.QueueRecoveryTest#damagedProgressLoadsBesideValidRecordAndArchivingPreservesStagingAndItsAndroidLeaseUntilReview",
+          "com.iconnect.proof.QueueRecoveryTest#damagedSendingCacheDoesNotPreventBrowsingAndCannotCreateTicketsOrBeOverwrittenByRevocation",
+          "com.iconnect.proof.QueueRecoveryTest#backupAndUncommittedMetadataArePreservedAndChangedRecordsRequireAnotherReview",
+          "com.iconnect.proof.QueueRecoveryTest#aChildCannotResumeOrPublishOutsideItsOriginalBatchEvenAfterParentMetadataIsArchived"
+        ],
+        "instrumentationCompleted": true
+      },
+      "runnerOutputSha256": "bf6e089977a969ff556006dd02ca045907cde688f85aad783bf87491c4563dd5",
+      "exitCaptureSha256": "fe56f57aa4879f8378c3f57087a3724479bc261fad57914d457332ab1d2e3a09",
+      "adbExitCode": 0,
+      "capturedApks": [
+        {
+          "name": "after-production-1.apk",
+          "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+        },
+        {
+          "name": "after-tests-1.apk",
+          "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+        },
+        {
+          "name": "before-production-1.apk",
+          "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+        },
+        {
+          "name": "before-tests-1.apk",
+          "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+        },
+        {
+          "name": "focused-production-1.apk",
+          "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+        },
+        {
+          "name": "focused-tests-1.apk",
+          "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+        }
+      ],
+      "originalWrapperPassed": true
+    },
+    {
+      "group": "ui",
+      "cases": 5,
+      "assessment": {
+        "cases": 5,
+        "failures": 0,
+        "skipped": 0,
+        "testCases": [
+          "com.iconnect.proof.LocalBatchUiTest#selectFolderPlanCancelPickerThenCopyAndRemoveOnlyItsHistory",
+          "com.iconnect.proof.LocalBrowserUiTest#nativeLocalImagePreviewCanRotateZoomAndCloseWithoutSharingTheFolder",
+          "com.iconnect.proof.LocalBrowserUiTest#localScreenOpensSearchesAndPreviewsGeneratedFilesWithNoConnection",
+          "com.iconnect.proof.LocalCopyUiTest#nativeCopyReviewCanCancelThePickerThenSaveAndRemoveOnlyTheCopyRecord",
+          "com.iconnect.proof.LocalFoldersUiTest#nativeFolderNamePickerCancelApproveCreateAndReceiptRemovalPreserveOriginals"
+        ],
+        "instrumentationCompleted": true
+      },
+      "runnerOutputSha256": "0de71aa047e0c6804688cdeadf3a37cb8b5bbbf4af103ca553c98f64bed0c4cc",
+      "exitCaptureSha256": "3057f1c442fc0c32412567e5396bac7a6bc8fc34ef06c17525645b0e36dbeded",
+      "adbExitCode": 0,
+      "capturedApks": [
+        {
+          "name": "after-production-1.apk",
+          "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+        },
+        {
+          "name": "after-tests-1.apk",
+          "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+        },
+        {
+          "name": "before-production-1.apk",
+          "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+        },
+        {
+          "name": "before-tests-1.apk",
+          "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+        },
+        {
+          "name": "focused-production-1.apk",
+          "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+        },
+        {
+          "name": "focused-tests-1.apk",
+          "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+        }
+      ],
+      "originalWrapperPassed": false
+    }
+  ],
+  "globalSourceMetadataUnchangedDuringStorageFocus": true,
+  "globalBeforeObservationSha256": "de43c9cca5ef81218f54c212ee3f69d9976e6a6e3ff3c9c6a79e5bde7f07b519",
+  "globalAfterObservationSha256": "69052fc5d583b5b80d4e1adc9c03b760030aaf80f8e2af915fc5a5fbc61c73a3",
+  "readOnlyApprovalSeededForEachOfFourChangedUiJourneys": true,
+  "uiChecksRequireExactApprovalSetPreservation": true,
+  "jvmCases": 89,
+  "lintErrors": 0,
+  "buildLogSha256": "b04053a2f43e2b296e7d9ec16efaf7c7bbad06ea8f619d4f716a98ee487af885",
+  "originalFullRegressionFailurePreserved": true,
+  "originalFullRegressionFailureSha256": "aa1444c73c3469764b75e598c3bfa5eae0c571ef5c8aeefce460f14c5a23867e",
+  "originalUiWrapperExpectedCases": 4,
+  "correctUiSelectionCases": 5,
+  "originalUiWrapperPassed": false,
+  "originalUiAdbExitRetained": true,
+  "completedUiRunRepeated": false,
+  "sourcePlanSha256": "a2199000ab17a079be75715334f21ea9234ddfe3fa11adbbdec881d198b48e8b",
+  "fullCurrent552CaseRegressionPassed": false,
+  "physicalPhoneVerified": false,
+  "fullApplicationComplete": false
+}

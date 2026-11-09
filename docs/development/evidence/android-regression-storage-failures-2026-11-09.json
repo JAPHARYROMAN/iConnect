@@ -1,0 +1,157 @@
+{
+  "schema": 1,
+  "stage": "OriginalFullAndroidRegressionFailed",
+  "checkedAtUtc": "2026-11-09T19:39:31.318787+00:00",
+  "applicationSha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e",
+  "testSha256": "1a6185259a4b097ddde6a4b28c003727304e48bbb654788e1befc7d289a87f18",
+  "cases": 552,
+  "passed": 538,
+  "failures": 14,
+  "skipped": 0,
+  "failedCases": [
+    {
+      "case": "com.iconnect.proof.AndroidStorageTest#rangesWithholdBytesWhenTheProviderMovesTheSourceDuringOpen",
+      "exceptionType": "java.lang.AssertionError",
+      "savedProgressConflictReported": true
+    },
+    {
+      "case": "com.iconnect.proof.AndroidStorageTest#queuedSourcePreparationCanRestartAfterAvailabilityEndsBeforeItExecutes",
+      "exceptionType": "java.lang.AssertionError",
+      "savedProgressConflictReported": false
+    },
+    {
+      "case": "com.iconnect.proof.AndroidStorageTest#statusPollingAndRepeatedRangesDoNotRenewIdleBackgroundAuthority",
+      "exceptionType": "java.lang.AssertionError",
+      "savedProgressConflictReported": false
+    },
+    {
+      "case": "com.iconnect.proof.AndroidStorageTest#rangesWithholdBytesWhenAnAncestorBecomesExcludedDuringOpen",
+      "exceptionType": "java.lang.AssertionError",
+      "savedProgressConflictReported": true
+    },
+    {
+      "case": "com.iconnect.proof.AndroidStorageTest#backgroundSourcePolicyAllowsOnlyTheSelectedLiveTicket",
+      "exceptionType": "java.lang.AssertionError",
+      "savedProgressConflictReported": false
+    },
+    {
+      "case": "com.iconnect.proof.AndroidStorageTest#oldPeerCleanupCannotRemoveANewerSendingTicket",
+      "exceptionType": "java.lang.IllegalArgumentException",
+      "savedProgressConflictReported": false
+    },
+    {
+      "case": "com.iconnect.proof.AndroidStorageTest#releasingOneTicketDoesNotRevokeAnotherDownloadOfTheSameFile",
+      "exceptionType": "java.lang.AssertionError",
+      "savedProgressConflictReported": false
+    },
+    {
+      "case": "com.iconnect.proof.AndroidStorageTest#sourceDownloadTicketsArePersistentPeerBoundAndRecheckReadPermission",
+      "exceptionType": "java.lang.AssertionError",
+      "savedProgressConflictReported": false
+    },
+    {
+      "case": "com.iconnect.proof.AndroidStorageTest#rangesWithholdBytesWhenTheProviderChangesVersionDuringOpen",
+      "exceptionType": "java.lang.AssertionError",
+      "savedProgressConflictReported": true
+    },
+    {
+      "case": "com.iconnect.proof.AndroidStorageTest#sendingPausePersistsAndResumeCannotOverrideANewerPause",
+      "exceptionType": "java.lang.IllegalArgumentException",
+      "savedProgressConflictReported": false
+    },
+    {
+      "case": "com.iconnect.proof.LocalBatchUiTest#selectFolderPlanCancelPickerThenCopyAndRemoveOnlyItsHistory",
+      "exceptionType": "java.lang.AssertionError",
+      "savedProgressConflictReported": false
+    },
+    {
+      "case": "com.iconnect.proof.LocalBrowserUiTest#nativeLocalImagePreviewCanRotateZoomAndCloseWithoutSharingTheFolder",
+      "exceptionType": "java.lang.AssertionError",
+      "savedProgressConflictReported": false
+    },
+    {
+      "case": "com.iconnect.proof.LocalCopyUiTest#nativeCopyReviewCanCancelThePickerThenSaveAndRemoveOnlyTheCopyRecord",
+      "exceptionType": "java.lang.AssertionError",
+      "savedProgressConflictReported": false
+    },
+    {
+      "case": "com.iconnect.proof.LocalFoldersUiTest#nativeFolderNamePickerCancelApproveCreateAndReceiptRemovalPreserveOriginals",
+      "exceptionType": "java.lang.AssertionError",
+      "savedProgressConflictReported": false
+    }
+  ],
+  "skippedCases": [],
+  "runnerCompleted": true,
+  "runnerLogSha256": "194fdab1b031d584e04ecdca86b251f636d22b977fe936b5caeef06cf136f9ea",
+  "adbExitCode": 0,
+  "adbExitCapturedBeforePostRunObservations": true,
+  "exitCaptureSha256": "64de307ec9be4e85af87a8c95a2f189e47a9de05344a2974cefde202ec9214b7",
+  "capturedApks": [
+    {
+      "name": "after-production-1.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "after-tests-1.apk",
+      "sha256": "1a6185259a4b097ddde6a4b28c003727304e48bbb654788e1befc7d289a87f18"
+    },
+    {
+      "name": "before-production-1.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "before-tests-1.apk",
+      "sha256": "1a6185259a4b097ddde6a4b28c003727304e48bbb654788e1befc7d289a87f18"
+    },
+    {
+      "name": "focused-production-1.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "focused-tests-1.apk",
+      "sha256": "1a6185259a4b097ddde6a4b28c003727304e48bbb654788e1befc7d289a87f18"
+    }
+  ],
+  "planSha256": "48f80a741846de255366fa9541dd6b2d35e9fbf2d97de05b705e4f02506dc23a",
+  "discoveryOnlyCountedAsExecution": false,
+  "globalSourceMetadataObservation": {
+    "observedAtUtc": "2026-11-09T19:25:08.619273+00:00",
+    "readOnly": true,
+    "observedDuringActiveTestRun": true,
+    "files": [
+      {
+        "suffix": "",
+        "exitCode": 0,
+        "bytesCaptured": 4195,
+        "sha256": "fa55c17cf6b5f02d7951e141488bb3cc58d540f28827f8076d4e4688ed1638a9",
+        "jsonValid": true,
+        "jsonRootType": "list",
+        "recordCount": 10,
+        "invalidHashLengths": []
+      },
+      {
+        "suffix": ".new",
+        "exitCode": 0,
+        "bytesCaptured": 4238,
+        "sha256": "8d034c2919c450a47d961bf9fa3b81c05c55323ae51d0b7a7f1bcbc4e4bd22af",
+        "jsonValid": true,
+        "jsonRootType": "list",
+        "recordCount": 10,
+        "invalidHashLengths": []
+      },
+      {
+        "suffix": ".bak",
+        "exitCode": 0,
+        "bytesCaptured": 65,
+        "sha256": "21555cf69950ccdbeb85edf250163b4054b0ffa7589637fe0c8dcc8a9c4c7f27",
+        "jsonValid": false,
+        "parseFailureType": "JSONDecodeError"
+      }
+    ]
+  },
+  "fixtureFixAppliedDuringRun": false,
+  "productionRecoveryGuardWeakened": false,
+  "currentFullRegressionPassed": false,
+  "physicalDeviceVerified": false,
+  "fullApplicationComplete": false
+}

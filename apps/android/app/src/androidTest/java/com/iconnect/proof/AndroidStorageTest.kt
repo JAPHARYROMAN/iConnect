@@ -1,6 +1,7 @@
 package com.iconnect.proof
 
 import android.content.Intent
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -14,7 +15,8 @@ import java.security.MessageDigest
 
 @RunWith(AndroidJUnit4::class)
 class AndroidStorageTest {
-    private val context get() = InstrumentationRegistry.getInstrumentation().targetContext
+    private var isolatedContext: Context? = null
+    private val context get() = checkNotNull(isolatedContext) { "Open an isolated storage fixture first." }
     private val peerKey = TestPeer.key()
     private val peer = Rules.id(peerKey.public.encoded)
     private class Fixture(val bundle: Bundle) {
@@ -27,15 +29,21 @@ class AndroidStorageTest {
     private fun request(operation: FileOperation, node: String = "", version: String = "") = FileRequest.newBuilder()
         .setRequestId(StorageRules.token()).setOperation(operation).setNodeId(node).setExpectedVersion(version)
     private fun withStorage(extra: Int = 0, body: suspend (Fixture, AndroidStorageGrants, AndroidFileService, AndroidStorageGrant) -> Unit) = runBlocking {
-        val fixture = fixture(extra)
-        val store = AndroidStorageGrants(context)
-        val approval = TestPeer.approve(store.owner, peerKey)
-        val grant = store.add(approval, fixture.tree, fixture.flags, "Phone documents")
-        val service = AndroidFileService(context, store)
-        try { body(fixture, store, service, grant) }
-        finally {
-            service.close(); store.revokePeer(peer)
-            context.contentResolver.call(TestDocumentsProvider.CONTROL_URI, "dispose", fixture.bundle.getString("root"), null)
+        check(isolatedContext==null)
+        IsolatedStorageContext().use { isolated ->
+            isolatedContext=isolated
+            try {
+                val fixture = fixture(extra)
+                val store = AndroidStorageGrants(context)
+                val approval = TestPeer.approve(store.owner, peerKey)
+                val grant = store.add(approval, fixture.tree, fixture.flags, "Phone documents")
+                val service = AndroidFileService(context, store)
+                try { body(fixture, store, service, grant) }
+                finally {
+                    service.close(); store.revokePeer(peer); store.batchPlans.shutdown()
+                    context.contentResolver.call(TestDocumentsProvider.CONTROL_URI, "dispose", fixture.bundle.getString("root"), null)
+                }
+            } finally {isolatedContext=null}
         }
     }
     private suspend fun roots(service: AndroidFileService) = service.execute(peer, request(FileOperation.LIST_ROOTS).build())
@@ -269,14 +277,14 @@ class AndroidStorageTest {
             store.update(grant.id, StorageRules.LIST)
             assertEquals(FileStatus.ACCESS_DENIED, source.execute(peer, request(FileOperation.DOWNLOAD_READ).setTransferId(ticket).setLength(1).build()).status)
             store.update(grant.id, StorageRules.READ_ONLY)
-            sources.close()
+            sources.shutdown()
             val reopened = AndroidDownloadSources(context, store)
             val reader = AndroidFileService(context, store, reopened)
             try {
                 assertEquals(DownloadState.DOWNLOAD_READY, reader.execute(peer, request(FileOperation.DOWNLOAD_STATUS).setTransferId(ticket).build()).download.state)
                 reader.execute(peer, request(FileOperation.RELEASE_DOWNLOAD).setTransferId(ticket).build())
-            } finally { reader.close(); reopened.close() }
-        } finally { source.close(); sources.close() }
+            } finally { reader.close(); reopened.shutdown() }
+        } finally { source.close(); sources.shutdown() }
     }
     @Test fun releasingOneTicketDoesNotRevokeAnotherDownloadOfTheSameFile() = withStorage { _, store, _, _ ->
         val sources = AndroidDownloadSources(context, store); val reader = AndroidFileService(context, store, sources)
@@ -294,7 +302,7 @@ class AndroidStorageTest {
             val read = reader.execute(peer, request(FileOperation.DOWNLOAD_READ).setTransferId(second).setLength(32).build())
             assertEquals(FileStatus.FILE_STATUS_OK, read.status); assertEquals(32, read.content.size())
             reader.execute(peer, request(FileOperation.RELEASE_DOWNLOAD).setTransferId(second).build())
-        } finally { reader.close(); sources.close() }
+        } finally { reader.close(); sources.shutdown() }
     }
     @Test fun inactiveAvailabilityDeniesExistingReferencesWithoutWideningOrRemovingTheGrant() = withStorage { _, store, _, _ ->
         val available = java.util.concurrent.atomic.AtomicBoolean(true)
@@ -323,7 +331,7 @@ class AndroidStorageTest {
             reader.execute(peer, request(FileOperation.DOWNLOAD_STATUS).setTransferId(ticket).build()); drain()
             assertEquals(DownloadState.DOWNLOAD_READY, reader.execute(peer, request(FileOperation.DOWNLOAD_STATUS).setTransferId(ticket).build()).download.state)
             reader.execute(peer, request(FileOperation.RELEASE_DOWNLOAD).setTransferId(ticket).build())
-        } finally { reader.close(); sources.close(); drain() }
+        } finally { reader.close(); sources.close(); drain(); sources.shutdown() }
     }
     @Test fun backgroundSourcePolicyAllowsOnlyTheSelectedLiveTicket() = withStorage { _, store, _, _ ->
         val sources = AndroidDownloadSources(context, store)
