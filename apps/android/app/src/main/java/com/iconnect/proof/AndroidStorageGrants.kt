@@ -19,6 +19,7 @@ class AndroidStorageGrants(private val context: Context, val owner: AndroidOwner
     internal val mutations by lazy { AndroidMutations(context, this) }
     private val batchPlansStore = lazy { AndroidBatchPlans(context,this) }
     internal val batchPlans by batchPlansStore
+    internal fun existingBatchPlans():AndroidBatchPlans? = if(batchPlansStore.isInitialized()) batchPlansStore.value else null
     internal var ordinaryIncoming:AndroidIncomingUploads?=null
     private val incomingVerification=java.util.concurrent.Semaphore(2)
     internal fun reserveIncomingVerification():AutoCloseable? {

@@ -142,6 +142,7 @@ internal class AndroidBatchPlans(private val context:Context,private val grants:
     fun pauseFiles() {publishedChecks.cancelAllNow(); fileHost?.pauseAll()}
     fun cancelPublishedChecksNow() {publishedChecks.cancelAllNow()}
     fun cancelPublishedCheckNow(peer:String,scope:String,request:FileRequest) {publishedChecks.cancelNow(peer,scope,request)}
+    fun publishedCancellationRefusal(peer:String,scope:String,request:FileRequest):StorageFailure? = publishedChecks.cancellationRefusal(peer,scope,request)
     fun readFileProgress(peer: String, pairing: String, limit: Long) = fileHost?.readFileProgress(peer, pairing, limit).orEmpty()
     fun clearFilePayloadRates() {fileHost?.clearFilePayloadRates()}
     fun cancelFileScopeNow(scope:String) {publishedChecks.cancelScopeNow(scope); fileHost?.cancelScope(scope)}

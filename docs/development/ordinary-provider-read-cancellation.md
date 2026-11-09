@@ -1,12 +1,12 @@
 # Ordinary provider-read cancellation
 
-Work in progress, 9 November 2026. The preserved foundation sequence fails its three-hour large-file upload case. This follow-up stops at its predecessor gate without executing device cases; a new validation run is required. See the [recorded timeout](provider-range-reads-and-stop.md). The full application remains incomplete.
+Work in progress, 9 November 2026. The preserved foundation sequence fails its three-hour large-file upload case. Its original follow-up stops at the predecessor gate. A separate run subsequently reproduces both exact baseline failures, passes all 45 fixed device cases and passes both native ordinary-upload connection roles. The [large-file timeout](provider-range-reads-and-stop.md) remains a failure, and the full application remains incomplete.
 
 ## Implementation
 
 `AndroidIncomingUploads` now opens ordinary published-copy checks and provider-backed incoming-window reviews through an unstable provider client, passing the operation's cancellation signal to `openFile`. The descriptor closes on completion or cancellation, and the client closes when that read ends. Publication continues using its existing retained, wrapped provider connection. Receipt formats, authority checks, hash/length checks, provider publication and source-removal decisions do not change.
 
-The earlier [batch check regression](published-batch-checks.md) observed that its resolver read path did not deliver a cancellation signal to the document provider. The ordinary helper used the same resolver API. This change addresses that opening path; the ordinary-file baseline must establish its own runtime reproduction before this follow-up is considered verified.
+The earlier [batch check regression](published-batch-checks.md) observed that its resolver read path did not deliver a cancellation signal to the document provider. The ordinary helper used the same resolver API. This change addresses that opening path; its separate ordinary-file baseline now reproduces both missing-signal assertions on the exact older APK.
 
 Two instrumentation methods cover three cancellation scenarios: a fresh check of an ordinary completed publication, review of an expired receipt's recorded provider copy, and confirmation of that review. They require the provider to receive a cancellation signal, interrupt a blocked read within three seconds, preserve file bytes and receipt metadata, and permit a subsequent check. The ordinary case also requires both shared verification permits to be available after cancellation. Window checks accept actual coroutine or Android provider cancellation; timeouts and unrelated failures do not satisfy the assertion. Cleanup can explicitly release only the generated fixture's blocked open.
 
@@ -31,4 +31,12 @@ The owned follow-up waits for the exact predecessor process to finish and requir
 2. Run all **45 selected cases** on the candidate: the two new methods, 17 incoming-upload cases, 20 incoming-window cases and six completed-batch check cases. All must pass without failures or skips, with exact APK hashes verified before and after.
 3. Execute both native Windows–Android ordinary-upload connection roles with the candidate APKs and the pinned source-built Windows transport. Both directions must retain their receipts, resume the lost accepted-range reply, preserve collision/source originals, obtain fresh published-copy checks and refuse withdrawn receiving authority. Installed APK hashes must still match afterward.
 
-Current follow-up state is `.tools/phase132-device-state.json`, with reports under `.tools/phase132-device-proofs/`. It records failure at the predecessor gate after the actual foundation timeout; it does not treat either interruption or failure as completion. None of these device steps executed in this follow-up. Broader provider/lifecycle, actual process/power-loss, physical separate-network, accessibility and independent security/release evidence remain open in the [completion audit](completion.md).
+The original follow-up state `.tools/phase132-device-state.json` records failure at the predecessor gate after the actual foundation timeout. None of its device steps executed, and that failed state remains unchanged.
+
+## Executed independent result
+
+The replacement run completes at 11:55 Africa/Nairobi on 9 November. The baseline produces exactly the two expected missing-provider-signal failures, with no skipped cases. Identical instrumentation on the candidate passes all **45 selected cases** without failures or skips. APK hashes match the frozen inputs before and after each run. The [baseline output](evidence/android-read-cancellation-baseline-2026-11-09.txt), [fixed output](evidence/android-read-cancellation-fixed-2026-11-09.txt) and [artifact-bound result](evidence/android-read-cancellation-2026-11-09.json) are tracked in the repository.
+
+Both native Windows–Android ordinary-upload initiating roles also pass on the same candidate. Each endpoint sends 2,097,169 generated bytes, loses an accepted-range reply, resumes the original receipt after manager recreation, preserves source/collision originals, checks its published copy and refuses withdrawn receiving authority. The native transport SHA-256 is `84a0a63dcc579d97e4afac959866f9e61e9584c18732045a48db673d8ec87dde`. The complete result is retained under `.tools/phase142-device-proofs/`; its separate scope explicitly retains the foundation failure.
+
+This is direct native engine evidence on a disposable API 35 emulator, not physical-network or full controller verification. Broader provider/lifecycle, actual process/power-loss, physical separate-network, accessibility and independent security/release evidence remain open in the [completion audit](completion.md).

@@ -1,0 +1,300 @@
+{
+  "schemaVersion": 1,
+  "observedDate": "2026-11-09",
+  "timeZone": "Africa/Nairobi",
+  "avd": "iconnect-large-files",
+  "apiLevel": 35,
+  "originalMissingOperationBaseline": {
+    "applicationSha256": "e5bca36d76ea0711ceb3eba2b9d480de0ae882f87342070db550857f4c797f74",
+    "instrumentationApkSha256": "2ddbffaec402830d5190cd65cfafc48b7f6e1c2511331357db30aefc0f458d93",
+    "cases": 1,
+    "expectedAssertionFailures": 1,
+    "observedStatus": "INVALID_REQUEST",
+    "originalHarnessOutcome": "failed because it expected UNSUPPORTED",
+    "reanalysisOnly": true,
+    "log": "android-batch-cancellation-baseline-2026-11-09.txt",
+    "logSha256": "f5e7d4f9f1c27f864360f04426aa393bab0bc7dea58f806801b5ecd5b97c3b29",
+    "strictVerifierControls": 12
+  },
+  "beforeBindingFix": {
+    "applicationSha256": "77e7241bc7de12c9a7ad373545268e7b17ec4aaf4052867d9a2b3613c4bb5c6e",
+    "instrumentationApkSha256": "2ddbffaec402830d5190cd65cfafc48b7f6e1c2511331357db30aefc0f458d93",
+    "cases": 51,
+    "passed": 49,
+    "failures": 2,
+    "failedMethods": [
+      "cancelingSavedBatchCheckRejectsForeignOrAlteredRequests",
+      "cancelingSavedBatchCheckCannotTakeOverAnotherSession"
+    ],
+    "log": "android-batch-cancellation-before-binding-fix-2026-11-09.txt",
+    "logSha256": "00898190dbcf63e4b8c46ef912c7047c975c4ac9accafba199f6f72f80170322",
+    "testRunnerTiming": [
+      {
+        "method": "cancelingSavedBatchCheckRejectsForeignOrAlteredRequests",
+        "startedDeviceEpoch": "1794214811.018",
+        "finishedDeviceEpoch": "1794214822.512",
+        "wholeTestMethodSeconds": 11.494
+      },
+      {
+        "method": "cancelingSavedBatchCheckCannotTakeOverAnotherSession",
+        "startedDeviceEpoch": "1794214836.601",
+        "finishedDeviceEpoch": "1794214848.088",
+        "wholeTestMethodSeconds": 11.487
+      }
+    ],
+    "timingScope": "Whole methods including setup and cleanup, from device TestRunner logcat; not isolated RPC latency."
+  },
+  "afterBindingFix": {
+    "applicationSha256": "1727aa9e2c1e81e9624bb260da9482aa1f801b32e8eb1ef8c13e786a47d77262",
+    "instrumentationApkSha256": "2ddbffaec402830d5190cd65cfafc48b7f6e1c2511331357db30aefc0f458d93",
+    "cases": 51,
+    "passed": 51,
+    "failures": 0,
+    "skipped": 0,
+    "elapsedSeconds": 91.716,
+    "log": "android-batch-cancellation-after-binding-fix-2026-11-09.txt",
+    "logSha256": "2f6034a108bfa87d6f9952a90f375e0a8ff03efa4e14e5c291ee959b8c2eee64",
+    "testRunnerTiming": [
+      {
+        "method": "cancelingSavedBatchCheckRejectsForeignOrAlteredRequests",
+        "startedDeviceEpoch": "1794215599.865",
+        "finishedDeviceEpoch": "1794215601.551",
+        "wholeTestMethodSeconds": 1.686
+      },
+      {
+        "method": "cancelingSavedBatchCheckCannotTakeOverAnotherSession",
+        "startedDeviceEpoch": "1794215616.091",
+        "finishedDeviceEpoch": "1794215617.655",
+        "wholeTestMethodSeconds": 1.564
+      }
+    ],
+    "timingScope": "Whole methods including setup and cleanup, from device TestRunner logcat; not isolated RPC latency.",
+    "build": {
+      "duration": "8m 30s",
+      "debug": true,
+      "instrumentation": true,
+      "unsignedRelease": true,
+      "jvmTests": 87,
+      "jvmFailures": 0,
+      "jvmErrors": 0,
+      "jvmSkipped": 0,
+      "lintErrors": 0,
+      "lintFatal": 0,
+      "lintWarnings": 71,
+      "unsignedReleaseSha256": "0e69775fae8a20081946cf61d1a195c4ba83699cf7e719449f2b09c2ab17edca",
+      "buildLogSha256": "12f2dcf77d3c2891c9912a595d0a773e4fefebe84862fae2c374d55f776b47ab",
+      "buildSourceParent": "fc6b1d65b6b991c7a023c758eb87a15831dffc97",
+      "builtBeforeCommit": true,
+      "sourceInputs": [
+        {
+          "Path": "apps/android/app/src/main/java/com/iconnect/proof/AndroidFileService.kt",
+          "Sha256": "f48b254e1fcf6f0b6fe7b3292bda1edd43b567453db91a8f893b14edc4df2dd2"
+        },
+        {
+          "Path": "apps/android/app/src/main/java/com/iconnect/proof/AndroidStorageGrants.kt",
+          "Sha256": "feeb494b0fca871806d3b96408bfedec647891ee3fdd2747299ad668f97533cb"
+        },
+        {
+          "Path": "apps/android/app/src/main/java/com/iconnect/proof/AndroidBatchPlans.kt",
+          "Sha256": "fc9734c5c118460db4e2e83b063142158bc8c5bb659f8ea4fa9f2c705243ab00"
+        },
+        {
+          "Path": "apps/android/app/src/main/java/com/iconnect/proof/AndroidPublishedBatchChecks.kt",
+          "Sha256": "fe39acec9c05d72db35182903a9e0024cfa6d5bda6988ad4206fef9072d94bfd"
+        }
+      ]
+    }
+  },
+  "nativeBatchCancellation": {
+    "roles": [
+      {
+        "inboxMode": "listing",
+        "initiator": "windows",
+        "endpoints": {
+          "Host": {
+            "sentHash": "2c5007d01960694cd5c4108167888fca6d343ef3d943fba73cecb0f065b614db",
+            "receivedHash": "726b85109740f1eeb668427da419244f12c065d63a8ab1d30ab721d0c6050cd6",
+            "bytes": 2097207,
+            "items": 6,
+            "preparations": 1,
+            "lostAcknowledgements": 1,
+            "resumedOriginalReceipt": true,
+            "collisionOriginalKept": true,
+            "originalSourceKept": true,
+            "emptyDirectoriesKept": true,
+            "unicodeNameTextKept": true,
+            "zeroLengthFilesKept": true,
+            "parentOutcomesMatch": true,
+            "blindNamesRetained": false,
+            "withdrawnInboxDenied": true,
+            "publishedBatchChecked": true,
+            "publishedBatchCanceled": true
+          },
+          "Android": {
+            "sentHash": "726b85109740f1eeb668427da419244f12c065d63a8ab1d30ab721d0c6050cd6",
+            "receivedHash": "2c5007d01960694cd5c4108167888fca6d343ef3d943fba73cecb0f065b614db",
+            "bytes": 2097207,
+            "items": 6,
+            "preparations": 1,
+            "lostAcknowledgements": 1,
+            "resumedOriginalReceipt": true,
+            "collisionOriginalKept": true,
+            "originalSourceKept": true,
+            "emptyDirectoriesKept": true,
+            "unicodeNameTextKept": true,
+            "zeroLengthFilesKept": true,
+            "parentOutcomesMatch": true,
+            "blindNamesRetained": false,
+            "withdrawnInboxDenied": true,
+            "publishedBatchChecked": true,
+            "publishedBatchCanceled": true
+          }
+        }
+      },
+      {
+        "inboxMode": "listing",
+        "initiator": "android",
+        "endpoints": {
+          "Host": {
+            "sentHash": "b014993110dac0da4af93c3db9dcbbc6b8c401a92d5d36767c1b6aebb41b424e",
+            "receivedHash": "383904efa29a5e249a34918c2d05a4c2642fa72323d435a22f887ac60ba1d5f1",
+            "bytes": 2097207,
+            "items": 6,
+            "preparations": 1,
+            "lostAcknowledgements": 1,
+            "resumedOriginalReceipt": true,
+            "collisionOriginalKept": true,
+            "originalSourceKept": true,
+            "emptyDirectoriesKept": true,
+            "unicodeNameTextKept": true,
+            "zeroLengthFilesKept": true,
+            "parentOutcomesMatch": true,
+            "blindNamesRetained": false,
+            "withdrawnInboxDenied": true,
+            "publishedBatchChecked": true,
+            "publishedBatchCanceled": true
+          },
+          "Android": {
+            "sentHash": "383904efa29a5e249a34918c2d05a4c2642fa72323d435a22f887ac60ba1d5f1",
+            "receivedHash": "b014993110dac0da4af93c3db9dcbbc6b8c401a92d5d36767c1b6aebb41b424e",
+            "bytes": 2097207,
+            "items": 6,
+            "preparations": 1,
+            "lostAcknowledgements": 1,
+            "resumedOriginalReceipt": true,
+            "collisionOriginalKept": true,
+            "originalSourceKept": true,
+            "emptyDirectoriesKept": true,
+            "unicodeNameTextKept": true,
+            "zeroLengthFilesKept": true,
+            "parentOutcomesMatch": true,
+            "blindNamesRetained": false,
+            "withdrawnInboxDenied": true,
+            "publishedBatchChecked": true,
+            "publishedBatchCanceled": true
+          }
+        }
+      },
+      {
+        "inboxMode": "blind",
+        "initiator": "windows",
+        "endpoints": {
+          "Host": {
+            "sentHash": "dbcc94b24b1859e855878710bd7d255577429555d3e6f6110d7992fa4f0fbe8c",
+            "receivedHash": "9fd1b86490c3afe62c225d0d272647bb6db9417342990b7bde0f6d34585c0601",
+            "bytes": 2097207,
+            "items": 6,
+            "preparations": 1,
+            "lostAcknowledgements": 1,
+            "resumedOriginalReceipt": true,
+            "collisionOriginalKept": true,
+            "originalSourceKept": true,
+            "emptyDirectoriesKept": true,
+            "unicodeNameTextKept": true,
+            "zeroLengthFilesKept": true,
+            "parentOutcomesMatch": true,
+            "blindNamesRetained": true,
+            "withdrawnInboxDenied": true,
+            "publishedBatchChecked": true,
+            "publishedBatchCanceled": true
+          },
+          "Android": {
+            "sentHash": "9fd1b86490c3afe62c225d0d272647bb6db9417342990b7bde0f6d34585c0601",
+            "receivedHash": "dbcc94b24b1859e855878710bd7d255577429555d3e6f6110d7992fa4f0fbe8c",
+            "bytes": 2097207,
+            "items": 6,
+            "preparations": 1,
+            "lostAcknowledgements": 1,
+            "resumedOriginalReceipt": true,
+            "collisionOriginalKept": true,
+            "originalSourceKept": true,
+            "emptyDirectoriesKept": true,
+            "unicodeNameTextKept": true,
+            "zeroLengthFilesKept": true,
+            "parentOutcomesMatch": true,
+            "blindNamesRetained": true,
+            "withdrawnInboxDenied": true,
+            "publishedBatchChecked": true,
+            "publishedBatchCanceled": true
+          }
+        }
+      },
+      {
+        "inboxMode": "blind",
+        "initiator": "android",
+        "endpoints": {
+          "Host": {
+            "sentHash": "0ef1c498827c8fbc1a3af6f99d776cacb57ed8eb85de821b526aa7d04f0cded5",
+            "receivedHash": "8d8ba7abc9f8cce5550b1f2e17ff701828bc016cb9c8b9a8e41aa24f167d9e4e",
+            "bytes": 2097207,
+            "items": 6,
+            "preparations": 1,
+            "lostAcknowledgements": 1,
+            "resumedOriginalReceipt": true,
+            "collisionOriginalKept": true,
+            "originalSourceKept": true,
+            "emptyDirectoriesKept": true,
+            "unicodeNameTextKept": true,
+            "zeroLengthFilesKept": true,
+            "parentOutcomesMatch": true,
+            "blindNamesRetained": true,
+            "withdrawnInboxDenied": true,
+            "publishedBatchChecked": true,
+            "publishedBatchCanceled": true
+          },
+          "Android": {
+            "sentHash": "8d8ba7abc9f8cce5550b1f2e17ff701828bc016cb9c8b9a8e41aa24f167d9e4e",
+            "receivedHash": "0ef1c498827c8fbc1a3af6f99d776cacb57ed8eb85de821b526aa7d04f0cded5",
+            "bytes": 2097207,
+            "items": 6,
+            "preparations": 1,
+            "lostAcknowledgements": 1,
+            "resumedOriginalReceipt": true,
+            "collisionOriginalKept": true,
+            "originalSourceKept": true,
+            "emptyDirectoriesKept": true,
+            "unicodeNameTextKept": true,
+            "zeroLengthFilesKept": true,
+            "parentOutcomesMatch": true,
+            "blindNamesRetained": true,
+            "withdrawnInboxDenied": true,
+            "publishedBatchChecked": true,
+            "publishedBatchCanceled": true
+          }
+        }
+      }
+    ],
+    "rolesCompleted": 4,
+    "publishedBatchCancellations": 8,
+    "freshPublishedBatchChecks": 8,
+    "nativeSha256": "84a0a63dcc579d97e4afac959866f9e61e9584c18732045a48db673d8ec87dde",
+    "windowsFixtureSha256": "72e0128374dac22406ad93ae3009b47aac3fc5f8ca966c29e327ba1bcf7bad5c",
+    "originalCancellationResultSha256": "fb72d65b90bd92755257c0b71a628c93c2887d30222e9028a9b9c4b051b69390",
+    "originalBaseResultSha256": "afdc9c516ecd790344b5b8436e160a3d0bc5f736039bf8acf4a548ff19972098",
+    "physicalNetworkVerified": false,
+    "fullControllerInteropVerified": false
+  },
+  "foundationOutcome": "failed",
+  "completeLargeFileMatrixProven": false,
+  "fullApplicationComplete": false
+}

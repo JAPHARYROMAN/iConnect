@@ -14,6 +14,7 @@ jobs:
           python-version: '3.12'
       - run: python -m unittest discover -s tests/tools -p test_native_notice_inventory.py -v
       - run: python -m unittest discover -s tests/tools -p test_android_ci_build.py -v
+      - run: python -m unittest discover -s tests/tools -p test_android_batch_cancellation_baseline.py -v
   windows:
     runs-on: windows-latest
     steps:

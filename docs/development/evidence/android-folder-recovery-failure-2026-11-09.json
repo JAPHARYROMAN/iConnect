@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "observedDate": "2026-11-09",
+  "avd": "iconnect-large-files",
+  "outcome": "failed",
+  "completedMatrixCases": 0,
+  "firstAttempt": {
+    "inboxMode": "listing",
+    "initiator": "windows"
+  },
+  "applicationSha256": "1727aa9e2c1e81e9624bb260da9482aa1f801b32e8eb1ef8c13e786a47d77262",
+  "instrumentationApkSha256": "2ddbffaec402830d5190cd65cfafc48b7f6e1c2511331357db30aefc0f458d93",
+  "windowsFixtureSha256": "5b55d480c326fd48eea17f704df338c05378cac1452a208fced963cb3acb4776",
+  "nativeSha256": "84a0a63dcc579d97e4afac959866f9e61e9584c18732045a48db673d8ec87dde",
+  "instrumentationCode": 0,
+  "failure": "IllegalStateException: This batch or two outgoing batch controls are already active.",
+  "sourceLocation": "PhoneBatchSender.verifyPublished cancellation can return before its completion callback unregisters the control; NativeBatchProbe immediately requests another check.",
+  "originalAndroidLogSha256": "8c61897fdba340ca2375b34836794cad2f651e81b12e6e8f660ca1f350e7cf40",
+  "originalWindowsLogSha256": "c84e20770d023b624606acc461e620d3e4e348ab7a76eb4113b9f20ada2007e4",
+  "failureExcerpt": "android-folder-recovery-failure-2026-11-09.txt",
+  "failureExcerptSha256": "1066aed4406e3325cd06be02b904f521c5a044cd18486b7dc8c1dfcb377d74b3",
+  "excerptOmissions": "Pre-result control/signaling events and any encoded probe/final-result payloads are omitted.",
+  "windowsOriginalMoveMatrixProven": false,
+  "androidSourceMovesProven": false,
+  "physicalNetworkVerified": false,
+  "fullControllerInteropVerified": false,
+  "fullApplicationComplete": false,
+  "postFailureObservation": {
+    "observedAtUtc": "2026-11-09T09:20:29.7148895+00:00",
+    "activeInstrumentation": false,
+    "installedApks": [
+      {
+        "Package": "com.iconnect.proof",
+        "Sha256": "1727aa9e2c1e81e9624bb260da9482aa1f801b32e8eb1ef8c13e786a47d77262"
+      },
+      {
+        "Package": "com.iconnect.proof.test",
+        "Sha256": "2ddbffaec402830d5190cd65cfafc48b7f6e1c2511331357db30aefc0f458d93"
+      }
+    ]
+  }
+}

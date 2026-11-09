@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "observedDate": "2026-11-09",
+  "timeZone": "Africa/Nairobi",
+  "validation": "independent run after the preserved foundation failure",
+  "avd": "iconnect-large-files",
+  "serial": "emulator-5568",
+  "apiLevel": 35,
+  "baseline": {
+    "applicationSha256": "54d2c19a489e7c25c2a6c565bdbf37564a33e9fada40b4c9778992151368edf0",
+    "instrumentationApkSha256": "cdd3306074f0339d9f3b6935d645bed8859649e3cd1601acec3b2a26ee356ce4",
+    "cases": 2,
+    "failures": 2,
+    "skipped": 0,
+    "log": "android-read-cancellation-baseline-2026-11-09.txt",
+    "logSha256": "8733f948cd884d5267c57948b0b0068d8de22d5b4456aaed47133fee4ec8100c"
+  },
+  "fixed": {
+    "applicationSha256": "e5bca36d76ea0711ceb3eba2b9d480de0ae882f87342070db550857f4c797f74",
+    "instrumentationApkSha256": "cdd3306074f0339d9f3b6935d645bed8859649e3cd1601acec3b2a26ee356ce4",
+    "cases": 45,
+    "failures": 0,
+    "skipped": 0,
+    "log": "android-read-cancellation-fixed-2026-11-09.txt",
+    "logSha256": "921bb8608831cbe937b8f3e829615bb17c46e809261a43c93f4c3420c4200ec4"
+  },
+  "nativeOrdinaryUploads": {
+    "roles": [
+      {
+        "initiator": "windows",
+        "endpoints": {
+          "Host": {
+            "bytes": 2097169,
+            "preparations": 1,
+            "lostAcknowledgements": 1,
+            "resumedOriginalReceipt": true,
+            "collisionOriginalKept": true,
+            "originalSourceKept": true,
+            "publishedCopyChecked": true,
+            "withdrawnInboxDenied": true
+          },
+          "Android": {
+            "bytes": 2097169,
+            "preparations": 1,
+            "lostAcknowledgements": 1,
+            "resumedOriginalReceipt": true,
+            "collisionOriginalKept": true,
+            "originalSourceKept": true,
+            "publishedCopyChecked": true,
+            "withdrawnInboxDenied": true
+          }
+        }
+      },
+      {
+        "initiator": "android",
+        "endpoints": {
+          "Host": {
+            "bytes": 2097169,
+            "preparations": 1,
+            "lostAcknowledgements": 1,
+            "resumedOriginalReceipt": true,
+            "collisionOriginalKept": true,
+            "originalSourceKept": true,
+            "publishedCopyChecked": true,
+            "withdrawnInboxDenied": true
+          },
+          "Android": {
+            "bytes": 2097169,
+            "preparations": 1,
+            "lostAcknowledgements": 1,
+            "resumedOriginalReceipt": true,
+            "collisionOriginalKept": true,
+            "originalSourceKept": true,
+            "publishedCopyChecked": true,
+            "withdrawnInboxDenied": true
+          }
+        }
+      }
+    ],
+    "nativeSha256": "84a0a63dcc579d97e4afac959866f9e61e9584c18732045a48db673d8ec87dde",
+    "originalResultSha256": "153f0bcabc968771746b319a53bcd31ea08f6c9998587f6e55e13d615e8bfbb2",
+    "applicationSha256": "e5bca36d76ea0711ceb3eba2b9d480de0ae882f87342070db550857f4c797f74",
+    "instrumentationApkSha256": "cdd3306074f0339d9f3b6935d645bed8859649e3cd1601acec3b2a26ee356ce4",
+    "physicalNetworkVerified": false,
+    "fullControllerInteropVerified": false
+  },
+  "completeLargeFileMatrixProven": false,
+  "foundationOutcome": "failed",
+  "fullApplicationComplete": false
+}

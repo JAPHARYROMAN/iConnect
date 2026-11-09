@@ -48,6 +48,23 @@ internal class AndroidPublishedBatchChecks(private val context:Context,private v
             request.nodeId.isEmpty() && request.destinationId.isEmpty() && request.name.isEmpty() && request.expectedVersion.isEmpty() &&
             request.continuation.isEmpty() && request.query.isEmpty() && request.deletedId.isEmpty()
 
+    // Refusal needs no provider access. In particular, an unrelated stop must not
+    // wait behind the provider read it is forbidden to interrupt. This is only a
+    // negative preflight: accepted stops still pass normal authorization below.
+    fun cancellationRefusal(peer:String,scope:String,request:FileRequest):StorageFailure? {
+        if(request.operation!=FileOperation.CANCEL_PUBLISHED_BATCH_CHECK) return null
+        if(!shape(scope,request))
+            return StorageFailure(FileStatus.INVALID_REQUEST,"Use the original whole-batch intent and a valid check challenge.")
+        val previous=checks[request.transferId]?:workers[request.transferId]?:return null
+        // Leave another peer to the normal policy/receipt lookup so this read
+        // does not reveal whether that peer's guessed identifier is active.
+        if(previous.row.peer!=peer) return null
+        if(previous.scope!=scope || previous.challenge!=request.mutationId || previous.row.header!=request.batchHeader ||
+            previous.row.header.epoch!=request.mutationEpoch)
+            return StorageFailure(FileStatus.CONFLICT,"Only the original session and challenge can stop this batch check.")
+        return null
+    }
+
     fun cancelNow(peer:String,scope:String,request:FileRequest) {
         if(request.operation!=FileOperation.CANCEL_PUBLISHED_BATCH_CHECK || !shape(scope,request)) return
         val check=workers[request.transferId]?:return

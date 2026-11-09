@@ -1,0 +1,19 @@
+INSTRUMENTATION_RESULT: stream=Native batch peer messages: Direct data channel opened. Waiting for device authentication. | Authenticated direct connection. Both devices are ready. No relay.
+Native batch probe failed: java.lang.IllegalStateException: This batch or two outgoing batch controls are already active.
+	at com.iconnect.proof.PhoneBatchSender.verifyPublished$app_debug(PhoneBatchSender.kt:220)
+	at com.iconnect.proof.NativeBatchProbe$exercise$2.invokeSuspend(NativeBatchProbe.kt:186)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:34)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:98)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:263)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:94)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:70)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source:1)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking$default(Builders.kt:48)
+	at kotlinx.coroutines.BuildersKt.runBlocking$default(Unknown Source:1)
+	at com.iconnect.proof.NativeBatchProbe.onStart(NativeBatchProbe.kt:26)
+	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2594)
+	Suppressed: java.io.IOException: Native batch peer messages before cleanup: Direct data channel opened. Waiting for device authentication. | Authenticated direct connection. Both devices are ready. No relay.
+		at com.iconnect.proof.NativeBatchProbe$exercise$2.invokeSuspend(NativeBatchProbe.kt:192)
+		... 10 more
+
+INSTRUMENTATION_CODE: 0

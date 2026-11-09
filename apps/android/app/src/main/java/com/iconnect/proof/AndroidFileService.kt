@@ -55,6 +55,12 @@ class AndroidFileService internal constructor(context: Context, private val gran
             // Cancel only an already-bound worker before either service/owner lock.
             // Durable stop and all filesystem actions still require authorization below.
             if(!closed.get() && Rules.tokenPattern.matches(request.requestId)) {
+                if(request.operation==FileOperation.CANCEL_PUBLISHED_BATCH_CHECK) {
+                    val host=batchPlanHost?:(grants as? AndroidStorageGrants)?.existingBatchPlans()
+                    host?.publishedCancellationRefusal(peer,downloadScope,request)?.let {refusal->
+                        return@runInterruptible error(request,refusal.status,refusal.message?:"This check cannot be stopped by this request.")
+                    }
+                }
                 batchPlanHost?.pauseForStop(peer,request)
                 interruptPublishedBatchCheck(peer,request)
             }
