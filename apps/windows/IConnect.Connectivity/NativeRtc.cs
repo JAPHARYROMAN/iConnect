@@ -69,6 +69,7 @@ public sealed class NativeRtc : IDisposable
             if (bindAddress != IntPtr.Zero) Marshal.FreeCoTaskMem(bindAddress);
         }
         Peers[peer] = this;
+        NativeTransportEvents.Log.Created(peer);
         Check(Native.rtcSetLocalDescriptionCallback(peer, DescriptionCallback));
         Check(Native.rtcSetLocalCandidateCallback(peer, CandidateCallback));
         Check(Native.rtcSetDataChannelCallback(peer, DataChannelCallback));
@@ -160,14 +161,16 @@ public sealed class NativeRtc : IDisposable
             throw new InvalidDataException("Unexpected channel label.");
         channel = id;
         Channels[id] = this;
+        NativeTransportEvents.Log.ChannelAttached(peer, id);
         Check(Native.rtcSetOpenCallback(id, OpenCallback));
         Check(Native.rtcSetMessageCallback(id, MessageCallback));
-        if (Native.rtcIsOpen(id)) opened.TrySetResult();
+        if (Native.rtcIsOpen(id)) { NativeTransportEvents.Log.ChannelOpened(peer, id); opened.TrySetResult(); }
     }
 
     private void Fail(Exception ex)
     {
         if (Interlocked.Exchange(ref failed, 1) != 0) return;
+        NativeTransportEvents.Log.Failed(peer, ex.GetType().Name);
         opened.TrySetException(ex);
         messages.Writer.TryComplete(ex);
         signals.Writer.TryComplete(ex);
@@ -201,10 +204,11 @@ public sealed class NativeRtc : IDisposable
         catch (Exception ex) { self.Fail(ex); }
     }
     private static void OnOpen(int id, IntPtr _)
-    { if (Channels.TryGetValue(id, out var self)) self.opened.TrySetResult(); }
+    { if (Channels.TryGetValue(id, out var self)) { NativeTransportEvents.Log.ChannelOpened(self.peer, id); self.opened.TrySetResult(); } }
     private static void OnState(int pc, int state, IntPtr _)
     {
         if (!Peers.TryGetValue(pc, out var self)) return;
+        NativeTransportEvents.Log.ConnectionState(pc, state, Volatile.Read(ref self.channel));
         self.connectionStates.Enqueue(state);
         while (self.connectionStates.Count > 16) self.connectionStates.TryDequeue(out var ignored);
         if (state >= 3)
@@ -221,7 +225,7 @@ public sealed class NativeRtc : IDisposable
         }
     }
     private static void OnIceState(int pc, int state, IntPtr _)
-    { if (Peers.TryGetValue(pc, out var self)) Volatile.Write(ref self.iceState, state); }
+    { if (Peers.TryGetValue(pc, out var self)) { Volatile.Write(ref self.iceState, state); NativeTransportEvents.Log.IceState(pc, state); } }
     private static void OnMessage(int id, IntPtr data, int size, IntPtr _)
     {
         if (!Channels.TryGetValue(id, out var self)) return;
@@ -240,6 +244,7 @@ public sealed class NativeRtc : IDisposable
         lock (signalingGate)
         {
             if (Interlocked.Exchange(ref disposed, 1) != 0) return;
+            NativeTransportEvents.Log.Disposing(peer, Volatile.Read(ref channel));
             Peers.TryRemove(peer, out _);
             if (channel >= 0) { Channels.TryRemove(channel, out _); Native.rtcDeleteDataChannel(channel); }
             Native.rtcDeletePeerConnection(peer);

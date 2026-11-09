@@ -1,0 +1,22 @@
+diff --git a/src/impl/peerconnection.hpp b/src/impl/peerconnection.hpp
+--- a/src/impl/peerconnection.hpp
++++ b/src/impl/peerconnection.hpp
+@@ -155,6 +155,7 @@ private:
+ 	shared_ptr<DtlsTransport> mDtlsTransport;
+ 	std::mutex mDtlsTransportInitMutex;
+ 	shared_ptr<SctpTransport> mSctpTransport;
++	std::mutex mSctpTransportInitMutex;
+ 
+ 	std::unordered_map<uint16_t, weak_ptr<DataChannel>> mDataChannels; // by stream ID
+ 	std::vector<weak_ptr<DataChannel>> mUnassignedDataChannels;
+diff --git a/src/impl/peerconnection.cpp b/src/impl/peerconnection.cpp
+--- a/src/impl/peerconnection.cpp
++++ b/src/impl/peerconnection.cpp
+@@ -304,6 +304,7 @@ shared_ptr<DtlsTransport> PeerConnection::initDtlsTransport() {
+ 
+ shared_ptr<SctpTransport> PeerConnection::initSctpTransport() {
+ 	try {
++		std::lock_guard lock(mSctpTransportInitMutex);
+ 		if (auto transport = std::atomic_load(&mSctpTransport))
+ 			return transport;
+ 
