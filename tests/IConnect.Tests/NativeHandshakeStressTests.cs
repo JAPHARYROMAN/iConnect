@@ -53,6 +53,8 @@ public sealed class NativeHandshakeStressTests(ITestOutputHelper output)
             catch (Exception failure)
             {
                 output.WriteLine($"Primary concurrent native failure: round={round}; pair={index}; hostAuth={first.Authenticated.Status}; guestAuth={second.Authenticated.Status}\n{failure}");
+                foreach (var key in new[] { "NativeConnectionState", "NativeChannelAttached", "NativeChannelOpened" })
+                    if (failure.Data.Contains(key)) output.WriteLine($"Native failure context: {key}={failure.Data[key]}");
                 foreach (var task in new[] { first.Authenticated, second.Authenticated }.Concat(loops).Concat(bridges))
                     if (task.IsFaulted) output.WriteLine("Faulted native task before cleanup: " + task.Exception);
                 throw;

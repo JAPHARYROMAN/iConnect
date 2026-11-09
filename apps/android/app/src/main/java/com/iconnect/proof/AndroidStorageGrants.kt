@@ -56,7 +56,9 @@ class AndroidStorageGrants(private val context: Context, val owner: AndroidOwner
             grant
         }
     }
-    fun update(id: String, permissions: Int, exclusions: Set<String> = emptySet(), expiresAt: Long = 0, enabled: Boolean = true) = synchronized(lock) {
+    fun update(id: String, permissions: Int, exclusions: Set<String> = emptySet(), expiresAt: Long = 0, enabled: Boolean = true) {
+      if(batchPlansStore.isInitialized()) batchPlans.cancelPublishedChecksNow()
+      synchronized(lock) {
         require(permissions and StorageRules.SUPPORTED == permissions && exclusions.size <= 128 && expiresAt in 0..StorageRules.MAX_TIMESTAMP)
         exclusions.forEach(StorageRules::name)
         owner.updateGrant(id) { old ->
@@ -67,15 +69,20 @@ class AndroidStorageGrants(private val context: Context, val owner: AndroidOwner
         ordinaryIncoming?.clearPayloadRates()
         if (batchPlansStore.isInitialized()) batchPlans.clearFilePayloadRates()
         Unit
+      }
     }
-    fun remove(id: String) = synchronized(lock) {
+    fun remove(id: String) {
+      if(batchPlansStore.isInitialized()) batchPlans.cancelPublishedChecksNow()
+      synchronized(lock) {
         owner.removeGrant(id)
         ordinaryIncoming?.clearPayloadRates()
         if (batchPlansStore.isInitialized()) batchPlans.clearFilePayloadRates()
         runCatching { access.release("share:$id") }
         Unit
+      }
     }
     fun revokePeer(peer: String) {
+        if(batchPlansStore.isInitialized()) batchPlans.cancelPublishedChecksNow()
         val trusted = owner.current(peer)
         if (trusted != null) owner.revoke(setOf(owner.blockPeer(trusted)))
         reconcileAccess()

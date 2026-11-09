@@ -200,7 +200,14 @@ public sealed class NativeRtc : IDisposable
     { if (Channels.TryGetValue(id, out var self)) self.opened.TrySetResult(); }
     private static void OnState(int pc, int state, IntPtr _)
     {
-        if (state >= 3 && Peers.TryGetValue(pc, out var self)) self.Fail(new IOException("Direct connection ended."));
+        if (state >= 3 && Peers.TryGetValue(pc, out var self))
+        {
+            var failure = new IOException("Direct connection ended.");
+            failure.Data["NativeConnectionState"] = state;
+            failure.Data["NativeChannelAttached"] = Volatile.Read(ref self.channel) >= 0;
+            failure.Data["NativeChannelOpened"] = self.opened.Task.IsCompletedSuccessfully;
+            self.Fail(failure);
+        }
     }
     private static void OnMessage(int id, IntPtr data, int size, IntPtr _)
     {

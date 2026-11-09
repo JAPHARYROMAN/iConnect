@@ -12,7 +12,7 @@ public final class FixtureControlProvider extends ContentProvider {
     @Override public boolean onCreate() { return true; }
     @Override public Bundle call(String method, String arg, Bundle extras) {
         if (!"com.iconnect.proof".equals(getCallingPackage()) ||
-            !(method.equals("fixture") || method.equals("change") || method.equals("creationMode") || method.equals("dispose") || method.equals("revoke") || method.equals("queryProbe") || method.equals("releaseQuery") || method.equals("openProbe")))
+            !(method.equals("fixture") || method.equals("change") || method.equals("creationMode") || method.equals("dispose") || method.equals("revoke") || method.equals("queryProbe") || method.equals("releaseQuery") || method.equals("openProbe") || method.equals("readFault") || method.equals("readCount") || method.equals("remove")))
             throw new SecurityException();
         if (method.equals("queryProbe") || method.equals("releaseQuery"))
             return TestDocumentsProvider.queryProbe(arg, method.equals("releaseQuery"));

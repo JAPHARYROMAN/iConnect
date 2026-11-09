@@ -138,13 +138,13 @@ class AndroidFileService internal constructor(context: Context, private val gran
                 catch (_: UnsupportedOperationException) { clearPage(); error(request, FileStatus.UNSUPPORTED, "The document provider does not support this safe operation.") }
                 catch (_: IOException) { clearPage(); error(request, FileStatus.IO_ERROR, "The document provider could not finish this operation.") }
                 catch (_: IllegalArgumentException) { clearPage(); error(request, FileStatus.INVALID_REQUEST, "The document request is invalid.") }
-                catch(e:IllegalStateException) {if(UploadRules.isRpc(request.operation)) error(request,FileStatus.CONFLICT,"Incoming copy could not be confirmed. Review its receipt and the preserved files.") else throw e}
+                catch(e:IllegalStateException) {if(UploadRules.isRpc(request.operation) || request.operation==FileOperation.VERIFY_PUBLISHED_BATCH) error(request,FileStatus.CONFLICT,"Incoming copy could not be confirmed. Review its receipt and the preserved files.") else throw e}
                 finally { activeSignal = null; activeRequest = null; if (closed.get()) clear() }
             }
         }.also {reply->
             // Successful range/status polling would overwhelm history and does
             // not itself establish file completion. Refusals remain observable.
-            val quiet=request.operation in setOf(FileOperation.READ_RANGE,FileOperation.DOWNLOAD_READ,FileOperation.DOWNLOAD_STATUS,FileOperation.UPLOAD_WRITE,FileOperation.WRITE_BATCH_FILE,FileOperation.UPLOAD_STATUS,FileOperation.UPLOAD_BATCH_ITEM_STATUS,FileOperation.VERIFY_PUBLISHED_UPLOAD)
+            val quiet=request.operation in setOf(FileOperation.READ_RANGE,FileOperation.DOWNLOAD_READ,FileOperation.DOWNLOAD_STATUS,FileOperation.UPLOAD_WRITE,FileOperation.WRITE_BATCH_FILE,FileOperation.UPLOAD_STATUS,FileOperation.UPLOAD_BATCH_ITEM_STATUS,FileOperation.VERIFY_PUBLISHED_UPLOAD,FileOperation.VERIFY_PUBLISHED_BATCH)
             if(Rules.tokenPattern.matches(request.requestId) && (!quiet || reply.status!=FileStatus.FILE_STATUS_OK)) try {
                 activity(PhoneActivityEvent(PhoneActivityKind.FILE_REQUEST,when(reply.status) {FileStatus.FILE_STATUS_OK->PhoneActivityOutcome.ACCEPTED; FileStatus.ACCESS_DENIED,FileStatus.UNSUPPORTED->PhoneActivityOutcome.REFUSED; else->PhoneActivityOutcome.FAILED},
                     peer,operation=if(request.operation==FileOperation.UNRECOGNIZED) -1 else request.operation.number))

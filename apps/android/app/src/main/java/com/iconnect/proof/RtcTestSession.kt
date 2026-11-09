@@ -210,6 +210,7 @@ class RtcTestSession(
             .addCapabilities(RemoteFiles.CAPABILITY).addCapabilities(READY_CAPABILITY).addCapabilities(StorageRules.DOWNLOAD_CAPABILITY).addCapabilities(MutationRules.CAPABILITY)
             .also {if(fileService?.supportsIncoming==true) it.addCapabilities(UploadRules.CAPABILITY)
                 .addCapabilities(UploadRules.PUBLISHED_CHECK_CAPABILITY).addCapabilities(UploadBatchRules.CAPABILITY)
+                .addCapabilities(UploadBatchRules.PUBLISHED_CHECK_CAPABILITY)
                 if(fileService?.supportsCreatedDirectoryReferences==true) it.addCapabilities(MutationRules.CREATED_FOLDERS_CAPABILITY)}.build())
     }
     private fun transcript(): ByteArray = Rules.session(sessionId, if(initiator) identity.id else Rules.id(peerKey), if(initiator) Rules.id(peerKey) else identity.id,

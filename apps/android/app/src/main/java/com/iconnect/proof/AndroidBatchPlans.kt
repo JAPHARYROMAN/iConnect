@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.CancellationSignal
 import android.system.Os
 import android.system.OsConstants
+import androidx.core.net.toUri
 import com.iconnect.protocol.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -40,6 +41,7 @@ internal class AndroidBatchPlans(private val context:Context,private val grants:
     val changes=mutable.asStateFlow()
     private fun changed() {mutable.value=mutable.value+1}
     private val children=AndroidBatchDirectories(context,grants,directory,::accepted,::startEffects,{recovery.block(it); changed()},::changed)
+    private val publishedChecks=AndroidPublishedBatchChecks(context,grants,::publishedSnapshot,::publishedCurrent,::publishedHistory)
     private fun failFiles(message:String):Nothing {recovery.block(message); changed(); throw StorageFailure(FileStatus.CONFLICT,message)}
     private fun files():AndroidBatchFiles=fileHost?:AndroidBatchFiles(context,grants,directory,children,{records[it]},::ready,::failFiles,::changed).also {fileHost=it}
     init {synchronized(gate) {runCatching {
@@ -137,11 +139,12 @@ internal class AndroidBatchPlans(private val context:Context,private val grants:
     fun reviewOrphanPartRemoval(allowed:()->Boolean={true}):PhoneReceivingPartRemovalReview=grants.authorized {synchronized(gate) {ready(); files().reviewOrphanRemoval(allowed)}}
     fun confirmOrphanPartRemoval(value:PhoneReceivingPartRemovalReview,allowed:()->Boolean={true}):Boolean=grants.authorized {synchronized(gate) {ready(); files().confirmOrphanRemoval(value,allowed)}}
     fun continueOrphanPartRemoval(allowed:()->Boolean={true}):Boolean=grants.authorized {synchronized(gate) {ready(); files().continueOrphanRemoval(allowed)}}
-    fun pauseFiles() {fileHost?.pauseAll()}
+    fun pauseFiles() {publishedChecks.cancelAllNow(); fileHost?.pauseAll()}
+    fun cancelPublishedChecksNow() {publishedChecks.cancelAllNow()}
     fun readFileProgress(peer: String, pairing: String, limit: Long) = fileHost?.readFileProgress(peer, pairing, limit).orEmpty()
     fun clearFilePayloadRates() {fileHost?.clearFilePayloadRates()}
-    fun cancelFileScopeNow(scope:String) {fileHost?.cancelScope(scope)}
-    suspend fun whenFilesIdle() {val host=synchronized(gate) {fileHost}; host?.whenIdle()}
+    fun cancelFileScopeNow(scope:String) {publishedChecks.cancelScopeNow(scope); fileHost?.cancelScope(scope)}
+    suspend fun whenFilesIdle() {val host=synchronized(gate) {fileHost}; publishedChecks.whenIdle(); host?.whenIdle()}
     private fun receipt(row:Row,scope:String):UploadBatchReceipt {
         val offset=if(UploadBatchRules.hasManifest(row.phase)) row.header.encodedLength else assemblies[row.header.id]?.takeIf {it.scope==scope}?.value?.offset?:0
         val message=if(row.retiring || row.retired) "Final parent outcomes are retained. The receiver owner is removing detailed item history; no new copy can be started from this intent." else when(row.phase) {
@@ -184,6 +187,7 @@ internal class AndroidBatchPlans(private val context:Context,private val grants:
             authorize(row,peer,allowed,signal)
             if((row.retiring || row.retired) && request.operation !in setOf(FileOperation.UPLOAD_BATCH_STATUS,FileOperation.FINISH_UPLOAD_BATCH,FileOperation.STOP_UPLOAD_BATCH)) throw StorageFailure(FileStatus.NOT_FOUND,"The receiver owner removed this plan's detailed item history. Final parent outcomes remain; no new copy is created.")
             when(request.operation) {
+                FileOperation.VERIFY_PUBLISHED_BATCH->result.setPublishedBatchCheck(publishedChecks.execute(row,scope,request,allowed,signal))
                 FileOperation.WRITE_UPLOAD_MANIFEST->{
                     if(row.phase!=UploadBatchPlanPhase.UPLOAD_PLAN_RECEIVING) throw StorageFailure(FileStatus.CONFLICT,"This plan no longer accepts manifest chunks.")
                     val work=assemblies.getOrPut(row.header.id) {AssemblyWork(scope,UploadBatchAssembly(row.header))}
@@ -227,6 +231,46 @@ internal class AndroidBatchPlans(private val context:Context,private val grants:
             fileHost?.pausePlanNow(peer,request.transferId,request.mutationEpoch,request.batchHeader.takeIf {request.hasBatchHeader()})
     }
     private data class Inventory(val manifest:UploadBatchManifest,val encoded:ByteArray,val children:Map<Int,AndroidBatchDirectories.Child>)
+    private fun publishedSnapshot(row:Row):PublishedBatchSnapshot {
+        val before=publishedHistory(row)
+        val inventory=inventory(row); val entries=mutableListOf<PublishedBatchEntry>(); val tree=row.target.tree.toUri()
+        inventory.manifest.itemsList.forEachIndexed {index,item->
+            val child=inventory.children[index]?:error("A completed batch child receipt is missing.")
+            val parents=if(item.parent<0) row.target.parents else entries[item.parent].let {parent->
+                check(parent.directory); parent.parents+SafFolderBinding(parent.document,parent.name)
+            }
+            SafDestination.validateBindings(parents)
+            check(child.parent==(parents.lastOrNull()?.id?:android.provider.DocumentsContract.getTreeDocumentId(tree))) {"A child lost its recorded provider parent."}
+            entries+=if(child.directory) {
+                check(child.phase==UploadBatchItemPhase.BATCH_ITEM_SUCCEEDED)
+                PublishedBatchEntry(item.parent,true,child.document,child.name,item.name,parents)
+            } else {
+                val scope=files().inventory(row,inventory.manifest,child,inventory.children).first
+                val saved=AndroidIncomingUploads.inspectScopedPublished(scope,grants.owner.deviceId)
+                check(scope.target.parents==parents)
+                PublishedBatchEntry(item.parent,false,android.provider.DocumentsContract.getDocumentId(saved.second),saved.first.finalName,item.name,parents,
+                    item.size,Rules.b64(item.sha256.toByteArray()))
+            }
+        }
+        check(entries.map {it.document}.distinct().size==entries.size) {"The saved batch contains ambiguous provider document IDs."}
+        check(publishedHistory(row)==before) {"The saved batch receipts changed while opening their bindings."}
+        return PublishedBatchSnapshot(entries,before)
+    }
+    private fun publishedCurrent(row:Row,allowed:()->Boolean,signal:CancellationSignal) {
+        ready(); signal.throwIfCanceled(); check(allowed()) {"The receiving session ended."}
+        check(records[row.header.id]==row && row.header.epoch==epoch && !row.retiring && !row.retired) {"The batch history context changed."}
+        if(grants.owner.current(row.peer)?.epoch!=row.target.pairing) throw StorageFailure(FileStatus.ACCESS_DENIED,"The original batch pairing ended.")
+        val grant=grants.get(row.target.grant,row.peer); StorageRules.requirePermission(grant.permissions,StorageRules.WRITE or StorageRules.CREATE)
+        check(grant.tree.toString()==row.target.tree && row.target.parents.all {grants.visible(grant,it.name)})
+        check(context.contentResolver.persistedUriPermissions.any {it.uri==grant.tree && it.isReadPermission && it.isWritePermission}) {"Android destination access ended."}
+    }
+    private fun publishedHistory(row:Row):List<String> {
+        val file=File(directory,"context.json")
+        check(!File(directory,"context.json.new").exists() && !File(directory,"context.json.bak").exists()) {"Batch history needs local review."}
+        val saved=JSONObject(PrivateJsonFile(file,4096).read())
+        check(saved.getInt("schema")==1 && saved.getString("owner")==owner && saved.getString("epoch")==epoch)
+        return listOf("context.json:"+retirementStamp(file))+retirementFiles(row).map {"${it.name}:${it.version}:${it.bytes}"}
+    }
     private fun inventory(row:Row):Inventory {
         val manifest=children.manifest(row); val attempts=children.readAttempts(row)
         if(row.effectsStarted && attempts==null) throw StorageFailure(FileStatus.CONFLICT,"The batch attempt inventory needs local review.")
@@ -295,12 +339,12 @@ internal class AndroidBatchPlans(private val context:Context,private val grants:
         }
         response.setBatchItem(result)
     }
-    fun endScope(scope:String)=synchronized(gate) {assemblies.filterValues {it.scope==scope}.keys.toList().forEach(::endAssembly); fileHost?.cancelScope(scope)}
+    fun endScope(scope:String)=synchronized(gate) {publishedChecks.endScope(scope); assemblies.filterValues {it.scope==scope}.keys.toList().forEach(::endAssembly); fileHost?.cancelScope(scope)}
     private fun backups()=context.filesDir.listFiles().orEmpty().filter {it.name.startsWith(BACKUP_PREFIX)}.take(33)
     fun preservedRecords()=synchronized(gate) {backups().size}
     suspend fun archiveHistory(closedOnly:Boolean=false) {
-      val host=grants.authorized {synchronized(gate) {check(!maintenance && !closed); if(closedOnly) check(records.values.all {UploadBatchRules.terminal(it.phase) && !it.retiring}) {"Finish all active plans and their history cleanup before resetting closed receipts."}; maintenance=true; fileHost?.pauseAll(); fileHost}}
-      try {host?.whenIdle(); grants.authorized {synchronized(gate) {
+      val host=grants.authorized {synchronized(gate) {check(!maintenance && !closed); if(closedOnly) check(records.values.all {UploadBatchRules.terminal(it.phase) && !it.retiring}) {"Finish all active plans and their history cleanup before resetting closed receipts."}; maintenance=true; publishedChecks.cancelAllNow(); fileHost?.pauseAll(); fileHost}}
+      try {publishedChecks.whenIdle(); host?.whenIdle(); grants.authorized {synchronized(gate) {
         check(backups().size<32) {"Remove reviewed batch-plan backups before creating another archive."}
         assemblies.keys.toList().forEach(::endAssembly)
         try {
@@ -313,7 +357,7 @@ internal class AndroidBatchPlans(private val context:Context,private val grants:
         } catch(e:Exception) {recovery.block("Batch history reset was interrupted. Keep the private archives and retry local recovery."); changed(); throw e}
       }}} finally {synchronized(gate) {maintenance=false; changed()}}
     }
-    suspend fun shutdown() {val host=synchronized(gate) {if(closed) return; closed=true; assemblies.keys.toList().forEach(::endAssembly); fileHost}; host?.shutdown()}
+    suspend fun shutdown() {publishedChecks.cancelAllNow(); val host=synchronized(gate) {if(closed) return; closed=true; assemblies.keys.toList().forEach(::endAssembly); fileHost}; publishedChecks.shutdown(); host?.shutdown()}
     fun clearPreservedRecords()=grants.authorized {synchronized(gate) {
         val backups=backups(); check(backups.size<=32)
         for(backup in backups) {
@@ -340,7 +384,7 @@ internal class AndroidBatchPlans(private val context:Context,private val grants:
         return files.sortedBy {it.name}.map {RetirementFile(it.name,retirementStamp(it),Os.lstat(it.path).st_size)}
     }
     private fun inspectRetirement(row:Row) {
-        check(UploadBatchRules.terminal(row.phase) && !row.retiring && !row.retired && fileHost?.busy(row.header.id)!=true) {"Finish or stop this plan and wait for verification before removing item history."}
+        check(UploadBatchRules.terminal(row.phase) && !row.retiring && !row.retired && !publishedChecks.busy(row.header.id) && fileHost?.busy(row.header.id)!=true) {"Finish or stop this plan and wait for verification before removing item history."}
         check(records.values.count {it.retiring || it.retired}<MAX_RETIRED_PLANS) {"Compact receipt storage is full. Once all plans finish, preserve and reset closed history."}
         if(UploadBatchRules.hasManifest(row.phase)) check(outcomes(row,inventory(row),row.phase==UploadBatchPlanPhase.UPLOAD_PLAN_COMPLETED,true).contentEquals(Rules.decode(row.outcomes))) {"Final outcomes changed. Copies and history were kept."}
         else {

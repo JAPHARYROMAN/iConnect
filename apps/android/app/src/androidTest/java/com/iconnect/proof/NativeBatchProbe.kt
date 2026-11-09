@@ -113,7 +113,7 @@ class NativeBatchProbe:Instrumentation() {
                                 .put("sentHash",documents.original.hash).put("receivedHash",received.hash).put("bytes",NativeBatchDocuments.BYTES).put("items",6)
                                 .put("preparations",begins).put("lostAcknowledgements",1).put("resumedOriginalReceipt",true)
                                 .put("collisionOriginalKept",true).put("originalSourceKept",true).put("emptyDirectoriesKept",true).put("unicodeNameTextKept",true)
-                                .put("zeroLengthFilesKept",true).put("parentOutcomesMatch",true).put("blindNamesRetained",!listing).put("withdrawnInboxDenied",true)
+                                .put("zeroLengthFilesKept",true).put("parentOutcomesMatch",true).put("blindNamesRetained",!listing).put("withdrawnInboxDenied",true).put("publishedBatchChecked",true)
                             status(result); verified.complete(result)
                         }
                         "finish"->{check(verified.isCompleted); finished.complete(Unit); return@launch}
@@ -124,6 +124,7 @@ class NativeBatchProbe:Instrumentation() {
             status(JSONObject().put("event","bound").put("peer",approval.id))
             withTimeout(40_000) {ready.await()}; status(JSONObject().put("event","authenticated"))
             check(requireNotNull(peer).acceptsFolderBatches)
+            check(requireNotNull(peer).acceptsPublishedBatchChecks)
             val receiving=raw(FileRequest.newBuilder().setOperation(FileOperation.UPLOAD_CONTEXT).build())
             check(receiving.status==FileStatus.FILE_STATUS_OK && receiving.entriesCount==1); target=receiving.entriesList.single()
             val roots=raw(FileRequest.newBuilder().setOperation(FileOperation.LIST_ROOTS).build())
@@ -165,10 +166,14 @@ class NativeBatchProbe:Instrumentation() {
             check(done.phase==PhoneBatchSendingPhase.COMPLETED && done.next==6 && done.header==stopped.header && begins==1 &&
                 done.outcomes==done.receiverOutcomes && Rules.decode(done.outcomes).let {it.size==6 && it.all {outcome->outcome.toInt()==1}})
             documents.verifyOriginal()
+            manager.verifyPublished(id,approval,{policy.isCurrent(approval)},::request)
             val names=JSONArray((0 until 6).map {manager.itemResult(id,it).name})
             sent.complete(Unit); status(JSONObject().put("event","sent").put("sha256",documents.original.hash).put("bytes",NativeBatchDocuments.BYTES).put("items",6)
-                .put("preparations",begins).put("lostAcknowledgements",1).put("resumedOriginalReceipt",true).put("names",names))
+                .put("preparations",begins).put("lostAcknowledgements",1).put("resumedOriginalReceipt",true).put("names",names).put("publishedBatchChecked",true))
             val result=verified.await(); finished.await(); success=true; result
+        } catch(failure:Throwable) {
+            failure.addSuppressed(IOException("Native batch peer messages before cleanup: "+messages.joinToString(" | ")))
+            throw failure
         } finally {withContext(NonCancellable) {
             commands?.cancelAndJoin(); withContext(Dispatchers.Main.immediate) {peer?.close()}; scope.cancel(); scope.coroutineContext.job.join()
             sender?.shutdown(); sources?.shutdown(); service.close(); incoming.shutdown(); grants.batchPlans.shutdown()

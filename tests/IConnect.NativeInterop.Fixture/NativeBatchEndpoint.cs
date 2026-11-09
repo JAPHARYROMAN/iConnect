@@ -19,6 +19,7 @@ internal sealed partial class NativeUploadEndpoint
     private string batchOriginal = "", batchOriginalHash = "", batchSeedHash = "";
     private int batchBegins;
     private bool batchLost;
+    private bool batchPublishedChecked;
     private readonly bool batchListing;
 
     public void PrepareBatchDataset()
@@ -69,7 +70,7 @@ internal sealed partial class NativeUploadEndpoint
     }
     public async Task SendBatchAsync(PeerSession peer, Action<object> emit, CancellationToken ct)
     {
-        if (batchSender is not null || batchOriginal.Length == 0 || !peer.AcceptsFolderBatches) throw new InvalidDataException("Prepare one dataset before connecting the authenticated batch peers.");
+        if (batchSender is not null || batchOriginal.Length == 0 || !peer.AcceptsFolderBatches || !peer.AcceptsPublishedBatchChecks) throw new InvalidDataException("Prepare one dataset and use authenticated batch peers with fresh destination checks.");
         var context = await peer.RequestFilesAsync(new() { Operation = FileOperation.UploadContext }, ct);
         if (context.Status != FileStatus.Ok || context.Entries.Count != 1) throw new InvalidDataException("Expected one receiving inbox.");
         target = context.Entries.Single();
@@ -114,7 +115,8 @@ internal sealed partial class NativeUploadEndpoint
             !batchCompleted.Header!.SequenceEqual(savedHeader) || batchCompleted.Outcomes?.Any(x => x != 1) != false ||
             !batchCompleted.Outcomes.SequenceEqual(batchCompleted.ReceiverOutcomes!) || Tree(batchOriginal).Hash != batchOriginalHash)
             throw new InvalidDataException("The exact parent plan or complete item outcomes were not retained.");
-        emit(new { @event = "sent", sha256 = batchOriginalHash, bytes = BatchBytes, items = 6, preparations = batchBegins,
+        await VerifyBatchAsync(peer, ct); batchPublishedChecked = true;
+        emit(new { @event = "sent", sha256 = batchOriginalHash, bytes = BatchBytes, items = 6, preparations = batchBegins, publishedBatchChecked = batchPublishedChecked,
             lostAcknowledgements = 1, resumedOriginalReceipt = true, names = BatchResultNames });
     }
     public Task VerifyBatchAsync(PeerSession peer, CancellationToken ct)
@@ -167,6 +169,6 @@ internal sealed partial class NativeUploadEndpoint
         return new { @event = "verified", suite = "batches", sentHash = batchOriginalHash, receivedHash = checkedTree.Hash,
             bytes = BatchBytes, items = 6, preparations = batchBegins, lostAcknowledgements = 1, resumedOriginalReceipt = true,
             collisionOriginalKept = true, originalSourceKept = true, emptyDirectoriesKept = true, unicodeNameTextKept = true,
-            zeroLengthFilesKept = true, parentOutcomesMatch = true, blindNamesRetained = !batchListing, withdrawnInboxDenied = true };
+            zeroLengthFilesKept = true, parentOutcomesMatch = true, blindNamesRetained = !batchListing, withdrawnInboxDenied = true, publishedBatchChecked = batchPublishedChecked };
     }
 }

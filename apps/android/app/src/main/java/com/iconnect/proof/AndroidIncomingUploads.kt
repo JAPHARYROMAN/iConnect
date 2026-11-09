@@ -8,6 +8,7 @@ import android.os.ParcelFileDescriptor
 import android.provider.DocumentsContract as Docs
 import android.system.Os
 import android.system.OsConstants
+import androidx.core.net.toUri
 import com.google.protobuf.ByteString
 import com.iconnect.protocol.*
 import kotlinx.coroutines.*
@@ -664,6 +665,12 @@ class AndroidIncomingUploads internal constructor(private val context:Context,pr
         internal fun inspectScopedJournal(scope:AndroidScopedIncoming,ownerId:String):UploadInfo {
             val root=JSONObject(PrivateJsonFile(scope.journalFile,AndroidBatchFileStore.RECORD_LIMIT).read()); validateScope(root,scope,ownerId)
             return rowInfo(decodeRow(root.getJSONArray("rows").getJSONObject(0),ownerId))
+        }
+        internal fun inspectScopedPublished(scope:AndroidScopedIncoming,ownerId:String):Pair<UploadInfo,Uri> {
+            val root=JSONObject(PrivateJsonFile(scope.journalFile,AndroidBatchFileStore.RECORD_LIMIT).read()); validateScope(root,scope,ownerId)
+            val row=decodeRow(root.getJSONArray("rows").getJSONObject(0),ownerId)
+            check(row.phase==UploadPhase.UPLOAD_COMPLETED && row.published.isNotEmpty()) {"The batch file has no completed provider publication receipt."}
+            return rowInfo(row) to row.published.toUri()
         }
         internal fun scopedPartExists(scope:AndroidScopedIncoming,ownerId:String):Boolean {
             val root=JSONObject(PrivateJsonFile(scope.journalFile,AndroidBatchFileStore.RECORD_LIMIT).read()); validateScope(root,scope,ownerId)

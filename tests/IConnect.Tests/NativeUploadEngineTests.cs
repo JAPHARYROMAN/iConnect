@@ -74,7 +74,6 @@ public sealed class NativeUploadEngineTests(ITestOutputHelper output)
             if (batch)
             {
                 await Task.WhenAll(hostFiles.SendBatchAsync(first, _ => { }, timeout.Token), guestFiles.SendBatchAsync(second, _ => { }, timeout.Token));
-                await Task.WhenAll(hostFiles.VerifyBatchAsync(first, timeout.Token), guestFiles.VerifyBatchAsync(second, timeout.Token));
                 hostFiles.RevokeBatch(); guestFiles.RevokeBatch();
             }
             else
@@ -94,7 +93,7 @@ public sealed class NativeUploadEngineTests(ITestOutputHelper output)
                 if (batch)
                 {
                     Assert.Equal(6, value.GetProperty("items").GetInt32());
-                    foreach (var field in new[] { "emptyDirectoriesKept", "unicodeNameTextKept", "zeroLengthFilesKept", "parentOutcomesMatch" }) Assert.True(value.GetProperty(field).GetBoolean());
+                    foreach (var field in new[] { "emptyDirectoriesKept", "unicodeNameTextKept", "zeroLengthFilesKept", "parentOutcomesMatch", "publishedBatchChecked" }) Assert.True(value.GetProperty(field).GetBoolean());
                     Assert.Equal(!listing, value.GetProperty("blindNamesRetained").GetBoolean());
                 }
                 else Assert.True(value.GetProperty("publishedCopyChecked").GetBoolean());
@@ -106,6 +105,8 @@ public sealed class NativeUploadEngineTests(ITestOutputHelper output)
             // main operation and both drain tasks. Capture it before cleanup
             // awaits change its stack, so CI retains the first failing action.
             output.WriteLine("Primary native fixture failure before cleanup: " + failure);
+            foreach (var key in new[] { "NativeConnectionState", "NativeChannelAttached", "NativeChannelOpened" })
+                if (failure.Data.Contains(key)) output.WriteLine($"Native failure context: {key}={failure.Data[key]}");
             output.WriteLine($"Batch={batch}; listing={listing}; hostAuth={first.Authenticated.Status}; guestAuth={second.Authenticated.Status}; hostClosed={first.IsClosed}; guestClosed={second.IsClosed}");
             foreach (var task in new[] { first.Authenticated, second.Authenticated }) if (task.IsFaulted) output.WriteLine("Peer authentication failure before cleanup: " + task.Exception);
             foreach (var task in loops) if (task.IsFaulted) output.WriteLine("Peer run failure before cleanup: " + task.Exception);

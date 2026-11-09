@@ -17,3 +17,10 @@ The final selected Windows regression passes all **882 cases**, with zero failur
 The original intermittent GitHub connection closure has not been reproduced or assigned a verified cause. This cleanup regression is independently reproduced; its fix does not establish the cause of that closure. A passing bounded concurrent test is not sustained-load or physical-network evidence. Full controller/invitation/coordinator, wider concurrency/fault, physical-device and release/security gates remain open.
 
 Local reports are `.tools/phase122-tests/phase122-primary-baseline.trx`, `phase122-primary-fixed.trx`, `phase122-native-stress.trx`, the source-built directory above and the desktop/build logs under `.tools/phase122-*`. The frozen Windows–Android fixtures and the running Android sequence are preserved separately; this change does not replace their artifacts or establish their pending results.
+## Later CI handshake failure
+
+The [86869df workflow](https://github.com/JAPHARYROMAN/iConnect/actions/runs/42395877072) passes Android, Windows large-file and native-notice jobs, but its main Windows run fails one of 905 cases. `NativeHandshakeStressTests` fails at round 3, pair 1 while awaiting the native channel opening; both authentication tasks fault. The other 904 cases pass. The earlier generic `Direct connection ended` message does not distinguish disconnected, failed or closed native state, so the underlying closure remains unexplained.
+
+The transport now attaches the numeric native connection state and whether the data channel was attached/open to exception data. Native test diagnostics print those fields before teardown; the user-facing error and fail-closed behavior stay unchanged. This is additional diagnostic evidence for a future failure, not a verified fix for the CI closure.
+
+The local follow-up passes all 905 selected Windows cases and ten additional repetitions of the unchanged 32-pair native stress case: 320 pairs with no failures. The desktop and standalone fixture Release builds have zero warnings/errors. That local result does not reproduce or explain the CI failure.

@@ -44,12 +44,16 @@ public final class TestDocumentsProvider extends DocumentsProvider {
     }
     private final Map<String, Item> items = new LinkedHashMap<>();
     private final Map<String, String> creationModes = new LinkedHashMap<>();
+    private final Map<String, String> readFaults = new LinkedHashMap<>();
+    private final Map<String, Integer> readCounts = new LinkedHashMap<>();
     private final java.util.Set<String> pickerRoots = new java.util.HashSet<>();
     private static final Map<String, CountDownLatch> queries = new ConcurrentHashMap<>();
     private static final Map<String, CountDownLatch> blockedOpens = new ConcurrentHashMap<>();
+    private static final Map<String, Boolean> blockedSignals = new ConcurrentHashMap<>();
     public static Bundle openProbe(String id, boolean release) {
         CountDownLatch latch = blockedOpens.get(id);
         Bundle result = new Bundle(); result.putBoolean("entered", latch != null);
+        result.putBoolean("cancelable", Boolean.TRUE.equals(blockedSignals.get(id)));
         if (release && latch != null) latch.countDown();
         return result;
     }
@@ -121,13 +125,22 @@ public final class TestDocumentsProvider extends DocumentsProvider {
                     return Bundle.EMPTY;
                 }
                 case "creationMode": { creationModes.put(arg, extras.getString("mode")); return Bundle.EMPTY; }
+                case "readFault": { readFaults.put(arg, extras.getString("fault")); readCounts.put(arg, 0); return Bundle.EMPTY; }
+                case "readCount": { Bundle result = new Bundle(); result.putInt("count", readCounts.getOrDefault(arg, 0)); return result; }
+                case "remove": {
+                    Item item = items.get(arg);
+                    if (item == null || item.parent == null || pickerRoots.contains(arg)) throw new IllegalArgumentException("Choose a fixture child.");
+                    for (Item child : items.values()) if (arg.equals(child.parent)) throw new IllegalStateException("Only a leaf fixture item can be removed.");
+                    if (item.file != null && !item.file.delete()) throw new IllegalStateException("Fixture file removal failed.");
+                    items.remove(arg); readFaults.remove(arg); readCounts.remove(arg); return Bundle.EMPTY;
+                }
                 case "dispose": {
                     creationModes.remove(arg);
                     if (pickerRoots.remove(arg)) getContext().getContentResolver().notifyChange(DocumentsContract.buildRootsUri(AUTHORITY), null);
                     List<String> remove = new ArrayList<>();
                     for (String id : items.keySet()) if (id.equals(arg) || isChildDocument(arg, id) ||
                         (items.get(id).file != null && items.get(id).file.getParentFile().getName().equals(arg))) remove.add(id);
-                    for (String id : remove) { Item item = items.remove(id); if (item.file != null) item.file.delete(); }
+                    for (String id : remove) { Item item = items.remove(id); readFaults.remove(id); readCounts.remove(id); if (item.file != null) item.file.delete(); }
                     new File(getContext().getFilesDir(), arg).delete();
                     return Bundle.EMPTY;
                 }
@@ -206,6 +219,15 @@ public final class TestDocumentsProvider extends DocumentsProvider {
         String ancestor = id;
         for (int i = 0; i < 64 && items.containsKey(ancestor) && items.get(ancestor).parent != null; i++) ancestor = items.get(ancestor).parent;
         if ("r".equals(mode)) {
+            if (readFaults.containsKey(id)) {
+                int count = readCounts.getOrDefault(id, 0) + 1; readCounts.put(id, count);
+                if (count == 2) {
+                    String changed = readFaults.get(id);
+                    if ("content".equals(changed)) { write(item.file, "xyz"); item.modified++; }
+                    if ("name".equals(changed)) { item.name = "owner-renamed.bin"; item.modified++; }
+                    if ("kind".equals(changed)) { item.directory = true; item.modified++; }
+                }
+            }
             String fault = creationModes.get(ancestor);
             if ("changeVersionOnRead".equals(fault)) item.modified++;
             if ("moveOutsideOnRead".equals(fault)) item.parent = "outside";
@@ -215,8 +237,10 @@ public final class TestDocumentsProvider extends DocumentsProvider {
             android.os.SystemClock.sleep(20);
             if (signal != null) signal.throwIfCanceled();
         }
-        if (mode.contains("w") && "blockWrite".equals(creationModes.get(ancestor))) {
+        if (mode.contains("w") && "blockWrite".equals(creationModes.get(ancestor)) ||
+            "r".equals(mode) && "blockRead".equals(creationModes.get(ancestor))) {
             CountDownLatch release = new CountDownLatch(1);
+            blockedSignals.put(id, signal != null);
             blockedOpens.put(id, release);
             try {
             long deadline = android.os.SystemClock.elapsedRealtime() + 10000;
@@ -230,7 +254,7 @@ public final class TestDocumentsProvider extends DocumentsProvider {
                 } catch (InterruptedException ex) { Thread.currentThread().interrupt(); throw new FileNotFoundException(); }
             }
             throw new FileNotFoundException("Simulated provider open timeout");
-            } finally { blockedOpens.remove(id); }
+            } finally { blockedOpens.remove(id); blockedSignals.remove(id); }
         }
         return ParcelFileDescriptor.open(item.file, ParcelFileDescriptor.parseMode(mode));
     }
