@@ -2,6 +2,8 @@
 
 This is the operator-run test requested for after implementation. It is prepared now; **physical-phone/separate-network results remain unverified**. A passing emulator or same-LAN run does not complete this gate. Use the final reviewed release builds when available.
 
+The [focused native connection acceptance check](native-connection-field-validation.md) binds the SCTP/DTLS corrections to the actual Windows runtime and records first-failure outcomes across both initiating devices. Start there when validating the corrected transport, then continue through the broader workflows below.
+
 ## Setup
 
 Use the [Windows release procedure](windows-release.md) and [Android release procedure](android-release.md) to verify the intended packages and signing certificates before installing the builds used in this test.

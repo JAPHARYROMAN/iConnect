@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "stage": "HostedNativeArtifactLocallyVerified",
+  "run": 42641731615,
+  "job": 129244301689,
+  "artifact": 13686123694,
+  "commit": "266448ca461f1880ed52a9c673c5279522bae0ed",
+  "zipSha256": "c2da70300f6b551348d9354f2fe1de79e289d2d52d5b170d5188a59ab657362e",
+  "nativeSha256": "8acf23bee1fda8fd7448157f05096a368993b5dbfee19fe4eedf9621f4816428",
+  "bundleEvidenceSha256": "a9d1a4efc61d5236cd64f8d99b6895a85de3f1f0b3f91ae9985f03fcd2426fdd",
+  "corrections": [
+    "serialize-sctp-initialization-v1",
+    "initialize-dtls-before-receive-v1"
+  ],
+  "nativeSourceJobPassed": true,
+  "selectionChecks": 7,
+  "artifactDownloadedAndVerified": true,
+  "windowsConsumerJobs": "Still running at this checkpoint",
+  "locallyExecuted": false,
+  "checkedAtUtc": "2026-11-09T18:30:42.1172836+03:00",
+  "sourceJobLogNormalization": "UTF-8 with LF",
+  "sourceJobLogSha256": "0e2e66db32f37c313f88b4f31ca405c4c7f51d6d694dea30463f16040cb4068c",
+  "physicalNetworkVerified": false,
+  "fullApplicationComplete": false
+}

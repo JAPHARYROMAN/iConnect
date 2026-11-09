@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "stage": "CurrentPackageAdvisoryLookupsCompleted",
+  "windows": {
+    "package": "iConnect.DefaultTransportFixture-1.247.0.0-x64.unsigned.msix",
+    "packageSha256": "c55e38fc03a4c930e209b1ed3074a7b8640954ee0e358fadd93d72e399201b4b",
+    "sbomSha256": "dbbabee427d7e5d670137f9763c6bc7b920b17a41b73b9aad74a2285d0f187f2",
+    "checkedAtUtc": "2026-11-09T18:11:38.9900095+03:00",
+    "source": "https://api.osv.dev/v1/querybatch",
+    "checkedCoordinates": 24,
+    "findings": []
+  },
+  "android": {
+    "package": "app-release-unsigned.apk",
+    "packageSha256": "535a0c1d79ba9dea836ce63a1261b543c18bddfd43c079ee4490b9483e619f2a",
+    "sbomSha256": "aaf9a129220a2ab1486baa8e3d3ee2a79ec6ecb4a6d56dbf8664ddbef7b9dfe7",
+    "checkedAtUtc": "2026-11-09T18:18:45.6028586+03:00",
+    "source": "https://api.osv.dev/v1/querybatch",
+    "checkedCoordinates": 68,
+    "findings": []
+  },
+  "windowsRuntimeSha256": "57f119d4f978085570df1e3f9e333e7655680af6d0bb89eebecf6f424787dfbc",
+  "windowsPatchIds": [
+    "serialize-sctp-initialization-v1",
+    "initialize-dtls-before-receive-v1"
+  ],
+  "androidReleaseUnsigned": true,
+  "androidDeviceValidationIsOnSeparateDebugApks": true,
+  "completeAdvisoryCoverage": false,
+  "completeNativeBuildProvenance": false,
+  "completeLicenseReview": false,
+  "independentSecurityReview": false,
+  "productionReleaseApproved": false,
+  "limitations": [
+    "OSV results cover only the embedded package URLs or public source commits queried at the recorded time.",
+    "An absence of coordinate matches does not establish the safety of patches, native configuration, vendor binaries, unlisted dependencies or the complete application.",
+    "Both review artifacts are unsigned and were not installed as production packages."
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "stage": "CurrentAndroidLargeDownloadPassed",
+  "checkedAtUtc": "2026-11-09T15:33:19.5532613+00:00",
+  "case": "com.iconnect.proof.LargeFileTest#downloadOver4GiBReopensItsCheckpointBeforeExplicitProviderSaving",
+  "cases": 1,
+  "failures": 0,
+  "skipped": 0,
+  "fileBytes": 4295229457,
+  "observedReopenedCheckpointBytes": 4294967296,
+  "runnerSeconds": 4530.86,
+  "adbExitCode": 0,
+  "adbExitCapturedBeforePostTestObservations": true,
+  "exitCaptureSha256": "8b44edcfbe590225af6caf85a9fce50091aabeced5616bab143767925ca5909e",
+  "runnerOutput": "android-large-download-instrumentation-2026-11-09.txt",
+  "runnerOutputSha256": "cb8e9067501f8ce64d502eaf9f8f8478e80ff9813c814c47db9274cd08395a04",
+  "assessment": {
+    "verified": true,
+    "cases": 1,
+    "failures": 0,
+    "skipped": 0,
+    "testCases": [
+      "com.iconnect.proof.LargeFileTest#downloadOver4GiBReopensItsCheckpointBeforeExplicitProviderSaving"
+    ],
+    "instrumentationCompleted": true
+  },
+  "assessmentSha256": "6f4277b369145b0a723b063fad6aeaff7704ac44bec8d9603ccded6d4896cb11",
+  "applicationSha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e",
+  "instrumentationSha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294",
+  "capturedApks": [
+    {
+      "name": "after-production-1.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "after-tests-1.apk",
+      "sha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294"
+    },
+    {
+      "name": "before-production-1.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "before-tests-1.apk",
+      "sha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294"
+    },
+    {
+      "name": "focused-production-1.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "focused-tests-1.apk",
+      "sha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294"
+    }
+  ],
+  "frozenManifestSha256": "ab7ed2d310f070158d9b5d510690a830718bc935b4d26c9aab8c66c9e009a472",
+  "unchangedLargeFileTestSha256": "a3748095cdd5faa77dfb00d835c8f009badde920708a7dddf5ad7110a835e908",
+  "parserSha256": "92bc3c062ea2439a769021adb4e8f1d59fc13b6ef7811dd21066b7db01e43747",
+  "validatorSha256": "e8de84857701634f1c6ffb08db7a2a74b5e2df6cba70ba4158ab9130b160c967",
+  "physicalPhoneVerified": false,
+  "physicalSeparateNetworksVerified": false,
+  "completeCurrentLargeFileMatrix": false,
+  "remainingCurrentOriginalCase": "offlineProviderCopyOver4GiBKeepsItsObserved64BitCheckpoint",
+  "uploadLimitation": "The current upload case completed; its original wrapper failed and did not retain the original ADB exit. Recovery evidence remains separate.",
+  "fullApplicationComplete": false
+}

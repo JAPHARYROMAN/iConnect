@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "stage": "ExplicitNativePackageSelectionValidated",
+  "before": {
+    "Stage": "ExplicitBundleAmbientSelectionFailureReproduced",
+    "OriginalCommit": "266448ca461f1880ed52a9c673c5279522bae0ed",
+    "OriginalBlob": "e77660d4beef82cfe93bc6918f89f232c28f11be",
+    "ControlAdjustment": "PSScriptRoot replaced with its original absolute tools directory for scriptblock evaluation",
+    "ControlSha256": "15a414c149f5278413a337b4ae1ae3f8102956d03be36c848f0a013d5cf84133",
+    "SelectedNativeSha256": "8acf23bee1fda8fd7448157f05096a368993b5dbfee19fe4eedf9621f4816428",
+    "AmbientBundleMissing": true,
+    "Failure": "Prepare the corrected native transport with ./tools/prepare-native-transport.ps1 before building the Windows application.",
+    "CheckedAtUtc": "2026-11-09T18:38:34.3846259+03:00"
+  },
+  "after": {
+    "Stage": "ExplicitBundleOverridesInvalidAmbientSelection",
+    "Package": "iConnect.ExplicitSelectionFixture-1.268.0.0-x64.unsigned.msix",
+    "CallerEnvironmentRestored": true,
+    "SelectedNativeSha256": "8acf23bee1fda8fd7448157f05096a368993b5dbfee19fe4eedf9621f4816428",
+    "CheckedAtUtc": "2026-11-09T18:41:00.7667987+03:00"
+  },
+  "packageInspection": {
+    "Stage": "NativeSourcePackageGuardsPassed",
+    "ProductionReleaseApproved": false,
+    "SignatureTrustVerified": false,
+    "ExerciseGuards": true,
+    "CheckedAtUtc": "2026-11-09T18:41:28.0553486+03:00",
+    "PackageSha256": "1d5be0636c5b80087fd90572fae9faae8d255e1133da199747c859f89bb94461",
+    "Components": 24,
+    "SourceFiles": 30,
+    "NativeSha256": "8acf23bee1fda8fd7448157f05096a368993b5dbfee19fe4eedf9621f4816428",
+    "NativeNoticeInventorySha256": "ca329f9aac92eb0770364bdf6fb9c16d3a3c67215643de8922d97af9debad7c9",
+    "NativeNoticeFiles": 19,
+    "Guards": [
+      {
+        "Passed": true,
+        "Components": 18,
+        "Case": "default-nuget-inventory"
+      },
+      {
+        "Passed": true,
+        "Case": "existing-inventory-preserved"
+      },
+      {
+        "Passed": true,
+        "Case": "unlabelled-replacement-refused"
+      },
+      {
+        "Passed": true,
+        "Case": "source-runtime-mismatch-refused"
+      },
+      {
+        "Passed": true,
+        "Case": "changed-notice-preflight-refused"
+      },
+      {
+        "Passed": true,
+        "Case": "redirected-notices-refused"
+      }
+    ]
+  },
+  "controlWasAdjustedOnlyForPSScriptRoot": true,
+  "defaultCacheWasNotRemovedForLocalControl": true,
+  "nativeBundleEvidenceSha256": "a9d1a4efc61d5236cd64f8d99b6895a85de3f1f0b3f91ae9985f03fcd2426fdd",
+  "productionReleaseApproved": false,
+  "fullApplicationComplete": false,
+  "hostedExactScenario": "Added to the workflow; its first execution is pending."
+}

@@ -64,8 +64,16 @@ $payload = Join-Path $work 'payload'
 $arguments = @('-c', 'Release', '-o', $payload, "-p:IConnectDesktopVersion=$Version", "-p:IConnectNativeTransportBundle=$($sourceNative.Directory)")
 if ($NoRestore) { $arguments += '--no-restore' }
 else { $arguments += '-p:RestoreLockedMode=true' }
-& (Join-Path $PSScriptRoot 'dev.ps1') publish-desktop @arguments | Out-Host
-if ($LASTEXITCODE -ne 0) { throw 'Windows desktop publish failed.' }
+$previousNativeBundle = $env:ICONNECT_NATIVE_TRANSPORT_BUNDLE
+try {
+    # The development helper must validate this same explicit selection, including
+    # on a clean machine with no default native cache or native compiler installed.
+    $env:ICONNECT_NATIVE_TRANSPORT_BUNDLE = $sourceNative.Directory
+    & (Join-Path $PSScriptRoot 'dev.ps1') publish-desktop @arguments | Out-Host
+    $publishExit = $LASTEXITCODE
+}
+finally { $env:ICONNECT_NATIVE_TRANSPORT_BUNDLE = $previousNativeBundle }
+if ($publishExit -ne 0) { throw 'Windows desktop publish failed.' }
 
 foreach ($asset in @('IConnect.Desktop.exe', 'IConnect.Desktop.dll', 'IConnect.Desktop.pri', 'App.xbf', 'MainWindow.xbf',
         'coreclr.dll', 'Microsoft.WindowsAppRuntime.dll', 'libDatachannel/datachannel.dll', 'PreviewWorker/IConnect.Preview.Worker.exe', 'PreviewWorker/coreclr.dll',

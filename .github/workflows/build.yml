@@ -75,6 +75,21 @@ jobs:
             if (-not (Test-Path -LiteralPath (Join-Path $destination $relative) -PathType Leaf)) { throw "Missing published asset: $relative" }
           }
           ./tools/write-windows-release-sbom.ps1 -Payload $destination -ConnectivityAssets apps/windows/IConnect.Connectivity/obj/project.assets.json -PackageName iConnect.CiPublishFixture -Version 1.0.0.0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - name: Verify explicit native bundle packaging and guards
+        shell: pwsh
+        run: |
+          $bundle = Join-Path $env:RUNNER_TEMP 'iconnect-native-bundle'
+          $missing = Join-Path $env:RUNNER_TEMP 'missing-native-bundle'
+          $previous = $env:ICONNECT_NATIVE_TRANSPORT_BUNDLE
+          try {
+            $env:ICONNECT_NATIVE_TRANSPORT_BUNDLE = $missing
+            $package = ./tools/package-windows.ps1 -PackageName iConnect.CiExplicitBundleFixture -Version 1.0.0.0 -Publisher 'CN=iConnect CI Fixture' -Unsigned -NoRestore -NativeTransportBundle $bundle
+            if ($env:ICONNECT_NATIVE_TRANSPORT_BUNDLE -cne $missing) { throw 'Packaging did not restore its caller environment.' }
+          } finally { $env:ICONNECT_NATIVE_TRANSPORT_BUNDLE = $previous }
+          ./tools/test-native-package.ps1 -Package $package.Path -Payload (Join-Path $package.WorkDirectory 'payload') -ExerciseGuards -RequireNoticeInventory
   windows-large-files:
     needs: native-transport
     runs-on: windows-latest
