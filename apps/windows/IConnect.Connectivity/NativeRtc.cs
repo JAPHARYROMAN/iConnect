@@ -17,6 +17,7 @@ public sealed class NativeRtc : IDisposable
     private static readonly Native.OpenCallback OpenCallback = OnOpen;
     private static readonly Native.MessageCallback MessageCallback = OnMessage;
     private static readonly Native.StateCallback StateCallback = OnState;
+    private static readonly Native.StateCallback IceStateCallback = OnIceState;
     private readonly Channel<byte[]> messages = Channel.CreateBounded<byte[]>(32);
     private readonly Channel<LocalSignal> signals = Channel.CreateBounded<LocalSignal>(128);
     private readonly TaskCompletionSource opened = new(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -27,6 +28,8 @@ public sealed class NativeRtc : IDisposable
     private int channel = -1;
     private int disposed;
     private int failed;
+    private int iceState = -1;
+    private readonly ConcurrentQueue<int> connectionStates = new();
     public ChannelReader<byte[]> Messages => messages.Reader;
     public ChannelReader<LocalSignal> Signals => signals.Reader;
     public Task Opened => opened.Task;
@@ -70,6 +73,7 @@ public sealed class NativeRtc : IDisposable
         Check(Native.rtcSetLocalCandidateCallback(peer, CandidateCallback));
         Check(Native.rtcSetDataChannelCallback(peer, DataChannelCallback));
         Check(Native.rtcSetStateChangeCallback(peer, StateCallback));
+        Check(Native.rtcSetIceStateChangeCallback(peer, IceStateCallback));
     }
 
     public void Offer()
@@ -200,15 +204,24 @@ public sealed class NativeRtc : IDisposable
     { if (Channels.TryGetValue(id, out var self)) self.opened.TrySetResult(); }
     private static void OnState(int pc, int state, IntPtr _)
     {
-        if (state >= 3 && Peers.TryGetValue(pc, out var self))
+        if (!Peers.TryGetValue(pc, out var self)) return;
+        self.connectionStates.Enqueue(state);
+        while (self.connectionStates.Count > 16) self.connectionStates.TryDequeue(out var ignored);
+        if (state >= 3)
         {
             var failure = new IOException("Direct connection ended.");
             failure.Data["NativeConnectionState"] = state;
             failure.Data["NativeChannelAttached"] = Volatile.Read(ref self.channel) >= 0;
             failure.Data["NativeChannelOpened"] = self.opened.Task.IsCompletedSuccessfully;
+            failure.Data["NativeIceState"] = Volatile.Read(ref self.iceState);
+            failure.Data["NativePeerId"] = pc;
+            failure.Data["NativeChannelId"] = Volatile.Read(ref self.channel);
+            failure.Data["NativeConnectionHistory"] = string.Join(',', self.connectionStates.ToArray());
             self.Fail(failure);
         }
     }
+    private static void OnIceState(int pc, int state, IntPtr _)
+    { if (Peers.TryGetValue(pc, out var self)) Volatile.Write(ref self.iceState, state); }
     private static void OnMessage(int id, IntPtr data, int size, IntPtr _)
     {
         if (!Channels.TryGetValue(id, out var self)) return;
@@ -271,6 +284,7 @@ public sealed class NativeRtc : IDisposable
         [DllImport(Library, CallingConvention = CallingConvention.Cdecl)] public static extern int rtcSetLocalDescriptionCallback(int pc, DescriptionCallback callback);
         [DllImport(Library, CallingConvention = CallingConvention.Cdecl)] public static extern int rtcSetLocalCandidateCallback(int pc, CandidateCallback callback);
         [DllImport(Library, CallingConvention = CallingConvention.Cdecl)] public static extern int rtcSetStateChangeCallback(int pc, StateCallback callback);
+        [DllImport(Library, CallingConvention = CallingConvention.Cdecl)] public static extern int rtcSetIceStateChangeCallback(int pc, StateCallback callback);
         [DllImport(Library, CallingConvention = CallingConvention.Cdecl)] public static extern int rtcSetDataChannelCallback(int pc, DataChannelCallback callback);
         [DllImport(Library, CallingConvention = CallingConvention.Cdecl)] public static extern int rtcSetLocalDescription(int pc, [MarshalAs(UnmanagedType.LPUTF8Str)] string type);
         [DllImport(Library, CallingConvention = CallingConvention.Cdecl)] public static extern int rtcSetRemoteDescription(int pc, [MarshalAs(UnmanagedType.LPUTF8Str)] string sdp, [MarshalAs(UnmanagedType.LPUTF8Str)] string type);
