@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "stage": "CurrentAndroidLargeOfflineCopyPassed",
+  "checkedAtUtc": "2026-11-09T17:56:36.093166+00:00",
+  "case": "com.iconnect.proof.LargeFileTest#offlineProviderCopyOver4GiBKeepsItsObserved64BitCheckpoint",
+  "cases": 1,
+  "failures": 0,
+  "skipped": 0,
+  "fileBytes": 4295229457,
+  "runnerSeconds": 5222.899,
+  "adbExitCode": 0,
+  "adbExitCapturedBeforePostTestObservations": true,
+  "exitCaptureSha256": "e849e1cef7792fbb15a16f6e2d0ebc2cb84689d10d8edd8af82867269be3c0e7",
+  "runnerOutput": "android-large-offline-instrumentation-2026-11-09.txt",
+  "runnerOutputSha256": "22eced023cca0840603ed5b30a0d6f6e746b03c2411e08050b22fc5cf421fb70",
+  "assessment": {
+    "verified": true,
+    "cases": 1,
+    "failures": 0,
+    "skipped": 0,
+    "testCases": [
+      "com.iconnect.proof.LargeFileTest#offlineProviderCopyOver4GiBKeepsItsObserved64BitCheckpoint"
+    ],
+    "instrumentationCompleted": true
+  },
+  "assessmentSha256": "53c4c7efa04134bde32538f1672d90605e1415d28cf672f46909bb2759378f57",
+  "applicationSha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e",
+  "instrumentationSha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294",
+  "capturedApks": [
+    {
+      "name": "after-production-1.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "after-tests-1.apk",
+      "sha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294"
+    },
+    {
+      "name": "before-production-1.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "before-tests-1.apk",
+      "sha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294"
+    },
+    {
+      "name": "focused-production-1.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "focused-tests-1.apk",
+      "sha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294"
+    }
+  ],
+  "frozenManifestSha256": "ab7ed2d310f070158d9b5d510690a830718bc935b4d26c9aab8c66c9e009a472",
+  "unchangedLargeFileTestSha256": "a3748095cdd5faa77dfb00d835c8f009badde920708a7dddf5ad7110a835e908",
+  "parserSha256": "92bc3c062ea2439a769021adb4e8f1d59fc13b6ef7811dd21066b7db01e43747",
+  "physicalPhoneVerified": false,
+  "physicalSeparateNetworksVerified": false,
+  "fullApplicationComplete": false
+}

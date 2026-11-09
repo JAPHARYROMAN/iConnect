@@ -11,3 +11,4 @@ tests/fixtures/android/single-case-success.txt -text -whitespace
 docs/development/evidence/android-large-upload-instrumentation-2026-11-09.txt -text -whitespace
 docs/development/evidence/native-connection-tools-2026-11-09.txt -text -whitespace
 docs/development/evidence/android-large-download-instrumentation-2026-11-09.txt -text -whitespace
+docs/development/evidence/android-large-offline-instrumentation-2026-11-09.txt -text -whitespace

@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "stage": "ThreeCurrentLargeFileCasesHaveCompletedJUnitEvidence",
+  "applicationSha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e",
+  "instrumentationSha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294",
+  "caseRecords": [
+    "android-large-upload-recovered-2026-11-09.json",
+    "android-large-download-2026-11-09.json",
+    "android-large-offline-2026-11-09.json"
+  ],
+  "eachCaseBytes": 4295229457,
+  "completedJUnitCases": 3,
+  "oneUninterruptedThreeCaseWrapperPassed": false,
+  "allOriginalWrappersPassed": false,
+  "uploadOriginalWrapperPassed": false,
+  "uploadOriginalAdbExitRetained": false,
+  "completedUploadRepeated": false,
+  "remainingCasesAdbExitCode": 0,
+  "originalRemainingMatrixSha256": "40ece4b965812cfb90452ff2ab450a3436ee11debcdbc5ee6f6a18c84414f70a",
+  "physicalPhoneVerified": false,
+  "physicalSeparateNetworksVerified": false,
+  "fullApplicationComplete": false
+}
