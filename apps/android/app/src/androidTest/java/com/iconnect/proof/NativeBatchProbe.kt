@@ -20,11 +20,12 @@ import java.util.concurrent.atomic.AtomicInteger
 /** Explicit native interop probe, outside JUnit discovery and ordinary app flows. */
 class NativeBatchProbe:Instrumentation() {
     private lateinit var options:Bundle
+    private val messages=CopyOnWriteArrayList<String>()
     override fun onCreate(arguments:Bundle?) {super.onCreate(arguments); options=arguments?:Bundle(); start()}
     override fun onStart() {
         try {val result=runBlocking {withTimeout(280_000) {exercise()}}
             finish(Activity.RESULT_OK,Bundle().apply {putString("nativeTransportResult",result.toString())})
-        } catch(failure:Throwable) {finish(Activity.RESULT_CANCELED,Bundle().apply {putString("stream","Native batch probe failed: ${failure.stackTraceToString()}")})}
+        } catch(failure:Throwable) {finish(Activity.RESULT_CANCELED,Bundle().apply {putString("stream","Native batch peer messages: ${messages.joinToString(" | ")}\nNative batch probe failed: ${failure.stackTraceToString()}")})}
     }
     private fun status(value:JSONObject)=sendStatus(0,Bundle().apply {putString("nativeProbe",Rules.b64(value.toString().toByteArray(Charsets.UTF_8)))})
     private suspend fun exercise():JSONObject=coroutineScope {
@@ -70,7 +71,7 @@ class NativeBatchProbe:Instrumentation() {
         val service=AndroidFileService(context,grants,available={policy.isCurrent(approval)},incoming=incoming)
         val scope=CoroutineScope(SupervisorJob()+Dispatchers.Main.immediate)
         val ready=CompletableDeferred<Unit>(); val sent=CompletableDeferred<Unit>(); val verified=CompletableDeferred<JSONObject>(); val finished=CompletableDeferred<Unit>()
-        val messages=CopyOnWriteArrayList<String>(); val signals=AtomicInteger()
+        val signals=AtomicInteger()
         var peer:RtcTestSession?=null; var browser:PhoneLocalBrowser?=null; var sources:AndroidBatchSources?=null; var sender:PhoneBatchSender?=null; var commands:Job?=null
         var target:FileEntry?=null; var completed:PhoneBatchSend?=null; var begins=0; var lost=false; var revoked=false; var success=false
         suspend fun raw(value:FileRequest)=withContext(Dispatchers.Main.immediate) {requireNotNull(peer).requestFiles(value)}
