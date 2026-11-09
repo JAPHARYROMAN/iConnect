@@ -1,0 +1,274 @@
+{
+  "schema": 1,
+  "stage": "CurrentLtsOpenSslUpstreamHarnessRecoveredPassed",
+  "checkedAtUtc": "2026-11-09T21:35:01.220496+00:00",
+  "nativeSha256": "016d8b449da214db2fc34ce900d13c539c2b56d885af9fbd870f326005249c68",
+  "openSslCommit": "45e844fa2a14ec92d146bd8f5778ac130b6625fb",
+  "buildEvidenceSha256": "00a4be8e38dab813da30ef7653ea8ca95d869d19be656c9993236e4b9bc9290c",
+  "libSslSha256": "e3762288f1f964a51e426de97d0802bebb530f5fd4f96495b00ac9bf07e8f51f",
+  "libCryptoSha256": "5c696b037294a6c5b8e474b198024ca916058b7cbe15e01a3da5833f15a5ffea",
+  "mainHarnessFiles": 347,
+  "mainHarnessTests": 3820,
+  "mainHarnessResult": "PASS",
+  "preparationHarness": {
+    "files": 1,
+    "tests": 0,
+    "result": "NOTESTS",
+    "recipe": "00-prep_fipsmodule_cnf.t",
+    "reason": "FIPS module config file only supported in a fips build"
+  },
+  "commandExitCode": 0,
+  "commandExitCapturedBeforePostRunObservations": true,
+  "command": "nmake /nologo test",
+  "harnessWorkers": 1,
+  "configuration": "VC-WIN64A no-shared",
+  "sourceWorktreeUnchanged": true,
+  "selectedLibrariesAndDllUnchanged": true,
+  "skippedRecipes": [
+    {
+      "recipe": "00-prep_fipsmodule_cnf.t",
+      "reason": "FIPS module config file only supported in a fips build"
+    },
+    {
+      "recipe": "01-test_fipsmodule_cnf.t",
+      "reason": "Test only supported in a fips build"
+    },
+    {
+      "recipe": "01-test_symbol_presence.t",
+      "reason": "This is unsupported on native Windows"
+    },
+    {
+      "recipe": "02-test_errstr.t",
+      "reason": "This is unsupported on MSYS/MinGW or MSWin32"
+    },
+    {
+      "recipe": "02-test_localetest.t",
+      "reason": "Locale tests not available on Windows or VMS"
+    },
+    {
+      "recipe": "02-test_windows_registry.t",
+      "reason": "Skipping test as registry keys aren't set"
+    },
+    {
+      "recipe": "03-test_fipsinstall.t",
+      "reason": "Test only supported in a fips build"
+    },
+    {
+      "recipe": "04-test_bio_tfo.t",
+      "reason": "This test requires enable-tfo"
+    },
+    {
+      "recipe": "05-test_rc5.t",
+      "reason": "rc5 is not supported by this OpenSSL build"
+    },
+    {
+      "recipe": "07-test_bio_comp.t",
+      "reason": "No compression algorithms"
+    },
+    {
+      "recipe": "20-test_app_s_client.t",
+      "reason": "test_app_s_client needs fork"
+    },
+    {
+      "recipe": "20-test_cli_fips.t",
+      "reason": "Test only supported in a fips build with security checks"
+    },
+    {
+      "recipe": "30-test_acvp.t",
+      "reason": "ACVP is not supported by this test"
+    },
+    {
+      "recipe": "30-test_afalg.t",
+      "reason": "test_afalg not supported for this build"
+    },
+    {
+      "recipe": "30-test_pairwise_fail.t",
+      "reason": "These tests are unsupported in a non fips build"
+    },
+    {
+      "recipe": "40-test_rehash.t",
+      "reason": "test_rehash is not available on this platform"
+    },
+    {
+      "recipe": "60-test_x509_store.t",
+      "reason": "test_rehash is not available on this platform"
+    },
+    {
+      "recipe": "70-test_certtypeext.t",
+      "reason": "test_certtypeext needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_comp.t",
+      "reason": "test_comp needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_key_share.t",
+      "reason": "test_key_share needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_npn.t",
+      "reason": "test_npn needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_renegotiation.t",
+      "reason": "test_renegotiation needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_sslcbcpadding.t",
+      "reason": "test_sslcbcpadding needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_sslcertstatus.t",
+      "reason": "test_sslcertstatus needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_sslextension.t",
+      "reason": "test_sslextension needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_sslkeylogfile.t",
+      "reason": "test_sslkeylogfile requires SSLKEYLOGFILE support"
+    },
+    {
+      "recipe": "70-test_sslmessages.t",
+      "reason": "test_sslmessages needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_sslrecords.t",
+      "reason": "test_sslrecords needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_sslsessiontick.t",
+      "reason": "test_sslsessiontick needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_sslsigalgs.t",
+      "reason": "test_sslsigalgs needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_sslsignature.t",
+      "reason": "test_sslsignature needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_sslskewith0p.t",
+      "reason": "test_sslskewith0p needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_sslversions.t",
+      "reason": "test_sslversions needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_sslvertol.t",
+      "reason": "test_sslvertol needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_tls13alerts.t",
+      "reason": "test_tls13alerts needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_tls13certcomp.t",
+      "reason": "test_tls13certcomp needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_tls13cookie.t",
+      "reason": "test_tls13cookie needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_tls13downgrade.t",
+      "reason": "test_tls13downgrade needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_tls13hrr.t",
+      "reason": "test_tls13hrr needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_tls13kexmodes.t",
+      "reason": "test_tls13kexmodes needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_tls13messages.t",
+      "reason": "test_tls13messages needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_tls13psk.t",
+      "reason": "test_tls13psk needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "70-test_tlsextms.t",
+      "reason": "test_tlsextms needs the dynamic engine feature enabled"
+    },
+    {
+      "recipe": "80-test_cmp_http.t",
+      "reason": "Tests involving local HTTP server not available on Windows or VMS"
+    },
+    {
+      "recipe": "80-test_pkcs12.t",
+      "reason": "Non-Greek system locale"
+    },
+    {
+      "recipe": "82-test_ocsp_cert_chain.t",
+      "reason": "test_ocsp_cert_chain is not available Windows or VMS"
+    },
+    {
+      "recipe": "82-test_tfo_cli.t",
+      "reason": "test_tfo_cli needs tfo enabled"
+    },
+    {
+      "recipe": "90-test_cert_comp.t",
+      "reason": "Certificate compression is disabled in this OpenSSL build"
+    },
+    {
+      "recipe": "90-test_fipsload.t",
+      "reason": "Test is disabled with disabled fips"
+    },
+    {
+      "recipe": "90-test_shlibload.t",
+      "reason": "Test only supported in a shared build"
+    },
+    {
+      "recipe": "90-test_tls13secrets.t",
+      "reason": "test_tls13secrets is not supported in this build"
+    },
+    {
+      "recipe": "95-test_external_cf_quiche.t",
+      "reason": "No external tests in this configuration"
+    },
+    {
+      "recipe": "95-test_external_gost_engine.t",
+      "reason": "No external tests in this configuration"
+    },
+    {
+      "recipe": "95-test_external_krb5.t",
+      "reason": "No external tests in this configuration"
+    },
+    {
+      "recipe": "95-test_external_oqsprovider.t",
+      "reason": "No external tests in this configuration"
+    },
+    {
+      "recipe": "95-test_external_pkcs11_provider.t",
+      "reason": "No external tests in this configuration"
+    },
+    {
+      "recipe": "95-test_external_pyca.t",
+      "reason": "No external tests in this configuration"
+    },
+    {
+      "recipe": "95-test_external_tlsfuzzer.t",
+      "reason": "No external tests in this configuration"
+    }
+  ],
+  "skipsCountedAsExecutedPasses": false,
+  "logSha256": "8b3f872e3153fa2967a9ae24dbd10a06ab0227bb372b0433aa052d5e56457a9f",
+  "driverSha256": "ba56b09e05ae11b03fbfb1ca168a24e58f36dabc8c7c96b1ca7166cf88ff5d7f",
+  "commandExitCaptureSha256": "49ee4f6f50440cdd273bea63f3df27e1e3aba112b40209591a3abb6b63d6b0fb",
+  "originalWrapperPassed": false,
+  "originalWrapperExpectedOneSummary": true,
+  "originalWrapperStateSha256": "ff6333f56e0015692e2be6faa1363d984d79b84708f234603cca842fe19b8370",
+  "completedRunRepeated": false,
+  "upstreamInstructions": "https://github.com/openssl/openssl/blob/45e844fa2a14ec92d146bd8f5778ac130b6625fb/NOTES-WINDOWS.md",
+  "cryptographicCertification": false,
+  "independentSecurityReviewComplete": false,
+  "productionReleaseApproved": false,
+  "fullApplicationComplete": false
+}
