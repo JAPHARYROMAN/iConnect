@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "id": "initialize-dtls-before-receive-v1",
+  "baseCommit": "6b1e2e620f1e37f0eafeee702eaea0043cb305fd",
+  "patchFile": "native-patches/initialize-dtls-before-receive.patch",
+  "patchSha256": "b893d83392352eab12710c47b826f6392a5d2924ad6fb3b8731982ae3ce3a79e",
+  "postImages": {
+    "src/impl/dtlstransport.cpp": "634249b05edf66c36589eaa771eb6bd058f2b129fe759bd617bdad305de1769a"
+  }
+}

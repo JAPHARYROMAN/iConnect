@@ -52,18 +52,24 @@ try {
         foreach ($component in $source.Components) {
             $entries=@($bom.components | Where-Object purl -ceq $component.Purl)
             if ($entries.Count -ne 1 -or $entries[0].scope -cne $component.Scope -or $entries[0].version -cne $component.Version) {throw 'The packaged source inventory is incomplete or inconsistent.'}
+            $patchIds=@($entries[0].properties | Where-Object name -ceq 'iconnect:source:patch:id' | ForEach-Object value)
+            $expectedIds=@($component.SourcePatches | ForEach-Object id)
+            if ((($expectedIds | Sort-Object -CaseSensitive) -join ';') -cne (($patchIds | Sort-Object -CaseSensitive) -join ';')) {throw 'The packaged inventory has an unexpected native patch list.'}
             foreach ($patch in $component.SourcePatches) {
+                $prefix='iconnect:source:patch:'+$patch.id
+                $legacy=@($component.SourcePatches).Count -eq 1 -and @($entries[0].properties | Where-Object name -ceq 'iconnect:source:patch:sha256').Count -eq 1
                 $expectedProperties=@(
                     @{name='iconnect:source:patch:id';value=$patch.id}
-                    @{name='iconnect:source:patch:sha256';value=$patch.patchSha256}
-                    @{name='iconnect:source:patch:path';value=('PackageMetadata/NativeTransport/recipe/' + $patch.patchFile)}
-                    @{name='iconnect:source:postimage:normalization';value='UTF-8 with LF'}
+                    @{name=$(if($legacy){'iconnect:source:patch:sha256'}else{$prefix+':sha256'});value=$patch.patchSha256}
+                    @{name=$(if($legacy){'iconnect:source:patch:path'}else{$prefix+':path'});value=('PackageMetadata/NativeTransport/recipe/' + $patch.patchFile)}
+                    @{name=$(if($legacy){'iconnect:source:postimage:normalization'}else{$prefix+':postimage:normalization'});value='UTF-8 with LF'}
                 )
                 foreach ($name in $patch.postImages.Keys) {
-                    $expectedProperties+=@{name=('iconnect:source:postimage:' + $name + ':sha256');value=$patch.postImages[$name]}
+                    $key=if($legacy){'iconnect:source:postimage:'+$name+':sha256'}else{$prefix+':postimage:'+$name+':sha256'}
+                    $expectedProperties+=@{name=$key;value=$patch.postImages[$name]}
                 }
                 foreach ($property in $expectedProperties) {
-                    $matches=@($entries[0].properties | Where-Object name -ceq $property.name)
+                    $matches=@($entries[0].properties | Where-Object {$_.name -ceq $property.name -and ($property.name -cne 'iconnect:source:patch:id' -or $_.value -ceq $property.value)})
                     if ($matches.Count -ne 1 -or $matches[0].value -cne $property.value) {throw 'The packaged inventory omits or misstates a native source patch.'}
                 }
             }

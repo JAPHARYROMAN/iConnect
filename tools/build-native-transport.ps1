@@ -4,13 +4,16 @@ param(
     [string]$BuildDirectory,
     [ValidateRange(1,8)][int]$Jobs = 1,
     [switch]$PrepareOnly,
-    [switch]$SctpInitializationFix
+    [switch]$SctpInitializationFix,
+    [switch]$ConnectionInitializationFixes,
+    [string]$ReuseOpenSslBuildDirectory
 )
 $ErrorActionPreference = 'Stop'
 if (!$IsWindows) { throw 'This builder targets Windows x64 and requires MSVC.' }
 . (Join-Path $PSScriptRoot 'native-transport-patches.ps1')
 $nativePatches = @()
-if ($SctpInitializationFix) { $nativePatches = @(Get-IConnectNativeSctpPatch) }
+if ($ConnectionInitializationFixes) { $nativePatches = @((Get-IConnectNativeSctpPatch),(Get-IConnectNativeDtlsPatch)) }
+elseif ($SctpInitializationFix) { $nativePatches = @(Get-IConnectNativeSctpPatch) }
 $lockPath = Join-Path $PSScriptRoot 'native-transport-sources.json'
 $lock = Get-Content -LiteralPath $lockPath -Raw | ConvertFrom-Json -AsHashtable
 if ($lock.schema -ne 1 -or $lock.cacheKey -cnotmatch '\A[A-Za-z0-9_-]{1,80}\z') { throw 'Unsupported native source lock.' }
@@ -21,7 +24,7 @@ foreach ($component in @($lock.libdatachannel,$lock.openssl)) {
 if ($lock.nasm.url -cnotmatch '\Ahttps://www\.nasm\.us/pub/nasm/releasebuilds/[0-9.]+/win64/nasm-[0-9.]+-win64\.zip\z' -or
     $lock.nasm.sha256 -cnotmatch '\A[a-f0-9]{64}\z') { throw 'Invalid assembler archive coordinate.' }
 if (!$BuildDirectory) {
-    $cache = $lock.cacheKey + $(if ($SctpInitializationFix) { '-sctp-init1' } else { '' })
+    $cache = $lock.cacheKey + $(if ($ConnectionInitializationFixes) { '-connection-init1' } elseif ($SctpInitializationFix) { '-sctp-init1' } else { '' })
     $BuildDirectory = Join-Path $env:USERPROFILE ('.cache/iconnect/native-transport/' + $cache)
 }
 $root = [IO.Path]::GetFullPath($BuildDirectory)
@@ -64,6 +67,7 @@ function Run-Driver([string]$Name,[string[]]$Commands) {
     Write-Host "Native stage '$Name' completed. Log: $log"
 }
 
+$sslReuseOwner = $null
 try {
     $libSource = Source 'libdatachannel' $lock.libdatachannel
     [void](Invoke-Git -Arguments @('-C',$libSource,'submodule','update','--init','--recursive','--depth','1'))
@@ -108,14 +112,34 @@ try {
     $sslBuild = Join-Path $root 'openssl-build'
     $sslPrefix = Join-Path $root 'openssl-install'
     $libBuild = Join-Path $root 'datachannel-build'
+    $reuseEvidenceHash = $null
+    if ($ReuseOpenSslBuildDirectory) {
+        $reuse = (Resolve-Path -LiteralPath $ReuseOpenSslBuildDirectory).Path
+        if ($reuse.TrimEnd('\') -ieq $root.TrimEnd('\')) { throw 'Choose a separate cache for OpenSSL reuse.' }
+        try { $sslReuseOwner = [IO.File]::Open((Join-Path $reuse 'owner.lock'),[IO.FileMode]::OpenOrCreate,[IO.FileAccess]::ReadWrite,[IO.FileShare]::None) }
+        catch { throw 'The OpenSSL reuse cache is already in use or inaccessible.' }
+        $reusePath = Join-Path $reuse 'artifact/build-evidence.json'
+        if ((Get-Item -LiteralPath $reusePath).Length -gt 64KB) { throw 'OpenSSL reuse evidence is oversized.' }
+        $reuseProof = Get-Content -LiteralPath $reusePath -Raw | ConvertFrom-Json -AsHashtable
+        if ($reuseProof.schema -ne 1 -or $reuseProof.stage -cne 'BuildOnly' -or $reuseProof.sourceLockSha256 -cne (Hash $lockPath) -or
+            $reuseProof.architecture -cne 'windows-x64' -or $reuseProof.runtime -cne 'MSVC static' -or
+            $reuseProof.openssl.commit -cne $lock.openssl.commit -or $reuseProof.nasmVersion -cne $lock.nasm.version -or
+            $reuseProof.nasmSha256 -cne (Hash (Join-Path $nasmDirectory 'nasm.exe')) -or
+            $reuseProof.nasmSha256 -cne (Hash (Join-Path $reuse 'nasm/nasm.exe'))) { throw 'OpenSSL reuse inputs do not match the pinned build.' }
+        Assert-Source (Join-Path $reuse 'openssl') $lock.openssl.commit
+        $sslPrefix = Join-Path $reuse 'openssl-install'
+        if ((Hash (Join-Path $sslPrefix 'lib/libssl.lib')) -cne $reuseProof.opensslLibSslSha256 -or
+            (Hash (Join-Path $sslPrefix 'lib/libcrypto.lib')) -cne $reuseProof.opensslLibCryptoSha256) { throw 'OpenSSL reuse libraries differ from their build evidence.' }
+        $reuseEvidenceHash = Hash $reusePath
+    }
     foreach ($directory in @($sslBuild,$libBuild)) { [void][IO.Directory]::CreateDirectory($directory) }
     $environment = @('@echo off',('call ' + (CmdPath $vs) + ' -arch=x64 -host_arch=x64 -no_logo'),
         'if errorlevel 1 exit /b 1',('set "PATH=' + $nasmDirectory + ';%PATH%"'),'set "CL="','set "_CL_="','set "LC_ALL=C"','set "LANG=C"')
-    Run-Driver 'build-openssl' ($environment + @(
+    if (!$ReuseOpenSslBuildDirectory) { Run-Driver 'build-openssl' ($environment + @(
         ('cd /d ' + (CmdPath $sslBuild)),
         ((CmdPath $perl) + ' ' + (CmdPath (Join-Path $sslSource 'Configure')) + ' VC-WIN64A no-shared --prefix=' + (CmdPath $sslPrefix)),
         'if errorlevel 1 exit /b 1','nmake /nologo','if errorlevel 1 exit /b 1',
-        'nmake /nologo install_sw','if errorlevel 1 exit /b 1','exit /b 0'))
+        'nmake /nologo install_sw','if errorlevel 1 exit /b 1','exit /b 0')) }
     $configure = (CmdPath $cmake) + ' -S ' + (CmdPath $libSource) + ' -B ' + (CmdPath $libBuild) +
         ' -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded' +
         ' -DBUILD_SHARED_LIBS=ON -DBUILD_SHARED_DEPS_LIBS=OFF -DNO_EXAMPLES=ON -DNO_TESTS=OFF' +
@@ -127,6 +151,11 @@ try {
     Assert-Source $libSource $lock.libdatachannel.commit $nativePatches
     Assert-Source $sslSource $lock.openssl.commit
     foreach ($module in $lock.libdatachannel.submodules.GetEnumerator()) { Assert-Source (Join-Path $libSource $module.Key) $module.Value }
+    if ($ReuseOpenSslBuildDirectory) {
+        Assert-Source (Join-Path $reuse 'openssl') $lock.openssl.commit
+        if ((Hash $reusePath) -cne $reuseEvidenceHash -or (Hash (Join-Path $sslPrefix 'lib/libssl.lib')) -cne $reuseProof.opensslLibSslSha256 -or
+            (Hash (Join-Path $sslPrefix 'lib/libcrypto.lib')) -cne $reuseProof.opensslLibCryptoSha256) { throw 'OpenSSL reuse inputs changed during the native build.' }
+    }
     $binary = Join-Path $libBuild 'datachannel.dll'
     if (!(Test-Path -LiteralPath $binary)) { throw 'The expected Windows native DLL was not produced.' }
     $artifact = Join-Path $root 'artifact'
@@ -134,8 +163,8 @@ try {
     Copy-Item -LiteralPath $binary -Destination (Join-Path $artifact 'datachannel.dll')
     Copy-Item -LiteralPath $lockPath -Destination (Join-Path $artifact 'source-lock.json')
     if ($nativePatches.Count) {
-        Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'native-sctp-initialization.json') -Destination $artifact
         foreach ($patch in $nativePatches) {
+            Copy-Item -LiteralPath (Join-Path $PSScriptRoot (Get-IConnectNativePatchDefinitionName $patch.id)) -Destination $artifact
             $target = Join-Path $artifact $patch.patchFile
             [void][IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($target))
             Copy-Item -LiteralPath (Join-Path $PSScriptRoot $patch.patchFile) -Destination $target
@@ -148,6 +177,7 @@ try {
         nasmVersion=$lock.nasm.version; nasmSha256=(Hash (Join-Path $nasmDirectory 'nasm.exe'))
         opensslLibSslSha256=(Hash (Join-Path $sslPrefix 'lib/libssl.lib'))
         opensslLibCryptoSha256=(Hash (Join-Path $sslPrefix 'lib/libcrypto.lib'))
+        opensslBuildReused=[bool]$ReuseOpenSslBuildDirectory; opensslReuseEvidenceSha256=$reuseEvidenceHash
         cmakeVersion=((& $cmake --version | Select-Object -First 1) -join '')
         architecture='windows-x64'; runtime='MSVC static'; jobs=$Jobs
         verifiedAtUtc=[DateTimeOffset]::UtcNow.ToString('o'); applicationInteropVerified=$false
@@ -155,4 +185,4 @@ try {
     }
     $evidence | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $artifact 'build-evidence.json') -Encoding UTF8
     [pscustomobject]@{ Stage='BuildOnly'; Artifact=$artifact; BinarySha256=$evidence.binarySha256; ApplicationInteropVerified=$false }
-} finally { $owner.Dispose() }
+} finally { if ($sslReuseOwner) { $sslReuseOwner.Dispose() }; $owner.Dispose() }

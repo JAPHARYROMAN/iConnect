@@ -20,12 +20,15 @@ class NativePatchEvidenceTests(unittest.TestCase):
         self.root = pathlib.Path(self.temporary.name).resolve()
         self.assertEqual(self.root.parent, pathlib.Path(tempfile.gettempdir()).resolve())
         self.addCleanup(self.temporary.cleanup)
-        for name in ("native-transport-patches.ps1", "native-sctp-initialization.json"):
+        for name in ("native-transport-patches.ps1", "native-sctp-initialization.json", "native-dtls-initialization.json"):
             shutil.copyfile(TOOLS / name, self.root / name)
         (self.root / "native-patches").mkdir()
         shutil.copyfile(TOOLS / "native-patches/serialize-sctp-initialization.patch",
                         self.root / "native-patches/serialize-sctp-initialization.patch")
+        shutil.copyfile(TOOLS / "native-patches/initialize-dtls-before-receive.patch",
+                        self.root / "native-patches/initialize-dtls-before-receive.patch")
         self.definition = json.loads((self.root / "native-sctp-initialization.json").read_text(encoding="utf-8-sig"))
+        self.dtls = json.loads((self.root / "native-dtls-initialization.json").read_text(encoding="utf-8-sig"))
         self.artifact = self.root / "artifact"
         self.artifact.mkdir()
         self.driver = self.root / "check.ps1"
@@ -49,10 +52,13 @@ try {
         self.assertEqual(result.returncode, 17, result.stdout + result.stderr)
         self.assertIn(reason, result.stderr)
 
-    def artifact_inputs(self):
+    def artifact_inputs(self, compound=False):
         shutil.copyfile(self.root / "native-sctp-initialization.json", self.artifact / "native-sctp-initialization.json")
         (self.artifact / "native-patches").mkdir()
         shutil.copyfile(self.root / self.definition["patchFile"], self.artifact / self.definition["patchFile"])
+        if compound:
+            shutil.copyfile(self.root / "native-dtls-initialization.json", self.artifact / "native-dtls-initialization.json")
+            shutil.copyfile(self.root / self.dtls["patchFile"], self.artifact / self.dtls["patchFile"])
 
     def test_legacy_unpatched_evidence_still_requires_no_patch(self):
         result = self.check({"stage": "BuildOnly"})
@@ -108,6 +114,45 @@ try {
         self.artifact_inputs()
         (self.artifact / "native-sctp-initialization.json").write_text("{}", encoding="utf-8")
         self.reject(self.check({"nativePatches": [self.definition]}, artifacts=True), "exact patch inputs")
+
+    def test_both_pinned_corrections_and_artifacts_are_accepted(self):
+        self.artifact_inputs(compound=True)
+        result = self.check({"nativePatches": [self.definition, self.dtls]}, artifacts=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout)["count"], 2)
+
+    def test_reordered_corrections_are_refused(self):
+        self.reject(self.check({"nativePatches": [self.dtls, self.definition]}), "inventory or order")
+
+    def test_dtls_without_sctp_correction_is_refused(self):
+        self.reject(self.check({"nativePatches": [self.dtls]}), "requires the SCTP correction")
+
+    def test_altered_dtls_postimage_is_refused(self):
+        self.dtls["postImages"]["src/impl/dtlstransport.cpp"] = "0" * 64
+        self.reject(self.check({"nativePatches": [self.definition, self.dtls]}), "source hashes differ")
+
+    def test_unlisted_dtls_source_path_is_refused(self):
+        self.dtls["postImages"] = {"src/impl/peerconnection.cpp": "0" * 64}
+        self.reject(self.check({"nativePatches": [self.definition, self.dtls]}), "source hashes differ")
+
+    def test_changed_dtls_recipe_patch_is_refused(self):
+        with (self.root / self.dtls["patchFile"]).open("ab") as stream:
+            stream.write(b"\nchanged DTLS input\n")
+        self.reject(self.check({"nativePatches": [self.definition, self.dtls]}), "patch bytes differ")
+
+    def test_changed_dtls_artifact_is_refused(self):
+        self.artifact_inputs(compound=True)
+        with (self.artifact / self.dtls["patchFile"]).open("ab") as stream:
+            stream.write(b"\nchanged DTLS artifact\n")
+        self.reject(self.check({"nativePatches": [self.definition, self.dtls]}, artifacts=True), "exact patch inputs")
+
+    def test_changed_dtls_artifact_definition_is_refused(self):
+        self.artifact_inputs(compound=True)
+        (self.artifact / "native-dtls-initialization.json").write_text("{}", encoding="utf-8")
+        self.reject(self.check({"nativePatches": [self.definition, self.dtls]}, artifacts=True), "exact patch inputs")
+
+    def test_unlisted_third_correction_is_refused(self):
+        self.reject(self.check({"nativePatches": [self.definition, self.dtls, self.dtls]}), "Unsupported native patch inventory")
 
 
 if __name__ == "__main__":

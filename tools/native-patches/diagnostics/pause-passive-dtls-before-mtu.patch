@@ -1,0 +1,12 @@
+diff --git a/src/impl/dtlstransport.cpp b/src/impl/dtlstransport.cpp
+--- a/src/impl/dtlstransport.cpp
++++ b/src/impl/dtlstransport.cpp
+@@ -18,2 +18,3 @@
+ #include <exception>
++#include <thread>
+ 
+@@ -861,2 +862,4 @@
+ 
++	// Diagnostic only: allow an early ClientHello on the passive endpoint.
++	if (!mIsClient) std::this_thread::sleep_for(std::chrono::milliseconds(20));
+ 	int ret, err;

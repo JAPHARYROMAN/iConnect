@@ -1,0 +1,22 @@
+diff --git a/src/impl/dtlstransport.cpp b/src/impl/dtlstransport.cpp
+--- a/src/impl/dtlstransport.cpp
++++ b/src/impl/dtlstransport.cpp
+@@ -856,8 +856,6 @@
+ 
+ void DtlsTransport::start() {
+ 	PLOG_DEBUG << "Starting DTLS transport";
+-	registerIncoming();
+-	changeState(State::Connecting);
+ 
+ 	int ret, err;
+ 	{
+@@ -873,6 +871,9 @@
+ 	}
+ 
+ 	openssl::check_error(err, "Handshake failed");
++
++	registerIncoming();
++	changeState(State::Connecting);
+ 
+ 	// start() can run on the libjuice poll thread via the ICE state-change
+ 	// callback, while juice still holds its registry mutex. Calling

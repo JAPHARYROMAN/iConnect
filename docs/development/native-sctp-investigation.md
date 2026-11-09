@@ -38,7 +38,7 @@ An ensuing diagnostic-only sequence on the same patched DLL enables native/lifec
 
 All 39 tooling tests pass, including twelve new patch/artifact guards. Nine additional checks on an actual pinned Git checkout exercise clean-source acceptance, patch application/idempotence, rejection of altered source, an untracked input, staged source, a wrong revision and misrepresenting patched source as unmodified. The existing unpatched DLL also exports and reopens successfully as a seven-component bundle under the updated tools. An initial observation incorrectly counted a null patch field as one entry; it is retained separately and corrected to the validated empty inventory. The export itself remains valid.
 
-The public builder has prepared its patched checkout successfully and is compiling a clean OpenSSL/native artifact in a new cache. A separate validator is waiting on that exact owned build before native fixtures, main regression, source reconstruction and an unsigned package inspection. These pending stages are not passing evidence. Default adoption, all remaining native failures, full license review and field/release gates remain open.
+That public SCTP-only build subsequently completes. Its DLL `71cc514e…` passes nine native fixtures, all 958 selected main cases, source reconstruction and unsigned package inspection, including six guards and the patch metadata. The [DTLS follow-up](native-dtls-startup.md) then captures a natural handshake failure on that same artifact and reproduces a separate initialization-order defect. The combined correction has its own artifact and validation scope. Default adoption, full license review and field/release gates remain open.
 
 ## Checkpoint validation
 

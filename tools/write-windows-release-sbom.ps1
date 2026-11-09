@@ -75,14 +75,15 @@ if ($sourceNative) {
             $component.hashes=@([ordered]@{alg='SHA-256';content=$payloadDigest})
             $component.properties+=@([ordered]@{name='iconnect:payload:libDatachannel/datachannel.dll:sha256';value=$payloadDigest})
             foreach ($patch in $nativeComponent.SourcePatches) {
+                $prefix = 'iconnect:source:patch:' + $patch.id
                 $component.properties+=@(
                     [ordered]@{name='iconnect:source:patch:id';value=$patch.id}
-                    [ordered]@{name='iconnect:source:patch:sha256';value=$patch.patchSha256}
-                    [ordered]@{name='iconnect:source:patch:path';value=('PackageMetadata/NativeTransport/recipe/' + $patch.patchFile)}
-                    [ordered]@{name='iconnect:source:postimage:normalization';value='UTF-8 with LF'}
+                    [ordered]@{name=($prefix + ':sha256');value=$patch.patchSha256}
+                    [ordered]@{name=($prefix + ':path');value=('PackageMetadata/NativeTransport/recipe/' + $patch.patchFile)}
+                    [ordered]@{name=($prefix + ':postimage:normalization');value='UTF-8 with LF'}
                 )
                 foreach ($name in @($patch.postImages.Keys | Sort-Object -CaseSensitive)) {
-                    $component.properties+=@([ordered]@{name=('iconnect:source:postimage:' + $name + ':sha256');value=$patch.postImages[$name]})
+                    $component.properties+=@([ordered]@{name=($prefix + ':postimage:' + $name + ':sha256');value=$patch.postImages[$name]})
                 }
             }
         }

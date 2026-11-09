@@ -6,3 +6,7 @@
 *.apk binary
 # Unified patch context preserves upstream indentation and blank-line prefixes.
 tools/native-patches/**/*.patch -whitespace
+# Preserve captured validator output byte-for-byte for artifact hash bindings.
+tests/fixtures/android/single-case-success.txt -text -whitespace
+docs/development/evidence/android-large-upload-instrumentation-2026-11-09.txt -text -whitespace
+docs/development/evidence/native-connection-tools-2026-11-09.txt -text -whitespace

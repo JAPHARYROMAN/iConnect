@@ -1,0 +1,4381 @@
+{
+  "SchemaVersion": 1,
+  "DateUtc": "2026-11-09",
+  "SourceParent": "ea70d8d6c9cf49d2f268015c65f91c0f57d24737",
+  "ManagedTestAssemblySha256": "c080c7a62260c844ff92ffdf50355ebe9680014d88988cc54b66afbcc2e7c5c7",
+  "NaturalSctpOnlyFailure": {
+    "NativeSha256": "71cc514e564381218d205a186be7efc346ab040ed65e8e0a9b69a1dc490b34fa",
+    "HookSha256": "7e7ff4393d68f61620c00ad5a025c72ea130452336c4cf0673cb27af88887c20",
+    "ArtificialPause": false,
+    "ManagedLifecycleListener": false,
+    "NativeLogLevel": "Error",
+    "Samples": [
+      {
+        "Sample": 1,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "c05a619dc716796e6e4bc20bf795ea33bff9d9b65741c6c551efb36061ad7c71",
+        "TrxSha256": "8151978687ead00257dbc2f4ecd9925f48c421c0c72dccb9529b87c3e3ba2f55",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 2,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "410af8763ebfc898992ef49a33ba652beb2aedbb01b0a0371118226489a11f82",
+        "TrxSha256": "0ec7a6eb81c68b40ece60c742e81313c9b485f801fe9042bc9d37abe8bfec390",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 3,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "f768006460186c7a93cd7067d691117227debcbffbacd65eee79216c92fb1c2d",
+        "TrxSha256": "4a7cdee374e9a320007c0cab1781af27b6cd5f1cb42c88cd6cd2632063ad6106",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 4,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "1af24e5382838c593513b5d93784dce93a9d8637359a9d70f6b6a481b583f800",
+        "TrxSha256": "098eee616e358f9ce9162ae4b2736b15318b895abfebd7458fe7e9bdd3214497",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 5,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "e5f9d32b72b9b48142f220b820357a1805ba406ccb23e65c7daaf20a55e0367b",
+        "TrxSha256": "83090957661079ae6a765ac763c7e0a4374de0042032e2c104b3fc2e8d5a38cb",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 6,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "8526ca3cfd5d4994aacd01a05ec660733a69038d977285ca95709cf336caa03e",
+        "TrxSha256": "4e71b98d2f96f34a4bea2bde5bbbca250a41cc065722f503f990c4e0252a69f2",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 7,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "814caff384dcaea8a88abfdcffb3f0fd4c5fcbdfd437ccfe039c166ebd1f1fd0",
+        "TrxSha256": "360f5337ab3f3cf777f10f8df59997f810128dde2e8625c1014ddeceb36829c2",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 8,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "f2dfe9510dff5ac42c19eccf617db9437b31a003fcfeaf98a2577c5db30d8ac6",
+        "TrxSha256": "3229b026a27c4d94477eab5e9bd145031ac066bf91e2cf1022e4a67473835e72",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 9,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "3ddc2ab4c7520b9d357ad1c0c14b314de7a9087ec8e6df49caedc557eba92ea5",
+        "TrxSha256": "3517a61e3413a1d39c964ef379c9f6d55d0023d0942cf3292eaf8c9e39550506",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 10,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "d5e27fe17bb02c996861526c9595c8cf967b0b949b9522fc07e3131c6f250ef0",
+        "TrxSha256": "b4606a61fcde8b5d8506f95c12b5bf1aedd062994ce77b682a0b0cd3c08d0b6e",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 11,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "6cc128fcec075e277a99d0afe6d4cf9d277d571b5e0c365786807df8802a774b",
+        "TrxSha256": "6e6b9b266a037557eb0d243b59a3186979da2fb5f2e1bfdf9db92aa5b6da8f20",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 12,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "5eda4a8a674b27962f22ae68f3b88dd8f8ce73e71014e7c47bd8ceea5f79b3af",
+        "TrxSha256": "da0cc325e4045c7f1efd991d861a829fd951ccaed35aa6aff64317019224f58d",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 13,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "176bd0f775af5cc7d6b1fb25520fe8b71da11545b531c988d553707b259162bb",
+        "TrxSha256": "50a4e464d8a70341e9b9ccfd888666db955d678049923342e702898ab6e6d6d7",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 14,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "bb3be3a49313e07b924ee2fc52e6da6d4f38e0a51bc3d5fa6e8e68da3b54ce9d",
+        "TrxSha256": "ccf39eefa514e7528f30a3e5a10ae682aaae7ed4ca9791e4f5f5553bd29cca58",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 15,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "ff15b94aa038560798b9aa368c6baaca2fb3edee1f67ec7d9fb45025bc822447",
+        "TrxSha256": "07c3e33341452713e1817661a452aee5d1c64f7bfe4bda6e6b406dd1949161bc",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 16,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "e04732646fe2149362a06877b5a6cbf384c7d6aa6a2048c275139023e6e154f6",
+        "TrxSha256": "9a2a37ef2dfb346564667c63eb8ee730e5e6c9f792ded66f639a3149da32fe7e",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 17,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "b026788cb8a25c6ccb76738a7bccecfe58eadce3d6f82700f5431917fe1f1844",
+        "TrxSha256": "0780b90b452b38d3142ea664426491a36f83a8e2c9297286c35b5e9b35a96898",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 18,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "3e2205c66b501e8a551f994c3330c1f57de1fc1fc4f71ce32f0e3b49e47537a9",
+        "TrxSha256": "206149d0a72edac13a3cb81d5574cfe9d6cdd4e3d9b14918d234c08d910aa0f4",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 19,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "c3b7f1ba0d11e5a97deec4fd1dc96479a261b8c4cde83ccfc142371b4274fcd5",
+        "TrxSha256": "c4188d86e66b6446ba13edf1e0aeb0b6487bbf3a934c7a982865312554fe3f93",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 20,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "19c0485bacb82069f502c001db50cf416bbfc497c604bffc3c1df7050b904b74",
+        "TrxSha256": "03ee79bc6a5831dd3c61fb0d7fe99bd2e3363925d6d728f876711b2b90cd7c61",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 21,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "21f5c1f8f2774a747d622ce6c26d3f1a7a2cc2100cdf75abac75973cc8b803cc",
+        "TrxSha256": "a0c859f3a3f42aafd5660ea1b75234c9c61158254e12c07cc5f663e33e59ce69",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 22,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "e95621d238d8491cb6b1b6bd099d5d1f32e76faef08936c80c4a6c6a60e5aa88",
+        "TrxSha256": "2b954768229da082b0612caaeb2d8e9a0a61d66af9cdc1788d1f7ef30caa430d",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 23,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "8045865bf516ac0dc055934165c5ff09b1b929f956a5c51b3e1989e2102550f5",
+        "TrxSha256": "d03425625af9926f70055f6675fafd29033bee2d62f67c7d1319b99aa40a449d",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 24,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "b19759b9e00d363c52e04b71032f8afceefe21c4320c3d8478cc3315f994d9cd",
+        "TrxSha256": "d722ebac3ef2e5fd267a71407edfd1bbd3c6646cd3ede5162b89851374dcb63f",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 25,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "435cb1d932a589e7e7469c125a0788546f81b85f9d0e4a6c2a7fea51dc4d74be",
+        "TrxSha256": "95b2c13c5642d2d47fc0543d5b0ff01de71a950319c11b595c301533402528bf",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 26,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "cea0fae29836200e99d00b45c69a55dbd03812d9b665b9675739b19d34afed6a",
+        "TrxSha256": "6d3bb52af713962d76e51141e6035e0b610bbe3f0afc19e00563a7f980e13491",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 27,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "9a731687f86a047993abc42a2cd0eb9b82f1f6cf1da5e23ee9137165a8dd0702",
+        "TrxSha256": "bab5d2d792d32e988001bfc1a43c47f78baebdd22abeb69162de880e81de844b",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 28,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "a83e7e8267f7501c86835b8f9f6358e62e367d8a0ef949faf1dae95128229d8d",
+        "TrxSha256": "c13f2b565f703db5b0c5b704856819fc90c1255df497179a7f98ecec362117b2",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 29,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "b97e13de5f5f511e24e8a5faf2192da43026a798369f128a2302d9dab9482d45",
+        "TrxSha256": "538bf37048e76e92d0900355c7c0efec06db0b87ae711887374af3a26f0923f0",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 30,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "b14161af7de303ab7aaf5ac7a535462454623b091014e851043f40d210512664",
+        "TrxSha256": "d508be7571769741c73ee2dc560bac35a59ef35a72823d03b5b5c8df2903dd40",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 31,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "1e1517a014b870828b9911c646210a3bda3be4f8985740e021937e75bf451b98",
+        "TrxSha256": "fd8b2b041bd2bc0ba92a5a14c202979c50a89947f2a4f4050f345ac210d7091b",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 32,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "52e0bccb883de3da779b669e08d71beeb4517df927cccf7d8d6cd4d1ee111839",
+        "TrxSha256": "f742a57b93e68d739f0a75fc466ef76ec1b720ab07b0fa713f0bff3e942d5b71",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 33,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "e6c7a04144d0b369cfc2dbafcd1c5043e1437da61034eee3bb07fe4596661f9f",
+        "TrxSha256": "3dab7a166f87a9bf0ca67f6ba2f7dd2ec59b14b548216e9897c8a14520d11fe2",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 34,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "e657268c5215e3e9e5d747274ab5d7c4c1799e1bf3c1fc97e77ce331ef043bd2",
+        "TrxSha256": "397fb6ef690b703d32cc08a25b0eafb3082548363ef5d25441d5d11e594247f8",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 35,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "4d294985038dd4d7df17b660ee8acb143ae4834b4bf7daec8109c6bb100fdb97",
+        "TrxSha256": "f2f29347eef750c31789927cb1b23e9256c2f1e6e11c72d0d9575638b58ea7af",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 36,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "0116d60a7c96eb204802fdf105eeaa836a955ec9cff538b332c164135129e0eb",
+        "TrxSha256": "4bd77c0d9802b5951f408b4cea4b3adcbe6203dd33e29068c662e656286e00e3",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 37,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "7b7dbd0691e606f3111e280351849a6c358446acb99ada67dfb8c36c558104cf",
+        "TrxSha256": "d65b37f5b81f9670da86005d7ee19ac471c4d7eddef44c62bec500fa38edea47",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 38,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "1a5c3264f74ab432fe5b58b35ee67ba3f740c7fa704992c89502ef972bd49402",
+        "TrxSha256": "418d5d7c31a666204e3950bb9f891f443f37cdf323dad0376aba024c2b1f1911",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 39,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "f9003c1ca0392008519a08c841ade0f51c17b208b4fcd1238d1c0df8faa50bb6",
+        "TrxSha256": "f5e214e16d6f7fd420825cef9c3c81a10ba8d09fc0ef6976a8209499da7712da",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 40,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "cd76e48fb9f76a375da2e7e65f672e7b40d94215d4bda6f8493915503db56bb0",
+        "TrxSha256": "f2d28bbb6f240d7f28aa3aa84fcf347821a7a84287d1d086b5e19555060ea489",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 41,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "533ef97380fdafb3f8135b24c2eb535a05e30100a395cf9d8e5560af48def4ce",
+        "TrxSha256": "1b3d1268ec15401195d7afe79758a5100d8f4e908a8f39b9e9d99be51d31360a",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 42,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "4e1d6ba6a3070524eac9f229ed2bb14afbcf8e45840f12574bf42f1b788a2b5b",
+        "TrxSha256": "8d9405b1116045a950f448b691cb6223fb6e68fc703f6e4b465ef83756287f0c",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 43,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "fa032ef82d14ed7650cd6ee18e792e6ab14d738e45b0b6a68fdd6712529d8f85",
+        "TrxSha256": "5e7cf95fec64f4504e8e7963ac39fcdb2aa436059ed4c11ad71f3ecb3f16e87f",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 44,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "8af630f4bf2785ce22eb22855add9355413d1bc3d9e3166e398080c14c303b7b",
+        "TrxSha256": "97cc4cec47a231280117b6477c3b4bba7ce7b3d2099d8dc346610dcad699e7d9",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 45,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "b6f9c4e96c781b556301c33667cfa4a72aafee802b829b1889982f330c861cbd",
+        "TrxSha256": "019976b83526b73de47a692ca05299af1924dbe7e0f6e49aa17097c845e6d1ef",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 46,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "f524809651b028c8740889d85769be31f1a077f11f7f1fb9c919d2ff8e6689e6",
+        "TrxSha256": "9a0bc1837ed410e0d852c083e699a1cd83e95d044a9be92d4ce1ed349c62d2c9",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 47,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "c93e70954b4beaa0233c0c3c7d2a5af4f6b62c21f49f250e5dc4e897939678be",
+        "TrxSha256": "54b75c040766b96192a3bc7e46f8fa4f533881c05d4849cbeade52b7d1eeeba8",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 48,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "21ae585c6b8cc80fd35e87de5f085d158ae036f3a45b1d4864180a3c862e1bc3",
+        "TrxSha256": "f9638630f7830ac8d2e80bf60761b6f88a8b90ead319a496e02733e3d66a1fbe",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 49,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "ece129e4c770d1e622aa461b3ecc437801bbf6470eb7b483ae447003516d6396",
+        "TrxSha256": "54cfcbe3f492164aa17f3aeab4931fd4013b748a9bc395ca1ac1f1e3f7433e35",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 50,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "1e1f545e618498a7b92745575634fd8cda77062034cc65453cdc3a1512eab7f4",
+        "TrxSha256": "cf61c7f36e2ac4ef545620a305896ce072c8b24ed9d97a26b31848d7222ce3b9",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 51,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "0013c00e09210386fa2c9d3a3cae61c3f92b408d594e19fafad3377f549c61e1",
+        "TrxSha256": "1a0957d484a964d19d0c24304c276780082b4fe46ceb6726eb3df3c85f852a14",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 52,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "9c027780db7d1196e0b7f8c795a6cf754cdee17e902502b18c4b86713493e024",
+        "TrxSha256": "2591c09566625710361ec5df2ad0433eb5fc41cc91e5badaccca5d7f9d8a1d90",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 53,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "f10fc70b34e13fe9483fe91234450e3d0cc4acd11f0a03914f98c69ff7112676",
+        "TrxSha256": "aba69fd21e845d54a7be713acc04cf89101536a8516bf5f641eb575f5301d08d",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 54,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "63d2807d0108e30134b227e1987e47acfcd2acb15ea6b11b580d5094b68fc548",
+        "TrxSha256": "809a0f6ae4aa3f1f6b048f5fe99d8d413c5f077674cdb219a20e1cebb1ce9fe0",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 55,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "f1e9fb32bcd85f1fd1626c9c4502005129860e8aa1405c1766cf651ebd784fea",
+        "TrxSha256": "368741bccbcb92b8cdf8e734affa14257c0c290cbef5fdf8f4d1707f93fa8624",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 56,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "c9f8366043e2aa690846f5eaa83b97ec5bdbe28cb3661d4a46f39f6d88972ae3",
+        "TrxSha256": "c06e661114347f3fb9acfba391fc198ed4388582242d2c3078b41262fc92de1f",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 57,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "0d7025ec5fdde5ef3849e3577bfd0464aeab8b13d8de5eab7847f52ff8585604",
+        "TrxSha256": "cfcb0198f52726de38f810a1eda319ad97a137da2081b86ab406dffcd7917bed",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 58,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "419dcb97cffaaf619c088bbc77ac30ef195dbf8ce42cfb917d9b2972bd63e5a3",
+        "TrxSha256": "1ac43d209babc38de484200cdd33d918a393ab97cd8e443f7c297fc5d633b938",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 59,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "488c24e6bc6f785b95d07a05ed69c035b2c5953f864f6fb0f9ce8757b7eb46d2",
+        "TrxSha256": "26e27195d19f2c942c2b2f8cdb3f2798524360e77375e0d81f5cb903d11aa930",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 60,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "f0b169a1bec02b71379199ca39b4d160db5e2f6159de725fc737e1493e463614",
+        "TrxSha256": "a04577b48c5c32c4d9d84b54badce9c237d58b6a6d2cc1a83d59be7bcbfa39ad",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 61,
+        "Total": 4,
+        "Passed": 3,
+        "Failed": 1,
+        "NotExecuted": 0,
+        "ExitCode": 1,
+        "LogSha256": "007140da130b85f2b66400d34b505f298f2cdfd2efd0f12559fdeca1425c83ef",
+        "TrxSha256": "24847a3a23af8aa009b69c794cfbbc856d334e3d8ddcf021ec801e7bb6ab3ce1",
+        "TestHostAffinityVerified": true
+      }
+    ],
+    "FailedSample": 61,
+    "FailedRound": 7,
+    "FailedPair": 3,
+    "FailedPeerContext": {
+      "ConnectionState": 4,
+      "IceState": 3,
+      "ConnectionHistory": [
+        1,
+        4
+      ]
+    },
+    "NativeErrorTrace": {
+      "Sha256": "c8c761526277a447ddbc95836abe445119b4c4b5054486a29a5ca45c3977d1b4",
+      "FatalHandshakeIoErrors": 1,
+      "DtlsHandshakeFailures": 1,
+      "Dropped": 0
+    },
+    "FailurePreserved": true
+  },
+  "MatchedSchedulingComparison": {
+    "Stage": "DtlsMtuDiagnosticComparisonCollected",
+    "FullCompletion": false,
+    "SameSourcesExceptReceiveRegistrationOrder": true,
+    "Samples": [
+      {
+        "HookSha256": "19def01f4c8415f85a9cef45fcf20d129ea8534a41840d287b4c1ffb50e8a3c3",
+        "NotExecuted": 0,
+        "ExitCode": 1,
+        "Total": 1,
+        "Variant": "control",
+        "NativeSha256": "a37ee03499d02c0ad7987be056beb9edb5885ec829a11e46eebb9b608fd5b358",
+        "TraceSha256": "7d3a5f6a7769b5ec336c213852710f9df4fa729111e89897763cc2bf9e1715dc",
+        "TestAssemblySha256": "c080c7a62260c844ff92ffdf50355ebe9680014d88988cc54b66afbcc2e7c5c7",
+        "TrxSha256": "c085f7be68e1ddc7bd656bb02f28d52378d7561d89f8a5c88de387234d27e2dc",
+        "Trace": "native-20772.log",
+        "Failed": 1,
+        "LogSha256": "15e90e1cbb01619795765c2cf81b0a98e1e4aaaf076235e28c5bcb0eba324608",
+        "Passed": 0,
+        "TraceSummary": {
+          "Sha256": "7d3a5f6a7769b5ec336c213852710f9df4fa729111e89897763cc2bf9e1715dc",
+          "FatalHandshakeIoErrors": 3,
+          "DtlsHandshakeFailures": 3,
+          "Dropped": 0
+        }
+      },
+      {
+        "HookSha256": "19def01f4c8415f85a9cef45fcf20d129ea8534a41840d287b4c1ffb50e8a3c3",
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "Total": 1,
+        "Variant": "fixed",
+        "NativeSha256": "1ae7698ffb735ffb14b664ed41822bbe416f768ae5a439e9a13fc4948de5def9",
+        "TraceSha256": "63b1f6bb942ef44cba084dabbd09110fded3331e855210974d1629f250bcab4b",
+        "TestAssemblySha256": "c080c7a62260c844ff92ffdf50355ebe9680014d88988cc54b66afbcc2e7c5c7",
+        "TrxSha256": "a3c9918d598292fc853fa89368119678d42d574aac53a72ec7976c980a3e3c91",
+        "Trace": "native-12608.log",
+        "Failed": 0,
+        "LogSha256": "d0bdfbfa288f1ca4c017e4b3093bfb3443db4b6d23f60c74938a4821c7b4b4b4",
+        "Passed": 1,
+        "TraceSummary": {
+          "Sha256": "63b1f6bb942ef44cba084dabbd09110fded3331e855210974d1629f250bcab4b",
+          "FatalHandshakeIoErrors": 0,
+          "DtlsHandshakeFailures": 0,
+          "Dropped": 0
+        }
+      }
+    ],
+    "CommonPassiveEndpointPauseMs": 20,
+    "SctpFixInBoth": true,
+    "DefaultAdopted": false,
+    "OriginalUntracedIceFailureUniquelyAttributed": false
+  },
+  "UpstreamIssue": "https://github.com/paullouisageneau/libdatachannel/issues/1657",
+  "ProductionBuild": {
+    "schema": 1,
+    "stage": "BuildOnly",
+    "sourceLockSha256": "d8d8c75efa7114c6c7df7984fc199415dafa222de5ba95506d86847313ab0b53",
+    "binarySha256": "57f119d4f978085570df1e3f9e333e7655680af6d0bb89eebecf6f424787dfbc",
+    "libdatachannel": {
+      "repository": "https://github.com/paullouisageneau/libdatachannel.git",
+      "tag": "v0.24.6",
+      "commit": "6b1e2e620f1e37f0eafeee702eaea0043cb305fd",
+      "submodules": {
+        "deps/json": "55f93686c01528224f448c19128836e7df245f72",
+        "deps/libjuice": "b89c792e3612faf2f12cf35bcc56857313a06be3",
+        "deps/libsrtp": "24b3bf8f19b6f5ab4cd2bcceb4f4064efca86fd5",
+        "deps/plog": "94899e0b926ac1b0f4750bfbd495167b4a6ae9ef",
+        "deps/usrsctp": "fec583d54493f879d2ae44a743423bf8a04371ab"
+      }
+    },
+    "openssl": {
+      "repository": "https://github.com/openssl/openssl.git",
+      "tag": "openssl-3.6.5",
+      "commit": "c8bd5a57108599ac650bbae77fcabe3109dab2e8"
+    },
+    "nasmVersion": "3.02",
+    "nasmSha256": "04ec2385879f7e1c45dbe76c4020970555de48eeb97c23f59620ede061328f51",
+    "opensslLibSslSha256": "f5518192f6f2eb6742875a4ded8aba5a1af85a24dc694e35987296721566ba53",
+    "opensslLibCryptoSha256": "f098d51eeea4b6e7a77586a6163bb2b2b49aefadfd75924b555dd352c6fa73f2",
+    "opensslBuildReused": true,
+    "opensslReuseEvidenceSha256": "63eb0d15c1b9a6b0a7a676a82bbe4e6c16ed8fe1758f9d095f6b921122e8418e",
+    "cmakeVersion": "cmake version 4.3.2",
+    "architecture": "windows-x64",
+    "runtime": "MSVC static",
+    "jobs": 1,
+    "verifiedAtUtc": "2026-11-09T14:25:20.5508988+00:00",
+    "applicationInteropVerified": false,
+    "nativePatches": [
+      {
+        "schema": 1,
+        "id": "serialize-sctp-initialization-v1",
+        "baseCommit": "6b1e2e620f1e37f0eafeee702eaea0043cb305fd",
+        "patchFile": "native-patches/serialize-sctp-initialization.patch",
+        "patchSha256": "ecb09364ce5510bcf7109bf672de1caf526717f3f393586ee767b8920d23d7b1",
+        "postImages": {
+          "src/impl/peerconnection.cpp": "4345ea0a2f9169ae91a43dbddfe1dbc43cb6648cd7737892ced70c84e57ce8b9",
+          "src/impl/peerconnection.hpp": "76484bdbc1784867ef81d67d5210947f53d43eb1a96f7ae28e03637ef49a96c6"
+        }
+      },
+      {
+        "schema": 1,
+        "id": "initialize-dtls-before-receive-v1",
+        "baseCommit": "6b1e2e620f1e37f0eafeee702eaea0043cb305fd",
+        "patchFile": "native-patches/initialize-dtls-before-receive.patch",
+        "patchSha256": "b893d83392352eab12710c47b826f6392a5d2924ad6fb3b8731982ae3ce3a79e",
+        "postImages": {
+          "src/impl/dtlstransport.cpp": "634249b05edf66c36589eaa771eb6bd058f2b129fe759bd617bdad305de1769a"
+        }
+      }
+    ]
+  },
+  "SourceInputs": [
+    {
+      "Sha256": "ab1731aa6a0b2471b562e8cc9ceee171d1a6e3f735799a94793da682502ac39f",
+      "Path": "tools/build-native-transport.ps1"
+    },
+    {
+      "Sha256": "8f55ab8d68bfb4685b405136051f77a27e8bb8afbdffb370d12ec799395e9923",
+      "Path": "tools/native-transport-patches.ps1"
+    },
+    {
+      "Sha256": "c219f8fc123b0d532fdbb3c9af652f55dec32e5288933d8524f4a8261840df7d",
+      "Path": "tools/native-sctp-initialization.json"
+    },
+    {
+      "Sha256": "ecb09364ce5510bcf7109bf672de1caf526717f3f393586ee767b8920d23d7b1",
+      "Path": "tools/native-patches/serialize-sctp-initialization.patch"
+    },
+    {
+      "Sha256": "604f6b180ae15f7da02425b70435346ba3c1eb0b9a52accedf0d9d7be0ade4c6",
+      "Path": "tools/native-dtls-initialization.json"
+    },
+    {
+      "Sha256": "b893d83392352eab12710c47b826f6392a5d2924ad6fb3b8731982ae3ce3a79e",
+      "Path": "tools/native-patches/initialize-dtls-before-receive.patch"
+    },
+    {
+      "Sha256": "0bd691e0bc60d0d595b4b3fe3cb8654040d608d086911987ffb5e44db33e2a78",
+      "Path": "tools/test-native-transport.ps1"
+    },
+    {
+      "Sha256": "be9be02d844700ad8677d40b4fb0a9897647654c3d05fcb5bffdca36fac94943",
+      "Path": "tools/export-native-transport-sources.ps1"
+    },
+    {
+      "Sha256": "8dbe5349cb583725f702ac845a4f20a9f20caa19d8bdfda710ba6acf365b7401",
+      "Path": "tools/read-native-transport-bundle.ps1"
+    },
+    {
+      "Sha256": "ad76cd18e403c023ed8e27cb0992c512fff0c74c7f02c8d9c96cd152b280047a",
+      "Path": "tools/write-windows-release-sbom.ps1"
+    },
+    {
+      "Sha256": "7189e22991b4e8cc18c1389da24783805905042a89ab80c26bad48246e2cb17f",
+      "Path": "tools/test-native-package.ps1"
+    },
+    {
+      "Sha256": "7d86ec3cffe37a8f8cb7325762af3edf8e8152e94b3ddcffc87b3ba4072c399b",
+      "Path": "apps/windows/IConnect.Connectivity/NativeRtc.cs"
+    },
+    {
+      "Sha256": "03b4da3692a35cb4c14f1344c4172e842aa0e7a9a75ffdfed1d38656f87c5198",
+      "Path": "apps/windows/IConnect.Connectivity/NativeTransportEvents.cs"
+    }
+  ],
+  "CombinedValidation": {
+    "FullCompletion": false,
+    "ConcurrentPairs": 6400,
+    "MainCases": 958,
+    "NativeCorrections": 2,
+    "DefaultAdopted": false,
+    "UnsignedPackageSha256": "3cfb259adf9fd090799f0f38e33df97b33672ea2e15192a30eab1f0cb04f4151",
+    "BinarySha256": "57f119d4f978085570df1e3f9e333e7655680af6d0bb89eebecf6f424787dfbc",
+    "VerifiedDtlsInitializationCorrection": true,
+    "ReconstructedPostImages": true,
+    "StressCases": 800,
+    "OriginalUntracedFailureUniquelyAttributed": false,
+    "BuildEvidenceSha256": "0a3806bda690129d217b845c36ec19f60a9b1ac8418ff6d185fabb2ddfa7f2fd",
+    "NativeFixtures": 9,
+    "Stage": "PublicCombinedNativeCandidateValidated",
+    "PackageInspection": {
+      "NativeSha256": "57f119d4f978085570df1e3f9e333e7655680af6d0bb89eebecf6f424787dfbc",
+      "SourceFiles": 30,
+      "Guards": 6
+    },
+    "BundleEvidenceSha256": "494ba23392f60ff080848a210e499e8a72c71d0df4c6ebc7bb13e7eef4380e54"
+  },
+  "PostCorrectionStress": {
+    "Samples": [
+      {
+        "Sample": 1,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "287f2e71cfc5b95dba9c8c7074d1708254f6e427b60cee2511381118b126799b",
+        "TrxSha256": "787ffb3c11be2dfc6b1aa4f748081252b8cc4a8c0de00e6fcb5740c7586cd39e",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 2,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "94a5356f3868a024968e5a8f0c74849888c2926f7e357a3161536f69ea7519b4",
+        "TrxSha256": "38a4cc699634196f4ad8a42a7d118394de50e3e54f70d745306286d30252d2cd",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 3,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "2e847be9f3a1f0937754764f78761c62bb2618301fa284b84faf12bd480501e4",
+        "TrxSha256": "c7e67edab938748724f1d6f497946b8d280131a56b085d6f58700992bd31404b",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 4,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "fd5ef6cc6307f80aad28cd66d1efadfef4065ba60d762528eb4e6b1a74c47709",
+        "TrxSha256": "f5ad1aa541b6bdb6f4f77f60b98551cc9faacebbcfc7b32696f51fc9a33d6f70",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 5,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "90d29e1299df37e7c9a50d67ae174a870e6ae736a41821f78bb10865799a00f2",
+        "TrxSha256": "5d8de5d89643e210e9a7338bdfc40ef9f211cbe65fbb82268cee429d49318f20",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 6,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "7f12fd4f86d36dbfba714d00b037c0f306a267f48173e856b311d4a15dfc0ea5",
+        "TrxSha256": "9317cfb5169b18c78f4cfa1a0b0feb217b9f550640353eddd76c513d7b1d2dfb",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 7,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "75f12c89b8d78304b9ec060eb430f58a83f7694d7be767b3e23983b5010169b9",
+        "TrxSha256": "9619b86a1df6488dfe3c91cbbc1c2e0ec0de3dcc5b96f189c7533aa8831bb849",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 8,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "39200cd6c5db7fc0a7ca13cee50081c86faba3d1335b287c4cff8cd976200536",
+        "TrxSha256": "da157646dc13ab58aa2edacf07d8c7a0b036c40622e292b8b6a42466ba471c62",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 9,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "0e4a5cc16a99cba309f4b9a04a4f125ae213ba8c889a396e4a15d246729f4375",
+        "TrxSha256": "75b2f80b23485b70808c2aaa467fc7fb0a9bc11b0885ec76c2208dba6a11a6a7",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 10,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "269fe504051e83598cd9bbfe105b95cb9b9ad87203fc73e1325e8168ec78e2da",
+        "TrxSha256": "fd79ff838ae379224cd3d172b6d56add65e5d4603b9358268ba229e79ebc3d52",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 11,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "80593a8a4a15db07fa3c9441e7e6393dba9b58f4f5afde3cd732b6525913558e",
+        "TrxSha256": "0f9f466dd58a3dac6450ed1c11751938caefa64a00648d69599736d4863718f2",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 12,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "5ac00f44ee3aa00962b0145b5048f5a8bfaf3cbf382b9d7435f31de6de79bb1a",
+        "TrxSha256": "2becc9117a18a3d30a300f8c3012bc3e25b2655e3740d07dc089e980b5d45ffa",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 13,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "b50fb369bfeff5cf9ab278a4bf7907ed1eb944cc9de6861a71d4863be9d9aba7",
+        "TrxSha256": "5859a2bf19ff0f94601958839865f0a735f45fc30480221f82bff6da717ef91c",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 14,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "9fd97b9f0558d483708ccf4b663475f10f593bdb42e90b1a7bd639e9e39d60bc",
+        "TrxSha256": "4c86198bfacdff1786684fd25cca493a52122ef263d1940270025042c3295c88",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 15,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "a58216d7cafb9c22d8097bd7fb0062bdf042a3a57519076d51589e8032fe3c1d",
+        "TrxSha256": "cdbfa4447902d93a1274800e57ba5075ce3d21ae1a453d17bb225e641ffce1de",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 16,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "3d9bc9f898b4a5e26e1569c03c38bffa228210092df29ea3eac460874bf0843e",
+        "TrxSha256": "a58c696127e8af03069ff11c758b1970c8b7a38e910dffcfe6542fd2193067c2",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 17,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "e0f03a5ab07b7ed2d2a9860259ebbbb4cb08ef78b0a4e0ab3b1b08f2d10dab87",
+        "TrxSha256": "065ceaddcaedea2fd0e75559caa20fcdb7809c34848db9bfaa0171b55da0c555",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 18,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "0f221705978a2a2de925ae56a99ee80960c99f135952300e60f14b5ea9aa53f7",
+        "TrxSha256": "473642bdc6cf9a673e20d1ed02da28761fab912cbc512839fb3c709e62f8c574",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 19,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "62d808278b7d50e4ef9441744e6eab7ee2625cea66c381c4c30f44d48fddecf6",
+        "TrxSha256": "fce92f58e99f390e8ae0d94892eab93acaf0bf17ebac722a5e08b6b0530d5dea",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 20,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "c1296e481e99b0d28e931f645b1cef7aad18f574786827df0dbecf648061c2f8",
+        "TrxSha256": "fd8dd4e3d38ae7e191896c5b5f648ced81cd0b0961914136598676195b5ff126",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 21,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "0cf809fdfb3e058fd98d90ba21d95bf56bc0242c016a1c8959a7de23acb443d8",
+        "TrxSha256": "48eec8041862f2e99ad48de7f5bcea19014dc5eb9c0dddec65d5ea0975424422",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 22,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "71a958d5532da2db7067eaea19f5587fe10c91546b4e3a3da6e216aab2f18b15",
+        "TrxSha256": "e533ece54836cdb26d696d0a91f33af08328624c1f45aed8552309a5526772ab",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 23,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "8d0bdbdc0554c4ef6e84136c023138c183df334146989af65543c9ee3cfe5b43",
+        "TrxSha256": "b7d8a104d6e190104cebfbe66210adeda7dca909a754cabb5e6b836ea38a3544",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 24,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "f13bff090128c838f88cf9298bd36b1b28f96aee2259af9fbc4adbe60cc1f91d",
+        "TrxSha256": "55c7cb80fb552449d9dd00425d8f4b188018e52a0f66844aafe1ea417ded6524",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 25,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "4c09e7b26ce3ba7ae1db7af915b3d44617157776cd9b87f5a272939c2a027a13",
+        "TrxSha256": "702f5eecd60624a218eb1b5c7048433197751f4c7cbc1ffb02b6ca36f65d1376",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 26,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "56a1c1853ffaa32689c799e44e1ebe470c3a1735f558d0134974af4259839ba8",
+        "TrxSha256": "69fba22b4c7bd7131b848de49c3bbb56cabb2b0a7e14c56e6edafbcdbfebc9e0",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 27,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "29951b286366c0d6f08893424d5e8d061ad11843f37df493f2aee1f01c57e022",
+        "TrxSha256": "040556190b4aad1a474918b3b8979367da00871d476f2461a0fca910506b17d8",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 28,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "92753ddb63090cde21a63409242d1f51cbd34f583db648ba51bc0c447396eb52",
+        "TrxSha256": "9fde5a0e638669b55cbf959e11d16259bd0d8c8656c290925b1c739f8ce89180",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 29,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "202bba3e13ef95d47811a21c9c82614d30ed90281e58f72625e9fc4df51e28f8",
+        "TrxSha256": "425eb5c30d9f89458767c823e4741a33ecf7fc640d75aeb8501c5f7a22437288",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 30,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "8a08cb018d89614e13d3901e2d3dc6a2e9335721fd8d83205ca821d99073db98",
+        "TrxSha256": "d99373cf4ba18bd812163e33a923d8804e16cda7175176cadec4d8dd2ed38491",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 31,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "c23af99d1f0351db9515539d636b8d26da59b7f856b3bac4b5b0cea390899303",
+        "TrxSha256": "25d901547801bdbf2d187ad179ee1135f1d6bde80a45ab1164b6b4f3220de2e1",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 32,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "2eac1a59f2a9e2f6b82eebfded674341ae76a2c9d507c074ca395ba3f2bfb621",
+        "TrxSha256": "57d72b3e8d5c7a9f6ad1cfecad655a47cac86e2eeb6964afd655bf1b33d7a613",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 33,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "33ef1408ec544d2075bde5293b4724e3f7e38e4ec096494fd385e72cffe75b46",
+        "TrxSha256": "bea10d2c8a4b7317ceb13b2e9dfc42293a44b46e6699ad427facb3df177733e9",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 34,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "9f8dec5ae85457515e94121274ffee0900f1ae28448abc49fafb8f576334c522",
+        "TrxSha256": "39663ecf78048bcc49172f826a3566095c608e5cc23f9bb902543bc2fd57c050",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 35,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "c1d3f16e8951d5ebf061eafaed81a694e10274b1182455e2dcfff4795ce754f9",
+        "TrxSha256": "0254eae36f30dec26d8fe9d3862f556f944cf1c47dd3a680d9394d70bb8a8f92",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 36,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "1b9fa4e1f43ec878df64554dd7c7768b91f0404e0431435348a69852e6d9445c",
+        "TrxSha256": "bed525bdbd0a8b9e5c2852bace2fbada220ff242cbe456470de1eeb2cf2c2817",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 37,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "c5796eac94ea5cf79162a51ba783293fd4b9b8ae38564de9a249abf1618a0f9b",
+        "TrxSha256": "87178441b8d3260d7d7733712781e96fb62da37d7dc0ff1d528dc7e95f232f41",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 38,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "e72e29ea348c0a16a27c5edf8bf026ad9b5479fcdc4a8fa4f91e0c3b32f6bdbb",
+        "TrxSha256": "4416f284f49d073de1dd73cf761fdd65b2b1667df10c38ef8707b16b58cfd679",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 39,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "f67f9bc7cbba038e791194d3d05d38326fdc9ad9f469bd2c50145bacc0ab1f13",
+        "TrxSha256": "c1be80259eb5f73189a0ab8f1152cbe5678a65234e8c998d724517249c68188b",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 40,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "169cd0b847a04ba4b5225adb668238a5aec874f5c43db946506562ce54291f56",
+        "TrxSha256": "23fc59b61028f14ec1703d62dbb1bfefcf2f892c758af8c876cba7f3f6a2d431",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 41,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "38f1e1f6a0ab381d37bee2a65cc2169c39dd4af41ca4287f3b03abb4620924f7",
+        "TrxSha256": "5bfbd3d437ba87a95a6f9e8a3242f009c13c6c740b4ea577f667868764aaa987",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 42,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "2bc7ba5d8cbfd41bb80fee76fc81ca1d42f8104945d3b32901f13d17183b18ce",
+        "TrxSha256": "fd60e27e31f898a5c4f0c6b3041e556fc952a39f70778f751c8881e7b2a6e07a",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 43,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "1a9a1347d5b7c1c2a499f194746dd62f348636919445643d3b6a9028f4f25fcc",
+        "TrxSha256": "9efd1dd836e90ba305a86ef4c8f3f6d8bdf5f98eae87f4e7a9b234574a991678",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 44,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "834d2ea3eb24b3f32d0dc488c03d16d991e898f5496629e9116f3517ee904db7",
+        "TrxSha256": "aa9fbceec058d11db2692127b04a2e598ebb77d97ec86df718ebe97df2d7b6d7",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 45,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "2cd4dc15cf7cba519ac65716529678f011c325430a4ab43c5b53e91b748a08a0",
+        "TrxSha256": "d5dce7692c3d2955a34e86bc37d5f1acb83ac0405d02ba5ca9319f023ce4ff8a",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 46,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "c91e80b9eb7f71bb918a46c0f63f610040af1e559942b290ee1e6c8f87c6b8ff",
+        "TrxSha256": "9d8d29b6d1532057794e993358db1328e5110488c330a4abf81e328516e254ab",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 47,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "d0571de3a496941fb04ad2878c97bf3f4c5a1b6e566bfed7c7ade7bd08530e9f",
+        "TrxSha256": "4abe59942f8f49361cfa02edd8f4020de19fff28660232cc252a50ad0f5c0ecc",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 48,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "65e448791dfdf0ce354890b41bff3811bb0c2d59bcfc6d8f2299feabbf3fd3dd",
+        "TrxSha256": "b68a0c29a9e411252d19bb22b96185f8d861ad3eef1c581317aa46dde7445afe",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 49,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "06912f64229bd83ec2ea69f2ba59c539b4cb0733520fe8e9f8dc42110f7f7dfd",
+        "TrxSha256": "e315e0ea08953bd847dca481081ae378a5b10707f5cb0fdb6b966944e2fe149e",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 50,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "4138199f15df6731cb483fd8769477cc5376dc354cbdb059a64aea3b981bb086",
+        "TrxSha256": "3bd549e65a7d5fbd3f3057338c76eefd8ea53eabba57bbe23a46054293beb3fe",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 51,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "c6ce1b31bacb2b572e3cf33559e48bd2b83d548db923f1aad08c3dba758d95ca",
+        "TrxSha256": "75cac871f712302f4b1c17be3159628eb002755b65a4a5961df42ac0bac5f03d",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 52,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "37d6b32b84a6dddd8160f17f15fe39d3e74261a74bd009852ebe654e03b443fa",
+        "TrxSha256": "6bc5117371e561f7442c62eee6bec63cbd3e269daaea3238f3022fe862e17c20",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 53,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "5c73249fe3abff1f83a97539078ce234062621867c5e45aebc6ae45586edf8dd",
+        "TrxSha256": "d37b3f0efcbf04b9fbc76578072ddb02edb255aceb5682fa3f23d9487a7f25c9",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 54,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "ec2fcecd954c0d79237e1c183ece77988b82b73fa371c2ab6a2c9283f09615f9",
+        "TrxSha256": "19cad24893af7f69c65373ebfa5d876beae4014c75cea6c5725bb366fe3e23a4",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 55,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "37489f21b6f7407654b863d7322e8f75d0d7b72b8d63e7fb27b187c8d586f6bc",
+        "TrxSha256": "c36224222eab64da7700f271c803643a9e79d722a996a1570bf1e1d629d882d3",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 56,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "cb17cfd1261133680ba411a17ef55ad4813000ef152cb3c29255db658d78a56c",
+        "TrxSha256": "9e4045bf6ea12f0dd578ed4230f40c64010cb21f97ef1acb230374392fb172f6",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 57,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "87caf151fbbc2ee5d40ae6057bdf2c2d26c7e0f7f0c903f40c6f95e5512c9c53",
+        "TrxSha256": "9924d546066ec42f744654c17ba6fc082b77044894fbbcbc3e1d7cfb1823d64a",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 58,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "4924a4edfd409d8522e0ab6e7251a93a0052f03b6877bf4ad3bf3c068e862dc2",
+        "TrxSha256": "4dde2df6da4962cda9bcda3f4a8e1ae53d92515556aa8b33860a6fb3a42d8b6c",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 59,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "b04b44e2103c82fdb987f41da64699bfbf1b25256dd0614abc667b89d54d7d57",
+        "TrxSha256": "ac28d82d5fcf94a1980020afbb483c0aeac59e213bb5570149eb880423b3cf99",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 60,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "bc8e5aec3f750ac41162b29dc939278252d490a3dc81d0d370bbdc10dd668927",
+        "TrxSha256": "32bdce6e51e47c7e9a88a8465a25e7e0046b78a57df952c95d590ee0c24b5293",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 61,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "2461a0369590191a21a7a0e59283c7dfc636ada1632acc95f3b863f35a67dc2b",
+        "TrxSha256": "d8d87e98ba02835521e4eba96f8722c37a9cda11bd605dd4863ed7810bf474b9",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 62,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "1df639ed338e71b3c6b770f252d1db4a12a4ddb22c63501edf16f58127b49f48",
+        "TrxSha256": "da2a89529bbc84dc821b932bb508bf1a80a1757d4c4485e9ce3bf6a05d417c99",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 63,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "d87c3d25d54531edef87aeae2e9a826b4bf47ab6d637c8110447ff153f66ccbf",
+        "TrxSha256": "7a5f7f7cdac02692e74b04c626b3503246ec3cf5673100e34b5e614588e1fd55",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 64,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "7d405f417806d7b33f4eb9b8a5cbe6cae21268db9e88939da26b8e70ee653183",
+        "TrxSha256": "f4a2b4f54b95b1229fff0570590176407dd0c715cfe66f10f512aed2cd3ab7bb",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 65,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "0800df0d349322eaaa5b29a643f904efb4d7cd1558e0e295cef2a887a6597d59",
+        "TrxSha256": "b38122fbaf960d663329e6ff3f81ed42cf6770bc58384ad0a54820e99d2732a6",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 66,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "f71b07d9fac0c64ce253c0503a2dd1f6202b4d2055abf79aacce3dab5554126e",
+        "TrxSha256": "0d7536ea83239d36bba1f820bb62513ad03cbd070153cb2a99949d93d462e650",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 67,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "dae7c10452eb2adc9be0db4649e8725760f3b689d15be5f8a76c1e38a19dc932",
+        "TrxSha256": "64fb768f3d797761f708286dfa54e6005352908606c65ccdfc5321df498dcae1",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 68,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "7f4b9a2b15ec9fec8b9180f492a1a4f0ffeaff29f371430d2eb6580e16b663ea",
+        "TrxSha256": "8f860b7c15e83bdf5dcbd2a3e5e7c9ff197bd696cfa849395a407f35a95e5979",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 69,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "c4215356c853e8ee7d0f33c29febcf6b65b884bd3a9e479dcfbb102a1035b71e",
+        "TrxSha256": "0efd2181aba7981cd8caef9e0d4901c7f05f599a99f6298cd2df94833879c2c6",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 70,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "8e4dbdcfc4990178330f47a8ab143c0e1cb4629f9f23fd469135e52c290e16cf",
+        "TrxSha256": "5a00ca388edb43e1c37f7708e73fa64cc51cba7094c6b9b72e954591c7c373be",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 71,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "3a89c9e29e3775f109175d3453ffbb1d863ddbffd796a5910ce5171266fe7822",
+        "TrxSha256": "bda0b2c85b014c3ccf1ad462d0cdcc0b9169d7474deeadb6a37099ebb44caf3e",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 72,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "5c6b27a056b84838660b283bd0201c2242b696f0fc80f71c5357cd9b105b595f",
+        "TrxSha256": "06ed4dbc346dbdad3e5b9eaff33674e9befc62173661fd9ca0cc92fc69e0f250",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 73,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "31dab45729817ed76d7910317faf8603e64020271fff68b7697e93b8c8941fcc",
+        "TrxSha256": "fdf0340514f773468ad75d1874808e44c6efe29367f33a0f20585552696fb8cf",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 74,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "7b2a28a3faf24e95f1583b83ded3d301b0491101c7ecc4e1d852f9de9ef546f0",
+        "TrxSha256": "6797799f046d6f7dd3388ac30ef5d5f86f968c0db1defe7fd2ec6cc19e3c9f0d",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 75,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "a2a279b3c87accd0e53f69e647ef82736e1f9cf2ff68d441b912207aae92f609",
+        "TrxSha256": "83e1077e55230adc0c606697753375d66c1356b9b98df3ecda9c7a811909479f",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 76,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "f8d41420fc975ca2c20415c104fa93b9656b05931f39113c77f8b9e06cefca25",
+        "TrxSha256": "4574a6edafae652ade90f22c6d6dab65b825d175e24b0dcd020493cf448416e6",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 77,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "a6cacbbb13891676eb6f876437ca456da654088044195149581b11d481363720",
+        "TrxSha256": "b138595fe264e00266e59c1db09817f9042bba993e3a0a9f63ddcc4111b45ada",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 78,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "55cdd7a84b33e4b08ae7a7668b883f7ea12f96baacbe088b7193c7449ac7eb42",
+        "TrxSha256": "af90602729a2e4c73db045cceb7fdb50ec5260452f598df9839df4335f89ed3d",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 79,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "f317283c608698d40d29d8337b9632ba838812c23ca8ab7ca194a759991750c7",
+        "TrxSha256": "18c572484b0f698e29222c35f3df95aadf9f059d689f8fe92590e92a2d3d00e1",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 80,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "d99a956ab606c38a16049a0ffe5553069126642f04dbf25274a1526642802b2b",
+        "TrxSha256": "ab00c7724714a002407d53ab91f2b0b1b68384846a47812bccd381df8222e95c",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 81,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "2b55b158fec8ccb182373b2c7dd61f129eab15b24ed87745aed9e2a947f27f9f",
+        "TrxSha256": "3011e0b02e0fce85291ba01bc50442ebf992f79cbb8a4549161b6478ed4a94cc",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 82,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "85c4e042bae861c559c07ee55d99d755dee173516dbcc5e1a9e245ff837d6b49",
+        "TrxSha256": "44fab7598154bf66ced84decb2e46968fd34537d24dc6d86e5054517d5dc284c",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 83,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "71f4a08d488be2fe6fc2c45f8c3d42c229f4833fc495ff27e2f03a882e831989",
+        "TrxSha256": "3a2bf6173d783194ce925da3b14789deef0e8a5a8c4d042ddb520b12d232378b",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 84,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "396a5648379404c0937c5afb277c1fd0b1f8e7bb7452e4bf000695beb35f3b4f",
+        "TrxSha256": "b0bbc0a57c4507a478a6556d3f392f7d8a2a22f8f53d1cba12e9927f53b887f4",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 85,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "4f5b96dd9f0e2768ae1a421b6b8ec8f3c0897938ab232be91cc51ea08013410f",
+        "TrxSha256": "372333d4197f959cfb7078b652e03af77f4e4e511e21ec001d37838bed496ce1",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 86,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "823567a6454ad640fa916ed3203c477ae979689bd7ec83fa1d310d805634bf7c",
+        "TrxSha256": "22c254dfd768ec94288d7d9826554cac18677a9d703983930c9198bfcfd84fd4",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 87,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "a5713b91c79d93de99c2a12db29c8192904e1ac1085aa065e8361641a094414e",
+        "TrxSha256": "69a35046eb27ea06c05c25a04bd79dc5fa5437b6a75725ac937f1d957844fe5f",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 88,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "87e1a27b54a6db2a4e8e1745bd97cd920017fa73ec63beda382a8874b83fa663",
+        "TrxSha256": "e836aedda898c17f1d4952b392a8c39ea5630c7f7b72fa81b3c43eed0ce55e53",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 89,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "661cb5e8eb74017686a105213de36aa0cbadede715ccdba9cc42b6471cdcf2cf",
+        "TrxSha256": "e414849193128ba7768b382ea0eb9955b195dab17a49a84394956a45e4b518fb",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 90,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "3acec339976f9b17df8f14576cc54491707cce04798653d4c6d4875d9179ab6f",
+        "TrxSha256": "50df8bba176852dbc08f0d15457b0ef6c10989c0126e380c87cf6195355855ba",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 91,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "02a4cd5af9be6e0e5dd814f2ffaec48c0f349fb7fd3074df28d0fe54dcfcc6c5",
+        "TrxSha256": "d8e13e46e422e066770bd0fa0f27d755a9d0cba676115a0879a97027df613981",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 92,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "57e8392ab359ec0dd568b9245e0851c44fb90c14863464621408b181a5a2eb04",
+        "TrxSha256": "c0245616bef9fe241f4ce8ec5e167523bca0e7576ae349fee2c4e3c0167a05c5",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 93,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "10e8e0cca342719327a0bdd74d413584997d5c833a5fcef5daf79c7875da5ec9",
+        "TrxSha256": "c76bec05e7307df978731a24a42078b52e4016f1b222b2287e04f0a853b58899",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 94,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "b696e2c122b4f17cdd3ab708871b94e764f94ef8e29935085c0ef600a0ab6427",
+        "TrxSha256": "ffbd2bfb0e9aa9205d024e04f11133593653f8f3f0148e99f336a58476bcfa74",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 95,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "a308115639d02249e832e8943b3e0537e2d38e4936b3f47bc9c760e9e53e6cd2",
+        "TrxSha256": "2bdc536dfdab5ccf9bbf424febf1cea965723e66c2e047b2b5f148dc5aed8919",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 96,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "7f36d868974d915bd2c2bcb5900fd5e807e75f3f8c663003545aa8b6f731946c",
+        "TrxSha256": "7f6b463b3d1ecdec78850ce095ad5d0c9360f3099db42e1cd8334950671fe5bc",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 97,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "03e42f26725f29685346a38e1b4e7fb7d72450674769c5ada1ec348c0150be66",
+        "TrxSha256": "544c726cd20e5f3b797108399ee20cca7844a96feb507f68a64cd3f6d8ea9165",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 98,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "ab50e8c7612d8975533e4811fdf4e5c15877e03cd7d2484a06721a9d83c9ce33",
+        "TrxSha256": "6135b663b0159d11c43d3416096957ecfb62820fc663da9a2a03040414c599cf",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 99,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "eff723fe9fa54a05a148db3d0142f9fd92cdfc94aae6688ca4a84a7514a58e69",
+        "TrxSha256": "bce79fae96c3ac99c057b94e00a9bbb431964992e92bd8debc2412f8c9c1f50a",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 100,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "ef60a777f1d196c040496613dbcf1ada09bdce869b1ce06fdf3583c7a49fce9a",
+        "TrxSha256": "9f23365d1227eaa8e6ca002a81c47912deea26e450407f462d7ba92c38474234",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 101,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "1477021f03a3ecbbd4773c4ac3bf2fa25a3ed7dbf98221d4ac6e54b1a43f16b6",
+        "TrxSha256": "6f160504de63110a2500c874c8d65dbe8b94e65e83e9d4a2b29f27b370c98755",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 102,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "41acd8eeb259a0cea73ede246d711c0b7998ce9a23a0360d8f6d8d51eccab166",
+        "TrxSha256": "d843a1ea0d2dc58d1d60dff74d9a713bcc531ed4da9395fd3e69e8f301e026cb",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 103,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "b639b1f875cf0aa81efa3b5f00a0ad740d98c0c9a64d74e39879745410131a99",
+        "TrxSha256": "2c9303dda10573043eb49ab7020a00a798701772ddf67770e7a4cedb4ceeb5b7",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 104,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "9de708f6133bdc29677ce126125cbdc556dbbee37f4b4be66a04c4a28bcd26ba",
+        "TrxSha256": "6de58d8f3e873f9edafcd2ac26d00d0249a6fd8d397c267fcdf4a930c5218173",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 105,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "09db9de7f455dfbee50a592d9ee51fcea774cc3812232477cda20835398b4f9d",
+        "TrxSha256": "b77edc08984ba4ee4276de6b1c79ce184e315faa2c7dcca8f9999d42c3b5bd7c",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 106,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "2dc498a4ca22415cd9d021bfed03cedeac86d9e7da3ed87032aa653bf8d49293",
+        "TrxSha256": "7719eca0f0bdd5a39496460db373236f6c9b49d640390ab0f6e84c68e48caf37",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 107,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "39167feb91821c1d8c336fda1de8df17153956a7ce005c4fc92baf6169c4e6e3",
+        "TrxSha256": "e18a0f060364525316283778c8c4389d66c235fe6a057bf4e6479e9f2131519d",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 108,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "2053596f0c7a532d6694bfa10ad42f351996b477c29840ab155875aca3e3497a",
+        "TrxSha256": "370adb71cf13d0c2d0fa4456ceb61364bb7736300f9830d44382523ac6868fb6",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 109,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "afe79aa28e2b701eef14f51f52a242ed858288c9f966a8f48d6abba437d3488a",
+        "TrxSha256": "104759fce642689cea545ed919b07dd907cfe058d52d3ba38f7f74a7084a7d33",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 110,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "2046b518f8dc05593cb90ca5944030cc099bbb4a7d14c040d8efb192ef66185c",
+        "TrxSha256": "0db31adccaf5f8727a711178a96307866c84202bcae19aaac3382c8c2f7be66a",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 111,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "3f132649b8488d7944df809443e5d54605948994d84bd87dfce793d4363aca03",
+        "TrxSha256": "52c9f441f55c2f59323c4d2ca4d89631ab8c60dce78fec5c761607ef3debabee",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 112,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "59184e2acd9c1049f8167008ee1a6cdc1abc3fa287b94c336d0d97aa8c01bf54",
+        "TrxSha256": "8f29020c3df96ec4578ea2a514eaeac01eef0245db1ba47b4304a6d2a4fa372c",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 113,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "4284e3581efa05ef77868f9a43bcc6c9d776b24d245ed1c12605e095ec3d7e28",
+        "TrxSha256": "06b549b0e5bbf41d56095ebf7bc4d37f3e024b006dc71d12a851d4aacaaa3462",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 114,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "383eb987b3685794f10c2fb51e71e346ece6784a0917946ec4e54cd6e5d92061",
+        "TrxSha256": "1dabcbf8aaf67f783d9e80fc1cfe0300278dc4f9a2ad51dd183cbd57bca97f86",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 115,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "fcc5fc26f13a6ba02bc8b6712e39ce597c3b7f322691771a5117d45c36b5d617",
+        "TrxSha256": "eb07eda02d1635745c6ecb34f4abac9a26ca3fd8c78dc111771fa09f5579af9a",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 116,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "b65930e8119ded237778e9dd2e9f6270393f3e781463ecd96d7718c2c508b6d7",
+        "TrxSha256": "f21bda0f980a7a72b7a3b11640b639fd738e4b4eabd420abc310c95f0a6abeeb",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 117,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "7551d19ee5106d48987e8ec62dec1a0dc419d4767787a163ae841cd4a68a4d87",
+        "TrxSha256": "8a6b4f1ae035b52804f90891c48a7b59d1481d2cad3c135698b6d8436dd56660",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 118,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "4872ae5ad286b19510abd0b992472a6acbe71e570e528713b71c1ec50b6ff2d5",
+        "TrxSha256": "0bd7a2679360bb1bbd3386655fc76f9fa6364fae3ea550a5f5ce1a941e3d9a94",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 119,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "5d6097d3bbf18f12ebbea88c11f195ceed9920df9d09855f1e26f2c54d33f518",
+        "TrxSha256": "48ffb2f3dd082564c03cfde467a051a091935682a57ce2361e45d2b9480484eb",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 120,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "bd0fac38c1cf1f8e5eec8686fba86a7167eaa589b2ac910229e6d07603253b63",
+        "TrxSha256": "aee89d47a63a24f85c4b45050aeddc98491f3381f49e9f96d176d2bb8d001ea7",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 121,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "3094f5ba48c74f87ba412c2fa6308783f4dad0cbe8cb84ae3b70ac132386da8a",
+        "TrxSha256": "029b31f31fd13760e32a3859f596f4149de7cd8bf5d45ad56e535da57bffcfbc",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 122,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "e19dbab2cf118fd51b8e8552abbd9304e89436fabba9bc64b26cb3cad30d0ea9",
+        "TrxSha256": "4aea7b488fcc6589f3ef3f701b4750c21ae2fb8d334b1e512f936e03455f4e9f",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 123,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "a897ca0a8c33bd4872a899ee724327ee8491a7577b0c598829faf9a65fc2488a",
+        "TrxSha256": "2d03a1d8249f417dc73e7ec7ae522738403d6e714ceab8e08dcc3f8650257c5d",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 124,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "1a2bb7836f70228f0e3a0020822aabd8abab0ee78496cdaecd78251ee5ffa2a4",
+        "TrxSha256": "3d52af8a126d5dcab684690b1edfcb659bb60da2efce7b52b7adc384564a5343",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 125,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "61ffdf8202bcd6427d33dd6609bcd10ef34a9234978b06720ee777107a55604f",
+        "TrxSha256": "3b049d2fcfbe342a219c6004489f211b1932ac50e88e4ec792e66c1411c1bdb7",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 126,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "286a2ee97ac0e8431b344484a3a09d0ee14edb18c0027b7fdcf37f5d440378a5",
+        "TrxSha256": "45991fec54aa6e3886abe7613cb10ea00396c92b6b7567e9d8f3852817957ff8",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 127,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "05839fe4d5d74b49f476d54735ffe233cf74c35ce82b452ce3efa106b1378762",
+        "TrxSha256": "67f4f8f5708d10de4289a45259a313a821844fdd7b5c3d155ad9049c718795d6",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 128,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "4fadff21b7aa07ae076c1f0b978c5d740eb03d6b3b87618a721169120627bcca",
+        "TrxSha256": "f574c96166246d53cace49ff009d534c2ed31811182d681ab354ec4e1369c605",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 129,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "d9c02b510ee9fc210d41ec70c990fff51c7f31752e3c0dce4cc21630c57dcb8a",
+        "TrxSha256": "6ed32e7af316e6c0c2e4b8ae7c0175b89bb6dbeff75fbe42f94560e9adba9b2b",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 130,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "27995ce06ac3a415eda67d4b0ae69d95ed979e1e4f5de1a1f0925964fe394d30",
+        "TrxSha256": "9e5e69eeee94adfedbf73b1e9f293a2f3b0255488a833608aadab1cbed04f92e",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 131,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "f66256d8d7a76f740d56d31d1fb7034495b36102728b0d84af43a70931d37795",
+        "TrxSha256": "4ab45251d26e17f51d91d49c751560b7fcf3dd76dbfb44dc94bd91e7a0fac220",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 132,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "ac605cf181c80e82edd87503dc51cb8584df6f10cca746363843d473895bbb75",
+        "TrxSha256": "05e9dbd5e6e176412b3a2b6a4f53623fe1d04e5b9ae47180a86e4de46a66ed47",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 133,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "7d2174e395809c6edd4e824c30d68f0c88d24f64bf232557830b71f7f39e08fd",
+        "TrxSha256": "9c1b42fa535d1981138e11b66b866dde3336a53460aec573f205439f8b67f36c",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 134,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "c714ae3fd22814d6e58c10fcb89ba94b8294d991260bcee66a3cbbd6dc608a2b",
+        "TrxSha256": "0ab1d20f70c0c7ef97cf918e7356ddb8cc820f56cceef26b397b4382e02dc3a4",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 135,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "77f117a7e4c8e3ad408401d89536731f515d58697835dcbbdc885c30aa0871ad",
+        "TrxSha256": "1375e1a15f8df7321fba7ddd0b14a331c19c80d22af16ccfcd85705dc1efd2eb",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 136,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "bde962ebc5183d697c6e84f6a4a2b3042a6ccc11bb70862f36c041596a667726",
+        "TrxSha256": "7e8194ed673b17aec2f5c4386f0daa55a30d27a04896d30195f4b24b17c3256c",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 137,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "ebc0323c458c7cdee476537ec8260bb031ef7ee40716dc69c954b52128ef92c8",
+        "TrxSha256": "130d6a06ad2bee392ddf4afd305f4ae1dcfae879be8ac527634130d9deba6ed8",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 138,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "a16e99db9e4b90c9b7fdd13588e8b619431b77244988e67b57f15242f3fb10ae",
+        "TrxSha256": "c7412452e4d4f2854ad41392a926bd59f89847c5e1682ff41fcf296fa7c273ff",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 139,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "4cd8a10b2db03cffc0c0ebb6aa613383b6f36376189a59a111e011afa9c80bf2",
+        "TrxSha256": "852b442478f3a6ab0ec715ee61e2f2d956013d0800edde566117c8675558b520",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 140,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "1558f2ce6ffd93b490f89221f62194f2a9f7ff191b3f23e1b2be3291adb1a5db",
+        "TrxSha256": "c9622d317a3144de2b87b37b2ef31d8ee0b5c874d9c14d5c7f3e34e6d2f954da",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 141,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "d700fe2bb93c17c06233259b9cc8c0c68c1920f0219305af0d4dc5b218c3b9a6",
+        "TrxSha256": "c6c82315dda6fbdf9dfd478f88cdc6ff6788caab8bd246b82cbbe0d60cb39f0c",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 142,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "940cdba4904b7256135c9ff3edaf9b598b2c20abb7bb708aba6d02c61a577b27",
+        "TrxSha256": "7cb6c75a0cdc053e81f0016fd76f359ebe22c49e3280e16014f3d207fab8b1bd",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 143,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "5792fd0fc6917d2d561f5a596b7b83dc21bdd06f4eb9e9667d28e613a46eef08",
+        "TrxSha256": "84ac9afb94d15f6f87a3e7bd9be14e0d4bbc74b075f3adb86cd99257a23754c2",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 144,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "7339f7844076b1d8d3b3e8d70623bea4280cdc5c3797ea9f1ca105695ff30017",
+        "TrxSha256": "8c25ae80893d24e4301ead57fb422be544a15ed9950da9ee830c00a0bcf63245",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 145,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "25e26ae89b57c7de10f57a738a51c05f64a6c52f406c5d0e58964a4bf9e257e7",
+        "TrxSha256": "a8f09df09b3ce2a31d4c434bced1e9683eba78f5d4fabef844b36be4a77bbf60",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 146,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "fbdede3081dca52f81c0c03e659241ef069cf8fd3e9eb7b2eaa4670702710a6f",
+        "TrxSha256": "49d6e7c9ee45cbc72e5dbb211e1d21c6654244abcdd789371c679e5c52243fd0",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 147,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "25211ff1265de890f4b70aa1827c6d46e8404fe70c85593a47eaf846676b6001",
+        "TrxSha256": "c3b73579bce2378265bd94768125b1557518daed43ca64333b154c45cb55fd8a",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 148,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "1acbebd4ed89e3aada9ecbfd386f5fe9594a8fd40349b87e39e2f9bb8acef152",
+        "TrxSha256": "edb448f718739d1e192cabd73f0c73bb1a7f8d03eba2b7d65360ffa75185e073",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 149,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "ab0bed6385de6302c7951f4efcafd7ced2c9bb2ed5f2b15e2087db1b970a62b1",
+        "TrxSha256": "a7286795508ff6df4b72e3ce8aaaffef27471b2bfe9453b7f9260a4c026e96d4",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 150,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "31dc128eeebbd4ee525bf2875134c2d28e8fddbf757d06749016947c9faa6af8",
+        "TrxSha256": "d64463b16c41fbb1e5ca0adeeeae15c30ffce2e938f814a482ff8954a1a20695",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 151,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "80012e20d408239246893b16754a0fc1b040c6cb8983748892c38b9eb2a0edbc",
+        "TrxSha256": "ec6793080ab7a5b03d4edbe1fbc6104b6a199e6ac63d0774f14e2de4fbc017a9",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 152,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "a75345c556f33a72676184ceec08f6ee874c3b339d048b14acda52b29a706f7f",
+        "TrxSha256": "bc26632d314763e3bca5a2575fdd7efc636bb0e810f1510dae2982f299955b48",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 153,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "fd106a78f824565a7d99f35db97a5270cc26c24f7369c8e4010bf45d0be6b622",
+        "TrxSha256": "8833d88b7d6578cfe672b0be7504b0961dd20f5ce4fd10c46917e41989ac7013",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 154,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "2898db75f49f7e107574d6dfea4f09d0cf8e551d9ce2e9d1054f767f96d482b8",
+        "TrxSha256": "e3f3c3d5c81de768a997130e751acf54c72f21fe5d3ea8323095e88533db30f6",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 155,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "73abf961df84732e6fd943c91fdc1373ea481a1fbbf4e82cb9704166b6c7ada7",
+        "TrxSha256": "88b43903c09801dfb33395dce99693402ceccda80746a99b47a196ebaaf54215",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 156,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "0d80b41490e7fc4e69c2002330c7d93c83c8c733d1f6a9df6640b5981d8ddb24",
+        "TrxSha256": "50b44959f68902ec9fd8d6474b72010d4615d4158f63e12b43c5ba04add0409e",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 157,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "f6e55ba2603f9c714030bbbd2b1ced79d75d03c6da7bed037a2070dcd3c36e3e",
+        "TrxSha256": "575fed71bbe2886da7ac5a86ae4604ce6064b00535c40c9585042ff839877c22",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 158,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "9ef4554812d87bb635cadb8a1949f47cacd002794d8c83ce14244046eb0fea92",
+        "TrxSha256": "e4d70174f955e3f5e9dd94cff43e48f219aced3bf7534a12308f249e63e059ec",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 159,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "547a5a03c822412140f227a8082d8e3187e39fce750564a7c805588cd5a02d46",
+        "TrxSha256": "a4737a27e4998b33759c5933186893851aff6758a4bb3d4b0237d85217f77ef1",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 160,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "dfc76ce94a4b332535c7c2ac59d4741293dc19f303dd1d3348f504f0cd1d836b",
+        "TrxSha256": "770fd5046e93f6e78b670b837ec05e857c4089cc3e2ca2c1a91aed93904a41bd",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 161,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "2e3623011e3625116baa6f6f7557b634dea2816705258cf0f27b7be74abe5658",
+        "TrxSha256": "d75e7744d593a1a42c1fa1a2aef0b605b307180605b85606a0e80a28e1a3e228",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 162,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "8945d2eb47dc5859f1df76fa2c0dc1ca5c9d36960054af0c5aa0e5389fb1953f",
+        "TrxSha256": "e691abdee3a32c4db368bec1fbb7af29ebc0db0ca99b0242610ecc0b87608f92",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 163,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "c9e3d7b91b8af669c4d735c902726c131eff98f9073f4272f67401e90bd8fb53",
+        "TrxSha256": "aa9ef8c8d8da86e9e00a9e2099c30552246c0b5f97fe786d0cf01535edbbbe89",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 164,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "fafc37059e4f2489ead805fbd73e93fa3b91cda1de456f3ab3718eee7c76333d",
+        "TrxSha256": "53c6d7ac563d6f63ef71e1f3c3472ce828b5484c0af31145423e55096ac06c2d",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 165,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "78067cc9e02f323aca9b48583a37f52768a07a0c4b4b5703490c1d5fb53051d6",
+        "TrxSha256": "d653b5345200ddb8ac3ea331de59c48255838e957287b4d8747718b768336041",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 166,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "bac5781477c328ef8b3dcc7281ee3ffc9c3f992946030e91b56e61ff74f93a76",
+        "TrxSha256": "9dd66c2a76a850a09ebcff7b2997794f4717868b295781bd14360dec5fa2db8e",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 167,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "9648d4a7393cc58fbde903afe5d63520ade692de6813fc5a209b8180b698eefb",
+        "TrxSha256": "2881b3769d0205c078ce70952fc84a6388adf08b273028b25454ca4356129f51",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 168,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "9ceb099eee9c2f45a1739373cc63666405e61adf4b5d37cac9af4a85991577bd",
+        "TrxSha256": "767119c20c1347568738c9a7d05bcc7a695aafbcec3e567f2180865ed88cc827",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 169,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "8533d1fc8b98ee9bae640f8f99e9a17cc8241f7cdd2c00eeffafce4aeaf33e97",
+        "TrxSha256": "71fa6feb33c4785f4dcb791d380d1917ddad131634bbcc1f848ad1ba4ef112a6",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 170,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "8a441ae17e54d61a6131c66f32c6c44cb0f49ab3d6d7d705c27925b150488a64",
+        "TrxSha256": "3617c906300d5b6d746939f05a6e6ec7f56c48de3c872e806e0bd91359c2a353",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 171,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "e15a766d1ad5f9e6504f83b3699f2a7bb9167f645626107973c21a20c5eca795",
+        "TrxSha256": "672d5d31d48382eb01b1087b1e4d98015b0aefa04b562ff1ebcb9006d5b1bbd5",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 172,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "c9de6d1675e63f6b2b117596492d6d9008cea4720412eeb21b6211ea56b23283",
+        "TrxSha256": "892833a9278ff0e513b1c9b4fd9d71a4e0be3713f414261ddb88885596c9ceec",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 173,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "c271534b93cf4709ad1726a2b72eb635f15204e1854aad86bb14bfe5a86ad78d",
+        "TrxSha256": "caea111fdd1b06b0e9ee17083141aefa03cc2ebfa591e26790b8249fc83c408e",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 174,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "c2ab16fca57fd537807b7a1042ea350d0be5642f7186049a6f744ea2c72ee479",
+        "TrxSha256": "35c0a30d9d1c5bdf6b70864f9c84e2e6471e389f6818118af4171db639cb3dfc",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 175,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "b66eaf6dffc49c76a2d073f38efd25d977574ce350ca74bf5126033dd16dfb05",
+        "TrxSha256": "94f70c129f6d42d4391d2d37082e83d282b6d38aa95ca96889683a4b6077f99e",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 176,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "22565b77a3e524e9193545c8ddfe1aeef0db9154cf9050254d0da58ca7b52de9",
+        "TrxSha256": "98ff74089d3595adf10adef82ba6d454d39bf5358309ac12b7001f829651d985",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 177,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "e7f392d781b51ef5c9fca10467f697718845772a257c3f374f3ec8d81ec7ca94",
+        "TrxSha256": "92e21737a92b5dbeb8fcf41b0a2c39f6f1b1bffc4572f1a9ab0f996ffb73a227",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 178,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "9a9dd2a7ea2805cbbf18b99eb52b0cc863a6c979086c501efa0397cfae4d68ad",
+        "TrxSha256": "53f0e5d4ad267c50cb3eaae7741294ac87196f9f93a337d4ea403444a6420f78",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 179,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "a26ad7ceb61428328f932fea5e8b7b243816b9a84830fd19a3cd8508866081ff",
+        "TrxSha256": "466774faee6b6591332618658ceae703bcb321c1306900760c15ca590d5559cc",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 180,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "439f7b3918ae8cc83480c372ee9e12f920e67cf56e68b7aa0f8086b918c22cdc",
+        "TrxSha256": "f77c1c6a6295eee9fb53e66d710f109688f230e6914775be2d583298cb96be4d",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 181,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "3f7232a7e779112de78b389f8f5249c16375e94298690f0ae987133e17c2a1df",
+        "TrxSha256": "e995f1f0fff3d0da99197c4eab85cf9dd27f22898aa524234a3b586c715eba75",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 182,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "5089702903a4ad0228bc4a6f9d6370d47c8a2c688869711a58959561fb3adcf6",
+        "TrxSha256": "f7470849aa8d8b7ff2bea70d0c0c4c90da1383bfa34402095a68aec1f663b164",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 183,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "00bcc9a2ef6021db4f8dab17677a3c145615dcdd7dac3132d06609f3abf5a4b9",
+        "TrxSha256": "500786ed14ed17dfa46e5fca8ca869971935d5e3f5f75e7e41a88435681781e4",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 184,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "4c4696f2699282f22b784b5be6772799bb77cc175299dc97864de3f6e8c275cf",
+        "TrxSha256": "4de9256b7f887786a5acc103c94c5db94f8d6ed7875c1e26e51e385308809909",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 185,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "76a205fbf1286324f3946ab16b18a3b79adfd36a692ddda9527345b0b84547ee",
+        "TrxSha256": "93c9e8dccee8e641f150a6fb66249ebee2a8a8c899fc8b4516c4ef28295d8104",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 186,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "539f534022200f6cb572948f0d00a181cd0b3b8c3fb0042026f7b89608c12167",
+        "TrxSha256": "33e273dce7adec786b3fd028893f137039d1bf41c3a4ec54a49302b6c95260a9",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 187,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "cc6eaa2217c5d0497c2972d99ee9f9fdb31a17ffdb9ad99d188ccad338da3500",
+        "TrxSha256": "451959d379c412730b9d6a534f378c35e1174ce93a889b20e2a3963c8af9699c",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 188,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "8045da1091431d7cc02282d03131a3b0e1cac4a79c3dcbc79e651742015c8bcb",
+        "TrxSha256": "439da740180ba2510fa30d7293d172e7b218ade5e0243086294aac9eda06eb9d",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 189,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "aeeae275a5797caf56c7b9534794a83a78b80b31af9535707ecc3dc6989c8f2b",
+        "TrxSha256": "2f5a73cc7fbad7da9083649096220dce39dfbbd18a0e2c1a074543bdd8a48353",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 190,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "1ad2ad00f270b6d9401452db4aaddaf48cfb2e6c2fbc8444a208ae741c98ae94",
+        "TrxSha256": "d0a54e1f91779bd5e27af64103167214c55c2eb81523da5038ce24cdb9838550",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 191,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "98ffa48745d032c157a14502e912c7cc8132bd0afd39adfc96dbfb372e121bf7",
+        "TrxSha256": "11790efb0b859803cdd33fce9f1f0f93fe2183b0f62d04229ebbea9d7ff9c18c",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 192,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "d8a7d50587721bdcca309f7c516028504bdb7efbd20c8bd175dd2b12a617597f",
+        "TrxSha256": "bbc8cb3c4f4874447408e6469458652d1094ca75155a941ecb78c7d9cfa9fbb0",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 193,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "218f30f8593a94056107d7938f9386dd26c3c8903daffb1db45198113cd7a494",
+        "TrxSha256": "dc7df4515085d429828f50d63ef9e4a224ec1a0f0b3cbfdff232e10c63b17af4",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 194,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "fa53944388b388ead8d027390c55e21f873a72fd7a6fa63c7fc62c4414471c57",
+        "TrxSha256": "913e774b6bff3122f5ba47ec90616b7ab77e13e951457494001ebf871962b3fd",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 195,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "95459a870c9866a61d0c5536d75680b37ca3cab45dd5deac3ae4fbbbfbd9c91b",
+        "TrxSha256": "4e924c531c24bd361e2df77521b8b725fb2c6babc314953d9ab7118ff0898e18",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 196,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "22dff979330dea87ba90fceb6aaf217e00551e79c0d521219c29bed89eba78e3",
+        "TrxSha256": "2ef13caccf50d28123c786482a8cce13997bee44cec9ef9cfbea43fa470246ee",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 197,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "19cfb4445b966d07773f44ba3ba836230aa495d1d50934a41a8ce9c615cf10e2",
+        "TrxSha256": "d0d7f014a5926e085d06ad6ffbcd8fc735544f14550e48683acd4c735523f6f2",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 198,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "ac538ce89e5ce8648ba4b9037f50ece254525e36e42632e25ca99ca907df714f",
+        "TrxSha256": "f1c719c991aae938a75e57941a1849362a5a5a80599fa78e172a7073d6f4415c",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 199,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "042deb85d833ad9c4efc1c35017e45616abf9d5a9a697df5ed093c332590270d",
+        "TrxSha256": "98ac16adc7467c585d26d88645bf158339936eb23e3a0fee6560e6bc000cd871",
+        "TestHostAffinityVerified": true
+      },
+      {
+        "Sample": 200,
+        "Total": 4,
+        "Passed": 4,
+        "Failed": 0,
+        "NotExecuted": 0,
+        "ExitCode": 0,
+        "LogSha256": "23712f192c311facbcde3f77711477c1b738b2ba5bba660a2975c08466f797d7",
+        "TrxSha256": "4140b09b24df819fa45503b49ce72dd6a492a824715698f5fa338e208380ea5f",
+        "TestHostAffinityVerified": true
+      }
+    ],
+    "PassedCases": 800,
+    "ConcurrentPairs": 6400,
+    "NativeTraceFilesRetained": 198,
+    "DistinctTestHostPids": 198,
+    "EarlierTraceFilesOverwrittenByPidReuse": 2,
+    "NativeTraceCoverageComplete": false,
+    "AllSampleConsoleAndTrxResultsRetained": true,
+    "RetainedNativeTraceSummaries": [
+      {
+        "Sha256": "6baa52f95326f7e37d03ec1a8e491938d58b3dcdbb2e4654c0cce3f9c4962379",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "df721d1ccff2372d4b761d516b1b4c77b33c0cf2953cc0cbf465051ad5d33a54",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "a41398536bdf795dfd30aebc6221ed56cbb3838e4ff39d9d2c45d3447ab854bf",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "670de44fd654211698bd709eaafb8008cc0a6366598d586a777c75e0efea52ad",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "8055d00b279a534672f2b1fe885017dc0c817611ff29ea30be1c1f68f005d18e",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "06df9a508c2a6317eac4cd13c6788add36cd6b5d82581b9f10f2d66a07f28ba5",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "cd921bc0e099eec81326fcbf378c86a3bafa9c928f2728d0549c19b9965941ac",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "34c436017ebbdade6c6dbb2e0f16db1d8ed1091e674bf2d9700bfbbee29b9579",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "7edaab8e36db29bf8a517f532c2b218e4c99735008e6fb7302c7b36df762589f",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "17cd2b0d2256d4000acd97a23509d2b122b0f920694dc023f0fcb139e4512389",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "d6b8a364d90f55b84df6c7ef3a485d6ace2d072c1b6220c987e61311ae798cbb",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "aca494dbdd324cb54485d6b08d5fb8968c4a2feaea2a6bf23ceddcbbf811a52b",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "9bfa1682a3c4ca8562fc1dea15c908d4bb6a64abb9f9dcec657b29c4ef1566e4",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "612b2580c287ff41adeb79c43c6e2c99420714848db96d5fa64433558de7270a",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "8ef0edf398e282886255193a205175ec689f1efecbd2844cddd6f66b12c44052",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "7fd930f59eab2737ad2807300b3fc4dcd67f47a79adc587b51f917c9829d6095",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "b0a95e972db4c362cf1a5b0e1608c35de0bffd3c6319d530ea31731f0958cb83",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "5ae24aee96629a2de7ca5cd6a4b23affadf26959385bc7fe0e4471860fb0c44c",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "310a3cdca740fdb2d0f55da23a980157d0b0945b23b6994e49972766ccc9d1ff",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "84477e2031d3a4a7a8ac296cfbc26adc2c542adbc4df75b69e3a2ea5c9741373",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "486736215fcd5c3ae572929a6c56c5cbaac49091992d68b2dd411f342670c849",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "8a09cc682e88e030fe38f79df315b1e07aa208fc655d9ef77f29b37fe0592dc7",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "3bdbd7cf1771c9a08c31df6322a3159b35c6954d3517b45e64584ab7cae88382",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "b43059740e641ebc8c615d2ec7c3decc5273bd10645b6455af4f9368b0a30f0b",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "2883aec09045e2014a64696d56738b94dde953ea23631fc768098dfe4e9a9be3",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "46f45599e822e75311b2c95c37687088e30cf5aaf0b1dab80f882516a1c1eb3e",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "20f1cc41b50188ddd87f733feb3406c78c547e6164825997e12fa312a39c16ea",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "0de76836a7ac78071d5a7ba1f1b30c236df13ba1a6385edca1bdc551988dedc3",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "90015f59b2011c925d3039e4df0297f78ecf5f1b53df6ed44185ba13e50e8d1f",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "13960788111c17cfdf158ecdd534a290402d59a9b29604bbd1c2b1ec2e42d7e8",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "f8bd9b519eb2cff00ad286e98da164117970fa3ca79a646a86e7befb802b333e",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "647c256e4c5a313a30512e2d2cbe260f35f7bfc2d436b423d9d825f936764d93",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "708257038850cebab46d88cb70f6d7a7376219f3e74705a5f9e520e7b3528be4",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "2bfd50f085c0c749e02e4b15494f1d6cc8c1f522b171739ce81c2b6185b073e6",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "ed4041f47d9e3523b9638d760887ee631bcac685b807fb0a90cdc4463d83dfff",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "facf935f0f9004aea12c9a01f0a592d5ea66dce1e8d6b72a44532560807248dd",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "7dc7c9b9ab7d39de714d8085de3dd53389a0a34527002e7acc7c6973c4c626e9",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "a385e1b3cf8896a0fc8fcc9183cbd529eb4fd2ce2a23eb0c7ff4c2563b3ba3f9",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "64a4a416bc5bc90b8bd8a3f08615a2ee4d328986afc75eef4ac3b829d7f6e5b1",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "c9b961e257559bd40cb167846d923b32d0379e8a75e0e81cde62fe6223c3db8c",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "316b5c14018eac3d8f0c14fecd6d49a1041031b20f893acff40ff1a53b10972e",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "e26a4a01ae59c8a1f0d6b522594cdc011843b9a39df1afde87c441ed98ac1b2e",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "1c9042780108fedcc1f6db1cb4b76713797d5366bf2c7b18722aa96ff3a49eb0",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "844c7bd962d6684c919bf0970714d61fea2d50f9e7200b2261d226bd300e6cbf",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "bbbce65cf32be9ebf4eee6da409a8e47e7da385b3cb839af8541573f65f0fbde",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "a02457e5c946b6908a640c14e8bdb3a61b9241ed9a4cbea4d8a18c8279f4ec5a",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "49831d5e2717aba0dacdb6f12487d17abbc0b3844b739932ab100358b8bedfcc",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "10286e1de5eb5025a9189d1f218106b357960071571c2dd44ca655305c9315da",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "bd0f39e68ba3fbc55b47b98fc8dfabe2f55d475b67c5e7995f294a7acbf5b96e",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "af5355eed3dcbf50475a891ca664d4eb516b7309f359b8005db364ce3c04b39d",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "ddc8d359462da56dc95c3f4355537d468cbc6f280c5cb3a01051c0280042d1cb",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "6373edf7bb0da73f2fa0c797f5d0bad5afc62bc4baee169fbb8d958503a9be5a",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "aeb767e1ddf81f9b1b09f072b89c5b1039a545442ceb0c8f11a2d502fcec246d",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "a52383465b1a9bcdacb84e46cdf766e53a91deaaa0f645f015c2bed72b10e00c",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "1ea2ad920f11453e402e1354fad03603975fb24114552ec28defc4276da254b8",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "88d4af4989bdfa4459dacef845698dbd84576f319f4ff4af344d4cfd13b62277",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "02baa634140ac6d28e4b5cf7d6e7edec739d8a862e69b26a2c62a6751aa65f5a",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "c5b409e3e33389e879ba9cf6714fd3bf1749060320f76d393fa1f07e06fee453",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "ba51599244eb98e1b0c2a16b33076bc5562f6b3ad8023a1d915175b2053615dc",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "81a1b784809794c524750df345af25bf19c93b477d6829c3f5bb597044bd9766",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "224e71f6570ab3c9a4e643c167cb58215f322c990a6e6b3038c55e6990f509d1",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "1f56cfb98e416b0189cdae6b95bff87602db837eae136609272791a4c62b3d8a",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "d57d8a7bf496224d8ceead821730bf8a76ed05f5c0543bbbd7b074a93d4d1da1",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "b124bad54b466807731a84aed38ed62bc89cdc4fb1f17dc7adaae6335fff197d",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "e927d214a7e5d89ad44c1ccce0ef352ab6425b4462506c71160425e2afd750f9",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "08b1f62e44b463a6af01d98ce566817a4c34f2e6147954703b99df52837c6749",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "1d6b1e96027a9e548de54e76160b908ed7cc405710ab9468dd578d9d5235bf53",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "fa72494f3506111d0807d64a99cbe4b0ac511aed52965d29f646c713eb0b5c56",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "e9051df65bebcd960882a0e0aba880a290e867c8f4d5c18dab00628047917506",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "cfacb6d67031ea9790d584d60e97463a79184e2c87285e75910f06cadbb82d77",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "cd5819a7ee5368594737c366cf8573aaa9f7232394668901a6d844874a4cb555",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "66cc11e1ae003297e38da59eac752fa0a2eb05de0e5c4263ed00bb43cf047391",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "71d07d76d65ed0f5b0e1bcb760ee507693741846a663c10f472f120f5d901b2f",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "7466194547cf1b665400544f21934ab58cb0230fa7414697e80b3d06d90ee17b",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "b8bd1e57680139a115a40bf2999414b8c88a4c6c4458b66b27e24205545aae2e",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "b53df236a27e67e41e6c53930ec3af192e86ae0eec0db4c5dd5a5b9776543756",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "135c2b2e5efb58c3a7e37a28cad99073986394e675dd3b4c7300bebdc51b4adf",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "8f397cd4a2807a79dbb570c93f121d5c1f9cd53f79ad6019be6aa1db67d2b188",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "1b38526eb837a60985e2daadef0775f99c8a268a65545d463b65ecd245e9e8d5",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "10142d1a3c867debe763eee998b17daff518a38a26374cfaf4d4eff00656acb8",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "b1e2ceb684be99cef34939a6553bebe1d3c910ab377a15dc423636e0b3f57f30",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "2c308d922b6551fa12a197e338423f220507c2c2a6f1325fe7b8f4dc6e6b0380",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "ef8fcc5f104b50b3b85c66de2ecdb66ab2d8ef67b02e173ead3422e84d3930c9",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "b95d874d410b3e412aada7e01b6554610a1878981c6c9d7b19fad7afe0d01029",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "7cbf1780daadb234d19f6462d0b11a4b054f7b0a5bf5efa32d08a5414a1bbb10",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "1b358ca0677cf204c20f9044441b91e761d6e1e6ef1740a6d093b971744c2206",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "836ba0a8c53b204fefb94eab1edc53d1f8add73186927adf87fb0f0283d7fa82",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "c2cb7bf0fc709e214d5cd0c3a24d0c22113ed34c258a8d6071f3f996c4f9747b",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "ca5c2ac40447d4a158b72f7296fa71d23237325ba212fa823a783e50dfd3f4e8",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "5b7aab05411ae331e7bef9c4392bae3c76449366eec35f78e8114ac0bd9f64a5",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "1afc767aff8eb04a5d60c3c8017cc1ce270bd72c2d52426e6fc28d91ffde4205",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "afd8e930467296eccffadebfbe1a50f12f8013ee4d3d63ebe1a5e6d1c2f34d30",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "14aa007763686f5e20a209f2e2b36f11130c9e5a3dddcf81f17f618de7c1544c",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "8e06e94aa3b7e56cd996f1b636b68b21cc854afecaedeaad73628784a3a5f63a",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "30d03d8a9526ffb93a27478a71acf52641dd354c2425e4acc8e49467e247c37d",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "9827d0e61d9e1808773dc10d37ff85d85f6ad8db56512d966baf5dd0aba2eae6",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "b41d01ef468372443a9668108b4de3b42eb3da0fdb4d40cc5d6f67494df26837",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "523c0c6cfcb215cb21ca39f6003dec45c7d4980bcd94254c12ff698785c3e91c",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "c7ed2aeddba8d53d4e7f93ba58b9a25829a2aa448fb7de38ab5c4e06dfe108b1",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "fdb459d8ac7ea14d402387f0da8402b27d1cce33d68096f62769701a0e24deb6",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "a40b2f5ec7c9db614defc535cc413a5edd6bd993cec7d6460c9fb0cbee592108",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "7157b450105fd4f841b001f8bc20f136b5c31901ceeaf6449c2a0cfcedf3616e",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "fa9e1e5175bcaf3bc5b1653bb26df22ea0366582be2e52b25adaeb5169b02faa",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "183fd3f49f9fa5e45c697c446dad6f128f6bf63a692205a1ca6482dfaa4fd9fb",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "201131493ada8d22c3da0d2fb59b8d4d049150eb801a18daafe38252226d51c5",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "31bf394a0a21f695c992c9c8f61f41c0533cc9fc0d8b6511fb651750b6feaf46",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "79435e7c9d8e29fc5cbf04d6191075f88ada7b38877cdf98f3d9c5c2458e3d64",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "990a5630ea1e74c45f311379db04364839109aaff6fd813f69e26fc623d02186",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "c4e9cf3037d826e3ede62a3f75b0f0e1f32a86eca4bdbeb5090176f60d5d970e",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "cec6f20dac9578b5e04c7c8470fa360b9a3be42f0e4de33db392a178994be14f",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "533f5273d9c7ebcf350cb054e9f2438c98de22c9421a33a54df60d4ad46f8405",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "bcc2446c5c9ea2b7fa195ee9f6ce150425426edcb3a6567fe6d6b013b663eb8c",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "05748d04573e674d5b99b6b94b5fda59ae998fc8af8cdc9428c7aea6d5784e6a",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "9127bed5e2d8ce1467df48323c86a94239aa8f5d79efef8810e47f06289bda00",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "3bbb25aaba0b64e162fdd4899df5e34b27a11e031616ed93c8d55e8483748106",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "a6f057cc1a38d46e3f945d817a530273f08fad917c7ff32ce78c26d0d13f9e69",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "c6582c067416fa5acbb63e4f3126e490c57a274769d108c0377d05857415aacc",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "d86e3e984263c553a0383aed65013d58bd9492fc4fb343c2b9a0d69106ee59e4",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "b487b1d59b2b9a797aea93a2961f4b5d25ca107dda608fc9d7124ea594c5f375",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "76ba990d4326db97ae925adf5af3284457d7245a05280ed13bc5297c2c9dbc39",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "2796aa35deb1dc4315550545b8629062f582a785895dcc3dabec4e80fa7ff133",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "d3a3bd4b3dd02c2f1d905dcc323ad813a1492268fdc85ebd1955f23ee9da5283",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "53a0ee19f1a422d09bba4822eb1d3805f4029e96f0f366133e64e963b1f7abe2",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "203cf5e944b16382ff85e8c5beae71f04c6320f4066fdb742b338a711245e04c",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "935663115739d7fb32fa87fb877b7c2c7bf733c13619e51a5dc20f905ddc3e69",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "518684c47d288d192b5ed1a4505a99d282f428be67dfca6fa84ec77203987ed2",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "9ee699a218aaf41294183500def743d053ebee7eaca90c08388e23b98bd58534",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "375ed54ee329013decd8fd122e148388800db8dbe50a7698c7f5fc00c3f17867",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "64868be71da8f3a2e048f4ab04b4dcb4ff6566159bc3e5572101ec742cc2190f",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "350d282d7a847713ea0464ebe32665569aff08c58ab45cc6ed7de656e1477beb",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "4a19189689154c1bb6dc29c9aff18308d36219e8af218a33c19eab04404daadc",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "58e5b498c25ab0dffcfd07c78045d0b6868db39ce07ea9996d5b5d068826b32d",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "370bc104822296eb998c3ca4747d8bf27f1adfdab7f35e75c525ce2de8f7f5d5",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "26b5f2016fe88cc744f338aeb47c9e1d2a6bd703080f727c60f7b260f0d06e4e",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "42f3db8c7e5a3a10d28be0924c3fc6df58cfc8afe456b389f0a1e23f833767bf",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "21dd0a5728a7b5fd661e51d805893cb1911095116f83ac2299c4dddc7eb66010",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "9f4ba44fd7c131b406f4d43d127a67db831a113fe7d5826d2380d2831c927850",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "5d31e4bbe748a053ebbc940fc4e773dc48ded8220e685b4079dcee38922c27f9",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "90b4c8a5a587e3c79aad81fb7a8c4d34b70cb50933c3f625ebf0f35d4fef02e7",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "a098c6b6f92172c59c668f413a2a5473289c28c4546183deba72408636d62a2f",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "7d49f34a44a6d061a8c5aa839f9e26269a28047268ef19abdf1e0a4665d1b906",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "95bdc4a4aedfb6c28c62696855b2390b0a79dcb13ec29554d465ebf63d095294",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "a6c34a15056dbf2c83011afd469a1ba68b74b0a08e0e9ed537b7edbe92d9eaf2",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "7a554e82f0698531b2239b0af3c4f69b8f44bc55ddbdcccebda7811786a5c340",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "72bb3ddbeb6d872c6636af366921c3970e8368eeeaba7ce332347ec227672af3",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "150b3508ea3e15cff9b982f0e415a5cc7d4508c080eb2908692d48cc4d23f356",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "46e6bd9e197062f1a9f6a03a866ba4021bc29d5b54fe6e30b5442098699d0077",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "9f89d9d9727505b519122856108ffea6170fd2d40a8dd3e500f09f7a7ef0c41e",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "22c4aa8d443aa502725d322441e4a01d5023919837cc18d8563cd72a5d694079",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "1621e7e647ad505d0a264a314a5a0c423cf65579655fc7393757574a92964d12",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "b2c36987ace03fc1b27cbc0dd31aadb6c7483dd0829073db92b3528ad1281c2d",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "eb3d8f987fb79f3c4c68628e5e8422a0da184200ca464a7fcb798a16cced91c7",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "b4bcf8adf91590cccb0037e21ec170b75e841890184273863e970a174581a7a3",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "b2a429e9b6b64cc3c4f0336677465326cfba84daaa060fa74b40c55f57ffa44a",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "5a307af257fd7a7d5fcd1e2d4d7b0cbf0add166fe4ccaf9de7ddf44ad0b5746f",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "ed1f4f28716f4576d25a92a230a82644e3b63a427f6eaf42b99d6647b57a7220",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "c8ae807fa8cd68deee616e7a13a4ce2dd6a80a46cb66aee08c407c78bdfe1dd7",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "27793f150b74077674a4875b73897bb3978720f9d11a1b81da3a593c84f64a1f",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "b30016cf13154c7f3e76868b2f57d3e171460f07fc78562341c37f7505a52608",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "b9f49be34812f5eabd07b74c828d9bfefa9eb65b5636e186fdaed1efb084200f",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "482c9578f410ba0df9f2d13a6f452ef17c1d6a382d3feac3a5c32b665773e4b1",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "06b3f750e35df70a4948009157c2cfab86ca9e63a542dde3c6a1737a37d15942",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "0d0b2a8de4fcb613b995b1b048108c89c46ef2db4a2c35b9958eb982ce4c4641",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "04b8eedf347c7f7458cc49039af009b4f9d509eaa53f9d21c9dd13cbb69f14fe",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "ee1ebf4928ad12d5e701e0dda2f202e457175b7872b90f1cdd8fc37ba1933ae6",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "573c01806e5c02421a5c10553bda9e937d8d0cc0ed420c9609d5b81a98ff725b",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "f897d7bde9ba044e7eddc4a72d277b21c7e1f6b5305ec1c9be2cb3911fd1691d",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "dc64f26120339d392d5fcdb4cb373aebc07be8741adbcfbdbce0b6dd99c19ce9",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "7454908f1202cb86d4e37543acf8289deb740556cdbb477079558df92d9d5d6d",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "4f0e477beb9a2f2f419972d2cbefcdf85246fb2dd3356c9f905cb81a11cd402e",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "46029ded4ff64bd3ba3bdf440ce64783b20b9ad93102c0485f248e26156f06e2",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "343aa669a73567c5694c7d25c45c3615a211339801e31f5dbb4ee79f3cd37642",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "14de8c056f9a632f724f8cd81c89f7698d953d1c28b2cd388956a675d9148116",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "a280519b9637dfa48ba55f82d6478ce711abb43d0c5d4377d706db0c82db4b1b",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "5ad41076a755b559d271d33aa004e9261b5a43ce1e0f677a6d89fa2cdca87ff3",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "8b3ee1159726192c83cd53e4f93c83095618c7f9f1e19125b0dd685b926afa03",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "91dfe046fc618fa6666f0d3b632476c0519002129f45afaef6fb02cae71b4611",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "5cc5eef448a48ce688b6a21a476c148a6f98cbe3acb11d4453b8f63fd9cf5726",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "f23752692a0b6c914d9e892869a78697e8eaa84da010c7abc861e6387c123b7c",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "404744f440b558b2b556fc835c04d1ee0cb24c6129d5229c8975d3fb9a664843",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "cfee93d87fe65b1a897be1d7409f481cb0079c3b568d0796c0285de78420090a",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "24b2d10dd826a4b84ee71e3adb9edf1d1534e6ddcf860c8b1e635d20a79c44bf",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "daa0e741c715ec17ba1523e8f3d9c2b068f7b8f76793070d82c2c935e6bfd663",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "3f73f1d5a3aeb781b356459db7fcd5301ea0949a0db11f920008f8fd50f383d7",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "637b7f932aa204208c7aa81faa792fad9d298a3ee8f9c6fd82bad16e3ac77c72",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "46601c9fe3f863cb153e5b1459379cf3b4082152004dd34d28e6022c03da9fbc",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "ba5b07738ded9258ef08ee149cc40923650c866b01969f19e67aa1ba60b0df6f",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "cf9f78a15f97d22d8459f240f112705ac9dfb96e2a4a7cc69f1bdb3672204ba1",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "2c844abcd83462503b6a0ac23fc531cd77cada18abc1c4b137cbc3b9d9340059",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "976a342af785e2e4b2e961402efa3265cb7a204db19009506be1916e17dbe9d7",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "b889d1fe8cccd30a6b7b48ccfe7ada7ecdc66d3aa4c588f08b006885e5e1556a",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "98024305eb0d00489f6d5e94c96f7d39f502ab4f0ac8d910e59264694041450d",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "4a5edfd1d11b7d710505ed86ccfd5acb8cf52b586f9c8cf052067c46caa2bd78",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "cdf78333e33a46e09d8e267c5088f862ae694704d684a5e36ac812ff4ba6149a",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "e31fbacc59b7c0138663db1c446b0e620908777aadeeb354205641514e6fdd4b",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "235cc16946b8472d1ed11fe05acf3efb3d70e8691a18a761e3cd8f0778fc56b4",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "ee57eca0feb1f84514d4942ee8c0faa3856c1e86ef29323a2c9a7dfeed1cf4c4",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      },
+      {
+        "Sha256": "963dd200bb6e7779f014dd603df2c14c4fb9cde1ef3242e352d4b31a70d43e08",
+        "FatalHandshakeIoErrors": 0,
+        "DtlsHandshakeFailures": 0,
+        "Dropped": 0
+      }
+    ],
+    "CollectorFollowup": "Future collector namespaces native output by sample; the completed sequence was not repeated.",
+    "FutureCollectorTemplateSha256": "e330869b5d71d15b7f2097b400d0b1a1f1eff37f180299b9241400966201bc29"
+  },
+  "MainRegression": {
+    "Counters": {
+      "total": 958,
+      "executed": 958,
+      "passed": 958,
+      "failed": 0,
+      "error": 0,
+      "timeout": 0,
+      "aborted": 0,
+      "inconclusive": 0,
+      "passedButRunAborted": 0,
+      "notRunnable": 0,
+      "notExecuted": 0,
+      "disconnected": 0,
+      "warning": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "pending": 0
+    },
+    "LogSha256": "1e8adbff0d68f074109095822ce4a0af8d5f538bacacde4c49f31b09e9393a47",
+    "TrxSha256": "61e24d2abebb645163d9cfc9106eef85b29a0b56d083e7b035e58d9b0a82be1e",
+    "FilterExcludes": [
+      "Full_4096_item_file_plan",
+      "Full4096ItemPrivateSnapshot",
+      "Full4096ItemSender",
+      "LargeFileTests"
+    ],
+    "PublishedResultsFile": "windows-native-combined-main-2026-11-09.txt",
+    "PublishedResultsSha256": "c6df88edfe5b1d036cffe50b8a701b6ddeb04d1c8c081272f6864f00291ce7e5"
+  },
+  "UpstreamConfiguredTests": {
+    "Passed": 13,
+    "ExitCode": 0,
+    "Failed": 0,
+    "Stage": "ThirteenConfiguredUpstreamCasesPassed",
+    "PhysicalSeparateNetworkVerified": false,
+    "TestExecutableSha256": "90d61b6d4f7cc4e0c0c1f68a292a90d16ef68878bc0f98abb5445499f67dcb56",
+    "LogSha256": "adbd713c00c62c205545d8ea4f69accb138c032c310eca636fd106a60f524228",
+    "FullCompletion": false,
+    "NativeSha256": "57f119d4f978085570df1e3f9e333e7655680af6d0bb89eebecf6f424787dfbc",
+    "UsesConfiguredPublicStunServer": true
+  },
+  "OpenSslReuseGuards": {
+    "NativeSha256": "57f119d4f978085570df1e3f9e333e7655680af6d0bb89eebecf6f424787dfbc",
+    "NativeArtifactUnchanged": true,
+    "Stage": "OpenSslReuseGuardsPassed",
+    "NoNativeRebuild": true,
+    "Cases": [
+      {
+        "Message": "OpenSSL reuse libraries differ",
+        "Outcome": "ExpectedRejection",
+        "Name": "AlteredStaticSslLibrary"
+      },
+      {
+        "Message": "OpenSSL reuse inputs do not match",
+        "Outcome": "ExpectedRejection",
+        "Name": "WrongOpenSslRevision"
+      }
+    ]
+  },
+  "UnsignedPackage": {
+    "PackageName": "iConnect.ConnectionInitFixture",
+    "Publisher": "CN=Owned native fixture",
+    "Version": "1.234.0.0",
+    "Signed": false,
+    "Sha256": "3cfb259adf9fd090799f0f38e33df97b33672ea2e15192a30eab1f0cb04f4151",
+    "NativeTransport": "PinnedSourceBundle",
+    "NativeNoticeInventorySha256": "0526de22d89893fa3f91c4e4fe5ac398e58e6c1437c6fec5ed409941c8b80184"
+  },
+  "BundleEvidenceSha256": "494ba23392f60ff080848a210e499e8a72c71d0df4c6ebc7bb13e7eef4380e54",
+  "ToolTests": {
+    "Passed": 60,
+    "Failures": 0,
+    "Skips": 0,
+    "RawLogSha256": "9c529f242013170050d44e168b3925d38f86816a141f9375cc9164b504e1b9af",
+    "PublishedResultsFile": "native-connection-tools-2026-11-09.txt",
+    "PublishedResultsSha256": "9c529f242013170050d44e168b3925d38f86816a141f9375cc9164b504e1b9af"
+  },
+  "LegacySinglePatchPackageInspectionPassed": true,
+  "RawNativeLogsPublished": false,
+  "DefaultAdopted": false,
+  "OriginalUntracedFailureUniquelyAttributed": false,
+  "WindowsAndroidCombinedArtifactVerified": false,
+  "PhysicalSeparateNetworkVerified": false,
+  "CompleteLicenseReview": false,
+  "FullCompletion": false
+}

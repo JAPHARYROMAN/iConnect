@@ -92,7 +92,7 @@ try {
         Assert-Source $component.source $component.commit $(if ($component.name -ceq 'libdatachannel') { $nativePatches } else { @() })
     }
     $files = @{}
-    foreach ($name in @('build-native-transport.ps1','native-transport-sources.json','test-native-transport.ps1','export-native-transport-sources.ps1','review-native-transport.ps1','read-native-transport-bundle.ps1','native-transport-patches.ps1','native-sctp-initialization.json')) {
+    foreach ($name in @('build-native-transport.ps1','native-transport-sources.json','test-native-transport.ps1','export-native-transport-sources.ps1','review-native-transport.ps1','read-native-transport-bundle.ps1','native-transport-patches.ps1','native-sctp-initialization.json','native-dtls-initialization.json')) {
         $relative = 'recipe/' + $name
         Copy-Item -LiteralPath (Join-Path $PSScriptRoot $name) -Destination (Join-Path $destinationPath $relative)
         $files[$relative] = Hash (Join-Path $destinationPath $relative)
@@ -123,9 +123,10 @@ The builder verifies Git checkouts; exported archives are source snapshots and
 do not replace those checkouts when running the builder.
 When build-evidence.json lists nativePatches, the libdatachannel archive is the
 pinned upstream base. Apply its exact recipe/native-patches/*.patch files to
-reconstruct the modified source; recipe/native-sctp-initialization.json records
-the patch bytes and resulting file hashes (UTF-8 with LF). The recipe builder's
--SctpInitializationFix switch performs and validates that application.
+reconstruct the modified source. The recipe/native-*-initialization.json files
+record each patch and resulting source hashes (UTF-8 with LF). The recipe builder's
+-SctpInitializationFix switch selects the SCTP correction;
+-ConnectionInitializationFixes selects both SCTP and DTLS corrections.
 
 bundle-evidence.json is written only after export completes. It binds the source
 archives, root licenses, recipe and build evidence to this exact DLL. This bundle

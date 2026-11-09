@@ -1,0 +1,36 @@
+{
+  "OriginalWrapperPassed": false,
+  "LogSha256": "9fd1fbd44022765458eeca5e3058d5d821ade80b4c32da4797769f914ae92b63",
+  "Apks": {
+    "tests": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294",
+    "production": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+  },
+  "Stage": "RecoveredCompletedJUnitCase",
+  "OriginalPluralMatcherAccepted": false,
+  "FullCompletion": false,
+  "ParserSha256": "92bc3c062ea2439a769021adb4e8f1d59fc13b6ef7811dd21066b7db01e43747",
+  "OriginalAdbExitCodeRetained": false,
+  "OriginalRunRepeated": false,
+  "Assessment": {
+    "verified": true,
+    "cases": 1,
+    "failures": 0,
+    "skipped": 0,
+    "testCases": [
+      "com.iconnect.proof.LargeFileTest#uploadAndIncomingProviderOver4GiBReopenTheOriginalReceipts"
+    ],
+    "instrumentationCompleted": true
+  },
+  "SchemaVersion": 1,
+  "DateUtc": "2026-11-09",
+  "ExactBytes": 4295229457,
+  "ReportedJUnitSeconds": 7636.975,
+  "LargeFileTestSha256": "a3748095cdd5faa77dfb00d835c8f009badde920708a7dddf5ad7110a835e908",
+  "FrozenArtifactManifestSha256": "ab7ed2d310f070158d9b5d510690a830718bc935b4d26c9aab8c66c9e009a472",
+  "OriginalRunLog": "android-large-upload-instrumentation-2026-11-09.txt",
+  "CurrentApkHashesReobserved": true,
+  "SixOriginalBeforeFocusedAfterApksMatch": true,
+  "ParserTests": 12,
+  "ParserTestLogSha256": "002e88c46ed494f76d3ccbdf1fb7723c3e426f5572aff751ad0092ec82f39041",
+  "CompleteThreeCaseMatrixVerified": false
+}

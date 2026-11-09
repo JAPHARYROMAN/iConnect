@@ -43,8 +43,11 @@ $nativePatches = @(Get-IConnectNativeSourcePatches $build)
 $required = @('datachannel.dll','build-evidence.json','source-lock.json','README.txt') +
     @('build-native-transport.ps1','native-transport-sources.json','test-native-transport.ps1',
         'export-native-transport-sources.ps1','review-native-transport.ps1' | ForEach-Object { 'recipe/' + $_ })
-$patchRecipe = @('recipe/native-transport-patches.ps1','recipe/native-sctp-initialization.json')
-if ($nativePatches.Count) { $required += $patchRecipe + @($nativePatches | ForEach-Object { 'recipe/' + $_.patchFile }) }
+$patchRecipe = @('recipe/native-transport-patches.ps1','recipe/native-sctp-initialization.json','recipe/native-dtls-initialization.json')
+if ($nativePatches.Count) {
+    $required += @('recipe/native-transport-patches.ps1') + @($nativePatches | ForEach-Object { 'recipe/' + (Get-IConnectNativePatchDefinitionName $_.id) }) +
+        @($nativePatches | ForEach-Object { 'recipe/' + $_.patchFile })
+}
 $allowed = $required + @('recipe/read-native-transport-bundle.ps1') + $patchRecipe
 foreach ($name in $required) { if (!$manifest.files.Contains($name)) { throw "Native bundle is missing $name." } }
 foreach ($name in $manifest.files.Keys) {
@@ -54,8 +57,9 @@ foreach ($name in $manifest.files.Keys) {
 if ($manifest.files['datachannel.dll'] -cne $manifest.binarySha256 -or $manifest.files['source-lock.json'] -cne $lockHash -or
     $manifest.files['recipe/native-transport-sources.json'] -cne $lockHash) { throw 'Native bundle payload or source lock is inconsistent.' }
 foreach ($patch in $nativePatches) {
+    $definition = Get-IConnectNativePatchDefinitionName $patch.id
     if ($manifest.files['recipe/' + $patch.patchFile] -cne $patch.patchSha256 -or
-        $manifest.files['recipe/native-sctp-initialization.json'] -cne (Hash (Join-Path $PSScriptRoot 'native-sctp-initialization.json'))) {
+        $manifest.files['recipe/' + $definition] -cne (Hash (Join-Path $PSScriptRoot $definition))) {
         throw 'Native bundle lacks the pinned patch and modified-source definition.'
     }
 }
