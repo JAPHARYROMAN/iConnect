@@ -26,9 +26,9 @@ jobs:
         run: |
           $build = Join-Path $env:RUNNER_TEMP 'iconnect-native-build'
           $bundle = Join-Path $env:RUNNER_TEMP 'iconnect-native-bundle'
-          ./tools/prepare-native-transport.ps1 -BuildDirectory $build -Destination $bundle -Jobs 2
-          ./tools/assert-native-transport.ps1 -BundleDirectory $bundle
-          ./tools/test-native-transport-selection.ps1 -BundleDirectory $bundle
+          ./tools/prepare-native-transport.ps1 -BuildDirectory $build -Destination $bundle -Jobs 2 | ConvertTo-Json -Depth 4
+          ./tools/assert-native-transport.ps1 -BundleDirectory $bundle | ConvertTo-Json -Depth 4
+          ./tools/test-native-transport-selection.ps1 -BundleDirectory $bundle | ConvertTo-Json -Depth 4
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: corrected-native-transport
@@ -51,7 +51,7 @@ jobs:
         shell: pwsh
         run: |
           $bundle = Join-Path $env:RUNNER_TEMP 'iconnect-native-bundle'
-          ./tools/assert-native-transport.ps1 -BundleDirectory $bundle
+          ./tools/assert-native-transport.ps1 -BundleDirectory $bundle | ConvertTo-Json -Depth 4
           "ICONNECT_NATIVE_TRANSPORT_BUNDLE=$bundle" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - run: dotnet restore iConnect.slnx --locked-mode
       - run: dotnet build iConnect.slnx --no-restore --configuration Release
@@ -89,7 +89,7 @@ jobs:
             $package = ./tools/package-windows.ps1 -PackageName iConnect.CiExplicitBundleFixture -Version 1.0.0.0 -Publisher 'CN=iConnect CI Fixture' -Unsigned -NoRestore -NativeTransportBundle $bundle
             if ($env:ICONNECT_NATIVE_TRANSPORT_BUNDLE -cne $missing) { throw 'Packaging did not restore its caller environment.' }
           } finally { $env:ICONNECT_NATIVE_TRANSPORT_BUNDLE = $previous }
-          ./tools/test-native-package.ps1 -Package $package.Path -Payload (Join-Path $package.WorkDirectory 'payload') -ExerciseGuards -RequireNoticeInventory
+          ./tools/test-native-package.ps1 -Package $package.Path -Payload (Join-Path $package.WorkDirectory 'payload') -ExerciseGuards -RequireNoticeInventory | ConvertTo-Json -Depth 4
   windows-large-files:
     needs: native-transport
     runs-on: windows-latest
@@ -106,7 +106,7 @@ jobs:
         shell: pwsh
         run: |
           $bundle = Join-Path $env:RUNNER_TEMP 'iconnect-native-bundle'
-          ./tools/assert-native-transport.ps1 -BundleDirectory $bundle
+          ./tools/assert-native-transport.ps1 -BundleDirectory $bundle | ConvertTo-Json -Depth 4
           "ICONNECT_NATIVE_TRANSPORT_BUNDLE=$bundle" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - run: dotnet restore tests/IConnect.Tests/IConnect.Tests.csproj --locked-mode
       - run: dotnet build tests/IConnect.Tests/IConnect.Tests.csproj --no-restore --configuration Release

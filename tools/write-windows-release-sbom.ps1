@@ -10,6 +10,14 @@ $ErrorActionPreference = 'Stop'
 $components = @{}
 $inventoryPath = Join-Path $Payload 'PackageMetadata/sbom.cdx.json'
 if (Test-Path -LiteralPath $inventoryPath) { throw 'The staged inventory already exists. Publish to a new payload directory before generating another inventory.' }
+$desktopPath = Join-Path $Payload 'IConnect.Desktop.dll'
+if (!(Test-Path -LiteralPath $desktopPath -PathType Leaf) -or
+    ((Get-Item -LiteralPath $desktopPath -Force).Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+    throw 'The inventory requires the actual nonredirected staged desktop binary.'
+}
+if ([Diagnostics.FileVersionInfo]::GetVersionInfo($desktopPath).FileVersion -cne $Version) {
+    throw 'The desktop binary does not match the inventory version.'
+}
 $nativeMetadata = Join-Path $Payload 'PackageMetadata/NativeTransport'
 $sourceNative = if (Test-Path -LiteralPath $nativeMetadata) {
     & (Join-Path $PSScriptRoot 'read-native-transport-bundle.ps1') -BundleDirectory $nativeMetadata

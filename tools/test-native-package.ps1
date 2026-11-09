@@ -90,6 +90,8 @@ if (!$ExerciseGuards) {
 }
 # Guard fixtures use generated copies of the real published dependency graphs,
 # source bundle and restored vendor binary; no application is installed or run.
+$applicationVersion=[Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $payload 'IConnect.Desktop.dll')).FileVersion
+if (!$applicationVersion) { throw 'The actual published desktop version is required for inventory guards.' }
 $assets=Get-Content (Join-Path $repo 'tests/IConnect.Tests/obj/project.assets.json') -Raw | ConvertFrom-Json -AsHashtable
 $vendorPackage=@($assets.libraries.GetEnumerator() | Where-Object {$_.Key -match '^MediaToolkit\.WebRtc\.Native\.win-x64/' -and $_.Value.type -eq 'package'})
 if ($vendorPackage.Count -ne 1) {throw 'Restore the standard native package before exercising default-origin guards.'}
@@ -110,7 +112,7 @@ function Copy-Bundle([string]$Name,[bool]$SkipNotices=$false) {
 function Make-Payload([string]$Name,[string]$Dll,[bool]$WithSource=$false) {
     $target=Join-Path $fixtureRoot $Name
     [void](New-Item -Path $target -ItemType Directory)
-    foreach ($relative in @('IConnect.Desktop.deps.json','PreviewWorker/IConnect.Preview.Worker.deps.json','AttachmentWorker/IConnect.Attachment.Worker.deps.json')) {
+    foreach ($relative in @('IConnect.Desktop.dll','IConnect.Desktop.deps.json','PreviewWorker/IConnect.Preview.Worker.deps.json','AttachmentWorker/IConnect.Attachment.Worker.deps.json')) {
         $destination=Join-Path $target $relative
         [void][IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($destination))
         Copy-Item -LiteralPath (Join-Path $payload $relative) -Destination $destination
@@ -126,8 +128,8 @@ function Make-Payload([string]$Name,[string]$Dll,[bool]$WithSource=$false) {
     }
     return $target
 }
-function Write-Inventory([string]$Target) {
-    & (Join-Path $repo 'tools/write-windows-release-sbom.ps1') -Payload $Target -ConnectivityAssets (Join-Path $repo 'tests/IConnect.Tests/obj/project.assets.json') -PackageName 'iConnect.NativeInventoryFixture' -Version '1.109.0.0'
+function Write-Inventory([string]$Target,[string]$InventoryVersion=$applicationVersion) {
+    & (Join-Path $repo 'tools/write-windows-release-sbom.ps1') -Payload $Target -ConnectivityAssets (Join-Path $repo 'tests/IConnect.Tests/obj/project.assets.json') -PackageName 'iConnect.NativeInventoryFixture' -Version $InventoryVersion
 }
 $checks=@()
 $default=Make-Payload 'default' $vendor
@@ -139,6 +141,11 @@ $before=(Get-FileHash (Join-Path $default 'PackageMetadata/sbom.cdx.json') -Algo
 try { Write-Inventory $default; throw 'Existing inventory was overwritten.' } catch { if ($_.Exception.Message -notlike 'The staged inventory already exists*') {throw} }
 if ((Get-FileHash (Join-Path $default 'PackageMetadata/sbom.cdx.json') -Algorithm SHA256).Hash -cne $before) {throw 'The existing inventory changed.'}
 $checks+=@{Case='existing-inventory-preserved';Passed=$true}
+$wrongVersion=Make-Payload 'application-version-mismatch' $vendor
+$differentVersion=if ($applicationVersion -ceq '1.0.0.0') {'2.0.0.0'} else {'1.0.0.0'}
+try { Write-Inventory $wrongVersion $differentVersion; throw 'A different desktop version was mislabeled.' } catch { if ($_.Exception.Message -cne 'The desktop binary does not match the inventory version.') { throw } }
+if (Test-Path -LiteralPath (Join-Path $wrongVersion 'PackageMetadata/sbom.cdx.json')) { throw 'An inventory was created with a different desktop version.' }
+$checks+=@{Case='application-version-mismatch-refused';Passed=$true}
 $unlabelled=Make-Payload 'unlabelled-replacement' (Join-Path $bundle 'datachannel.dll')
 try {Write-Inventory $unlabelled;throw 'Substituted DLL was mislabeled as NuGet.'} catch {if ($_.Exception.Message -notlike 'The native DLL differs from the resolved NuGet artifact*') {throw}}
 if (Test-Path (Join-Path $unlabelled 'PackageMetadata/sbom.cdx.json')) {throw 'A mislabeled inventory was produced.'}

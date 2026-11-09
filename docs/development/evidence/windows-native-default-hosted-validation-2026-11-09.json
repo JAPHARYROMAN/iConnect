@@ -1,0 +1,115 @@
+{
+  "schema": 1,
+  "stage": "CorrectedDefaultHostedWorkflowPassed",
+  "commit": "266448ca461f1880ed52a9c673c5279522bae0ed",
+  "run": 42641731615,
+  "url": "https://github.com/JAPHARYROMAN/iConnect/actions/runs/42641731615",
+  "observedAtUtc": "2026-11-09T15:59:16.2925384+00:00",
+  "jobs": [
+    {
+      "id": 129244301113,
+      "name": "android",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 129244301689,
+      "name": "native-transport",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 129244302081,
+      "name": "native-notice-tools",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 129255538234,
+      "name": "windows",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 129255538237,
+      "name": "windows-large-files",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "sourceArtifact": 13686123694,
+  "sourceArtifactZipSha256": "c2da70300f6b551348d9354f2fe1de79e289d2d52d5b170d5188a59ab657362e",
+  "nativeSha256": "8acf23bee1fda8fd7448157f05096a368993b5dbfee19fe4eedf9621f4816428",
+  "bundleEvidenceSha256": "a9d1a4efc61d5236cd64f8d99b6895a85de3f1f0b3f91ae9985f03fcd2426fdd",
+  "windowsSplitSuites": [
+    {
+      "name": "main",
+      "result": {
+        "failed": 0,
+        "passed": 959,
+        "skipped": 0,
+        "total": 959
+      }
+    },
+    {
+      "name": "receiver-capacity",
+      "result": {
+        "failed": 0,
+        "passed": 1,
+        "skipped": 0,
+        "total": 1
+      }
+    },
+    {
+      "name": "snapshot-capacity",
+      "result": {
+        "failed": 0,
+        "passed": 1,
+        "skipped": 0,
+        "total": 1
+      }
+    },
+    {
+      "name": "sender-capacity",
+      "result": {
+        "failed": 0,
+        "passed": 1,
+        "skipped": 0,
+        "total": 1
+      }
+    },
+    {
+      "name": "previews",
+      "result": {
+        "failed": 0,
+        "passed": 10,
+        "skipped": 0,
+        "total": 10
+      }
+    },
+    {
+      "name": "large-files",
+      "result": {
+        "failed": 0,
+        "passed": 3,
+        "skipped": 0,
+        "total": 3
+      }
+    }
+  ],
+  "totalWindowsCaseExecutions": 975,
+  "managedSolutionWarnings": 0,
+  "managedSolutionErrors": 0,
+  "ordinaryPublishAndInventoryStepPassed": true,
+  "nativeSelectionGuardsPassed": 7,
+  "logs": {
+    "normalization": "UTF-8 with LF capture",
+    "largeFilesSha256": "58f11efc0dda2c6aa3ebc06204d11a3d77cc00b7298faccc7d873dce97007e3c",
+    "mainSha256": "485b07b91131eb0f9545295ea4c3d027aab1887b8a26efdc6b9bbbcbe9df6d0c"
+  },
+  "explicitBundlePackagingScenario": "Added in child commit de5453a; not part of this run.",
+  "combinedWindowsAndroidInterop": false,
+  "physicalSeparateNetworks": false,
+  "signedInstalledLifecycle": false,
+  "fullApplicationComplete": false
+}

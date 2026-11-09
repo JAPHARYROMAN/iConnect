@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "stage": "DefaultWindowsSplitValidationPassed",
+  "nativeSha256": "57f119d4f978085570df1e3f9e333e7655680af6d0bb89eebecf6f424787dfbc",
+  "bundleEvidenceSha256": "494ba23392f60ff080848a210e499e8a72c71d0df4c6ebc7bb13e7eef4380e54",
+  "totalCaseExecutions": 975,
+  "suites": [
+    {
+      "name": "main",
+      "passed": 959,
+      "trxSha256": "2c51853101625e3ecf925ed3c35cb8f6021a7f058e8a197b9dbd66ce9b438824",
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 959
+    },
+    {
+      "name": "receiver-capacity",
+      "passed": 1,
+      "trxSha256": "30b17c9bcb7ff5cde45971635861f866dc9fccfd099f08299fd2ecefb023d357",
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 1
+    },
+    {
+      "name": "snapshot-capacity",
+      "passed": 1,
+      "trxSha256": "8d25d6ba4aff1d0da2888c63633555438233384b7abebf6f243b9fef3e91779e",
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 1
+    },
+    {
+      "name": "sender-capacity",
+      "passed": 1,
+      "trxSha256": "b8b4a351d0136839ba02a6d7911a5f143b4c63ed566748a1b05226f0ef9e08a7",
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 1
+    },
+    {
+      "name": "large-files",
+      "passed": 3,
+      "trxSha256": "a7c706f1730bc2fd04b44cf7735d483fcca41635e02462f9344775e3617cf225",
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 3
+    },
+    {
+      "name": "previews",
+      "passed": 10,
+      "trxSha256": "551a1ac90f3807b726ec32128aaa43db70c8eaa993842baf302e51e4298647d9",
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 10
+    }
+  ],
+  "mainAssemblySha256": "deea9d487d88bdb59dd2f0eab935304044f8e98b5e29eef16a0d3d2eb2eff3e0",
+  "solutionBuildWarnings": 0,
+  "solutionBuildErrors": 0,
+  "solutionBuildLogSha256": "77bf887d65841f4367a1151f1d76b97e8ef15a7faf543d1db5b7790888447f9d",
+  "originalNoBuildPublish": {
+    "applicationFileVersion": "1.268.0.0",
+    "nativeAndSourceChecksPassed": true,
+    "applicationVersionMismatchObserved": true,
+    "inventoryVersion": "1.0.0.0",
+    "originalArtifactPreserved": true
+  },
+  "correctedFreshPublish": {
+    "Stage": "FreshDefaultPublishVersionVerified",
+    "ApplicationVersion": "1.0.0.0",
+    "InventoryVersion": "1.0.0.0",
+    "Components": 24,
+    "NativeSha256": "57f119d4f978085570df1e3f9e333e7655680af6d0bb89eebecf6f424787dfbc",
+    "BundleEvidenceSha256": "494ba23392f60ff080848a210e499e8a72c71d0df4c6ebc7bb13e7eef4380e54",
+    "InventorySha256": "112445a7661097e5b04a38bccfdab9621a7436f675ca964df049324bba27d91e",
+    "SignedOrInstalled": false,
+    "CheckedAtUtc": "2026-11-09T19:24:33.1034942+03:00"
+  },
+  "correctedPublishLogSha256": "13a8d757bfaeea21289a2b650cee10c40bc18395fa470a00a596a64c275887dd",
+  "completeCurrentAndroidMatrix": false,
+  "combinedNativeWindowsAndroidInterop": false,
+  "physicalSeparateNetworks": false,
+  "fullApplicationComplete": false,
+  "checkedAtUtc": "2026-11-09T16:29:48.0476758+00:00"
+}

@@ -1,0 +1,150 @@
+{
+  "schema": 1,
+  "stage": "WindowsInventoryVersionIntegrityValidated",
+  "before": {
+    "Stage": "NoBuildPublishVersionMismatchObserved",
+    "ActualFileVersion": "1.268.0.0",
+    "InventoryVersion": "1.0.0.0",
+    "ExistingInventorySha256": "644dd982b3f1baa97559afbd8435619a922bed57a795b65014cbacc30750dd00",
+    "OriginalWriterBlob": "fce742ff9f9295cd944921e906708c7f9a705bd3",
+    "OriginalHelperSha256": "a93f45f3f306ebf83bd589f86a604ced69f302ebaec9d70a571e809a5b4d82db",
+    "NativeAssetChecksPassed": true,
+    "OriginalCheckComparedApplicationVersions": false,
+    "Cause": "An explicit package build updated shared desktop outputs during the long capacity run; the later no-build publish copied that existing compiled version.",
+    "OriginalArtifactPreserved": true,
+    "CheckedAtUtc": "2026-11-09T19:22:58.2804285+03:00"
+  },
+  "freshPublish": {
+    "Stage": "FreshDefaultPublishVersionVerified",
+    "ApplicationVersion": "1.0.0.0",
+    "InventoryVersion": "1.0.0.0",
+    "Components": 24,
+    "NativeSha256": "57f119d4f978085570df1e3f9e333e7655680af6d0bb89eebecf6f424787dfbc",
+    "BundleEvidenceSha256": "494ba23392f60ff080848a210e499e8a72c71d0df4c6ebc7bb13e7eef4380e54",
+    "InventorySha256": "112445a7661097e5b04a38bccfdab9621a7436f675ca964df049324bba27d91e",
+    "SignedOrInstalled": false,
+    "CheckedAtUtc": "2026-11-09T19:24:33.1034942+03:00"
+  },
+  "refusalControls": [
+    {
+      "packageSha256": "1d5be0636c5b80087fd90572fae9faae8d255e1133da199747c859f89bb94461",
+      "guards": [
+        {
+          "Components": 18,
+          "Case": "default-nuget-inventory",
+          "Passed": true
+        },
+        {
+          "Passed": true,
+          "Case": "existing-inventory-preserved"
+        },
+        {
+          "Passed": true,
+          "Case": "application-version-mismatch-refused"
+        },
+        {
+          "Passed": true,
+          "Case": "unlabelled-replacement-refused"
+        },
+        {
+          "Passed": true,
+          "Case": "source-runtime-mismatch-refused"
+        },
+        {
+          "Passed": true,
+          "Case": "changed-notice-preflight-refused"
+        },
+        {
+          "Passed": true,
+          "Case": "redirected-notices-refused"
+        }
+      ],
+      "components": 24,
+      "reportSha256": "a4eed115961508c71a8042eb0a1decc543cd4e6e7b8c9f7305f9383adc8815ad",
+      "sourceFiles": 30,
+      "nativeSha256": "8acf23bee1fda8fd7448157f05096a368993b5dbfee19fe4eedf9621f4816428"
+    },
+    {
+      "packageSha256": "c55e38fc03a4c930e209b1ed3074a7b8640954ee0e358fadd93d72e399201b4b",
+      "guards": [
+        {
+          "Components": 18,
+          "Passed": true,
+          "Case": "default-nuget-inventory"
+        },
+        {
+          "Passed": true,
+          "Case": "existing-inventory-preserved"
+        },
+        {
+          "Passed": true,
+          "Case": "application-version-mismatch-refused"
+        },
+        {
+          "Passed": true,
+          "Case": "unlabelled-replacement-refused"
+        },
+        {
+          "Passed": true,
+          "Case": "source-runtime-mismatch-refused"
+        },
+        {
+          "Passed": true,
+          "Case": "changed-notice-preflight-refused"
+        },
+        {
+          "Passed": true,
+          "Case": "redirected-notices-refused"
+        }
+      ],
+      "components": 24,
+      "reportSha256": "432892de67d280139a7d02e4b646e014f496419de1baf639cc09cc17eb7818c1",
+      "sourceFiles": 30,
+      "nativeSha256": "57f119d4f978085570df1e3f9e333e7655680af6d0bb89eebecf6f424787dfbc"
+    },
+    {
+      "packageSha256": "40387af9a64dab95262814ed6737bbea7469753d0040a364bf8ed9ac20e56304",
+      "guards": [
+        {
+          "Passed": true,
+          "Components": 18,
+          "Case": "default-nuget-inventory"
+        },
+        {
+          "Case": "existing-inventory-preserved",
+          "Passed": true
+        },
+        {
+          "Case": "application-version-mismatch-refused",
+          "Passed": true
+        },
+        {
+          "Case": "unlabelled-replacement-refused",
+          "Passed": true
+        },
+        {
+          "Case": "source-runtime-mismatch-refused",
+          "Passed": true
+        },
+        {
+          "Case": "changed-notice-preflight-refused",
+          "Passed": true
+        },
+        {
+          "Case": "redirected-notices-refused",
+          "Passed": true
+        }
+      ],
+      "components": 24,
+      "reportSha256": "303e1a4c299412e96fdcc487462dfcbed012c72c7cfeef66e6d126b59c0a3abe",
+      "sourceFiles": 28,
+      "nativeSha256": "71cc514e564381218d205a186be7efc346ab040ed65e8e0a9b69a1dc490b34fa"
+    }
+  ],
+  "writerSha256": "556641c76a0d40cb5fb68e5a60ffb5967e439617d4896d94c8c6d904dc61aef4",
+  "guardRunnerSha256": "67c1c63b6fb43a0280ce17bd0dba464e924b4f32109f8d916cbb82f666c19056",
+  "legacySinglePatchInspectedButNotEligibleAsApplicationDefault": true,
+  "signedOrInstalled": false,
+  "fullApplicationComplete": false,
+  "checkedAtUtc": "2026-11-09T16:29:48.0693382+00:00"
+}

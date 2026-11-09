@@ -39,6 +39,8 @@ $package = ./tools/package-windows.ps1 -PackageName iConnect.NativeReview -Versi
 
 The package verifier reads the archive and checks the canonical DLL, every source-bundle member and the native inventory. Its optional guard exercises use generated fixture copies and a private legacy NuGet test dependency; they do not install or launch an application. The inventory records the source commits, both corrections and actual DLL hash. JSON is recorded as an excluded source input because this recipe disables examples. Existing inventories are preserved; publish to a new payload directory to regenerate one.
 
+Standalone inventory generation also requires the actual staged `IConnect.Desktop.dll` and an exact matching file version. A no-build publish can reuse a previous versioned build, so rebuild into a fresh directory when changing versions. The verifier's seven guard cases include refusing an application/inventory version mismatch. See the [observed mismatch and corrected publish](native-default-transport.md#application-version-integrity).
+
 This procedure prepares a review artifact. Combined-artifact cross-platform interoperability, complete license/advisory review, independent security review, trusted signing and installed lifecycle verification remain required before production distribution.
 
 ## Verify and install
