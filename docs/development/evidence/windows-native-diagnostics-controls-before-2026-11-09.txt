@@ -1,0 +1,21 @@
+Test run for C:\projects\Actual Projects\iConnect\tests\IConnect.Tests\bin\Release\net10.0\IConnect.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.26]     IConnect.Tests.NativeFailureDiagnosticsTests.Shared_context_is_deduplicated_and_exception_text_and_distinct_contexts_are_bounded [FAIL]
+[xUnit.net 00:00:00.26]     IConnect.Tests.NativeFailureDiagnosticsTests.Nested_channel_context_and_a_distinct_peer_task_cause_survive_without_unrelated_exception_data [FAIL]
+  Failed IConnect.Tests.NativeFailureDiagnosticsTests.Shared_context_is_deduplicated_and_exception_text_and_distinct_contexts_are_bounded [7 ms]
+  Error Message:
+   Each diagnostic entry must stay within the exception-text budget.
+  Stack Trace:
+     at IConnect.Tests.NativeFailureDiagnosticsTests.Shared_context_is_deduplicated_and_exception_text_and_distinct_contexts_are_bounded() in C:\projects\Actual Projects\iConnect\tests\IConnect.Tests\NativeFailureDiagnosticsTests.cs:line 50
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed IConnect.Tests.NativeFailureDiagnosticsTests.Nested_channel_context_and_a_distinct_peer_task_cause_survive_without_unrelated_exception_data [1 ms]
+  Error Message:
+   Peer task cause must be retained before cleanup.
+  Stack Trace:
+     at IConnect.Tests.NativeFailureDiagnosticsTests.Nested_channel_context_and_a_distinct_peer_task_cause_survive_without_unrelated_exception_data() in C:\projects\Actual Projects\iConnect\tests\IConnect.Tests\NativeFailureDiagnosticsTests.cs:line 26
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+Results File: C:\projects\Actual Projects\iConnect\.tools\phase179-diagnostics-controls\before.trx
+
+Failed!  - Failed:     2, Passed:     0, Skipped:     0, Total:     2, Duration: 29 ms - IConnect.Tests.dll (net10.0)

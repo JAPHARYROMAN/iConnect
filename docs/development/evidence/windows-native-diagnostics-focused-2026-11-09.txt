@@ -1,0 +1,209 @@
+Sample 1
+VSTest version 18.7.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.13]   Discovering: IConnect.Tests
+[xUnit.net 00:00:00.28]   Discovered:  IConnect.Tests
+[xUnit.net 00:00:00.33]   Starting:    IConnect.Tests
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: True) [317 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: False) [16 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Storage_cleanup_failure_is_observable_when_the_message_loop_has_no_prior_failure [82 ms]
+[xUnit.net 00:00:01.50]   Finished:    IConnect.Tests
+  Passed IConnect.Tests.NativeHandshakeStressTests.Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown [1 s]
+
+Test Run Successful.
+Total tests: 4
+     Passed: 4
+ Total time: 2.1404 Seconds
+Results File: C:\projects\Actual Projects\iConnect\.tools\phase176-native-diagnostics\06bbb66873eb414a926ad6134dbd6029\sample-01.trx
+
+Sample 2
+VSTest version 18.7.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.11]   Discovering: IConnect.Tests
+[xUnit.net 00:00:00.24]   Discovered:  IConnect.Tests
+[xUnit.net 00:00:00.28]   Starting:    IConnect.Tests
+[xUnit.net 00:00:01.23]   Finished:    IConnect.Tests
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: True) [255 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: False) [79 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Storage_cleanup_failure_is_observable_when_the_message_loop_has_no_prior_failure [81 ms]
+  Passed IConnect.Tests.NativeHandshakeStressTests.Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown [911 ms]
+
+Test Run Successful.
+Total tests: 4
+     Passed: 4
+ Total time: 1.7194 Seconds
+Results File: C:\projects\Actual Projects\iConnect\.tools\phase176-native-diagnostics\06bbb66873eb414a926ad6134dbd6029\sample-02.trx
+
+Sample 3
+VSTest version 18.7.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.11]   Discovering: IConnect.Tests
+[xUnit.net 00:00:00.23]   Discovered:  IConnect.Tests
+[xUnit.net 00:00:00.26]   Starting:    IConnect.Tests
+[xUnit.net 00:00:01.10]   Finished:    IConnect.Tests
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: True) [129 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: False) [12 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Storage_cleanup_failure_is_observable_when_the_message_loop_has_no_prior_failure [24 ms]
+  Passed IConnect.Tests.NativeHandshakeStressTests.Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown [805 ms]
+
+Test Run Successful.
+Total tests: 4
+     Passed: 4
+ Total time: 1.6381 Seconds
+Results File: C:\projects\Actual Projects\iConnect\.tools\phase176-native-diagnostics\06bbb66873eb414a926ad6134dbd6029\sample-03.trx
+
+Sample 4
+VSTest version 18.7.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.10]   Discovering: IConnect.Tests
+[xUnit.net 00:00:00.22]   Discovered:  IConnect.Tests
+[xUnit.net 00:00:00.25]   Starting:    IConnect.Tests
+[xUnit.net 00:00:01.07]   Finished:    IConnect.Tests
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: True) [178 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: False) [16 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Storage_cleanup_failure_is_observable_when_the_message_loop_has_no_prior_failure [23 ms]
+  Passed IConnect.Tests.NativeHandshakeStressTests.Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown [785 ms]
+
+Test Run Successful.
+Total tests: 4
+     Passed: 4
+ Total time: 1.6349 Seconds
+Results File: C:\projects\Actual Projects\iConnect\.tools\phase176-native-diagnostics\06bbb66873eb414a926ad6134dbd6029\sample-04.trx
+
+Sample 5
+VSTest version 18.7.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.10]   Discovering: IConnect.Tests
+[xUnit.net 00:00:00.22]   Discovered:  IConnect.Tests
+[xUnit.net 00:00:00.25]   Starting:    IConnect.Tests
+[xUnit.net 00:00:01.03]   Finished:    IConnect.Tests
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: True) [176 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: False) [19 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Storage_cleanup_failure_is_observable_when_the_message_loop_has_no_prior_failure [74 ms]
+  Passed IConnect.Tests.NativeHandshakeStressTests.Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown [743 ms]
+
+Test Run Successful.
+Total tests: 4
+     Passed: 4
+ Total time: 1.5352 Seconds
+Results File: C:\projects\Actual Projects\iConnect\.tools\phase176-native-diagnostics\06bbb66873eb414a926ad6134dbd6029\sample-05.trx
+
+Sample 6
+VSTest version 18.7.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.12]   Discovering: IConnect.Tests
+[xUnit.net 00:00:00.24]   Discovered:  IConnect.Tests
+[xUnit.net 00:00:00.27]   Starting:    IConnect.Tests
+[xUnit.net 00:00:01.16]   Finished:    IConnect.Tests
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: True) [139 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: False) [13 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Storage_cleanup_failure_is_observable_when_the_message_loop_has_no_prior_failure [84 ms]
+  Passed IConnect.Tests.NativeHandshakeStressTests.Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown [857 ms]
+
+Test Run Successful.
+Total tests: 4
+     Passed: 4
+ Total time: 1.6911 Seconds
+Results File: C:\projects\Actual Projects\iConnect\.tools\phase176-native-diagnostics\06bbb66873eb414a926ad6134dbd6029\sample-06.trx
+
+Sample 7
+VSTest version 18.7.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.13]   Discovering: IConnect.Tests
+[xUnit.net 00:00:00.51]   Discovered:  IConnect.Tests
+[xUnit.net 00:00:00.58]   Starting:    IConnect.Tests
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: True) [217 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: False) [20 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Storage_cleanup_failure_is_observable_when_the_message_loop_has_no_prior_failure [43 ms]
+[xUnit.net 00:00:01.78]   Finished:    IConnect.Tests
+  Passed IConnect.Tests.NativeHandshakeStressTests.Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown [1 s]
+
+Test Run Successful.
+Total tests: 4
+     Passed: 4
+ Total time: 2.5718 Seconds
+Results File: C:\projects\Actual Projects\iConnect\.tools\phase176-native-diagnostics\06bbb66873eb414a926ad6134dbd6029\sample-07.trx
+
+Sample 8
+VSTest version 18.7.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.12]   Discovering: IConnect.Tests
+[xUnit.net 00:00:00.40]   Discovered:  IConnect.Tests
+[xUnit.net 00:00:00.47]   Starting:    IConnect.Tests
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: True) [204 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: False) [85 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Storage_cleanup_failure_is_observable_when_the_message_loop_has_no_prior_failure [93 ms]
+[xUnit.net 00:00:01.66]   Finished:    IConnect.Tests
+  Passed IConnect.Tests.NativeHandshakeStressTests.Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown [1 s]
+
+Test Run Successful.
+Total tests: 4
+     Passed: 4
+ Total time: 2.6042 Seconds
+Results File: C:\projects\Actual Projects\iConnect\.tools\phase176-native-diagnostics\06bbb66873eb414a926ad6134dbd6029\sample-08.trx
+
+Sample 9
+VSTest version 18.7.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.10]   Discovering: IConnect.Tests
+[xUnit.net 00:00:00.25]   Discovered:  IConnect.Tests
+[xUnit.net 00:00:00.29]   Starting:    IConnect.Tests
+[xUnit.net 00:00:01.19]   Finished:    IConnect.Tests
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: True) [174 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: False) [16 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Storage_cleanup_failure_is_observable_when_the_message_loop_has_no_prior_failure [81 ms]
+  Passed IConnect.Tests.NativeHandshakeStressTests.Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown [860 ms]
+
+Test Run Successful.
+Total tests: 4
+     Passed: 4
+ Total time: 1.9084 Seconds
+Results File: C:\projects\Actual Projects\iConnect\.tools\phase176-native-diagnostics\06bbb66873eb414a926ad6134dbd6029\sample-09.trx
+
+Sample 10
+VSTest version 18.7.0 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.5+1b188a7b0a (64-bit .NET 10.0.14)
+[xUnit.net 00:00:00.13]   Discovering: IConnect.Tests
+[xUnit.net 00:00:00.28]   Discovered:  IConnect.Tests
+[xUnit.net 00:00:00.31]   Starting:    IConnect.Tests
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: True) [191 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: False) [90 ms]
+  Passed IConnect.Tests.NativeSessionFailureTests.Storage_cleanup_failure_is_observable_when_the_message_loop_has_no_prior_failure [34 ms]
+[xUnit.net 00:00:01.54]   Finished:    IConnect.Tests
+  Passed IConnect.Tests.NativeHandshakeStressTests.Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown [1 s]
+
+Test Run Successful.
+Total tests: 4
+     Passed: 4
+ Total time: 2.4281 Seconds
+Results File: C:\projects\Actual Projects\iConnect\.tools\phase176-native-diagnostics\06bbb66873eb414a926ad6134dbd6029\sample-10.trx

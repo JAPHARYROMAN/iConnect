@@ -1,0 +1,32 @@
+{
+  "JobUrl": "https://github.com/JAPHARYROMAN/iConnect/actions/runs/42609065418/job/129132436964",
+  "Total": 956,
+  "Passed": 955,
+  "Round": 5,
+  "NativeContext": {
+    "NativeChannelAttached": false,
+    "NativeIceState": 3,
+    "NativeChannelId": -1,
+    "NativeConnectionHistory": "1,2,3",
+    "NativeChannelOpened": false,
+    "NativePeerId": 94,
+    "NativeConnectionState": 3
+  },
+  "ExcerptSha256": "5db0ef730c4d6832a3757a596a18a04e9e0fd0f56b83815764d9d2a3ce1df39a",
+  "CauseIsolated": false,
+  "Excerpt": "windows-native-stress-failure-2026-11-09.txt",
+  "GuestAuthentication": "Faulted",
+  "Test": "NativeHandshakeStressTests.Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown",
+  "HeadCommit": "6930aaa3009c6e3aacf0e28b40dd94a9ee81b4a5",
+  "HostAuthentication": "Faulted",
+  "ExcerptConvention": "Relevant decoded job-log lines with LF line endings; normal setup omitted.",
+  "SchemaVersion": 1,
+  "RunId": 42609065418,
+  "Failed": 1,
+  "JobOutcome": "failure",
+  "Skipped": 0,
+  "JobId": 129132436964,
+  "Pair": 0,
+  "FullCompletion": false,
+  "DownstreamWindowsCapacityPreviewPublishSteps": "skipped"
+}

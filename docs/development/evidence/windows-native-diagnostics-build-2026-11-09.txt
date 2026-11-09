@@ -1,0 +1,14 @@
+  IConnect.Attachment.Fixture -> C:\projects\Actual Projects\iConnect\tests\IConnect.Attachment.Fixture\bin\Release\net10.0\win-x64\IConnect.Attachment.Fixture.dll
+  IConnect.Core -> C:\projects\Actual Projects\iConnect\shared\IConnect.Core\bin\Release\net10.0\IConnect.Core.dll
+  IConnect.Attachment.Worker -> C:\projects\Actual Projects\iConnect\apps\windows\IConnect.Attachment.Worker\bin\Release\net10.0\win-x64\IConnect.Attachment.Worker.dll
+  IConnect.Storage.Windows -> C:\projects\Actual Projects\iConnect\apps\windows\IConnect.Storage.Windows\bin\Release\net10.0\IConnect.Storage.Windows.dll
+  IConnect.Connectivity -> C:\projects\Actual Projects\iConnect\apps\windows\IConnect.Connectivity\bin\Release\net10.0\IConnect.Connectivity.dll
+  IConnect.Rendezvous -> C:\projects\Actual Projects\iConnect\backend\IConnect.Rendezvous\bin\Release\net10.0\IConnect.Rendezvous.dll
+  IConnect.AppModel -> C:\projects\Actual Projects\iConnect\apps\windows\IConnect.AppModel\bin\Release\net10.0\IConnect.AppModel.dll
+  IConnect.Tests -> C:\projects\Actual Projects\iConnect\tests\IConnect.Tests\bin\Release\net10.0\IConnect.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:28.83

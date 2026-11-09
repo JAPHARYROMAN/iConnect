@@ -1,0 +1,21 @@
+# Native connection failure diagnostics
+
+Two hosted runs fail before completing an ordinary native session. The [a8994ce run](evidence/windows-native-hello-failure-2026-11-09.json) closes a legacy peer's message channel before its first hello; its readiness and storage-cleanup assertions are not reached. The [6930aaa run](evidence/windows-native-stress-failure-2026-11-09.json) fails concurrent handshake round 5, pair 0. Both host and guest authentication tasks are faulted. The retained native context records connection history `1,2,3`, ICE state `3`, no attached channel and no opened channel. Both runs record 955 main passes and one failure. Their downstream Windows capacity, preview and publish steps do not run.
+
+These observations do not isolate whether DTLS, SCTP, signalling or earlier peer cleanup initiated the closure. The reference native implementation can report disconnection from multiple layers. The application continues to terminate the affected transport on native disconnection; no state is ignored or converted into success.
+
+## Capturing the original context
+
+`NativeFailureDiagnostics` is test-only. It reports the primary exception and snapshots of each peer's open, authentication, run and signalling tasks before teardown. It follows nested and aggregate exceptions, retains distinct peer task error text, inspects at most 16 distinct exception objects and deduplicates shared instances. Exception text is limited to 8,192 characters per entry. Only the existing seven native context fields are read from `Exception.Data`: connection state, channel attached/opened, ICE state, peer/channel identifiers and bounded connection history. Other exception data is not dumped. Reporting errors cannot replace the original exception rethrown by the caller.
+
+The missing-readiness/cleanup tests now use this helper. Concurrent-handshake and native upload/folder tests use it as well, replacing their inconsistent shallow context extraction. Existing native session behavior, test assertions, deadlines, cleanup, concurrency and selection remain unchanged. The helper does not retry a failed connection or suppress its failure.
+
+## Local execution
+
+The initial diagnostic variant's Release build passes with zero warnings/errors in 28.83 seconds. An isolated copy retains the default native library `39ff4149…`; it does not substitute the optional source-built candidate. Ten bounded samples each pass the same four readiness/cleanup and concurrent-handshake cases: 40 case executions and 320 concurrent native pairs. The probe stops on its first failure rather than continuing toward a green sample. All six native upload/folder cases then pass. The complete selected Windows main regression also passes all 956 cases without failures or skips in 4.7416 minutes.
+
+Two new output controls then expose omissions in that initial helper: distinct peer task error text is missing, and a long exception exceeds its intended output budget. Both exact assertions fail before the correction. After correcting the helper, the Release test build passes in 5.68 seconds with zero warnings/errors. Both output controls and all ten selected native cases pass together: 12 cases, no failures or skips. The controls also require nested native context, shared-context deduplication and exclusion of unrelated exception data. A preliminary build rejected an `Assert.Single` usage under xUnit2031; that build is preserved and excluded, with no test execution claimed.
+
+The [artifact-bound record](evidence/windows-native-diagnostics-2026-11-09.json) separates the initial variant's 956-case regression from the final helper's 12-case validation, binding both builds and source inputs. Published output includes all focused samples, native upload results, every initial main test outcome, both failing output controls and the final targeted run; unrelated server logging is omitted from the main excerpt. Original local logs/TRX remain preserved.
+
+These passing executions and synthetic output controls do not reproduce or resolve the hosted failure. A new actual native failure has not yet exercised the final diagnostics. A hosted run must capture the original peer/task causes before a transport correction can be justified. The Android full-size matrix remains independent on its frozen APKs.

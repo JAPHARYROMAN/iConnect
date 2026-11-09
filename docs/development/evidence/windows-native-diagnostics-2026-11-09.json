@@ -1,0 +1,257 @@
+{
+  "schemaVersion": 2,
+  "recordedUtc": "2026-11-09T11:46:55.947077+00:00",
+  "buildSourceParent": "6930aaa3009c6e3aacf0e28b40dd94a9ee81b4a5",
+  "scope": "Test-only diagnostics. Production transport/session code and existing assertions, timeouts, concurrency and teardown unchanged.",
+  "sourceInputs": [
+    {
+      "path": "tests/IConnect.Tests/NativeFailureDiagnostics.cs",
+      "capturedWorkingTreeSha256": "ada70a8cbc8fdb1944077ac12cc85d5f818ef81e43e4ea3957a7bf56cfeec35c",
+      "canonicalLfSha256": "ada70a8cbc8fdb1944077ac12cc85d5f818ef81e43e4ea3957a7bf56cfeec35c"
+    },
+    {
+      "path": "tests/IConnect.Tests/NativeFailureDiagnosticsTests.cs",
+      "capturedWorkingTreeSha256": "a48735c6b2e4113f11da093fa9aa49d78da9cd630eae44cb72450e3968c2291f",
+      "canonicalLfSha256": "a48735c6b2e4113f11da093fa9aa49d78da9cd630eae44cb72450e3968c2291f"
+    },
+    {
+      "path": "tests/IConnect.Tests/NativeSessionFailureTests.cs",
+      "capturedWorkingTreeSha256": "3a41842a0a30b051331e2959fab63f9ce5fd708ba1a9ff3fec7101496ab265ba",
+      "canonicalLfSha256": "3a41842a0a30b051331e2959fab63f9ce5fd708ba1a9ff3fec7101496ab265ba"
+    },
+    {
+      "path": "tests/IConnect.Tests/NativeHandshakeStressTests.cs",
+      "capturedWorkingTreeSha256": "307d577b7806f6613ccdd3212b016ee78dbd6fa75c93410db0252c9c0ec0a1ea",
+      "canonicalLfSha256": "307d577b7806f6613ccdd3212b016ee78dbd6fa75c93410db0252c9c0ec0a1ea"
+    },
+    {
+      "path": "tests/IConnect.Tests/NativeUploadEngineTests.cs",
+      "capturedWorkingTreeSha256": "69e9edb7a037d77bb63275d38102ae95132456203ed5d6189057231bbf5ed291",
+      "canonicalLfSha256": "69e9edb7a037d77bb63275d38102ae95132456203ed5d6189057231bbf5ed291"
+    }
+  ],
+  "finalTestAssemblySha256": "3ea16ea213b3e1e06a6072829914dd6d04876fe937746da7194b687b3a69e7a8",
+  "defaultNativeSha256": "39ff41497d059067a34fd9cc691236a0b5dff7af5ad6b1f6df3f9887b907b7e6",
+  "finalBuild": {
+    "outcome": "Build succeeded",
+    "warnings": 0,
+    "errors": 0,
+    "durationSeconds": 5.68,
+    "originalLogSha256": "0ada32c0f56914282cd881a308e451b14461cb3fad32effb0bb536aa32c55e45"
+  },
+  "outputControlsBefore": {
+    "counts": {
+      "total": 2,
+      "passed": 0,
+      "failed": 2,
+      "notExecuted": 0
+    },
+    "expectedMessages": [
+      "Each diagnostic entry must stay within the exception-text budget.",
+      "Peer task cause must be retained before cleanup."
+    ],
+    "initialHelperSha256": "b63196574651e3e873876252c76178c5b2caa8b26958d559fbec1f68faf10c29",
+    "originalTrxSha256": "10c36ac260cb9c2b93b2d962eaf602f0fc159e3c151e9abacd044185b1195b58",
+    "testAssemblySha256": "e5db6a4395decad6c7a70824ce36f49b8a31a3191f42f2ab5b747b5266799281",
+    "testsSourceSha256": "a48735c6b2e4113f11da093fa9aa49d78da9cd630eae44cb72450e3968c2291f"
+  },
+  "finalTargeted": {
+    "counts": {
+      "total": 12,
+      "passed": 12,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    "uniqueOutputControls": 2,
+    "nativeReadinessCleanupConcurrentCases": 4,
+    "nativeUploadFolderCases": 6,
+    "originalTrxSha256": "aacb4af6bc2020b92ec8b61c1c534e8e7ac554f7d6862d9e6f73637336cb5741"
+  },
+  "initialDiagnosticVariantLocalRuns": {
+    "schemaVersion": 1,
+    "recordedUtc": "2026-11-09T11:41:42.109644+00:00",
+    "buildSourceParent": "6930aaa3009c6e3aacf0e28b40dd94a9ee81b4a5",
+    "scope": "Test diagnostics only; native state handling, assertions, deadlines, teardown and test selection unchanged.",
+    "sourceInputs": [
+      {
+        "path": "tests/IConnect.Tests/NativeFailureDiagnostics.cs",
+        "capturedWorkingTreeSha256": "b63196574651e3e873876252c76178c5b2caa8b26958d559fbec1f68faf10c29",
+        "canonicalLfSha256": "b63196574651e3e873876252c76178c5b2caa8b26958d559fbec1f68faf10c29"
+      },
+      {
+        "path": "tests/IConnect.Tests/NativeSessionFailureTests.cs",
+        "capturedWorkingTreeSha256": "3a41842a0a30b051331e2959fab63f9ce5fd708ba1a9ff3fec7101496ab265ba",
+        "canonicalLfSha256": "3a41842a0a30b051331e2959fab63f9ce5fd708ba1a9ff3fec7101496ab265ba"
+      },
+      {
+        "path": "tests/IConnect.Tests/NativeHandshakeStressTests.cs",
+        "capturedWorkingTreeSha256": "307d577b7806f6613ccdd3212b016ee78dbd6fa75c93410db0252c9c0ec0a1ea",
+        "canonicalLfSha256": "307d577b7806f6613ccdd3212b016ee78dbd6fa75c93410db0252c9c0ec0a1ea"
+      },
+      {
+        "path": "tests/IConnect.Tests/NativeUploadEngineTests.cs",
+        "capturedWorkingTreeSha256": "69e9edb7a037d77bb63275d38102ae95132456203ed5d6189057231bbf5ed291",
+        "canonicalLfSha256": "69e9edb7a037d77bb63275d38102ae95132456203ed5d6189057231bbf5ed291"
+      }
+    ],
+    "build": {
+      "outcome": "Build succeeded",
+      "warnings": 0,
+      "errors": 0,
+      "durationSeconds": 28.83,
+      "rawLogSha256": "9d35f5213c8be7a6df738ded930ea235295ec0664f81624fe98e3b4e4c73d63f"
+    },
+    "testAssemblySha256": "3b967b77b7061b123fef7b8bc92ae2da5ab43d53f5e7eda26b12858ac34585c4",
+    "defaultNativeSha256": "39ff41497d059067a34fd9cc691236a0b5dff7af5ad6b1f6df3f9887b907b7e6",
+    "focusedSamples": [
+      {
+        "Passed": 4,
+        "Sample": 1,
+        "TrxSha256": "dcbd491253a4d9d3f95eeeea097781d8b38feb88df05d7056cde0bd46b88c17a",
+        "NotExecuted": 0,
+        "LogSha256": "bd1f9fa797184621dee74364df595233a673f06494362d0cad17186412768a88",
+        "ExitCode": 0,
+        "Failed": 0,
+        "Total": 4
+      },
+      {
+        "Passed": 4,
+        "Sample": 2,
+        "TrxSha256": "c58ef9aa21a6e4e4db7bf5df792f0bc08f8f3702945fb69aaa290ccf404d05e9",
+        "NotExecuted": 0,
+        "LogSha256": "da5c646a173a2eded60bd61b23121c7c1c69400ad9b3ad327e6e931eec0ee38f",
+        "ExitCode": 0,
+        "Failed": 0,
+        "Total": 4
+      },
+      {
+        "Passed": 4,
+        "Sample": 3,
+        "TrxSha256": "2bca0cd74e0612a8fd570ffa4906031e2dcc371e74ec77e0d13ac24293197b55",
+        "NotExecuted": 0,
+        "LogSha256": "4add4a033c577e499fd06cc5797a1e702bc5613b40cfca0a893b9238d781995b",
+        "ExitCode": 0,
+        "Failed": 0,
+        "Total": 4
+      },
+      {
+        "Passed": 4,
+        "Sample": 4,
+        "TrxSha256": "645aa1d2e4764566bb0b3e1b3cd7c5b3d19bc636bcd70a2778811e3bb0baee2f",
+        "NotExecuted": 0,
+        "LogSha256": "1ef8f2d8d0c9ae095235d90f3d46ef7926958d68f56de09ac4d72c0f36f07edd",
+        "ExitCode": 0,
+        "Failed": 0,
+        "Total": 4
+      },
+      {
+        "Passed": 4,
+        "Sample": 5,
+        "TrxSha256": "b0758d4e9fdb143ccbc7c911d568abc540b5ba4f6eed2017fb18d96b359c2769",
+        "NotExecuted": 0,
+        "LogSha256": "47ed6deefdd8deca0fc1a44710bba5325ae2585564c2a7d084642efc1c6a2d62",
+        "ExitCode": 0,
+        "Failed": 0,
+        "Total": 4
+      },
+      {
+        "Passed": 4,
+        "Sample": 6,
+        "TrxSha256": "a629c5110d264c6839cde3ecaf1ef10ca5375b1aa4ee69aabc321ff53caaf463",
+        "NotExecuted": 0,
+        "LogSha256": "9603efa4d0972b352311b575de88af5d31734e1e0fef95d128a60aced7ae954b",
+        "ExitCode": 0,
+        "Failed": 0,
+        "Total": 4
+      },
+      {
+        "Passed": 4,
+        "Sample": 7,
+        "TrxSha256": "51e94f5b64117e6ccaed8443cc81ac0f12e98be62c5ea07fc5f29fb8a40be5a7",
+        "NotExecuted": 0,
+        "LogSha256": "4b9614d9b426407ba29b44aa34f7a1ecb262ac4f7d6f7e4317f48b06a07974dc",
+        "ExitCode": 0,
+        "Failed": 0,
+        "Total": 4
+      },
+      {
+        "Passed": 4,
+        "Sample": 8,
+        "TrxSha256": "5c6b4c8f5053f162eda4354d076417836137e298b23d0c1abf3e5bb0dc1037a7",
+        "NotExecuted": 0,
+        "LogSha256": "847b917dd8c4b5ccd4336c8654ffe964c75c4bb9661a17fc8ad9521e5a5dd56f",
+        "ExitCode": 0,
+        "Failed": 0,
+        "Total": 4
+      },
+      {
+        "Passed": 4,
+        "Sample": 9,
+        "TrxSha256": "82f827a6c8ad8e30b431d799cffb8dec70d4f1dbdfb64e225f1b0fcf573cd1c9",
+        "NotExecuted": 0,
+        "LogSha256": "9918f676be200010fac018e61fc014fdb4c3650aed9e93882f9f41f4ed60192b",
+        "ExitCode": 0,
+        "Failed": 0,
+        "Total": 4
+      },
+      {
+        "Passed": 4,
+        "Sample": 10,
+        "TrxSha256": "98be9c21b975d67f5ddebd23ff7e5fda086f443541ae63ddcb5f7d698ae93b50",
+        "NotExecuted": 0,
+        "LogSha256": "bc586b01e6ad8bd36e25ccdaf1b51314488376c2d77d1f869534def44b501e68",
+        "ExitCode": 0,
+        "Failed": 0,
+        "Total": 4
+      }
+    ],
+    "focusedUniqueCases": 4,
+    "focusedCaseExecutions": 40,
+    "concurrentPairsInFocusedSamples": 320,
+    "nativeUploadCases": 6,
+    "main": {
+      "ExitCode": 0,
+      "LogSha256": "b21ef975a1b4a5e65094fef18a56820661e02975dcdb9053ba9297cb974446ef",
+      "Total": 956,
+      "HostedFailureResolved": false,
+      "DefaultNativeSha256": "39ff41497d059067a34fd9cc691236a0b5dff7af5ad6b1f6df3f9887b907b7e6",
+      "Passed": 956,
+      "TestAssemblySha256": "3b967b77b7061b123fef7b8bc92ae2da5ab43d53f5e7eda26b12858ac34585c4",
+      "TrxSha256": "ffc3048ffa586c7909362d4b3d19c8dd5b9f9b930c4606db133a918c927e356d",
+      "FullCompletion": false,
+      "NotExecuted": 0,
+      "Failed": 0
+    },
+    "files": {
+      "windows-native-diagnostics-focused-2026-11-09.txt": "af7ffca66924c10d6be34fdef287e20e3ac093dc9553f552fa0e3b1b4c736b2e",
+      "windows-native-diagnostics-build-2026-11-09.txt": "093baaa9d33580fa01461f53c5fe4a9b63609d540f4133ab147f5621194de094",
+      "windows-native-diagnostics-uploads-2026-11-09.txt": "84699dbebc99952275f95ebeabc9ad1eac56c3c9866b60d1273cff0a530a3bc9",
+      "windows-native-diagnostics-main-2026-11-09.txt": "320ee104cfab1269bd749fa30d4a2c8ba4b65db6a1f336685de6fa7b012bfee4"
+    },
+    "publishedLogConvention": "Decoded logs normalized to LF; focused logs combined with sample labels. Main log includes all 956 passed result lines and terminal counters, omitting unrelated server logs. Original log/TRX hashes are retained.",
+    "latestHostedFailure": "windows-native-stress-failure-2026-11-09.json",
+    "earlierHostedFailure": "windows-native-hello-failure-2026-11-09.json",
+    "hostedFailureReproducedLocally": false,
+    "hostedFailureResolved": false,
+    "newNativeFailureCapturedByDiagnostics": false,
+    "fullCompletion": false
+  },
+  "files": {
+    "windows-native-diagnostics-controls-before-2026-11-09.txt": "3fa6690d00353a968be2610949cda5711be77086727d52fea3524b7a1905c136",
+    "windows-native-diagnostics-controls-after-2026-11-09.txt": "636e4a0deb4414c1e0c846e32038f4cdeecafbe21e87ab5c58b872b0cf224733",
+    "windows-native-diagnostics-final-build-2026-11-09.txt": "c19b738e02a35947b4061f9fdf02ddbcf9081a477de9e5ea9db049d47f29340c"
+  },
+  "exceptionOutputCharacterLimit": 8192,
+  "maximumDistinctContextExceptions": 16,
+  "excludedBuild": {
+    "reason": "xUnit2031 analyzer rejection before test execution; Assert.Single predicate usage corrected.",
+    "originalLogSha256": "eae29e6a29a69af578c9f164ddbd9e0d3f585b4c048fe3a30ec3c8ae13df9265",
+    "testsExecuted": false
+  },
+  "latestHostedFailure": "windows-native-stress-failure-2026-11-09.json",
+  "earlierHostedFailure": "windows-native-hello-failure-2026-11-09.json",
+  "hostedFailureReproducedLocally": false,
+  "hostedFailureResolved": false,
+  "newNativeFailureCapturedByDiagnostics": false,
+  "fullCompletion": false
+}

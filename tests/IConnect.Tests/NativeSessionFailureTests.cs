@@ -4,10 +4,11 @@ using IConnect.Connectivity;
 using IConnect.Core;
 using IConnect.Protocol;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace IConnect.Tests;
 
-public sealed class NativeSessionFailureTests
+public sealed class NativeSessionFailureTests(ITestOutputHelper output)
 {
     private const string CleanupError = "Generated storage cleanup failure.";
     private sealed class CleanupService(bool fail) : IFileService
@@ -51,6 +52,14 @@ public sealed class NativeSessionFailureTests
             Assert.Equal(0, service.Requests); Assert.Equal(1, service.Disposals);
             Assert.False(Directory.Exists(inbox));
         }
+        catch (Exception failure)
+        {
+            NativeFailureDiagnostics.Write(output, "missing readiness", failure,
+                ("host open", peer.Rtc.Opened), ("legacy open", legacy.Opened),
+                ("host authentication", peer.Authenticated), ("host run", run),
+                ("host signals", bridges[0]), ("legacy signals", bridges[1]));
+            throw;
+        }
         finally
         {
             deadline.Cancel(); peer.Dispose(); legacy.Dispose();
@@ -83,6 +92,15 @@ public sealed class NativeSessionFailureTests
             var failure = await Assert.ThrowsAsync<IOException>(() => loops[0].WaitAsync(deadline.Token));
             Assert.Equal(CleanupError, failure.Message); Assert.Equal(1, service.Disposals); Assert.Equal(0, service.Requests);
             Assert.False(Directory.Exists(root));
+        }
+        catch (Exception failure)
+        {
+            NativeFailureDiagnostics.Write(output, "storage cleanup", failure,
+                ("host open", first.Rtc.Opened), ("guest open", second.Rtc.Opened),
+                ("host authentication", first.Authenticated), ("guest authentication", second.Authenticated),
+                ("host run", loops[0]), ("guest run", loops[1]),
+                ("host signals", bridges[0]), ("guest signals", bridges[1]));
+            throw;
         }
         finally
         {

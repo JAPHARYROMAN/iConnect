@@ -1,0 +1,5 @@
+Test run for C:\projects\Actual Projects\iConnect\tests\IConnect.Tests\bin\Release\net10.0\IConnect.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: C:\projects\Actual Projects\iConnect\.tools\phase180-diagnostics-fixed\fixed.trx
+
+Passed!  - Failed:     0, Passed:    12, Skipped:     0, Total:    12, Duration: 25 s - IConnect.Tests.dll (net10.0)

@@ -111,13 +111,12 @@ public sealed class NativeUploadEngineTests(ITestOutputHelper output)
             // Native channel failure can be the same exception instance in the
             // main operation and both drain tasks. Capture it before cleanup
             // awaits change its stack, so CI retains the first failing action.
-            output.WriteLine("Primary native fixture failure before cleanup: " + failure);
-            foreach (var key in new[] { "NativeConnectionState", "NativeChannelAttached", "NativeChannelOpened" })
-                if (failure.Data.Contains(key)) output.WriteLine($"Native failure context: {key}={failure.Data[key]}");
             output.WriteLine($"Batch={batch}; listing={listing}; hostAuth={first.Authenticated.Status}; guestAuth={second.Authenticated.Status}; hostClosed={first.IsClosed}; guestClosed={second.IsClosed}");
-            foreach (var task in new[] { first.Authenticated, second.Authenticated }) if (task.IsFaulted) output.WriteLine("Peer authentication failure before cleanup: " + task.Exception);
-            foreach (var task in loops) if (task.IsFaulted) output.WriteLine("Peer run failure before cleanup: " + task.Exception);
-            foreach (var task in bridges) if (task.IsFaulted) output.WriteLine("Signal bridge failure before cleanup: " + task.Exception);
+            NativeFailureDiagnostics.Write(output, "native upload fixture", failure,
+                ("host open", first.Rtc.Opened), ("guest open", second.Rtc.Opened),
+                ("host authentication", first.Authenticated), ("guest authentication", second.Authenticated),
+                ("host run", loops[0]), ("guest run", loops[1]),
+                ("host signals", bridges[0]), ("guest signals", bridges[1]));
             throw;
         }
         finally

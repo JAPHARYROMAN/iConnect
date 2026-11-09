@@ -1,0 +1,83 @@
+2026-11-09T11:28:40.0219118Z [xUnit.net 00:00:06.01]     IConnect.Tests.NativeHandshakeStressTests.Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown [FAIL]
+2026-11-09T11:28:40.0377203Z   Failed IConnect.Tests.NativeHandshakeStressTests.Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown [1 s]
+2026-11-09T11:28:40.0385626Z   Error Message:
+2026-11-09T11:28:40.0394898Z    System.IO.IOException : Direct connection ended.
+2026-11-09T11:28:40.0413113Z   Stack Trace:
+2026-11-09T11:28:40.0427122Z      at System.Threading.Channels.AsyncOperation`2.GetResult(Int16 token)
+2026-11-09T11:28:40.0429363Z    at System.Threading.Channels.ChannelReader`1.ReadAllAsync(CancellationToken cancellationToken)+MoveNext()
+2026-11-09T11:28:40.0457274Z    at IConnect.Tests.NativeHandshakeStressTests.<>c__DisplayClass2_2.<<Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown>g__Bridge|4>d.MoveNext() in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeHandshakeStressTests.cs:line 33
+2026-11-09T11:28:40.0459070Z --- End of stack trace from previous location ---
+2026-11-09T11:28:40.0463566Z    at IConnect.Tests.NativeHandshakeStressTests.<>c__DisplayClass2_2.<<Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown>g__Bridge|4>d.MoveNext() in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeHandshakeStressTests.cs:line 33
+2026-11-09T11:28:40.0471171Z --- End of stack trace from previous location ---
+2026-11-09T11:28:40.0517680Z    at IConnect.Tests.NativeHandshakeStressTests.<>c__DisplayClass2_0.<<Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown>g__Pair|0>d.MoveNext() in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeHandshakeStressTests.cs:line 66
+2026-11-09T11:28:40.0543564Z --- End of stack trace from previous location ---
+2026-11-09T11:28:40.0551639Z    at IConnect.Tests.NativeHandshakeStressTests.<>c__DisplayClass2_0.<<Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown>g__Pair|0>d.MoveNext() in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeHandshakeStressTests.cs:line 65
+2026-11-09T11:28:40.0558966Z --- End of stack trace from previous location ---
+2026-11-09T11:28:40.0560932Z    at IConnect.Tests.NativeHandshakeStressTests.Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown() in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeHandshakeStressTests.cs:line 19
+2026-11-09T11:28:40.0562943Z --- End of stack trace from previous location ---
+2026-11-09T11:28:40.0563545Z   Standard Output Messages:
+2026-11-09T11:28:40.0567149Z  Primary concurrent native failure: round=5; pair=0; hostAuth=Faulted; guestAuth=Faulted
+2026-11-09T11:28:40.0569464Z System.IO.IOException: Direct connection ended.
+2026-11-09T11:28:40.0570859Z     at IConnect.Connectivity.PeerSession.RunAsync(CancellationToken ct) in D:\a\iConnect\iConnect\apps\windows\IConnect.Connectivity\PeerSession.cs:line 77
+2026-11-09T11:28:40.0573968Z     at IConnect.Tests.NativeHandshakeStressTests.<>c__DisplayClass2_0.<<Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown>g__Pair|0>d.MoveNext() in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeHandshakeStressTests.cs:line 40
+2026-11-09T11:28:40.0585896Z  Native failure context: NativeConnectionState=3
+2026-11-09T11:28:40.0596943Z  Native failure context: NativeChannelAttached=False
+2026-11-09T11:28:40.0599068Z  Native failure context: NativeChannelOpened=False
+2026-11-09T11:28:40.0599704Z  Native failure context: NativeIceState=3
+2026-11-09T11:28:40.0605622Z  Native failure context: NativePeerId=94
+2026-11-09T11:28:40.0606978Z  Native failure context: NativeChannelId=-1
+2026-11-09T11:28:40.0607561Z  Native failure context: NativeConnectionHistory=1,2,3
+2026-11-09T11:28:40.0614341Z  Faulted native task before cleanup: System.AggregateException: One or more errors occurred. (Direct connection ended.)
+2026-11-09T11:28:40.0618405Z   ---> System.IO.IOException: Direct connection ended.
+2026-11-09T11:28:40.0623393Z     at System.Threading.Channels.AsyncOperation`2.GetResult(Int16 token)
+2026-11-09T11:28:40.0625436Z     at System.Threading.Channels.ChannelReader`1.ReadAllAsync(CancellationToken cancellationToken)+MoveNext()
+2026-11-09T11:28:40.0634835Z     at IConnect.Tests.NativeHandshakeStressTests.<>c__DisplayClass2_2.<<Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown>g__Bridge|4>d.MoveNext() in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeHandshakeStressTests.cs:line 33
+2026-11-09T11:28:40.0645778Z  --- End of stack trace from previous location ---
+2026-11-09T11:28:40.0648024Z     at IConnect.Tests.NativeHandshakeStressTests.<>c__DisplayClass2_2.<<Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown>g__Bridge|4>d.MoveNext() in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeHandshakeStressTests.cs:line 33
+2026-11-09T11:28:40.0690651Z     --- End of inner exception stack trace ---
+2026-11-09T11:28:40.0691694Z  Faulted native task before cleanup: System.AggregateException: One or more errors occurred. (Direct connection ended.)
+2026-11-09T11:28:40.0704279Z   ---> System.IO.IOException: Direct connection ended.
+2026-11-09T11:28:40.0705570Z     at IConnect.Connectivity.PeerSession.RunAsync(CancellationToken ct) in D:\a\iConnect\iConnect\apps\windows\IConnect.Connectivity\PeerSession.cs:line 77
+2026-11-09T11:28:40.0709030Z     at IConnect.Tests.NativeHandshakeStressTests.<>c__DisplayClass2_0.<<Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown>g__Pair|0>d.MoveNext() in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeHandshakeStressTests.cs:line 40
+2026-11-09T11:28:40.0711361Z  --- End of stack trace from previous location ---
+2026-11-09T11:28:40.0712703Z     at IConnect.Connectivity.PeerSession.RunAsync(CancellationToken ct) in D:\a\iConnect\iConnect\apps\windows\IConnect.Connectivity\PeerSession.cs:line 113
+2026-11-09T11:28:40.0714070Z     --- End of inner exception stack trace ---
+2026-11-09T11:28:40.0715101Z  Faulted native task before cleanup: System.AggregateException: One or more errors occurred. (Direct connection ended.)
+2026-11-09T11:28:40.0716610Z   ---> System.IO.IOException: Direct connection ended.
+2026-11-09T11:28:40.0717362Z     at System.Threading.Channels.AsyncOperation`2.GetResult(Int16 token)
+2026-11-09T11:28:40.0722706Z     at System.Threading.Channels.ChannelReader`1.ReadAllAsync(CancellationToken cancellationToken)+MoveNext()
+2026-11-09T11:28:40.0726490Z     at IConnect.Tests.NativeHandshakeStressTests.<>c__DisplayClass2_2.<<Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown>g__Bridge|4>d.MoveNext() in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeHandshakeStressTests.cs:line 33
+2026-11-09T11:28:40.0738191Z  --- End of stack trace from previous location ---
+2026-11-09T11:28:40.0740455Z     at IConnect.Tests.NativeHandshakeStressTests.<>c__DisplayClass2_2.<<Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown>g__Bridge|4>d.MoveNext() in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeHandshakeStressTests.cs:line 33
+2026-11-09T11:28:40.0746072Z  --- End of stack trace from previous location ---
+2026-11-09T11:28:40.0747439Z     at IConnect.Connectivity.PeerSession.RunAsync(CancellationToken ct) in D:\a\iConnect\iConnect\apps\windows\IConnect.Connectivity\PeerSession.cs:line 113
+2026-11-09T11:28:40.0748830Z     --- End of inner exception stack trace ---
+2026-11-09T11:28:40.0749870Z  Faulted native task before cleanup: System.AggregateException: One or more errors occurred. (Direct connection ended.)
+2026-11-09T11:28:40.0750947Z   ---> System.IO.IOException: Direct connection ended.
+2026-11-09T11:28:40.0752260Z     at IConnect.Connectivity.PeerSession.RunAsync(CancellationToken ct) in D:\a\iConnect\iConnect\apps\windows\IConnect.Connectivity\PeerSession.cs:line 77
+2026-11-09T11:28:40.0755480Z     at IConnect.Tests.NativeHandshakeStressTests.<>c__DisplayClass2_0.<<Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown>g__Pair|0>d.MoveNext() in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeHandshakeStressTests.cs:line 40
+2026-11-09T11:28:40.0758573Z  --- End of stack trace from previous location ---
+2026-11-09T11:28:40.0759875Z     at IConnect.Connectivity.PeerSession.RunAsync(CancellationToken ct) in D:\a\iConnect\iConnect\apps\windows\IConnect.Connectivity\PeerSession.cs:line 113
+2026-11-09T11:28:40.0762187Z     --- End of inner exception stack trace ---
+2026-11-09T11:28:40.0763171Z  Faulted native task before cleanup: System.AggregateException: One or more errors occurred. (Direct connection ended.)
+2026-11-09T11:28:40.0764211Z   ---> System.IO.IOException: Direct connection ended.
+2026-11-09T11:28:40.0764919Z     at System.Threading.Channels.AsyncOperation`2.GetResult(Int16 token)
+2026-11-09T11:28:40.0766021Z     at System.Threading.Channels.ChannelReader`1.ReadAllAsync(CancellationToken cancellationToken)+MoveNext()
+2026-11-09T11:28:40.0777223Z     at IConnect.Tests.NativeHandshakeStressTests.<>c__DisplayClass2_2.<<Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown>g__Bridge|4>d.MoveNext() in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeHandshakeStressTests.cs:line 33
+2026-11-09T11:28:40.0779402Z  --- End of stack trace from previous location ---
+2026-11-09T11:28:40.0781556Z     at IConnect.Tests.NativeHandshakeStressTests.<>c__DisplayClass2_2.<<Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown>g__Bridge|4>d.MoveNext() in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeHandshakeStressTests.cs:line 33
+2026-11-09T11:28:40.0783725Z  --- End of stack trace from previous location ---
+2026-11-09T11:28:40.0784973Z     at IConnect.Connectivity.PeerSession.RunAsync(CancellationToken ct) in D:\a\iConnect\iConnect\apps\windows\IConnect.Connectivity\PeerSession.cs:line 113
+2026-11-09T11:28:40.0786204Z     --- End of inner exception stack trace ---
+2026-11-09T11:28:40.0787169Z  Faulted native task before cleanup: System.AggregateException: One or more errors occurred. (Direct connection ended.)
+2026-11-09T11:28:40.0812975Z   ---> System.IO.IOException: Direct connection ended.
+2026-11-09T11:28:40.0872540Z     at IConnect.Connectivity.PeerSession.RunAsync(CancellationToken ct) in D:\a\iConnect\iConnect\apps\windows\IConnect.Connectivity\PeerSession.cs:line 77
+2026-11-09T11:28:40.0876406Z     at IConnect.Tests.NativeHandshakeStressTests.<>c__DisplayClass2_0.<<Concurrent_native_handshakes_keep_their_own_identity_readiness_and_file_authority_through_repeated_teardown>g__Pair|0>d.MoveNext() in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeHandshakeStressTests.cs:line 40
+2026-11-09T11:28:40.0880303Z  --- End of stack trace from previous location ---
+2026-11-09T11:28:40.0881571Z     at IConnect.Connectivity.PeerSession.RunAsync(CancellationToken ct) in D:\a\iConnect\iConnect\apps\windows\IConnect.Connectivity\PeerSession.cs:line 113
+2026-11-09T11:28:40.0882790Z     --- End of inner exception stack trace ---
+2026-11-09T11:28:40.0883150Z 
+2026-11-09T11:28:40.0883158Z 
+2026-11-09T11:32:29.1271626Z 
+2026-11-09T11:32:29.1324478Z Failed!  - Failed:     1, Passed:   955, Skipped:     0, Total:   956, Duration: 3 m 54 s - IConnect.Tests.dll (net10.0)
+2026-11-09T11:32:29.3069226Z ##[error]Process completed with exit code 1.

@@ -18,3 +18,5 @@ android-upload-cpu-recorder-2026-11-09.txt -text whitespace=cr-at-eol,-blank-at-
 android-upload-cpu-probe-2026-11-09.txt -text whitespace=cr-at-eol,-blank-at-eol
 android-sender-checkpoints-*-2026-11-09.txt -text whitespace=cr-at-eol,-blank-at-eol
 windows-native-hello-failure-2026-11-09.txt -text whitespace=cr-at-eol,-blank-at-eol
+windows-native-stress-failure-2026-11-09.txt -text whitespace=cr-at-eol,-blank-at-eol
+windows-native-diagnostics-*-2026-11-09.txt -text whitespace=cr-at-eol,-blank-at-eol
