@@ -112,6 +112,8 @@ Use `tools/test-native-batches-unicode.ps1` for new batch runs, with the same pa
 
 The [65ebf9a Android CI job](https://github.com/JAPHARYROMAN/iConnect/actions/runs/42568144727/job/128999119312) ends while downloading the Gradle 8.13 distribution: the wrapper's 10,000 ms request times out with `SocketTimeoutException: Read timed out`. It does not reach application compilation or tests. This is separate from the successful local build/device evidence and the earlier native-session CI failure; it is not recorded as a passing CI run.
 
+The [5643076 Android job](https://github.com/JAPHARYROMAN/iConnect/actions/runs/42569381028/job/129002976940) repeats the same download timeout. The wrapper now allows 60,000 ms for its network request, using Gradle's [documented timeout setting](https://docs.gradle.org/current/userguide/gradle_wrapper.html). The selected 8.13 distribution, HTTPS URL, URL validation and SHA-256 pin remain unchanged. A cached local wrapper invocation can verify configuration and version, but a later successful CI job is required to establish that the download and build recover.
+
 ### Native connection diagnostic follow-up
 
 The `8d09a75` GitHub main regression failed one blind-inbox native control after 100 ms with `Direct connection ended`; the other 877 cases passed. Android and Windows large-file CI jobs passed. The reported stack ended in the signal-bridge cleanup. Native failure can share an exception instance across channel, authentication and drain tasks, so cleanup awaits can change the visible stack. The harness now captures the primary failure, authentication state and faulted authentication/run/bridge tasks before draining them. It preserves all transfer and authority assertions.
