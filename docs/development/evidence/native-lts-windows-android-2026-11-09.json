@@ -1,0 +1,249 @@
+{
+  "schema": 1,
+  "stage": "LtsNativeInteropAndFolderRecoveryPassed",
+  "checkedAtUtc": "2026-11-09T21:55:53.912842+00:00",
+  "nativeSha256": "016d8b449da214db2fc34ce900d13c539c2b56d885af9fbd870f326005249c68",
+  "applicationSha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e",
+  "testSha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e",
+  "windowsFixtureSha256": "d4783d50dfe4d4f27db66d41386843e40cf937856b713b27f28738ce305d3091",
+  "fixtureFilesVerified": 238,
+  "inputManifestSha256": "54a63b3b8c554ea5300a53a31901b7325800d382a2a7bd2667b4cda907527b90",
+  "combinedResultSha256": "eec0679e240fa7a196f0959dad38804efae23a85e596b24d71c4ac7f687f11d2",
+  "preceding552CaseResultSha256": "2d658a2f3cac20527d3f424631221dce0f35ebbc8c78e71f9b21ed36204cc2e2",
+  "suites": [
+    {
+      "name": "frames",
+      "scenarios": 2,
+      "cases": [
+        {
+          "initiator": "windows",
+          "bytesEachDirection": 262144,
+          "bothDirectionsMatched": true
+        },
+        {
+          "initiator": "android",
+          "bytesEachDirection": 262144,
+          "bothDirectionsMatched": true
+        }
+      ],
+      "resultSha256": "f746c84c5075e48fad4f71565a1ed904397517603b11a04d1b21a8532354b0a2",
+      "baseResultSha256": "f746c84c5075e48fad4f71565a1ed904397517603b11a04d1b21a8532354b0a2"
+    },
+    {
+      "name": "uploads",
+      "scenarios": 2,
+      "cases": [
+        {
+          "initiator": "windows",
+          "bytesEachDirection": 2097169,
+          "bothDirectionsMatched": true,
+          "originalReceiptResumedBothDirections": true,
+          "sourceAndCollisionPreservedBothDirections": true,
+          "withdrawnInboxDeniedBothDirections": true
+        },
+        {
+          "initiator": "android",
+          "bytesEachDirection": 2097169,
+          "bothDirectionsMatched": true,
+          "originalReceiptResumedBothDirections": true,
+          "sourceAndCollisionPreservedBothDirections": true,
+          "withdrawnInboxDeniedBothDirections": true
+        }
+      ],
+      "resultSha256": "05b7ae215d209603529bbc5154a1ba21048293172c0a0107fc7fd745e1b80fa0",
+      "baseResultSha256": "05b7ae215d209603529bbc5154a1ba21048293172c0a0107fc7fd745e1b80fa0"
+    },
+    {
+      "name": "batch-cancellation",
+      "scenarios": 4,
+      "cases": [
+        {
+          "initiator": "windows",
+          "bytesEachDirection": 2097207,
+          "bothDirectionsMatched": true,
+          "originalReceiptResumedBothDirections": true,
+          "sourceAndCollisionPreservedBothDirections": true,
+          "withdrawnInboxDeniedBothDirections": true,
+          "inboxMode": "listing",
+          "itemsEachDirection": 6,
+          "checkCanceledAndFreshCheckPassedBothDirections": true
+        },
+        {
+          "initiator": "android",
+          "bytesEachDirection": 2097207,
+          "bothDirectionsMatched": true,
+          "originalReceiptResumedBothDirections": true,
+          "sourceAndCollisionPreservedBothDirections": true,
+          "withdrawnInboxDeniedBothDirections": true,
+          "inboxMode": "listing",
+          "itemsEachDirection": 6,
+          "checkCanceledAndFreshCheckPassedBothDirections": true
+        },
+        {
+          "initiator": "windows",
+          "bytesEachDirection": 2097207,
+          "bothDirectionsMatched": true,
+          "originalReceiptResumedBothDirections": true,
+          "sourceAndCollisionPreservedBothDirections": true,
+          "withdrawnInboxDeniedBothDirections": true,
+          "inboxMode": "blind",
+          "itemsEachDirection": 6,
+          "checkCanceledAndFreshCheckPassedBothDirections": true
+        },
+        {
+          "initiator": "android",
+          "bytesEachDirection": 2097207,
+          "bothDirectionsMatched": true,
+          "originalReceiptResumedBothDirections": true,
+          "sourceAndCollisionPreservedBothDirections": true,
+          "withdrawnInboxDeniedBothDirections": true,
+          "inboxMode": "blind",
+          "itemsEachDirection": 6,
+          "checkCanceledAndFreshCheckPassedBothDirections": true
+        }
+      ],
+      "resultSha256": "0a6337ec667bcd53796ab859d58b89b3ac13e42446b2e88fbdb0027d11fd438b",
+      "baseResultSha256": "137f81e705a3bae33a806ce36af3fdf13a8b47feb52bb6fbd49eddb4135b0e00"
+    },
+    {
+      "name": "folder-moves",
+      "scenarios": 4,
+      "cases": [
+        {
+          "initiator": "windows",
+          "bytesEachDirection": 2097207,
+          "bothDirectionsMatched": true,
+          "originalReceiptResumedBothDirections": true,
+          "sourceAndCollisionPreservedBothDirections": true,
+          "withdrawnInboxDeniedBothDirections": true,
+          "inboxMode": "listing",
+          "itemsEachDirection": 6,
+          "checkCanceledAndFreshCheckPassedBothDirections": true,
+          "windowsOriginalMovedVerifiedAndRestored": true
+        },
+        {
+          "initiator": "android",
+          "bytesEachDirection": 2097207,
+          "bothDirectionsMatched": true,
+          "originalReceiptResumedBothDirections": true,
+          "sourceAndCollisionPreservedBothDirections": true,
+          "withdrawnInboxDeniedBothDirections": true,
+          "inboxMode": "listing",
+          "itemsEachDirection": 6,
+          "checkCanceledAndFreshCheckPassedBothDirections": true,
+          "windowsOriginalMovedVerifiedAndRestored": true
+        },
+        {
+          "initiator": "windows",
+          "bytesEachDirection": 2097207,
+          "bothDirectionsMatched": true,
+          "originalReceiptResumedBothDirections": true,
+          "sourceAndCollisionPreservedBothDirections": true,
+          "withdrawnInboxDeniedBothDirections": true,
+          "inboxMode": "blind",
+          "itemsEachDirection": 6,
+          "checkCanceledAndFreshCheckPassedBothDirections": true,
+          "windowsOriginalMovedVerifiedAndRestored": true
+        },
+        {
+          "initiator": "android",
+          "bytesEachDirection": 2097207,
+          "bothDirectionsMatched": true,
+          "originalReceiptResumedBothDirections": true,
+          "sourceAndCollisionPreservedBothDirections": true,
+          "withdrawnInboxDeniedBothDirections": true,
+          "inboxMode": "blind",
+          "itemsEachDirection": 6,
+          "checkCanceledAndFreshCheckPassedBothDirections": true,
+          "windowsOriginalMovedVerifiedAndRestored": true
+        }
+      ],
+      "resultSha256": "4ca3e6f640cae38aa4c04d0dddaae24b26632b44c50481feee73f5eb8ca9d494",
+      "baseResultSha256": "0c998ea6c47a9c8d3057da369319aa8ba7ffa3fcb63f689caaeeb27bc973ef61"
+    }
+  ],
+  "scenarios": 12,
+  "windowsOriginalMovesAndRestores": 4,
+  "capturedApks": [
+    {
+      "name": "batch-cancellation-after-app-debug-androidTest.apk",
+      "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+    },
+    {
+      "name": "batch-cancellation-after-app-debug.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "batch-cancellation-before-app-debug-androidTest.apk",
+      "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+    },
+    {
+      "name": "batch-cancellation-before-app-debug.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "final-app-debug-androidTest.apk",
+      "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+    },
+    {
+      "name": "final-app-debug.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "folder-moves-after-app-debug-androidTest.apk",
+      "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+    },
+    {
+      "name": "folder-moves-after-app-debug.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "folder-moves-before-app-debug-androidTest.apk",
+      "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+    },
+    {
+      "name": "folder-moves-before-app-debug.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "frames-after-app-debug-androidTest.apk",
+      "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+    },
+    {
+      "name": "frames-after-app-debug.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "frames-before-app-debug-androidTest.apk",
+      "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+    },
+    {
+      "name": "frames-before-app-debug.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "uploads-after-app-debug-androidTest.apk",
+      "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+    },
+    {
+      "name": "uploads-after-app-debug.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    },
+    {
+      "name": "uploads-before-app-debug-androidTest.apk",
+      "sha256": "41be6e290aca57ea15711757f92fb2afc1941360b4570dd1a08a026fb890546e"
+    },
+    {
+      "name": "uploads-before-app-debug.apk",
+      "sha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e"
+    }
+  ],
+  "distinctFreshOwnedHeadlessAvd": true,
+  "originalAvdDataPreserved": true,
+  "coordinatorAndPairingScope": "Local generated fixture controls; native authenticated encrypted transport and file engines",
+  "allUntracedIceFailuresResolved": false,
+  "androidSourceMovesVerified": false,
+  "fullControllerInteropVerified": false,
+  "physicalSeparateNetworksVerified": false,
+  "fullApplicationComplete": false
+}

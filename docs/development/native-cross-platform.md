@@ -133,3 +133,16 @@ The `8d09a75` GitHub main regression failed one blind-inbox native control after
 The local 878-case selection passes in 5 minutes 6 seconds, and all eight focused native controls pass on the final diagnostic build. That build has zero warnings/errors. The CI connection failure has not been reproduced or assigned a verified cause; a passing local run does not close its reliability investigation. Evidence is in `.tools/phase121-tests/phase121-regression.trx` and `phase121-native-final.trx`.
 
 A separately [reproduced worker-cleanup regression](native-session-failures.md) now preserves the original session failure. Three native controls cover that behavior, including preservation of a cleanup-only failure. A concurrent control passes 32 peer pairs and 256 denied roots requests. These checks also pass on the pinned source-built transport. They do not establish the cause of the earlier CI closure, and the original diagnostic capture remains in place.
+
+### Current combined LTS qualification
+
+The [current matrix](evidence/native-lts-windows-android-2026-11-09.json) passes twelve scenarios on the combined corrected OpenSSL 3.5.9 LTS transport `016d8b44…`, production debug APK `b8cc8e37…`, test APK `41be6e29…` and frozen Windows fixture `d4783d50…`. It follows the complete 552-case Android regression. A distinct fresh headless API-35 AVD hosts these fixtures; the original AVD's data remains preserved. Both emulators are shut down after their respective validation completes.
+
+| Suite | Scenarios | Verified behavior |
+| --- | --- | --- |
+| Encrypted frames | 2 initiating roles | Matching 262,144-byte payloads in both directions. |
+| Ordinary uploads | 2 initiating roles | Matching 2,097,169-byte files, original-receipt resume after a lost acknowledgement, source/collision preservation, published-copy verification and withdrawn-inbox refusal. |
+| Batch cancellation | 4 initiating-role/inbox combinations | Six items and 2,097,207 bytes in each direction, restart/resume, Unicode/empty-folder/zero-file preservation, acknowledged check cancellation and a fresh complete check. |
+| Original-folder recovery | 4 initiating-role/inbox combinations | The same batch invariants plus four Windows original moves into recovery, verification there and complete restores. |
+
+The outer matrix retains eighteen matching APK captures, hashes all 238 frozen Windows fixture files and checks its pinned drivers before and after execution. Native loading binds the selected DLL hash. Pairing and signalling use local fixture controls. Full controller/invitation workflows, Android-source moves, physical separate-network/provider behavior and independent security/release gates remain open. The passing matrix does not assign a unique cause to the earlier untraced ICE/connection events.
