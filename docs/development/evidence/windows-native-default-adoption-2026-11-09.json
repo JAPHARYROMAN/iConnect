@@ -1,0 +1,111 @@
+{
+  "schema": 1,
+  "stage": "CorrectedNativeTransportAdopted",
+  "checkedAtUtc": "2026-11-09T15:08:47.7928001+00:00",
+  "fullApplicationComplete": false,
+  "defaultAdopted": true,
+  "nativeBinarySha256": "57f119d4f978085570df1e3f9e333e7655680af6d0bb89eebecf6f424787dfbc",
+  "bundleEvidenceSha256": "494ba23392f60ff080848a210e499e8a72c71d0df4c6ebc7bb13e7eef4380e54",
+  "patchIds": [
+    "serialize-sctp-initialization-v1",
+    "initialize-dtls-before-receive-v1"
+  ],
+  "lockedRestore": {
+    "passed": true,
+    "logSha256": "be6a749ccd05a7aba5c93c9cf2ed4da5d5f40bd8b4d05f19b1b0312c8c414aff"
+  },
+  "main": {
+    "total": 959,
+    "assemblySha256": "deea9d487d88bdb59dd2f0eab935304044f8e98b5e29eef16a0d3d2eb2eff3e0",
+    "assemblyLastWriteUtc": "2026-11-09T14:58:16.3325630Z",
+    "failed": 0,
+    "consoleSha256": "fb59f3ceda8d38cd114eda1d10d0b3eaca98ec6a4f4b6f98cbb32ae81d036666",
+    "filter": "FullyQualifiedName!~Full_4096_item_file_plan&FullyQualifiedName!~Full4096ItemPrivateSnapshot&FullyQualifiedName!~Full4096ItemSender&FullyQualifiedName!~LargeFileTests",
+    "passed": 959,
+    "notExecuted": 0,
+    "trxSha256": "2c51853101625e3ecf925ed3c35cb8f6021a7f058e8a197b9dbd66ce9b438824"
+  },
+  "toolTests": {
+    "total": 60,
+    "passed": 60,
+    "consoleSha256": "a228df8a511edc470f438a147a232e93461e67666fb3177755ec0b2c44b53077"
+  },
+  "selectionGuards": {
+    "missingBundleSdkBuildRefused": true,
+    "missingBundleSdkExitCode": 1,
+    "legacySctpOnlyRefused": true,
+    "checks": [
+      "MissingBundle",
+      "DllWithoutSourceEvidence",
+      "ChangedBinary",
+      "InvalidExistingDestination",
+      "VerifiedMembersOnly",
+      "IdempotentPreparation",
+      "EnvironmentSelection"
+    ],
+    "reportSha256": "8acce6c4484c1a1c7924c15bbc45adb4b777cec962b8e4c3ce659a0bbdc205b0",
+    "controls": {
+      "staleOutputBuildLogSha256": "af3f4f7e430bff40d9bed8ef208574f228d1fc4dbed0382d09bbe29932793406",
+      "sdkLogSha256": "c6a6aa4a41d256370286156cc13f895dcce63dc0cdd18f314752fce6127d4101",
+      "staleOutputReportSha256": "77430e5189eb9fc911cb1a42a6529d19dfc6a924d17e56f797ec2c22dcc9e898",
+      "sdkReportSha256": "846d84dce1e4bd54675276ee057ff2befd06ce8fbc62d756043c2da7fb405372",
+      "legacyReportSha256": "75a67948ce652d2c61c6f1d904a7d1c1268e734b54d411579793a6592ffc058b"
+    },
+    "changedNewerRuntimeAndMetadataRestored": true
+  },
+  "unsignedPackage": {
+    "guards": [
+      {
+        "Passed": true,
+        "Case": "default-nuget-inventory",
+        "Components": 18
+      },
+      {
+        "Case": "existing-inventory-preserved",
+        "Passed": true
+      },
+      {
+        "Case": "unlabelled-replacement-refused",
+        "Passed": true
+      },
+      {
+        "Case": "source-runtime-mismatch-refused",
+        "Passed": true
+      },
+      {
+        "Case": "changed-notice-preflight-refused",
+        "Passed": true
+      },
+      {
+        "Case": "redirected-notices-refused",
+        "Passed": true
+      }
+    ],
+    "name": "iConnect.DefaultTransportFixture-1.247.0.0-x64.unsigned.msix",
+    "explicitNativeBundleArgumentUsed": false,
+    "installed": false,
+    "nativeNoticeFiles": 19,
+    "inspectionReportSha256": "9793d46a1ed0cb04fb8ad584d6e0e017daac53063402539e1f8553b758830845",
+    "noticeInventorySha256": "0526de22d89893fa3f91c4e4fe5ac398e58e6c1437c6fec5ed409941c8b80184",
+    "sha256": "c55e38fc03a4c930e209b1ed3074a7b8640954ee0e358fadd93d72e399201b4b",
+    "components": 24,
+    "signed": false,
+    "sourceFiles": 30,
+    "nativeSha256": "57f119d4f978085570df1e3f9e333e7655680af6d0bb89eebecf6f424787dfbc"
+  },
+  "followup": {
+    "combinedWindowsAndroidInterop": false,
+    "localCapacityLargeFilesPreviewAndFinalPublish": "Running separately; not yet claimed",
+    "independentSecurityReview": false,
+    "completeLicenseReview": false,
+    "signedInstalledLifecycle": false,
+    "physicalSeparateNetworks": false,
+    "newHostedSourceBuildAndConsumers": "Pending first pushed workflow run"
+  },
+  "android": {
+    "remainingFrozenApkMatrix": "Still running independently",
+    "applicationSha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e",
+    "instrumentationSha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294",
+    "uploadWrapperRecoveryLimitation": "Original upload runner completed, wrapper failed; original adb exit was not retained."
+  }
+}

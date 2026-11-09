@@ -23,23 +23,23 @@ The script prints the final SHA-256 and writes the artifact under `.local/releas
 
 The current package includes `libDatachannel/datachannel.dll` and the [embedded dependency inventory](release-security.md). Rebuild packages made before the native publish fix to include the DLL required for direct connections.
 
-## Review a source-built transport
+## Prepare the corrected source transport
 
-The default build uses the restored NuGet transport. To review the [pinned-source candidate](native-transport-review.md), provide a completed source/notice bundle to the package builder. The builder checks its exact commits, hashes, x64 image and nonredirected file paths before publishing, then checks the staged copy. It replaces the DLL only in the new package payload and includes the source archives, notices and recipe under `PackageMetadata/NativeTransport/`. Python 3.11 or newer also exports the [readable source-notice inventory](native-notice-review.md) under `PackageMetadata/NativeNotices/`; `-NoticePython` selects an explicit interpreter.
+Ordinary builds and packaging require the [corrected pinned source transport](native-default-transport.md). Prepare it before packaging, or select another fully verified bundle with `ICONNECT_NATIVE_TRANSPORT_BUNDLE` or `-NativeTransportBundle`. The builder checks exact commits, both corrections, hashes, the x64 image and nonredirected file paths before publishing, then checks the SDK's staged copy. Source archives, notices and the recipe are included under `PackageMetadata/NativeTransport/`. Python 3.11 or newer also exports the [readable source-notice inventory](native-notice-review.md) under `PackageMetadata/NativeNotices/`; `-NoticePython` selects an explicit interpreter.
 
 ```powershell
-$bundle = ./tools/export-native-transport-sources.ps1
+./tools/prepare-native-transport.ps1
 $package = ./tools/package-windows.ps1 -PackageName iConnect.NativeReview -Version 1.0.0.0 `
-    -Publisher $releasePublisher -Unsigned -NativeTransportBundle $bundle.Bundle
+    -Publisher $releasePublisher -Unsigned
 ./tools/test-native-package.ps1 -Package $package.Path `
     -Payload (Join-Path $package.WorkDirectory 'payload') -ExerciseGuards -RequireNoticeInventory
 ./tools/review-release-dependencies.ps1 -Package $package.Path `
     -OutputDirectory .tools/native-package-review/new-review
 ```
 
-The package verifier reads the archive and checks the canonical DLL, every source-bundle member and the native inventory. Its optional guard exercises use generated fixture copies and the restored default package; they do not install or launch an application. The inventory records the source commits and actual DLL hash instead of labeling the source build as the vendor package. JSON is recorded as an excluded source input because this recipe disables examples. Existing inventories are preserved; publish to a new payload directory to regenerate one.
+The package verifier reads the archive and checks the canonical DLL, every source-bundle member and the native inventory. Its optional guard exercises use generated fixture copies and a private legacy NuGet test dependency; they do not install or launch an application. The inventory records the source commits, both corrections and actual DLL hash. JSON is recorded as an excluded source input because this recipe disables examples. Existing inventories are preserved; publish to a new payload directory to regenerate one.
 
-This option prepares a review artifact. Cross-platform interoperability, complete license/advisory review, independent security review, trusted signing and installed lifecycle verification remain required before production distribution. The default transport is not changed by this option.
+This procedure prepares a review artifact. Combined-artifact cross-platform interoperability, complete license/advisory review, independent security review, trusted signing and installed lifecycle verification remain required before production distribution.
 
 ## Verify and install
 

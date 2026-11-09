@@ -2,12 +2,6 @@
   "version": 1,
   "dependencies": {
     "net10.0": {
-      "MediaToolkit.WebRtc.Native.win-x64": {
-        "type": "Direct",
-        "requested": "[0.24.6.1, )",
-        "resolved": "0.24.6.1",
-        "contentHash": "wdGwTGJRzcj47RPl4xg2yxUQSJ8L1SE4CPRYM/+Ak1S08BahYrvGqcMCmdgn3qQMQ89cO3L3kXikH+aIy/D9eA=="
-      },
       "Google.Protobuf": {
         "type": "Transitive",
         "resolved": "3.33.1",

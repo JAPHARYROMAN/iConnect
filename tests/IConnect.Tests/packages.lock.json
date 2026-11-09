@@ -2,6 +2,12 @@
   "version": 1,
   "dependencies": {
     "net10.0": {
+      "MediaToolkit.WebRtc.Native.win-x64": {
+        "type": "Direct",
+        "requested": "[0.24.6.1, )",
+        "resolved": "0.24.6.1",
+        "contentHash": "wdGwTGJRzcj47RPl4xg2yxUQSJ8L1SE4CPRYM/+Ak1S08BahYrvGqcMCmdgn3qQMQ89cO3L3kXikH+aIy/D9eA=="
+      },
       "Microsoft.AspNetCore.Mvc.Testing": {
         "type": "Direct",
         "requested": "[10.0.0, )",
@@ -44,11 +50,6 @@
         "type": "Transitive",
         "resolved": "3.33.1",
         "contentHash": "RztiFmX9aOWDwfhxFzx/nS4fjs4DX7ZC7/XBEBl56k15lPGBftvbSwZkeo1mMCJHrNp1kK5iQYrFXB4MqCmBCA=="
-      },
-      "MediaToolkit.WebRtc.Native.win-x64": {
-        "type": "Transitive",
-        "resolved": "0.24.6.1",
-        "contentHash": "wdGwTGJRzcj47RPl4xg2yxUQSJ8L1SE4CPRYM/+Ak1S08BahYrvGqcMCmdgn3qQMQ89cO3L3kXikH+aIy/D9eA=="
       },
       "Microsoft.AspNetCore.TestHost": {
         "type": "Transitive",
@@ -419,8 +420,7 @@
         "type": "Project",
         "dependencies": {
           "IConnect.Core": "[1.0.0, )",
-          "IConnect.Storage.Windows": "[1.0.0, )",
-          "MediaToolkit.WebRtc.Native.win-x64": "[0.24.6.1, )"
+          "IConnect.Storage.Windows": "[1.0.0, )"
         }
       },
       "iconnect.core": {

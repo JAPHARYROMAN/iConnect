@@ -153,6 +153,8 @@ For a physical phone or separate-network testing, configure a coordinator reacha
 
 ## Build and test
 
+Windows builds use the [corrected pinned source transport](docs/development/native-default-transport.md). The first `dev.ps1` build prepares it automatically and requires PowerShell 7.2+, Git, MSVC x64, CMake, Ninja and Perl in addition to the .NET SDK. Preparation compiles OpenSSL and libdatachannel, so allow time for that first build. Later builds verify and reuse the completed bundle. Direct `dotnet build` users should first run `./tools/prepare-native-transport.ps1`. Missing or altered native inputs stop the build.
+
 ```powershell
 ./tools/dev.ps1 build
 ./tools/dev.ps1 test

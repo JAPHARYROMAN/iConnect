@@ -23,9 +23,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $repository = Split-Path $PSScriptRoot -Parent
-$sourceNative = if ($NativeTransportBundle) {
-    & (Join-Path $PSScriptRoot 'read-native-transport-bundle.ps1') -BundleDirectory $NativeTransportBundle
-} else { $null }
+$selectedNative = & (Join-Path $PSScriptRoot 'assert-native-transport.ps1') -BundleDirectory $NativeTransportBundle
+$sourceNative = & (Join-Path $PSScriptRoot 'read-native-transport-bundle.ps1') -BundleDirectory $selectedNative.Directory
 $versionValue = [version]$Version
 if ($versionValue.ToString() -cne $Version -or $versionValue.Major -eq 0 -or
     @($Version.Split('.') | Where-Object { [int]$_ -gt 65535 }).Count -ne 0) {
@@ -62,7 +61,7 @@ if (Test-Path -LiteralPath $result) { throw 'A package already exists for this i
 $work = Join-Path $output ('work-' + [Guid]::NewGuid().ToString('N'))
 $payload = Join-Path $work 'payload'
 [void][IO.Directory]::CreateDirectory($payload)
-$arguments = @('-c', 'Release', '-o', $payload, "-p:IConnectDesktopVersion=$Version")
+$arguments = @('-c', 'Release', '-o', $payload, "-p:IConnectDesktopVersion=$Version", "-p:IConnectNativeTransportBundle=$($sourceNative.Directory)")
 if ($NoRestore) { $arguments += '--no-restore' }
 else { $arguments += '-p:RestoreLockedMode=true' }
 & (Join-Path $PSScriptRoot 'dev.ps1') publish-desktop @arguments | Out-Host
@@ -77,18 +76,12 @@ $metadata = [Diagnostics.FileVersionInfo]::GetVersionInfo((Join-Path $payload 'I
 if ($metadata.FileVersion -cne $Version) { throw 'The desktop binary does not match the package version.' }
 $connectivityAssets = Join-Path $repository 'apps/windows/IConnect.Connectivity/obj/project.assets.json'
 $nativeMetadata = Join-Path $payload 'PackageMetadata/NativeTransport'
-if (Test-Path -LiteralPath $nativeMetadata) { throw 'Unexpected native metadata in the fresh desktop publish output.' }
 if ($sourceNative) {
-    [void](New-Item -Path $nativeMetadata -ItemType Directory)
-    foreach ($file in $sourceNative.Files) {
-        $target = Join-Path $nativeMetadata $file.RelativePath
-        [void][IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName($target))
-        Copy-Item -LiteralPath $file.Path -Destination $target
+    $stagedNative = & (Join-Path $PSScriptRoot 'assert-native-transport.ps1') -BundleDirectory $nativeMetadata
+    if ($stagedNative.BundleEvidenceSha256 -cne $selectedNative.BundleEvidenceSha256 -or
+        (Get-FileHash -LiteralPath (Join-Path $payload 'libDatachannel/datachannel.dll') -Algorithm SHA256).Hash.ToLowerInvariant() -cne $selectedNative.BinarySha256) {
+        throw 'The desktop publish does not contain the selected corrected native transport and metadata.'
     }
-    # Validate the staged source/notice copy before replacing this fresh publish's
-    # default transport. The repository's regular build output stays unchanged.
-    $stagedNative = & (Join-Path $PSScriptRoot 'read-native-transport-bundle.ps1') -BundleDirectory $nativeMetadata
-    Copy-Item -LiteralPath (Join-Path $stagedNative.Directory 'datachannel.dll') -Destination (Join-Path $payload 'libDatachannel/datachannel.dll') -Force
     $noticeMetadata = Join-Path $payload 'PackageMetadata/NativeNotices'
     & (Join-Path $PSScriptRoot 'export-native-notices.ps1') -BundleDirectory $stagedNative.Directory `
         -ExpectedBinarySha256 $stagedNative.BinarySha256 -OutputDirectory $noticeMetadata -Python $NoticePython | Out-Host

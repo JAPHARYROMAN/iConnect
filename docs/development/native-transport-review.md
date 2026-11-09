@@ -1,8 +1,8 @@
 # Native transport provenance and build review
 
-Reviewed 7 November 2026. This is partial release evidence. Native adoption, complete advisory/license review and independent security review remain open.
+Reviewed 7 November 2026. This page preserves the original vendor and unpatched-source baseline. On 9 November, ordinary Windows builds adopted the [source transport with both initialization corrections](native-default-transport.md). The older artifact hashes and default-selection observations below describe their original runs. Complete advisory/license review and independent security review remain open.
 
-## Current Windows artifact
+## Original Windows vendor artifact
 
 The application resolves `MediaToolkit.WebRtc.Native.win-x64` 0.24.6.1. Its restored `datachannel.dll` SHA-256 is `39ff41497d059067a34fd9cc691236a0b5dff7af5ad6b1f6df3f9887b907b7e6`. The package describes libdatachannel 0.24.x with statically bundled OpenSSL, libjuice, libsrtp and usrsctp. Windows product/file version metadata is absent. An embedded string identifies OpenSSL 3.6.5, dated 29 September 2026; that string does not establish the complete build recipe. [NuGet metadata](https://www.nuget.org/packages/MediaToolkit.WebRtc.Native.win-x64/0.24.6.1)
 

@@ -90,7 +90,7 @@ if (!$ExerciseGuards) {
 }
 # Guard fixtures use generated copies of the real published dependency graphs,
 # source bundle and restored vendor binary; no application is installed or run.
-$assets=Get-Content (Join-Path $repo 'apps/windows/IConnect.Connectivity/obj/project.assets.json') -Raw | ConvertFrom-Json -AsHashtable
+$assets=Get-Content (Join-Path $repo 'tests/IConnect.Tests/obj/project.assets.json') -Raw | ConvertFrom-Json -AsHashtable
 $vendorPackage=@($assets.libraries.GetEnumerator() | Where-Object {$_.Key -match '^MediaToolkit\.WebRtc\.Native\.win-x64/' -and $_.Value.type -eq 'package'})
 if ($vendorPackage.Count -ne 1) {throw 'Restore the standard native package before exercising default-origin guards.'}
 $vendorCandidates=@($assets.packageFolders.Keys | ForEach-Object {Join-Path $_ ($vendorPackage[0].Value.path + '/native/win-x64/datachannel.dll')} | Where-Object {Test-Path -LiteralPath $_ -PathType Leaf})
@@ -127,7 +127,7 @@ function Make-Payload([string]$Name,[string]$Dll,[bool]$WithSource=$false) {
     return $target
 }
 function Write-Inventory([string]$Target) {
-    & (Join-Path $repo 'tools/write-windows-release-sbom.ps1') -Payload $Target -ConnectivityAssets (Join-Path $repo 'apps/windows/IConnect.Connectivity/obj/project.assets.json') -PackageName 'iConnect.NativeInventoryFixture' -Version '1.109.0.0'
+    & (Join-Path $repo 'tools/write-windows-release-sbom.ps1') -Payload $Target -ConnectivityAssets (Join-Path $repo 'tests/IConnect.Tests/obj/project.assets.json') -PackageName 'iConnect.NativeInventoryFixture' -Version '1.109.0.0'
 }
 $checks=@()
 $default=Make-Payload 'default' $vendor

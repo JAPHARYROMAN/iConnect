@@ -25,6 +25,13 @@ if (-not $dotnet -and $Task -ne 'android') { throw 'Install .NET 10 SDK 10.0.400
 $previousEnvironment = $env:ASPNETCORE_ENVIRONMENT
 Push-Location $repository
 try {
+    if ($Task -in @('windows','desktop','publish-desktop','build','test')) {
+        if ($env:ICONNECT_NATIVE_TRANSPORT_BUNDLE) {
+            [void](& (Join-Path $PSScriptRoot 'assert-native-transport.ps1') -BundleDirectory $env:ICONNECT_NATIVE_TRANSPORT_BUNDLE)
+        } else {
+            & (Join-Path $PSScriptRoot 'prepare-native-transport.ps1') | Out-Host
+        }
+    }
     switch ($Task) {
         'server' {
             $env:ASPNETCORE_ENVIRONMENT = 'Development'

@@ -1,12 +1,29 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup><PlatformTarget>x64</PlatformTarget></PropertyGroup>
+  <PropertyGroup>
+    <PlatformTarget>x64</PlatformTarget>
+    <IConnectNativeTransportBundle Condition="'$(IConnectNativeTransportBundle)' == '' and '$(ICONNECT_NATIVE_TRANSPORT_BUNDLE)' != ''">$(ICONNECT_NATIVE_TRANSPORT_BUNDLE)</IConnectNativeTransportBundle>
+    <IConnectNativeTransportBundle Condition="'$(IConnectNativeTransportBundle)' == ''">$(USERPROFILE)/.cache/iconnect/native-transport/application-connection-init-v1/bundle</IConnectNativeTransportBundle>
+    <_IConnectNativeTools>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)../../../tools'))</_IConnectNativeTools>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../IConnect.Storage.Windows/IConnect.Storage.Windows.csproj" />
     <ProjectReference Include="../../../shared/IConnect.Core/IConnect.Core.csproj" />
-    <PackageReference Include="MediaToolkit.WebRtc.Native.win-x64" Version="0.24.6.1"
-                      GeneratePathProperty="true" ExcludeAssets="build" />
-    <None Include="$(PkgMediaToolkit_WebRtc_Native_win-x64)/native/win-x64/datachannel.dll"
-          Condition="'$(PkgMediaToolkit_WebRtc_Native_win-x64)' != ''" Link="libDatachannel/datachannel.dll"
-          CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(IConnectNativeTransportBundle)/datachannel.dll" Link="libDatachannel/datachannel.dll"
+          CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" Visible="false" />
+    <!-- Explicit verified paths keep unrelated files out of build/publish output. -->
+    <Content Include="$(IConnectNativeTransportBundle)/datachannel.dll;$(IConnectNativeTransportBundle)/build-evidence.json;$(IConnectNativeTransportBundle)/source-lock.json;$(IConnectNativeTransportBundle)/bundle-evidence.json;$(IConnectNativeTransportBundle)/README.txt"
+             Link="PackageMetadata/NativeTransport/%(Filename)%(Extension)" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" Visible="false" />
+    <Content Include="$(IConnectNativeTransportBundle)/sources/libdatachannel.zip;$(IConnectNativeTransportBundle)/sources/openssl.zip;$(IConnectNativeTransportBundle)/sources/libjuice.zip;$(IConnectNativeTransportBundle)/sources/libsrtp.zip;$(IConnectNativeTransportBundle)/sources/usrsctp.zip;$(IConnectNativeTransportBundle)/sources/plog.zip;$(IConnectNativeTransportBundle)/sources/json.zip"
+             Link="PackageMetadata/NativeTransport/sources/%(Filename)%(Extension)" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" Visible="false" />
+    <Content Include="$(IConnectNativeTransportBundle)/notices/libdatachannel-LICENSE;$(IConnectNativeTransportBundle)/notices/openssl-LICENSE.txt;$(IConnectNativeTransportBundle)/notices/libjuice-LICENSE;$(IConnectNativeTransportBundle)/notices/libsrtp-LICENSE;$(IConnectNativeTransportBundle)/notices/usrsctp-LICENSE.md;$(IConnectNativeTransportBundle)/notices/plog-LICENSE;$(IConnectNativeTransportBundle)/notices/json-LICENSE.MIT"
+             Link="PackageMetadata/NativeTransport/notices/%(Filename)%(Extension)" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" Visible="false" />
+    <Content Include="$(IConnectNativeTransportBundle)/recipe/build-native-transport.ps1;$(IConnectNativeTransportBundle)/recipe/native-transport-sources.json;$(IConnectNativeTransportBundle)/recipe/test-native-transport.ps1;$(IConnectNativeTransportBundle)/recipe/export-native-transport-sources.ps1;$(IConnectNativeTransportBundle)/recipe/review-native-transport.ps1;$(IConnectNativeTransportBundle)/recipe/read-native-transport-bundle.ps1;$(IConnectNativeTransportBundle)/recipe/native-transport-patches.ps1;$(IConnectNativeTransportBundle)/recipe/native-sctp-initialization.json;$(IConnectNativeTransportBundle)/recipe/native-dtls-initialization.json"
+             Link="PackageMetadata/NativeTransport/recipe/%(Filename)%(Extension)" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" Visible="false" />
+    <Content Include="$(IConnectNativeTransportBundle)/recipe/native-patches/serialize-sctp-initialization.patch;$(IConnectNativeTransportBundle)/recipe/native-patches/initialize-dtls-before-receive.patch"
+             Link="PackageMetadata/NativeTransport/recipe/native-patches/%(Filename)%(Extension)" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" Visible="false" />
   </ItemGroup>
+  <Target Name="VerifyApplicationNativeTransport" BeforeTargets="PrepareForBuild" Condition="'$(DesignTimeBuild)' != 'true'">
+    <Exec Command="pwsh -NoProfile -File &quot;$(_IConnectNativeTools)/assert-native-transport.ps1&quot;"
+          EnvironmentVariables="ICONNECT_NATIVE_TRANSPORT_BUNDLE=$(IConnectNativeTransportBundle)" StandardOutputImportance="Low" />
+  </Target>
 </Project>
