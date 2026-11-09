@@ -1,0 +1,32 @@
+INSTRUMENTATION_STATUS: uploadCostPhase=source generation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=sourceGeneration completed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=private source preparation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=privateSnapshotPreparation completed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=payload and sender hash
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver PREPARING
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver CHECKING_PRIVATE_BYTES
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver PREPARING_PROVIDER_DOCUMENT
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver WRITING_PROVIDER_DOCUMENT
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver SYNCING_PROVIDER_DOCUMENT
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver CHECKING_PROVIDER_BYTES
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=payloadAndSenderHash completed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiverFinalization completed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=independent hashes
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=independentSourceAndOutputHash completed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: uploadCostResult={"schemaVersion":1,"payloadBytes":67108881,"rangeBytes":32768,"sha256":"efea6580f1c4748e06b42b66203adf826d982a264116d0adcdf9a11e75a469e7","phases":[{"wallMillis":216.0625,"processCpuMillis":215,"processBinderSent":null,"name":"sourceGeneration"},{"wallMillis":57280.0833,"processCpuMillis":23038,"processBinderSent":null,"name":"privateSnapshotPreparation"},{"wallMillis":54257.8632,"processCpuMillis":23145,"processBinderSent":null,"name":"payloadAndSenderHash"},{"wallMillis":61690.5622,"processCpuMillis":24116,"processBinderSent":null,"name":"receiverFinalization"},{"wallMillis":266.6914,"processCpuMillis":169,"processBinderSent":null,"name":"independentSourceAndOutputHash"}],"localRequests":{"GET_METADATA":{"calls":1,"wallMillis":20.9959},"LIST_DIRECTORY":{"calls":1,"wallMillis":32.9701},"LIST_ROOTS":{"calls":1,"wallMillis":41.3036},"READ_RANGE":{"calls":2049,"wallMillis":55902.3424}},"receivingRequests":{"FINISH_UPLOAD":{"calls":1,"wallMillis":81.6818},"PREPARE_UPLOAD":{"calls":1,"wallMillis":96.6549},"UPLOAD_CONTEXT":{"calls":1,"wallMillis":6.6499},"UPLOAD_STATUS":{"calls":186,"wallMillis":967.5751},"UPLOAD_WRITE":{"calls":2049,"wallMillis":35860.419}},"sampledFinalizationStages":[{"stage":"PREPARING","offset":0,"sinceProbeStart":{"wallMillis":112804.5135,"processCpuMillis":47669,"processBinderSent":null}},{"stage":"CHECKING_PRIVATE_BYTES","offset":163840,"sinceProbeStart":{"wallMillis":112844.4043,"processCpuMillis":47687,"processBinderSent":null}},{"stage":"PREPARING_PROVIDER_DOCUMENT","offset":0,"sinceProbeStart":{"wallMillis":116428.3148,"processCpuMillis":50093,"processBinderSent":null}},{"stage":"WRITING_PROVIDER_DOCUMENT","offset":0,"sinceProbeStart":{"wallMillis":116500.6178,"processCpuMillis":50137,"processBinderSent":null}},{"stage":"SYNCING_PROVIDER_DOCUMENT","offset":0,"sinceProbeStart":{"wallMillis":171185.157,"processCpuMillis":69683,"processBinderSent":null}},{"stage":"CHECKING_PROVIDER_BYTES","offset":0,"sinceProbeStart":{"wallMillis":171265.3914,"processCpuMillis":69719,"processBinderSent":null}}],"samplingIntervalMillis":20,"total":{"wallMillis":174653.6288,"processCpuMillis":71924,"processBinderSent":null},"sourceAndOutputIndependentlyVerified":true,"collisionOriginalKept":true,"counterScope":"Target process, including probe\/polling\/GC; provider-process CPU is excluded. Short sampled stages can be missed.","encryptedTransportVerified":false,"largeFileMatrixProven":false,"physicalNetworkVerified":false,"fullCompletion":false}
+INSTRUMENTATION_CODE: -1

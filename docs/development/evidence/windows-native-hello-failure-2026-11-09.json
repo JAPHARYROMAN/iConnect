@@ -1,0 +1,27 @@
+{
+  "SchemaVersion": 1,
+  "Test": "NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: True)",
+  "ExcerptSha256": "54e3794dad9eb401442d8dc5250d2483bedf278e346c6d0e1461f92c37ab8ed0",
+  "ReadinessAndStorageCleanupAssertionsReached": false,
+  "Total": 956,
+  "Location": "tests/IConnect.Tests/NativeSessionFailureTests.cs:43",
+  "Excerpt": "windows-native-hello-failure-2026-11-09.txt",
+  "OtherJobs": {
+    "native-notice-tools": "success",
+    "android": "success",
+    "windows-large-files": "success"
+  },
+  "Skipped": 0,
+  "JobOutcome": "failure",
+  "FullCompletion": false,
+  "RunId": 42604690658,
+  "HeadCommit": "a8994ce6bc3177a53a49a597b17733bda225b3b1",
+  "Reached": "Waiting for the initial hello frame",
+  "JobUrl": "https://github.com/JAPHARYROMAN/iConnect/actions/runs/42604690658/job/129117538249",
+  "JobId": 129117538249,
+  "CauseIsolated": false,
+  "Failure": "ChannelClosedException with IOException: Direct connection ended.",
+  "Passed": 955,
+  "Failed": 1,
+  "ExcerptConvention": "Relevant decoded job-log lines with LF line endings; normal setup omitted."
+}

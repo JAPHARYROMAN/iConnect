@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "recordedUtc": "2026-11-09T11:25:04.730914+00:00",
+  "buildSourceParent": "a8994ce6bc3177a53a49a597b17733bda225b3b1",
+  "buildStartedBeforeCommit": true,
+  "sourceHashConvention": "Working-tree source bytes and equivalent LF-normalized committed text.",
+  "sourceInputs": [
+    {
+      "path": "apps/android/app/src/main/java/com/iconnect/proof/PhoneUploads.kt",
+      "capturedWorkingTreeSha256": "aa6db163ecdde81af759673574f54fea2da5aed8fc5bb8a212bf6724391b93f7",
+      "canonicalLfSha256": "aa6db163ecdde81af759673574f54fea2da5aed8fc5bb8a212bf6724391b93f7"
+    },
+    {
+      "path": "apps/android/app/src/androidTest/java/com/iconnect/proof/PhoneUploadsTest.kt",
+      "capturedWorkingTreeSha256": "a568254034baf52cd9d2e03ce474106dd8e587a96b13c76b763660a47361960b",
+      "canonicalLfSha256": "a568254034baf52cd9d2e03ce474106dd8e587a96b13c76b763660a47361960b"
+    }
+  ],
+  "unchangedLargeFileTestSha256": "a3748095cdd5faa77dfb00d835c8f009badde920708a7dddf5ad7110a835e908",
+  "applicationSha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e",
+  "testSha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294",
+  "unsignedReleaseSha256": "535a0c1d79ba9dea836ce63a1261b543c18bddfd43c079ee4490b9483e619f2a",
+  "build": {
+    "tasks": [
+      ":app:assembleDebug",
+      ":app:assembleDebugAndroidTest",
+      ":app:testDebugUnitTest",
+      ":app:lintDebug",
+      ":app:assembleRelease"
+    ],
+    "duration": "9m 37s",
+    "outcome": "BUILD SUCCESSFUL",
+    "rawLog": {
+      "path": "android-sender-checkpoints-build-2026-11-09.txt",
+      "sha256": "440c8148c05dd50d62ff5d1adffeb675641f853e56e4f2cb4630178a74fbfa95"
+    },
+    "jvm": {
+      "tests": 89,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "jvmSuites": [
+      {
+        "name": "com.iconnect.proof.CopyPayloadEstimatesTest",
+        "tests": 9,
+        "reportSha256": "d5d3c1bc55c54d29678e3b1415d9a628e9719ab4997c36c1e6c23b0ed45ed9ee"
+      },
+      {
+        "name": "com.iconnect.proof.CreatedDirectoryReferencesTest",
+        "tests": 3,
+        "reportSha256": "e35035b4b5821bbd4e9c422fbbf55a73429bc72d8763d29b93869c5118e81b5f"
+      },
+      {
+        "name": "com.iconnect.proof.HexEncodingTest",
+        "tests": 2,
+        "reportSha256": "a147e5d341d40bc773d2c3ecc91b4bcb17530d61e02f78617804ac6231a0514f"
+      },
+      {
+        "name": "com.iconnect.proof.PhoneBatchSourceApprovalTest",
+        "tests": 4,
+        "reportSha256": "41e207414f7f511d19fdf2514da156104fff754552ae97f9c0a1636faad3720a"
+      },
+      {
+        "name": "com.iconnect.proof.PhoneFileTrafficPolicyTest",
+        "tests": 7,
+        "reportSha256": "0c32a16c4fc0108a1c877ea2fbdc5caf7d22981e50152074223cc40ebba14f0c"
+      },
+      {
+        "name": "com.iconnect.proof.PhonePayloadRateTrackerTest",
+        "tests": 18,
+        "reportSha256": "0b360cc8333b15b6088813b4efe1c8f24118e017bde7d79b57fffdae6e772de8"
+      },
+      {
+        "name": "com.iconnect.proof.PhoneTransferTimeEstimateTest",
+        "tests": 8,
+        "reportSha256": "dca28cac1a19b05ee6b8b396c4d92d326205ed298a712c531c90f7fa6fa09d9d"
+      },
+      {
+        "name": "com.iconnect.proof.PresenceTrackerTest",
+        "tests": 4,
+        "reportSha256": "84d4353b17c165b53af1b04c4d35d95fabd862de1f6da4d49eb9211084566937"
+      },
+      {
+        "name": "com.iconnect.proof.PreviewRulesTest",
+        "tests": 4,
+        "reportSha256": "d79cd043cb5277e67c23ee73df0cd8ec3eca2aa7ea22cb56d43d622f3c14c81e"
+      },
+      {
+        "name": "com.iconnect.proof.ReconnectScheduleTest",
+        "tests": 4,
+        "reportSha256": "d5d9d7695cf14233d9a0a906307d1ab3bc4ad22b2878b1598668de2aca8e6d10"
+      },
+      {
+        "name": "com.iconnect.proof.RulesTest",
+        "tests": 6,
+        "reportSha256": "d1b65250d896a18e2634c796ac4089fffcce9a8407151296b928ff6d6ee34516"
+      },
+      {
+        "name": "com.iconnect.proof.UploadBatchRulesTest",
+        "tests": 18,
+        "reportSha256": "b5eee2783dc5f21502ee9d9237222c6a356dcaf97ee0fe0ef8b17f204907c7c6"
+      },
+      {
+        "name": "com.iconnect.proof.UploadRulesTest",
+        "tests": 2,
+        "reportSha256": "5578e463e0df89a34bc2f961a8224e804742dfcfcbdce82aa443e5b149034435"
+      }
+    ],
+    "lint": {
+      "Warning": 71
+    }
+  },
+  "checkpointPolicy": {
+    "bytes": 1048576,
+    "milliseconds": 1000,
+    "checkedAtValidatedAcknowledgement": true,
+    "receiverSyncAndCheckpointPerRangeUnchanged": true,
+    "finalAckAndExitSaves": true
+  },
+  "device": {
+    "before": {
+      "result": {
+        "Failures": 2,
+        "Classes": "com.iconnect.proof.PhoneUploadsTest#liveAcknowledgementsRemainSeparateFromBoundedSenderCheckpointsAndPauseSavesTheLatest,com.iconnect.proof.PhoneUploadsTest#reopeningAnOlderSenderCheckpointResumesTheSameReceiptFromItsFreshDurableOffset",
+        "TestSha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294",
+        "Skipped": 0,
+        "PhysicalNetworkVerified": false,
+        "ExcludedClasses": "",
+        "ExpectedAssertionFailures": 2,
+        "LogSha256": "303dc7d9fa020963709b15ddfc8ca6091dc2fcec29d14698ffa40510ae30ba21",
+        "BaselineReproduced": true,
+        "FullCompletion": false,
+        "ApplicationSha256": "6eab422c1c0eab6d96742f2cca4f0a137fc8872773c45f1def3758985f440c29",
+        "Cases": 2
+      },
+      "rawInstrumentation": {
+        "path": "android-sender-checkpoints-before-2026-11-09.txt",
+        "sha256": "303dc7d9fa020963709b15ddfc8ca6091dc2fcec29d14698ffa40510ae30ba21"
+      }
+    },
+    "after": {
+      "result": {
+        "Failures": 0,
+        "Classes": "com.iconnect.proof.IncomingReadCancellationTest,com.iconnect.proof.IncomingUploadsTest,com.iconnect.proof.IncomingWindowRecoveryTest,com.iconnect.proof.PublishedBatchCheckTest,com.iconnect.proof.BatchSenderTest#completedBatchChecksBindFreshChallengesAndRejectChangedParentEvidence,com.iconnect.proof.BatchSenderTest#stoppingCompletedBatchCheckUsesNegotiatedRemoteCancellationAndKeepsCompletedHistory,com.iconnect.proof.BatchSenderTest#canceledPublishedBatchCheckReturnsAfterTheOutgoingControlIsReleased,com.iconnect.proof.BatchSenderTest#failedPublishedBatchCheckReturnsAfterTheOutgoingControlIsReleased,com.iconnect.proof.AndroidStorageTest,com.iconnect.proof.PhoneUploadsTest",
+        "TestSha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294",
+        "Skipped": 0,
+        "PhysicalNetworkVerified": false,
+        "ExcludedClasses": "",
+        "LogSha256": "544ada66b283a71b601d183f14cce11c2a1c79456ed63ba09d856f84300624be",
+        "FullCompletion": false,
+        "ApplicationSha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e",
+        "Cases": 87
+      },
+      "rawInstrumentation": {
+        "path": "android-sender-checkpoints-after-2026-11-09.txt",
+        "sha256": "544ada66b283a71b601d183f14cce11c2a1c79456ed63ba09d856f84300624be"
+      }
+    }
+  },
+  "baselineMeaning": "Two assertions distinguish old per-range saving from the candidate policy; they do not establish an old recovery defect.",
+  "cost": {
+    "before": {
+      "profile": {
+        "path": "android-sender-checkpoints-cost-before-2026-11-09.json",
+        "sha256": "ab4a0e584fb209746e2f464d2a636966e8d243e28e6c437dc86b261809e6f6bd"
+      },
+      "result": {
+        "ProfileReport": "C:\\projects\\Actual Projects\\iConnect\\.tools\\phase171-cost-before-device\\b613d2926f144ea29e960cd7e062b653\\profile.json",
+        "LargeFileMatrixProven": false,
+        "TestSha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294",
+        "ApplicationSha256": "6eab422c1c0eab6d96742f2cca4f0a137fc8872773c45f1def3758985f440c29",
+        "DiagnosticOnly": true,
+        "PhysicalNetworkVerified": false,
+        "LogSha256": "d4975aec51891dc9ff51dc6dc616ca921f8272c2f2df383028e208d43e2c5c0d",
+        "FullCompletion": false
+      },
+      "rawInstrumentation": {
+        "path": "android-sender-checkpoints-cost-before-2026-11-09.txt",
+        "sha256": "d4975aec51891dc9ff51dc6dc616ca921f8272c2f2df383028e208d43e2c5c0d"
+      }
+    },
+    "after": {
+      "profile": {
+        "path": "android-sender-checkpoints-cost-after-2026-11-09.json",
+        "sha256": "200e5f79c705755809d21272f77e378a9c78c70889365614ab63934e809893ab"
+      },
+      "result": {
+        "ProfileReport": "C:\\projects\\Actual Projects\\iConnect\\.tools\\phase171-cost-after-device\\8de69b80291d4c80be68f1e344b98838\\profile.json",
+        "LargeFileMatrixProven": false,
+        "TestSha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294",
+        "ApplicationSha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e",
+        "DiagnosticOnly": true,
+        "PhysicalNetworkVerified": false,
+        "LogSha256": "108f415377310d63ba029f3723b2e0155fdaa2f18720ee3e23723a370465d701",
+        "FullCompletion": false
+      },
+      "rawInstrumentation": {
+        "path": "android-sender-checkpoints-cost-after-2026-11-09.txt",
+        "sha256": "108f415377310d63ba029f3723b2e0155fdaa2f18720ee3e23723a370465d701"
+      }
+    }
+  },
+  "native": {
+    "report": {
+      "path": "android-sender-checkpoints-native-2026-11-09.json",
+      "sha256": "6377268af7630d920ef090281b1f5d1878e2821aa75ef6fdbf3859971fcb32a0",
+      "originalRawSha256": "d0c9aed3ba1e64b57679de890d3bb781ef00ea1f9ecc7fe4a8d0ff772bf85134",
+      "convention": "Decoded driver result, formatted with LF line endings; original raw hash also retained."
+    },
+    "roles": 2,
+    "windowsFixtureSha256": "72e0128374dac22406ad93ae3009b47aac3fc5f8ca966c29e327ba1bcf7bad5c",
+    "windowsFixtureFiles": 208,
+    "nativeSha256": "84a0a63dcc579d97e4afac959866f9e61e9584c18732045a48db673d8ec87dde",
+    "driverSha256": "4cbbc6a9805c3b4e326299126d05aeff8522226fc7b9f3f3e02a161fbe1f2b0c"
+  },
+  "reopenFixture": "Relocates only an owned snapshot to preserve its inode and copies the persisted journal before graceful pause. This is not an actual process kill.",
+  "wholeTransferSpeedupProven": false,
+  "fullLargeFileMatrixProven": false,
+  "physicalNetworkVerified": false,
+  "fullControllerInteropVerified": false,
+  "fullCompletion": false,
+  "earlierLargeUploadFailure": "android-large-upload-timeout-2026-11-09.json",
+  "separateWindowsCiFailure": "windows-native-hello-failure-2026-11-09.json"
+}

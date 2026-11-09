@@ -18,6 +18,7 @@ import kotlinx.coroutines.*
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.json.JSONArray
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -176,6 +177,103 @@ class PhoneUploadsTest {
         val id=uploads.stage(approved,source,allowed)
         waitFor("private copy prepared") {uploads.state.value.any {it.id==id && !it.active && it.phase==PhoneUploadPhase.READY}}
         return uploads.state.value.single {it.id==id}
+    }
+    private fun savedUpload(context:Context)=JSONArray(File(context.filesDir,"outgoing-uploads.json").readText()).getJSONObject(0)
+
+    @Test fun liveAcknowledgementsRemainSeparateFromBoundedSenderCheckpointsAndPauseSavesTheLatest():Unit=runBlocking {
+        fixture(elapsed={0L}) {context,policy,approved,_,source,uploads,_->
+            val prepared=stage(uploads,approved,source) {policy.isCurrent(approved)}; val receiver=Receiver()
+            val blocked=CompletableDeferred<Unit>(); var writes=0
+            uploads.send(prepared.id,approved,destination(),{policy.isCurrent(approved)}) {request->
+                if(request.operation==FileOperation.UPLOAD_WRITE && ++writes==34) {blocked.complete(Unit); awaitCancellation()}
+                receiver.request(request)
+            }
+            withTimeout(12000) {blocked.await()}
+            val acknowledged=33L*StorageRules.RANGE
+            assertEquals(acknowledged,receiver.bytes.size().toLong())
+            assertEquals(acknowledged,uploads.payloadProgress.value.getValue(prepared.id).offset)
+            assertEquals(1024L*1024,uploads.state.value.single().offset)
+            assertEquals(1024L*1024,savedUpload(context).getLong("offset"))
+            uploads.pause(prepared.id); waitFor("latest acknowledgement saved on pause") {!uploads.state.value.single().active}
+            assertEquals(PhoneUploadPhase.PAUSED,uploads.state.value.single().phase)
+            assertEquals(acknowledged,savedUpload(context).getLong("offset")); assertTrue(uploads.payloadProgress.value.isEmpty())
+            uploads.send(prepared.id,approved,null,{policy.isCurrent(approved)},receiver::request)
+            waitFor("same copy completed after checkpointed pause") {uploads.state.value.single().let {!it.active && it.phase==PhoneUploadPhase.COMPLETED}}
+            assertEquals(1,receiver.prepares)
+            assertArrayEquals(File(context.filesDir,"outgoing-upload-copies/${prepared.id}.bin").readBytes(),receiver.bytes.toByteArray())
+            assertTrue(source.allowed())
+        }
+    }
+
+    @Test fun senderCheckpointDeadlineAndMonotonicClockRollbackSaveAcknowledgedProgress():Unit=runBlocking {
+        val ticks=AtomicLong()
+        fixture(elapsed=ticks::get) {context,policy,approved,_,source,uploads,_->
+            val prepared=stage(uploads,approved,source) {policy.isCurrent(approved)}; val receiver=Receiver()
+            val fourth=CompletableDeferred<Unit>(); val release=CompletableDeferred<Unit>(); val fifth=CompletableDeferred<Unit>(); var writes=0
+            uploads.send(prepared.id,approved,destination(),{policy.isCurrent(approved)}) {request->
+                if(request.operation==FileOperation.UPLOAD_WRITE) {
+                    writes++
+                    if(writes==4) {fourth.complete(Unit); release.await(); ticks.set(600)}
+                    if(writes==5) {fifth.complete(Unit); awaitCancellation()}
+                }
+                receiver.request(request).also {if(request.operation==FileOperation.UPLOAD_WRITE && writes<=3) ticks.addAndGet(400)}
+            }
+            withTimeout(12000) {fourth.await()}
+            assertEquals(3L*StorageRules.RANGE,savedUpload(context).getLong("offset"))
+            release.complete(Unit); withTimeout(12000) {fifth.await()}
+            assertEquals(4L*StorageRules.RANGE,savedUpload(context).getLong("offset"))
+            assertEquals(4L*StorageRules.RANGE,uploads.payloadProgress.value.getValue(prepared.id).offset)
+            uploads.pause(prepared.id); waitFor("clock fixture paused") {!uploads.state.value.single().active}
+            assertEquals(4L*StorageRules.RANGE,savedUpload(context).getLong("offset")); assertTrue(source.allowed())
+        }
+    }
+
+    @Test fun reopeningAnOlderSenderCheckpointResumesTheSameReceiptFromItsFreshDurableOffset():Unit=runBlocking {
+        fixture(elapsed={0L}) {context,policy,approved,_,source,uploads,_->
+            val prepared=stage(uploads,approved,source) {policy.isCurrent(approved)}; val receiver=Receiver()
+            val blocked=CompletableDeferred<Unit>(); var writes=0
+            uploads.send(prepared.id,approved,destination(),{policy.isCurrent(approved)}) {request->
+                if(request.operation==FileOperation.UPLOAD_WRITE && ++writes==6) {blocked.complete(Unit); awaitCancellation()}
+                receiver.request(request)
+            }
+            withTimeout(12000) {blocked.await()}
+            val acknowledged=5L*StorageRules.RANGE
+            assertEquals(acknowledged,receiver.bytes.size().toLong()); assertEquals(0L,savedUpload(context).getLong("offset"))
+            val root=File(context.filesDir,"checkpoint-image-"+StorageRules.token()).apply {check(mkdir())}
+            val originalSnapshot=File(context.filesDir,"outgoing-upload-copies/${prepared.id}.bin")
+            var relocated:File?=null; var restored:PhoneUploads?=null
+            try {
+                // Capture the persisted restart image before graceful cancellation can
+                // flush newer progress. This is an on-disk recovery fixture, not a process kill.
+                val snapshots=File(root,"outgoing-upload-copies").apply {check(mkdir())}
+                val retained=File(snapshots,"${prepared.id}.bin")
+                check(originalSnapshot.renameTo(retained)); relocated=retained // Keep the recorded inode and bytes.
+                File(context.filesDir,"outgoing-uploads.json").copyTo(File(root,"outgoing-uploads.json"))
+                uploads.pause(prepared.id); waitFor("original send stopped after image capture") {!uploads.state.value.single().active}
+                assertEquals(acknowledged,savedUpload(context).getLong("offset"))
+                val recoveredContext=object:ContextWrapper(context) {
+                    override fun getFilesDir()=root
+                    override fun getApplicationContext():Context=this
+                }
+                val again=PhoneUploads(recoveredContext,prepared.owner,elapsed={0L}); restored=again
+                val row=again.state.value.single()
+                assertEquals(PhoneUploadPhase.PAUSED,row.phase); assertEquals(0L,row.offset)
+                assertEquals(receiver.descriptor!!.id,row.remote); assertEquals(receiver.epoch,row.remoteEpoch)
+                var resumedFrom=-1L
+                again.send(row.id,approved,null,{policy.isCurrent(approved)}) {request->
+                    if(request.operation==FileOperation.UPLOAD_WRITE && resumedFrom<0) resumedFrom=request.offset
+                    receiver.request(request)
+                }
+                waitFor("retained receipt completed from its fresh offset") {again.state.value.single().let {!it.active && it.phase==PhoneUploadPhase.COMPLETED}}
+                assertEquals(acknowledged,resumedFrom); assertEquals(1,receiver.prepares)
+                assertArrayEquals(retained.readBytes(),receiver.bytes.toByteArray())
+                assertTrue(again.payloadProgress.value.isEmpty()); assertTrue(source.allowed())
+            } finally {
+                restored?.shutdown()
+                relocated?.let {check(!originalSnapshot.exists() && it.renameTo(originalSnapshot))}
+                check(root.deleteRecursively())
+            }
+        }
     }
     @Test fun localSnapshotCanResumeALostRangeReplyAfterRestartWithoutSharingTheOriginal()=runBlocking {fixture {context,policy,approved,_,source,uploads,restart->
         fun assertDescriptorsClosed() {

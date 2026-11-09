@@ -1,0 +1,90 @@
+{
+  "Stage": "NativeCrossPlatformVerified",
+  "OrdinaryUploadEnginesVerified": true,
+  "Avd": "iconnect-large-files",
+  "PhysicalNetworkVerified": false,
+  "ApplicationSha256": "b8cc8e37ebcbadc52e0d0445150be5b4fa18da86bdf9b5d849d59d3c99de0a0e",
+  "Serial": "emulator-5568",
+  "FullControllerInteropVerified": false,
+  "Roles": [
+    {
+      "Suite": "uploads",
+      "NativeSha256": "84a0a63dcc579d97e4afac959866f9e61e9584c18732045a48db673d8ec87dde",
+      "Role": "windows",
+      "Run": "n_PMLVF5t2XuBm3fkdqx3I7Mp6J1UbPlSxuWxZ09vDM",
+      "Android": {
+        "event": "verified",
+        "suite": "uploads",
+        "run": "n_PMLVF5t2XuBm3fkdqx3I7Mp6J1UbPlSxuWxZ09vDM",
+        "role": "windows",
+        "sentHash": "2ce3172ab5811f22d8e2d9d45d2c71397e38a636b4a5fd5a09517b7454fb2368",
+        "receivedHash": "556a692bbc0486551d8f9b2d0d76bba10cfc1b209a817760042ccb3e5b911c53",
+        "bytes": 2097169,
+        "preparations": 1,
+        "lostAcknowledgements": 1,
+        "resumedOriginalReceipt": true,
+        "collisionOriginalKept": true,
+        "originalSourceKept": true,
+        "publishedCopyChecked": true,
+        "withdrawnInboxDenied": true
+      },
+      "Host": {
+        "event": "verified",
+        "suite": "uploads",
+        "sentHash": "556a692bbc0486551d8f9b2d0d76bba10cfc1b209a817760042ccb3e5b911c53",
+        "receivedHash": "2ce3172ab5811f22d8e2d9d45d2c71397e38a636b4a5fd5a09517b7454fb2368",
+        "bytes": 2097169,
+        "preparations": 1,
+        "lostAcknowledgements": 1,
+        "resumedOriginalReceipt": true,
+        "collisionOriginalKept": true,
+        "originalSourceKept": true,
+        "publishedCopyChecked": true,
+        "withdrawnInboxDenied": true,
+        "localType": "host",
+        "remoteType": "prflx"
+      }
+    },
+    {
+      "Suite": "uploads",
+      "NativeSha256": "84a0a63dcc579d97e4afac959866f9e61e9584c18732045a48db673d8ec87dde",
+      "Role": "android",
+      "Run": "KtOLJVYP2Hg3qF5lDUbyb-UcPZ4m4-T8OjnMPEzhPaY",
+      "Android": {
+        "event": "verified",
+        "suite": "uploads",
+        "run": "KtOLJVYP2Hg3qF5lDUbyb-UcPZ4m4-T8OjnMPEzhPaY",
+        "role": "android",
+        "sentHash": "2ce3172ab5811f22d8e2d9d45d2c71397e38a636b4a5fd5a09517b7454fb2368",
+        "receivedHash": "a5a70d07ea3667a0c40592a2b6eb4de54ff92fe11e589765cdaeebd3954d8b40",
+        "bytes": 2097169,
+        "preparations": 1,
+        "lostAcknowledgements": 1,
+        "resumedOriginalReceipt": true,
+        "collisionOriginalKept": true,
+        "originalSourceKept": true,
+        "publishedCopyChecked": true,
+        "withdrawnInboxDenied": true
+      },
+      "Host": {
+        "event": "verified",
+        "suite": "uploads",
+        "sentHash": "a5a70d07ea3667a0c40592a2b6eb4de54ff92fe11e589765cdaeebd3954d8b40",
+        "receivedHash": "2ce3172ab5811f22d8e2d9d45d2c71397e38a636b4a5fd5a09517b7454fb2368",
+        "bytes": 2097169,
+        "preparations": 1,
+        "lostAcknowledgements": 1,
+        "resumedOriginalReceipt": true,
+        "collisionOriginalKept": true,
+        "originalSourceKept": true,
+        "publishedCopyChecked": true,
+        "withdrawnInboxDenied": true,
+        "localType": "host",
+        "remoteType": "prflx"
+      }
+    }
+  ],
+  "Suite": "uploads",
+  "TestApkSha256": "6667c8876b57f83c435ca4c26dd7c75fc4e0d046ec544b4baecb1c1cd127b294",
+  "NativeSha256": "84a0a63dcc579d97e4afac959866f9e61e9584c18732045a48db673d8ec87dde"
+}

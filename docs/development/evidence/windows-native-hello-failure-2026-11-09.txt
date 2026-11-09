@@ -1,0 +1,15 @@
+2026-11-09T10:56:33.8822178Z [xUnit.net 00:00:04.92]     IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: True) [FAIL]
+2026-11-09T10:56:33.8988019Z   Failed IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(cleanupFails: True) [162 ms]
+2026-11-09T10:56:33.8994081Z   Error Message:
+2026-11-09T10:56:33.8995107Z    System.Threading.Channels.ChannelClosedException : The channel has been closed.
+2026-11-09T10:56:33.9021880Z ---- System.IO.IOException : Direct connection ended.
+2026-11-09T10:56:33.9022425Z   Stack Trace:
+2026-11-09T10:56:33.9022905Z      at System.Threading.Channels.AsyncOperation`2.GetResult(Int16 token)
+2026-11-09T10:56:33.9050138Z    at IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(Boolean cleanupFails) in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeSessionFailureTests.cs:line 43
+2026-11-09T10:56:33.9052971Z    at IConnect.Tests.NativeSessionFailureTests.Missing_readiness_remains_the_run_failure_when_storage_cleanup_also_fails(Boolean cleanupFails) in D:\a\iConnect\iConnect\tests\IConnect.Tests\NativeSessionFailureTests.cs:line 57
+2026-11-09T10:56:33.9054672Z --- End of stack trace from previous location ---
+2026-11-09T10:56:33.9055176Z ----- Inner Stack Trace -----
+2026-11-09T10:56:33.9055428Z 
+2026-11-09T10:59:41.1678682Z 
+2026-11-09T10:59:41.1735536Z Failed!  - Failed:     1, Passed:   955, Skipped:     0, Total:   956, Duration: 3 m 11 s - IConnect.Tests.dll (net10.0)
+2026-11-09T10:59:41.6189962Z ##[error]Process completed with exit code 1.

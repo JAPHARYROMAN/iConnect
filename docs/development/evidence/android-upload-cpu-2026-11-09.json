@@ -1,0 +1,210 @@
+{
+  "schemaVersion": 1,
+  "recordedUtc": "2026-11-09T11:10:13.227021+00:00",
+  "applicationSha256": "6eab422c1c0eab6d96742f2cca4f0a137fc8872773c45f1def3758985f440c29",
+  "testSha256": "846d48913b41be129b94e8d4cb0822e64c5a5e4b6aacc5f93f1338c082cbb95c",
+  "scope": "Debug target process only, including user/kernel task-clock samples; separate provider-process CPU excluded. First 150 seconds, not the entire probe.",
+  "sampler": {
+    "event": "task-clock",
+    "frequencyHz": 99,
+    "durationSeconds": 150.004,
+    "maximumRecordBytes": 67108864,
+    "samples": 5495,
+    "lostSamples": 0,
+    "recordBytes": 8042154,
+    "recordSha256": "ceaacb91d3178a3e321cf05955317dd1868593d5b1ed59a55aeabc9101c0b49c",
+    "kernelSymbolsRestricted": true,
+    "recordProcessExitCode": null,
+    "recoveredDataReadable": true,
+    "reportCommandExitCode": 0
+  },
+  "inclusiveCpuPercent": {
+    "PhoneUploads.save": 9.81,
+    "AndroidIncomingUploads.save": 6.02,
+    "PrivateJsonFile.write": 15.03
+  },
+  "percentagesOverlap": true,
+  "files": {
+    "android-upload-cpu-2026-11-09.txt": "dc44c9a3022788b7c818470af1dd17de6b1c79ab4c75ad24b2a8b0bcdeba06b0",
+    "android-upload-cpu-recorder-2026-11-09.txt": "78b3f8f0878d9737e8722fd7e82601b527c6412b46b063ae20b81ccb94df6fbf",
+    "android-upload-cpu-probe-2026-11-09.txt": "261d954eff17f9ef8d7281289ed1ee1d2011dc5f1f9224466abdd4b7a9875e27"
+  },
+  "probe": {
+    "schemaVersion": 1,
+    "payloadBytes": 67108881,
+    "rangeBytes": 32768,
+    "sha256": "efea6580f1c4748e06b42b66203adf826d982a264116d0adcdf9a11e75a469e7",
+    "phases": [
+      {
+        "wallMillis": 216.0625,
+        "processCpuMillis": 215,
+        "processBinderSent": null,
+        "name": "sourceGeneration"
+      },
+      {
+        "wallMillis": 57280.0833,
+        "processCpuMillis": 23038,
+        "processBinderSent": null,
+        "name": "privateSnapshotPreparation"
+      },
+      {
+        "wallMillis": 54257.8632,
+        "processCpuMillis": 23145,
+        "processBinderSent": null,
+        "name": "payloadAndSenderHash"
+      },
+      {
+        "wallMillis": 61690.5622,
+        "processCpuMillis": 24116,
+        "processBinderSent": null,
+        "name": "receiverFinalization"
+      },
+      {
+        "wallMillis": 266.6914,
+        "processCpuMillis": 169,
+        "processBinderSent": null,
+        "name": "independentSourceAndOutputHash"
+      }
+    ],
+    "localRequests": {
+      "GET_METADATA": {
+        "calls": 1,
+        "wallMillis": 20.9959
+      },
+      "LIST_DIRECTORY": {
+        "calls": 1,
+        "wallMillis": 32.9701
+      },
+      "LIST_ROOTS": {
+        "calls": 1,
+        "wallMillis": 41.3036
+      },
+      "READ_RANGE": {
+        "calls": 2049,
+        "wallMillis": 55902.3424
+      }
+    },
+    "receivingRequests": {
+      "FINISH_UPLOAD": {
+        "calls": 1,
+        "wallMillis": 81.6818
+      },
+      "PREPARE_UPLOAD": {
+        "calls": 1,
+        "wallMillis": 96.6549
+      },
+      "UPLOAD_CONTEXT": {
+        "calls": 1,
+        "wallMillis": 6.6499
+      },
+      "UPLOAD_STATUS": {
+        "calls": 186,
+        "wallMillis": 967.5751
+      },
+      "UPLOAD_WRITE": {
+        "calls": 2049,
+        "wallMillis": 35860.419
+      }
+    },
+    "sampledFinalizationStages": [
+      {
+        "stage": "PREPARING",
+        "offset": 0,
+        "sinceProbeStart": {
+          "wallMillis": 112804.5135,
+          "processCpuMillis": 47669,
+          "processBinderSent": null
+        }
+      },
+      {
+        "stage": "CHECKING_PRIVATE_BYTES",
+        "offset": 163840,
+        "sinceProbeStart": {
+          "wallMillis": 112844.4043,
+          "processCpuMillis": 47687,
+          "processBinderSent": null
+        }
+      },
+      {
+        "stage": "PREPARING_PROVIDER_DOCUMENT",
+        "offset": 0,
+        "sinceProbeStart": {
+          "wallMillis": 116428.3148,
+          "processCpuMillis": 50093,
+          "processBinderSent": null
+        }
+      },
+      {
+        "stage": "WRITING_PROVIDER_DOCUMENT",
+        "offset": 0,
+        "sinceProbeStart": {
+          "wallMillis": 116500.6178,
+          "processCpuMillis": 50137,
+          "processBinderSent": null
+        }
+      },
+      {
+        "stage": "SYNCING_PROVIDER_DOCUMENT",
+        "offset": 0,
+        "sinceProbeStart": {
+          "wallMillis": 171185.157,
+          "processCpuMillis": 69683,
+          "processBinderSent": null
+        }
+      },
+      {
+        "stage": "CHECKING_PROVIDER_BYTES",
+        "offset": 0,
+        "sinceProbeStart": {
+          "wallMillis": 171265.3914,
+          "processCpuMillis": 69719,
+          "processBinderSent": null
+        }
+      }
+    ],
+    "samplingIntervalMillis": 20,
+    "total": {
+      "wallMillis": 174653.6288,
+      "processCpuMillis": 71924,
+      "processBinderSent": null
+    },
+    "sourceAndOutputIndependentlyVerified": true,
+    "collisionOriginalKept": true,
+    "counterScope": "Target process, including probe/polling/GC; provider-process CPU is excluded. Short sampled stages can be missed.",
+    "encryptedTransportVerified": false,
+    "largeFileMatrixProven": false,
+    "physicalNetworkVerified": false,
+    "fullCompletion": false
+  },
+  "launchFailure": {
+    "stage": "Failed",
+    "detail": "The term 'C:\\projects\\Actual Projects\\iConnect\\.tools\\phase167-profile-device.ps1' is not recognized as a name of a cmdlet, function, script file, or executable program.\r\nCheck the spelling of the name, or if a path was included, verify that the path is correct and try again.",
+    "diagnosticStartedByThatWrapper": false
+  },
+  "collectionFailure": {
+    "stage": "Failed",
+    "detail": "The sampler failed; preserve its actual output.",
+    "exitCodeWasNotCaptured": true
+  },
+  "recovery": "Recorder had exited; its full retained data was collected and parsed successfully on-device. Original failed wrapper states remain failed. Exact recorder exit status is unavailable. Only the owned remote sample file was removed; the owned app was stopped after collection.",
+  "hostObservation": {
+    "OwnedEmulator": {
+      "IDProcess": 51900,
+      "PercentProcessorTime": 185,
+      "WorkingSetPrivate": 1803796480,
+      "PageFaultsPersec": 6,
+      "IOReadBytesPersec": 0,
+      "IOWriteBytesPersec": 8938803
+    },
+    "AtUtc": "2026-11-09T11:00:31.5798114+00:00",
+    "HostMemory": {
+      "AvailableMBytes": 2006,
+      "PagesInputPersec": 62,
+      "PagesOutputPersec": 0
+    }
+  },
+  "wholeTransferSpeedupProven": false,
+  "largeFileMatrixProven": false,
+  "physicalNetworkVerified": false,
+  "fullCompletion": false
+}

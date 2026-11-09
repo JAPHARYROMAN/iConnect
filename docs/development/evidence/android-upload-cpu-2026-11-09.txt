@@ -1,0 +1,358 @@
+Cmdline: /system/bin/simpleperf record --app com.iconnect.proof --add-meta-info app_type=debuggable --in-app --tracepoint-events /data/local/tmp/tracepoint_events --out-fd 3 --stop-signal-fd 4 -e task-clock -f 99 -g --duration 150 --size-limit 64M
+Arch: x86_64
+Event: task-clock (type 1, config 1)
+Samples: 5495
+Event count: 55505049950
+
+Children  Self    Symbol
+97.53%    0.00%   __pthread_start(void*)
+97.53%    0.00%   __start_thread
+93.94%    1.04%   void art::interpreter::ExecuteSwitchImplCpp<false>(art::interpreter::SwitchImplContext*)
+93.94%    0.13%   art::interpreter::Execute(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame&, art::JValue, bool, bool) (.__uniq.112435418011751916792819755956732575238)
+93.92%    0.11%   art_quick_invoke_stub
+93.90%    0.82%   artQuickToInterpreterBridge
+93.90%    0.36%   art_quick_to_interpreter_bridge
+93.90%    0.07%   art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)
+93.90%    0.00%   ExecuteSwitchImplAsm
+92.85%    0.00%   art::Thread::CreateCallback(void*)
+92.85%    0.00%   art::Thread::CreateCallbackWithUffdGc(void*)
+92.70%    0.51%   bool art::interpreter::DoCall<false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, bool, art::JValue*)
+89.63%    0.02%   art::interpreter::ArtInterpreterToInterpreterBridge(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame*, art::JValue*)
+75.76%    0.00%   kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run
+75.76%    0.00%   kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker
+72.74%    0.11%   art::jit::Jit::MaybeDoOnStackReplacement(art::Thread*, art::ArtMethod*, unsigned int, int, art::JValue*)
+72.63%    0.00%   art_quick_osr_stub
+70.21%    0.00%   kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask
+69.50%    0.00%   kotlinx.coroutines.DispatchedTask.run
+69.43%    0.00%   kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith
+69.43%    0.00%   kotlinx.coroutines.internal.LimitedDispatcher$Worker.run
+69.43%    0.00%   kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely
+69.43%    0.00%   kotlinx.coroutines.scheduling.TaskImpl.run
+68.81%    0.00%   bool art::interpreter::DoCall<true>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, bool, art::JValue*)
+67.04%    0.00%   [kernel.kallsyms][+ffffffffb2a00128]
+66.93%    0.00%   [kernel.kallsyms][+ffffffffb29c987e]
+59.55%    0.04%   art_quick_invoke_static_stub
+51.32%    0.00%   kotlinx.coroutines.intrinsics.UndispatchedKt.startUndspatched
+51.26%    0.00%   kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn
+50.46%    0.00%   com.iconnect.proof.PhoneUploads$launch$job$1.invokeSuspend
+47.79%    1.29%   art_jni_trampoline
+40.84%    0.00%   com.iconnect.proof.PhoneTransferManifests.checked
+40.44%    0.02%   com.iconnect.proof.UploadCostProbe$exercise$2.invokeSuspend$measured
+39.60%    0.00%   com.iconnect.proof.AndroidFileService.execute
+39.53%    0.00%   kotlinx.coroutines.BuildersKt.withContext
+39.53%    0.00%   kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext
+39.51%    0.00%   kotlinx.coroutines.InterruptibleKt.runInterruptible
+39.33%    0.00%   kotlinx.coroutines.InterruptibleKt$runInterruptible$2.invoke
+39.33%    0.00%   kotlinx.coroutines.InterruptibleKt$runInterruptible$2.invokeSuspend
+39.33%    0.00%   kotlinx.coroutines.InterruptibleKt.access$runInterruptibleInExpectedContext
+39.33%    0.00%   kotlinx.coroutines.InterruptibleKt.runInterruptibleInExpectedContext
+39.27%    0.02%   com.iconnect.proof.AndroidFileService.execute$lambda$0
+39.27%    0.00%   com.iconnect.proof.AndroidFileService$$ExternalSyntheticLambda0.invoke
+39.27%    0.00%   com.iconnect.proof.AndroidFileService.$r8$lambda$Rxor0dLgCLsGm9pbg3A0wm3WvsM
+39.14%    0.00%   com.iconnect.proof.AndroidFileService$$ExternalSyntheticLambda6.invoke
+39.14%    0.00%   com.iconnect.proof.AndroidFileService.$r8$lambda$nGX6V2U9HR72oS-H9esznXrjo9s
+39.14%    0.00%   com.iconnect.proof.AndroidFileService.execute$lambda$0$1$0
+29.14%    0.24%   art_quick_generic_jni_trampoline
+27.77%    0.00%   com.iconnect.proof.PhoneUploads.access$transfer
+27.77%    0.00%   com.iconnect.proof.PhoneUploads.transfer
+26.75%    0.00%   com.iconnect.proof.PhoneUploads$send$1$3.invoke
+26.75%    0.00%   com.iconnect.proof.PhoneUploads$send$1$3.invokeSuspend
+25.11%    0.09%   clock_gettime
+24.91%    0.00%   [kernel.kallsyms][+ffffffffb180447c]
+24.86%    0.00%   [kernel.kallsyms][+ffffffffb1aa0953]
+23.71%    0.00%   com.iconnect.proof.PhoneUploads$stage$1$5.invoke
+23.71%    0.00%   com.iconnect.proof.PhoneUploads$stage$1$5.invokeSuspend
+23.06%    0.00%   com.iconnect.proof.UploadCostProbe$exercise$2.invokeSuspend$read
+22.98%    0.00%   com.iconnect.proof.UploadCostProbe$exercise$2$id$2.invoke
+22.98%    0.00%   com.iconnect.proof.UploadCostProbe$exercise$2.access$invokeSuspend$read
+22.66%    0.00%   com.iconnect.proof.UploadCostProbe$exercise$2$read$2.invoke
+22.66%    0.00%   com.iconnect.proof.UploadCostProbe$exercise$2$read$2.invokeSuspend
+22.20%    0.00%   com.iconnect.proof.LocalDocumentLocations.authorized
+22.04%    0.00%   com.iconnect.proof.AndroidFileService.read
+22.04%    0.00%   com.iconnect.proof.AndroidFileService.read$default
+18.67%    18.67%  [kernel.kallsyms][+ffffffffb29e0f77]
+17.93%    0.00%   [kernel.kallsyms][+ffffffffb1802603]
+17.93%    0.00%   [kernel.kallsyms][+ffffffffb1d05ffb]
+17.93%    0.00%   fsync
+17.87%    17.87%  [kernel.kallsyms][+ffffffffb19292eb]
+17.65%    0.05%   android.os.BinderProxy.transact
+17.63%    0.00%   com.iconnect.proof.PhoneUploads.transfer$lambda$0$0$call
+17.42%    0.00%   com.iconnect.proof.UploadCostProbe$exercise$2$8.invoke
+17.42%    0.00%   com.iconnect.proof.UploadCostProbe$exercise$2$8.invokeSuspend
+17.40%    0.00%   com.iconnect.proof.UploadCostProbe$exercise$2.access$invokeSuspend$measured
+17.27%    0.00%   com.iconnect.proof.UploadCostProbe$exercise$2$8$1.invoke
+17.27%    0.00%   com.iconnect.proof.UploadCostProbe$exercise$2$8$1.invokeSuspend
+17.18%    0.00%   com.iconnect.proof.IncomingUploadsTest$Fixture.raw
+17.18%    0.00%   com.iconnect.proof.IncomingUploadsTest$Fixture.raw$default
+16.94%    0.00%   com.iconnect.proof.AndroidStorageGrants.authorized
+16.92%    0.00%   com.iconnect.proof.AndroidIncomingUploads.execute$app_debug
+16.85%    0.00%   java.lang.Thread.run
+16.67%    0.02%   com.iconnect.proof.AndroidFileService.inspectAncestry
+15.18%    0.00%   [kernel.kallsyms][+ffffffffb1a96342]
+15.07%    0.00%   [kernel.kallsyms][+ffffffffb1aa287f]
+15.03%    0.00%   com.iconnect.proof.PrivateJsonFile.write
+14.92%    0.00%   com.iconnect.proof.AndroidIncomingUploads$execute$1$job$1.invokeSuspend
+14.92%    0.00%   com.iconnect.proof.AndroidIncomingUploads.access$verifyPublish
+14.92%    0.00%   com.iconnect.proof.AndroidIncomingUploads.verifyPublish
+12.72%    0.00%   FileDescriptor_sync
+12.70%    0.00%   JVM_Sync
+12.50%    0.00%   [kernel.kallsyms][+ffffffffb1d97b8f]
+12.50%    0.00%   [kernel.kallsyms][+ffffffffb1dfab47]
+12.32%    0.00%   [kernel.kallsyms][+ffffffffb1e0dbb9]
+12.14%    0.00%   [kernel.kallsyms][+ffffffffb1e0d697]
+11.96%    0.00%   __ioctl
+11.96%    0.00%   ioctl
+11.94%    0.00%   [kernel.kallsyms][+ffffffffb180320d]
+11.94%    0.00%   [kernel.kallsyms][+ffffffffb1cd399b]
+11.94%    0.00%   com.iconnect.proof.AndroidIncomingUploads$verifyPublish$2$4$1$8.invoke
+11.94%    0.00%   com.iconnect.proof.AndroidIncomingUploads$verifyPublish$2$4$1$8.invokeSuspend
+11.94%    0.00%   com.iconnect.proof.AndroidIncomingUploads$withProvider$2.invoke
+11.94%    0.00%   com.iconnect.proof.AndroidIncomingUploads$withProvider$2.invokeSuspend
+11.94%    0.00%   com.iconnect.proof.AndroidIncomingUploads$withProvider$2.invokeSuspend$useDescriptor
+11.94%    0.00%   com.iconnect.proof.AndroidIncomingUploads.withProvider
+11.94%    0.00%   kotlinx.coroutines.CoroutineScopeKt.coroutineScope
+11.87%    0.00%   [kernel.kallsyms][+ffffffffb1cd3a3a]
+11.39%    11.39%  [kernel.kallsyms][+ffffffffb1929321]
+11.34%    0.00%   [kernel.kallsyms][+ffffffffb26194ed]
+10.77%    0.00%   com.iconnect.proof.AndroidFileService.metadata
+10.17%    0.00%   com.iconnect.proof.AndroidFileService.resolve
+9.81%     0.00%   com.iconnect.proof.PhoneUploads.put
+9.81%     0.00%   com.iconnect.proof.PhoneUploads.save
+9.75%     0.00%   [kernel.kallsyms][+ffffffffb1aa2a15]
+9.74%     0.00%   [kernel.kallsyms][+ffffffffb1a960d5]
+9.59%     0.02%   System_nanoTime
+9.59%     0.00%   [kernel.kallsyms][+ffffffffb29d850f]
+9.46%     0.02%   android::elapsedRealtime()
+9.04%     9.04%   [kernel.kallsyms][+ffffffffb1a063a5]
+8.90%     0.00%   android_os_BinderProxy_transact(_JNIEnv*, _jobject*, int, _jobject*, _jobject*, int)
+8.84%     0.00%   android::BpBinder::transact(unsigned int, android::Parcel const&, android::Parcel*, unsigned int)
+8.84%     0.00%   android::IPCThreadState::transact(int, unsigned int, android::Parcel const&, android::Parcel*, unsigned int)
+8.44%     0.00%   java.lang.Daemons$Daemon.run
+8.39%     0.00%   kotlinx.coroutines.DefaultExecutor.run
+8.24%     0.00%   [kernel.kallsyms][+ffffffffb29d88e9]
+8.23%     0.02%   android.app.AppOpsManager.isListeningForOpNoted
+8.21%     0.02%   android.app.AppOpsManager.isCollectingStackTraces
+7.92%     0.07%   android.content.ContentResolver.query
+7.81%     0.04%   android.content.ContentProviderClient.query
+6.93%     0.00%   android.content.ContentResolver.getPersistedUriPermissions
+6.92%     0.00%   android.app.IUriGrantsManager$Stub$Proxy.getUriPermissions
+6.90%     0.00%   com.iconnect.proof.AndroidIncomingUploads.authorize
+6.86%     0.00%   kotlinx.coroutines.EventLoopImplBase.processNextEvent
+6.84%     0.02%   syscall
+6.48%     0.00%   art::gc::TaskProcessor::RunAllTasks(art::Thread*)
+6.48%     0.00%   java.lang.Daemons$HeapTaskDaemon.runInternal
+6.39%     0.00%   [kernel.kallsyms][+ffffffffb1a95f8d]
+6.10%     0.00%   art::gc::Heap::ConcurrentGCTask::Run(art::Thread*)
+6.08%     0.00%   com.iconnect.proof.AndroidIncomingUploads.put
+6.04%     0.00%   art::gc::Heap::CollectGarbageInternal(art::gc::collector::GcType, art::gc::GcCause, bool, unsigned int)
+6.02%     0.00%   com.iconnect.proof.AndroidIncomingUploads.save
+5.99%     0.00%   art::gc::collector::GarbageCollector::Run(art::gc::GcCause, bool)
+5.93%     0.00%   [kernel.kallsyms][+ffffffffb180247e]
+5.93%     0.00%   [kernel.kallsyms][+ffffffffb1aacda7]
+5.93%     0.00%   art::gc::collector::MarkCompact::RunPhases()
+5.55%     0.00%   com.iconnect.proof.SafDestination.child
+5.51%     0.00%   [kernel.kallsyms][+ffffffffb261e5c0]
+5.42%     0.00%   kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.tryPark
+5.39%     0.00%   kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.park
+5.24%     0.02%   android.system.Os.fsync
+5.22%     0.00%   Linux_fsync(_JNIEnv*, _jobject*, _jobject*)
+5.22%     0.00%   libcore.io.BlockGuardOs.fsync
+5.22%     0.00%   libcore.io.ForwardingOs.fsync
+5.08%     0.05%   kotlinx.coroutines.EventLoopImplBase.enqueueDelayedTasks
+5.08%     0.00%   android.util.AtomicFile.finishWrite
+4.91%     0.00%   [kernel.kallsyms][+ffffffffb1aacedb]
+4.62%     0.02%   android.content.ContentProviderProxy.query
+4.22%     0.05%   android.content.ContentResolver.call
+4.17%     0.00%   art::NanoTime()
+4.15%     0.04%   android.content.ContentProviderClient.call
+4.11%     0.02%   android.content.ContentProviderProxy.call
+4.04%     0.02%   android.database.CursorWrapper.moveToFirst
+4.02%     0.00%   android.database.AbstractCursor.moveToFirst
+4.02%     0.00%   android.database.AbstractCursor.moveToPosition
+4.02%     0.00%   android.database.BulkCursorProxy.getWindow
+4.02%     0.00%   android.database.BulkCursorToCursorAdaptor.onMove
+3.89%     0.00%   [kernel.kallsyms][+ffffffffb1f9fc25]
+3.89%     0.00%   [kernel.kallsyms][+ffffffffb1f9fd85]
+3.73%     0.02%   android.os.Parcel.readTypedObject
+3.73%     0.00%   [kernel.kallsyms][+ffffffffb2624df2]
+3.71%     0.02%   android.content.pm.ParceledListSlice$1.createFromParcel
+3.68%     0.00%   [kernel.kallsyms][+ffffffffb261fa44]
+3.66%     0.00%   android.content.pm.BaseParceledListSlice.<init>
+3.66%     0.00%   android.content.pm.ParceledListSlice.<init>
+3.51%     0.00%   art::ThreadPoolWorker::Callback(void*)
+3.51%     0.00%   art::ThreadPoolWorker::Run()
+3.51%     0.00%   java.util.concurrent.locks.LockSupport.parkNanos
+3.49%     0.00%   [kernel.kallsyms][+ffffffffb1a3085e]
+3.49%     0.00%   [kernel.kallsyms][+ffffffffb2627fb0]
+3.49%     0.00%   [kernel.kallsyms][+ffffffffb26292c2]
+3.48%     0.00%   android.content.ContentProviderProxy.createCancellationSignal
+3.48%     0.00%   art::Thread::Park(bool, long)
+3.48%     0.00%   art::Unsafe_park(_JNIEnv*, _jobject*, unsigned char, long) (.__uniq.319429422067363160645159987129209045680)
+3.48%     0.00%   com.iconnect.proof.SafDestination.validate
+3.46%     0.02%   android.content.pm.BaseParceledListSlice.readVerifyAndAddElement
+3.37%     0.07%   android.content.pm.BaseParceledListSlice.readCreator
+3.33%     0.00%   [kernel.kallsyms][+ffffffffb1fa3354]
+3.31%     0.00%   [kernel.kallsyms][+ffffffffb1d97cf6]
+3.31%     0.00%   android.os.FileUtils.sync
+3.31%     0.00%   art::jit::JitCompileTask::Run(art::Thread*)
+3.29%     0.02%   android.content.UriPermission$1.createFromParcel
+3.28%     0.00%   android.content.UriPermission.<init>
+3.26%     0.00%   [kernel.kallsyms][+ffffffffb1f99135]
+3.22%     0.00%   android.os.Parcel.readParcelableInternal
+3.22%     0.00%   art::jit::Jit::CompileMethodInternal(art::ArtMethod*, art::Thread*, art::CompilationKind, bool)
+3.20%     0.00%   art::jit::JitCompiler::CompileMethod(art::Thread*, art::jit::JitMemoryRegion*, art::ArtMethod*, art::CompilationKind)
+3.15%     0.00%   com.iconnect.proof.AndroidIncomingUploads.access$requireName
+3.13%     0.00%   [kernel.kallsyms][+ffffffffb1f9f365]
+3.13%     0.00%   com.iconnect.proof.AndroidIncomingUploads.requireName
+3.09%     0.00%   [kernel.kallsyms][+ffffffffb1aacc82]
+3.04%     0.00%   android.os.Parcel.readParcelable
+3.02%     0.00%   [kernel.kallsyms][+ffffffffb29cc7d7]
+3.02%     0.00%   [kernel.kallsyms][+ffffffffb2a013aa]
+3.00%     0.00%   [kernel.kallsyms][+ffffffffb1ab0417]
+3.00%     0.00%   [kernel.kallsyms][+ffffffffb1ab09be]
+2.98%     0.04%   kotlin.io.CloseableKt.closeFinally
+2.95%     0.00%   android.provider.DocumentsContract.findDocumentPath
+2.78%     0.02%   android.database.BulkCursorToCursorAdaptor.close
+2.78%     0.00%   android.content.ContentProviderClient$CursorWrapperInner.close
+2.78%     0.00%   android.database.CursorWrapper.close
+2.77%     0.00%   com.iconnect.proof.SafDestination.name
+2.73%     0.00%   android.database.BulkCursorProxy.close
+2.71%     0.00%   com.iconnect.proof.AndroidIncomingUploads.checkAllowed
+2.66%     0.00%   [kernel.kallsyms][+ffffffffb1ab262f]
+2.62%     0.00%   [kernel.kallsyms][+ffffffffb1930833]
+2.53%     0.00%   com.iconnect.proof.SafDestination.directory
+2.49%     0.02%   com.iconnect.proof.StorageRules.name
+2.40%     0.00%   [kernel.kallsyms][+ffffffffb1c60fca]
+2.40%     0.00%   art::OptimizingCompiler::JitCompile(art::Thread*, art::jit::JitCodeCache*, art::jit::JitMemoryRegion*, art::ArtMethod*, art::CompilationKind, art::jit::JitLogger*)
+2.35%     0.02%   art::gc::collector::MarkCompact::MarkingPhase()
+2.31%     0.04%   android.provider.DocumentsContract.isChildDocument
+2.18%     0.00%   [kernel.kallsyms][+ffffffffb1c62b51]
+2.17%     0.00%   [kernel.kallsyms][+ffffffffb1c64298]
+2.15%     0.02%   android.net.Uri$1.createFromParcel
+2.11%     0.00%   [kernel.kallsyms][+ffffffffb1d97b22]
+2.07%     0.07%   void art::StackVisitor::WalkStack<(art::StackVisitor::CountTransitions)0>(bool)
+2.07%     0.00%   [kernel.kallsyms][+ffffffffb1c3aece]
+2.00%     2.00%   [kernel.kallsyms][+ffffffffb29be63b]
+1.87%     0.20%   art::(anonymous namespace)::ScopedCheck::Check(art::ScopedObjectAccess&, bool, char const*, art::(anonymous namespace)::JniValueType*) (.__uniq.99033978352804627313491551960229047428)
+1.86%     0.00%   java.lang.Daemons$ReferenceQueueDaemon.runInternal
+1.84%     0.00%   [kernel.kallsyms][+ffffffffb1a01906]
+1.82%     0.00%   [kernel.kallsyms][+ffffffffb1aaccc2]
+1.82%     0.00%   [kernel.kallsyms][+ffffffffb1aafc8e]
+1.82%     0.00%   [kernel.kallsyms][+ffffffffb2a0166e]
+1.80%     0.00%   [kernel.kallsyms][+ffffffffb1934b8c]
+1.80%     0.00%   [kernel.kallsyms][+ffffffffb1934f4c]
+1.80%     0.00%   com.iconnect.proof.AndroidIncomingUploads.chain
+1.78%     0.00%   java.lang.ref.ReferenceQueue.enqueuePending
+1.75%     0.02%   android::IPCThreadState::flushIfNeeded()
+1.73%     0.00%   com.iconnect.proof.AndroidFileService.checkChild
+1.71%     0.00%   [kernel.kallsyms][+ffffffffb262309d]
+1.71%     0.00%   android.provider.DocumentsContract.buildDocumentUriUsingTree
+1.71%     0.00%   libcore.util.NativeAllocationRegistry$CleanerThunk.run
+1.71%     0.00%   sun.misc.Cleaner.clean
+1.69%     0.02%   android.content.ContentResolver.openFileDescriptor
+1.69%     0.00%   art::JValue art::InvokeWithVarArgs<_jmethodID*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jmethodID*, __va_list_tag*)
+1.67%     0.00%   android.content.ContentProviderClient.openFile
+1.66%     1.66%   [kernel.kallsyms][+ffffffffb19254d8]
+1.64%     0.00%   java.util.concurrent.locks.LockSupport.unpark
+1.60%     0.64%   art::jit::JitCodeCache::GetJniStubCode(art::ArtMethod*)
+1.60%     0.00%   art::Unsafe_unpark(_JNIEnv*, _jobject*, _jobject*) (.__uniq.319429422067363160645159987129209045680)
+1.58%     0.15%   art::CheckReferenceResult(art::Handle<art::mirror::Object>, art::Thread*)
+1.58%     0.00%   com.iconnect.proof.AndroidIncomingUploads.access$authorize
+1.57%     0.07%   art::JniDecodeReferenceResult(_jobject*, art::Thread*)
+1.57%     0.00%   [kernel.kallsyms][+ffffffffb191db91]
+1.57%     0.00%   [kernel.kallsyms][+ffffffffb191e116]
+1.57%     0.00%   [kernel.kallsyms][+ffffffffb1ab22ef]
+1.55%     0.00%   [kernel.kallsyms][+ffffffffb1c3d70c]
+1.53%     0.04%   com.iconnect.proof.AndroidFileService.document
+1.53%     0.00%   art::Thread::Unpark()
+1.51%     0.00%   com.iconnect.proof.UploadCostProbe$exercise$2.invokeSuspend$settled
+1.49%     0.00%   com.iconnect.proof.UploadCostProbe$exercise$2$settled$1.invokeSuspend
+1.47%     0.00%   com.iconnect.proof.UploadCostProbe$exercise$2.access$invokeSuspend$settled
+1.46%     0.00%   com.iconnect.proof.UploadCostProbe$exercise$2.invokeSuspend
+1.44%     0.05%   sun.security.jca.GetInstance.getInstance
+1.44%     0.04%   java.security.MessageDigest.getInstance
+1.44%     0.04%   kotlin.text.Regex.matches
+1.44%     0.00%   [kernel.kallsyms][+ffffffffb19c61b8]
+1.44%     0.00%   [kernel.kallsyms][+ffffffffb1c4a642]
+1.42%     0.02%   android.net.Uri$HierarchicalUri.readFrom
+1.42%     0.02%   java.security.Security.getImpl
+1.40%     0.00%   com.iconnect.proof.LocalDocumentLocations.visible
+1.38%     0.00%   art::jit::JitCodeCache::Commit(art::Thread*, art::jit::JitMemoryRegion*, art::ArtMethod*, art::ArrayRef<unsigned char const>, art::ArrayRef<unsigned char const>, art::ArrayRef<unsigned char const>, std::__1::vector<art::Handle<art::mirror::Object>, std::__1::allocator<art::Handle<art::mirror::Object>>> const&, art::ArrayRef<unsigned char const>, std::__1::vector<unsigned char, std::__1::allocator<unsigned char>> const&, bool, art::CompilationKind, std::__1::set<art::ArtMethod*, std::__1::less<art::ArtMethod*>, art::ArenaAllocatorAdapter<art::ArtMethod*>> const&)
+1.36%     0.02%   art::ClassLinker::EnsureInitialized(art::Thread*, art::Handle<art::mirror::Class>, bool, bool)
+1.35%     0.00%   art::ClassLinker::InitializeClass(art::Thread*, art::Handle<art::mirror::Class>, bool, bool)
+1.33%     0.04%   android.net.Uri$Builder.appendPath
+1.33%     0.00%   art::ClassLinker::PerformClassVerification(art::Thread*, art::verifier::VerifierDeps*, art::Handle<art::mirror::Class>, art::verifier::HardFailLogMode, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>*)
+1.33%     0.00%   art::ClassLinker::VerifyClass(art::Thread*, art::verifier::VerifierDeps*, art::Handle<art::mirror::Class>, art::verifier::HardFailLogMode)
+1.33%     0.00%   art::verifier::ClassVerifier::VerifyClass(art::Thread*, art::verifier::VerifierDeps*, art::DexFile const*, art::Handle<art::mirror::Class>, art::Handle<art::mirror::DexCache>, art::Handle<art::mirror::ClassLoader>, art::dex::ClassDef const&, art::CompilerCallbacks*, art::verifier::HardFailLogMode, unsigned int, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>*)
+1.31%     0.00%   com.iconnect.proof.IncomingUploadsTest$Fixture$$ExternalSyntheticLambda2.invoke
+1.31%     0.00%   com.iconnect.proof.IncomingUploadsTest$Fixture.$r8$lambda$9udvBPDCE2DN2e91uk31seaPVyo
+1.31%     0.00%   com.iconnect.proof.IncomingUploadsTest$Fixture._init_$lambda$1
+1.29%     0.05%   android.net.Uri$PathPart.appendDecodedSegment
+1.29%     0.02%   art::gc::collector::MarkCompact::ReclaimPhase()
+1.29%     0.00%   [kernel.kallsyms][+ffffffffb1c4a38c]
+1.29%     0.00%   art::TimingLogger::EndTiming()
+1.27%     0.16%   art::(anonymous namespace)::ScopedCheck::CheckInstance(art::ScopedObjectAccess&, art::(anonymous namespace)::ScopedCheck::InstanceKind, _jobject*, bool) (.__uniq.99033978352804627313491551960229047428)
+1.27%     0.04%   art::Thread::GetCurrentMethod(unsigned int*, bool, bool) const
+1.27%     0.02%   BinderProxy_destroy(void*)
+1.27%     0.00%   android.util.AtomicFile.rename
+1.26%     0.00%   [kernel.kallsyms][+ffffffffb1bda3e3]
+1.26%     0.00%   [kernel.kallsyms][+ffffffffb1bdb214]
+1.26%     0.00%   [kernel.kallsyms][+ffffffffb1bea260]
+1.26%     0.00%   [kernel.kallsyms][+ffffffffb1dabee3]
+1.26%     0.00%   [kernel.kallsyms][+ffffffffb261edd0]
+1.24%     0.02%   java.util.regex.Pattern.matcher
+1.24%     0.00%   art::verifier::MethodVerifier::VerifyMethod(art::Thread*, art::ClassLinker*, art::ArenaPool*, art::verifier::VerifierDeps*, unsigned int, art::DexFile const*, art::Handle<art::mirror::DexCache>, art::Handle<art::mirror::ClassLoader>, art::dex::ClassDef const&, art::dex::CodeItem const*, unsigned int, art::verifier::HardFailLogMode, unsigned int, bool, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>*)
+1.22%     1.22%   [kernel.kallsyms][+ffffffffb1929328]
+1.22%     0.00%   java.util.regex.Matcher.<init>
+1.20%     0.00%   kotlinx.coroutines.CancellableContinuationImpl.resumeUndispatched
+1.20%     0.00%   kotlinx.coroutines.EventLoopImplBase$DelayedResumeTask.run
+1.18%     0.00%   kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core$default
+1.16%     1.16%   [kernel.kallsyms][+ffffffffb29e1b9b]
+1.16%     0.00%   kotlinx.coroutines.CancellableContinuationImpl.resumeImpl$kotlinx_coroutines_core
+1.15%     0.00%   android.content.ContentProviderProxy.openFile
+1.15%     0.00%   kotlinx.coroutines.scheduling.CoroutineScheduler.tryUnpark
+1.11%     0.02%   android::IPCThreadState::joinThreadPool(bool)
+1.11%     0.00%   android.net.Uri$PathPart.appendEncodedSegment
+1.11%     0.00%   android.os.Parcel.readStrongBinder
+1.11%     0.00%   android::AndroidRuntime::javaThreadShell(void*)
+1.11%     0.00%   android::PoolThread::threadLoop()
+1.11%     0.00%   android::Thread::_threadLoop(void*)
+1.09%     0.02%   com.iconnect.proof.PhoneIncomingFinalizationTracker.advance
+1.09%     0.00%   kotlinx.coroutines.CancellableContinuationImpl.dispatchResume
+1.07%     0.07%   android.os.Parcel.readParcelableCreatorInternal
+1.07%     0.00%   [kernel.kallsyms][+ffffffffb18034ca]
+1.07%     0.00%   [kernel.kallsyms][+ffffffffb1805cd9]
+1.07%     0.00%   [kernel.kallsyms][+ffffffffb18f531e]
+1.07%     0.00%   [kernel.kallsyms][+ffffffffb2629336]
+1.07%     0.00%   [kernel.kallsyms][+ffffffffb29d8a3a]
+1.07%     0.00%   [kernel.kallsyms][+ffffffffb29d8a64]
+1.07%     0.00%   kotlinx.coroutines.DispatchedTaskKt.dispatch
+1.07%     0.00%   kotlinx.coroutines.internal.DispatchedContinuationKt.safeDispatch
+1.07%     0.00%   kotlinx.coroutines.internal.LimitedDispatcher.dispatch
+1.07%     0.00%   kotlinx.coroutines.scheduling.DefaultIoScheduler.dispatch
+1.06%     0.00%   [kernel.kallsyms][+ffffffffb1c0ff30]
+1.06%     0.00%   [kernel.kallsyms][+ffffffffb2622b1e]
+1.06%     0.00%   mmap
+1.04%     0.00%   [kernel.kallsyms][+ffffffffb1c4454f]
+1.04%     0.00%   [kernel.kallsyms][+ffffffffb1c456aa]
+1.04%     0.00%   art::MemMap::MapAnonymous(char const*, unsigned char*, unsigned long, int, bool, bool, art::MemMap*, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>*, bool)
+1.02%     0.02%   kotlinx.coroutines.DelayKt.delay
+1.02%     0.00%   [kernel.kallsyms][+ffffffffb1aacea8]
+1.02%     0.00%   _JNIEnv::CallStaticVoidMethod(_jclass*, _jmethodID*, ...)
+1.02%     0.00%   __libc_init
+1.02%     0.00%   _jobject* art::InvokeMethod<(art::PointerSize)8>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jobject*, _jobject*, unsigned long)
+1.02%     0.00%   android.app.ActivityThread.main
+1.02%     0.00%   android.os.Looper.loop
+1.02%     0.00%   android.os.Looper.loopOnce
+1.02%     0.00%   android::AndroidRuntime::start(char const*, android::Vector<android::String8> const&, bool)
+1.02%     0.00%   art::JNI<true>::CallStaticVoidMethodV(_JNIEnv*, _jclass*, _jmethodID*, __va_list_tag*)
+1.02%     0.00%   art::Method_invoke(_JNIEnv*, _jobject*, _jobject*, _jobjectArray*) (.__uniq.165753521025965369065708152063621506277)
+1.02%     0.00%   art::gc::space::LargeObjectMapSpace::Alloc(art::Thread*, unsigned long, unsigned long*, unsigned long*, unsigned long*)
+1.02%     0.00%   com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run
+1.02%     0.00%   com.android.internal.os.ZygoteInit.main
+1.02%     0.00%   com.iconnect.proof.PhoneUploads$transfer$1.invokeSuspend
+1.02%     0.00%   main
+1.00%     0.04%   android.database.BulkCursorDescriptor.readFromParcel
+1.00%     0.02%   kotlinx.coroutines.scheduling.UnlimitedIoScheduler.dispatch
+1.00%     0.00%   [kernel.kallsyms][+ffffffffb29cc159]
+1.00%     0.00%   android.database.BulkCursorDescriptor$1.createFromParcel

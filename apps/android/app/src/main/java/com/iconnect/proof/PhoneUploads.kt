@@ -227,6 +227,7 @@ class PhoneUploads internal constructor(private val context:Context,private val 
                     info=checked(call(FileRequest.newBuilder().setOperation(FileOperation.PREPARE_UPLOAD).setDestinationId(destination.id).setTransferId(row.remote).setMutationEpoch(row.remoteEpoch).setUpload(descriptor).build()).upload)
                 } else info=checked(call(FileRequest.newBuilder().setOperation(FileOperation.UPLOAD_STATUS).setTransferId(row.remote).setMutationEpoch(row.remoteEpoch).build()).upload)
                 row=put(row.copy(offset=info.offset,phase=PhoneUploadPhase.SENDING,message="Sending the retained private copy.")); Os.lseek(fd,info.offset,OsConstants.SEEK_SET)
+                var savedOffset=row.offset; var savedAt=elapsed()
                 // The checked receipt is a baseline, not newly acknowledged progress.
                 publishPayload(row,payloadRun,info.phase==UploadPhase.UPLOAD_RECEIVING)
                 while(info.phase==UploadPhase.UPLOAD_RECEIVING && info.offset<row.size) {
@@ -235,7 +236,14 @@ class PhoneUploads internal constructor(private val context:Context,private val 
                     val expected=info.offset+count
                     info=checked(call(FileRequest.newBuilder().setOperation(FileOperation.UPLOAD_WRITE).setTransferId(row.remote).setMutationEpoch(row.remoteEpoch).setOffset(info.offset).setContent(ByteString.copyFrom(bytes,0,count)).build()).upload)
                     check(info.offset==expected) {"The receiver changed its acknowledged range. Review its receipt before continuing."}
-                    row=put(row.copy(offset=info.offset))
+                    // The receiver has already retained this range durably. Keep live
+                    // acknowledgements separate from our restart hint; every resume
+                    // rechecks the original receipt before choosing a source offset.
+                    row=row.copy(offset=info.offset)
+                    val now=elapsed()
+                    if(row.offset==row.size || row.offset-savedOffset>=CHECKPOINT_BYTES || now<savedAt || now-savedAt>=CHECKPOINT_MILLIS) {
+                        row=put(row); savedOffset=row.offset; savedAt=now
+                    }
                     publishPayload(row,payloadRun,info.phase==UploadPhase.UPLOAD_RECEIVING)
                 }
                 if(info.phase==UploadPhase.UPLOAD_RECEIVING || info.phase==UploadPhase.UPLOAD_FINALIZING || info.phase==UploadPhase.UPLOAD_VERIFYING || info.phase==UploadPhase.UPLOAD_REVIEW && info.finalName.isNotEmpty())
@@ -278,4 +286,8 @@ class PhoneUploads internal constructor(private val context:Context,private val 
         synchronized(gate) {scope.cancel(); inventory.close()}
     }
     private fun clean(value:String)=value.filterNot(Character::isISOControl).take(512)
+    private companion object {
+        const val CHECKPOINT_BYTES=1024L*1024
+        const val CHECKPOINT_MILLIS=1000L
+    }
 }

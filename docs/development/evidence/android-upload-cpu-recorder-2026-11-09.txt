@@ -1,0 +1,5 @@
+simpleperf I environment.cpp:548] Waiting for process of app com.iconnect.proof
+simpleperf I environment.cpp:540] Got process 15386 for package com.iconnect.proof
+simpleperf W kallsyms.cpp:163] Access to kernel symbol addresses is restricted. If possible, please do `echo 0 >/proc/sys/kernel/kptr_restrict` to fix this.
+simpleperf I cmd_record.cpp:824] Recorded for 150.004 seconds. Start post processing.
+simpleperf I cmd_record.cpp:918] Samples recorded: 5,495. Samples lost: 0.

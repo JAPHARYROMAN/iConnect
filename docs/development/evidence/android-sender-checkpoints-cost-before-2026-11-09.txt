@@ -1,0 +1,32 @@
+INSTRUMENTATION_STATUS: uploadCostPhase=source generation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=sourceGeneration completed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=private source preparation
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=privateSnapshotPreparation completed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=payload and sender hash
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver PREPARING
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver CHECKING_PRIVATE_BYTES
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver PREPARING_PROVIDER_DOCUMENT
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver WRITING_PROVIDER_DOCUMENT
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver SYNCING_PROVIDER_DOCUMENT
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiver CHECKING_PROVIDER_BYTES
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=payloadAndSenderHash completed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=receiverFinalization completed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=independent hashes
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: uploadCostPhase=independentSourceAndOutputHash completed
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: uploadCostResult={"schemaVersion":1,"payloadBytes":67108881,"rangeBytes":32768,"sha256":"995704123130bfeebd934dcc983ec3d149b43c7df30a99acbfbf8c591f390063","phases":[{"wallMillis":172.1406,"processCpuMillis":156,"processBinderSent":null,"name":"sourceGeneration"},{"wallMillis":58007.2647,"processCpuMillis":20914,"processBinderSent":null,"name":"privateSnapshotPreparation"},{"wallMillis":48768.5218,"processCpuMillis":18961,"processBinderSent":null,"name":"payloadAndSenderHash"},{"wallMillis":34772.9117,"processCpuMillis":14719,"processBinderSent":null,"name":"receiverFinalization"},{"wallMillis":280.4159,"processCpuMillis":170,"processBinderSent":null,"name":"independentSourceAndOutputHash"}],"localRequests":{"GET_METADATA":{"calls":1,"wallMillis":17.4011},"LIST_DIRECTORY":{"calls":1,"wallMillis":33.8619},"LIST_ROOTS":{"calls":1,"wallMillis":39.8291},"READ_RANGE":{"calls":2049,"wallMillis":56728.0643}},"receivingRequests":{"FINISH_UPLOAD":{"calls":1,"wallMillis":12.4361},"PREPARE_UPLOAD":{"calls":1,"wallMillis":105.0472},"UPLOAD_CONTEXT":{"calls":1,"wallMillis":6.5554},"UPLOAD_STATUS":{"calls":109,"wallMillis":263.2367},"UPLOAD_WRITE":{"calls":2049,"wallMillis":32433.6964}},"sampledFinalizationStages":[{"stage":"PREPARING","offset":0,"sinceProbeStart":{"wallMillis":107808.9005,"processCpuMillis":41237,"processBinderSent":null}},{"stage":"CHECKING_PRIVATE_BYTES","offset":786432,"sinceProbeStart":{"wallMillis":107836.8156,"processCpuMillis":41258,"processBinderSent":null}},{"stage":"PREPARING_PROVIDER_DOCUMENT","offset":0,"sinceProbeStart":{"wallMillis":109901.9153,"processCpuMillis":42710,"processBinderSent":null}},{"stage":"WRITING_PROVIDER_DOCUMENT","offset":0,"sinceProbeStart":{"wallMillis":109965.7388,"processCpuMillis":42736,"processBinderSent":null}},{"stage":"SYNCING_PROVIDER_DOCUMENT","offset":0,"sinceProbeStart":{"wallMillis":140202.0895,"processCpuMillis":54391,"processBinderSent":null}},{"stage":"CHECKING_PROVIDER_BYTES","offset":720896,"sinceProbeStart":{"wallMillis":140261.3313,"processCpuMillis":54423,"processBinderSent":null}}],"samplingIntervalMillis":20,"total":{"wallMillis":142855.9302,"processCpuMillis":56119,"processBinderSent":null},"sourceAndOutputIndependentlyVerified":true,"collisionOriginalKept":true,"counterScope":"Target process, including probe\/polling\/GC; provider-process CPU is excluded. Short sampled stages can be missed.","encryptedTransportVerified":false,"largeFileMatrixProven":false,"physicalNetworkVerified":false,"fullCompletion":false}
+INSTRUMENTATION_CODE: -1
