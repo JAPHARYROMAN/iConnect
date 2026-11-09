@@ -351,6 +351,69 @@ class BatchSenderTest {
         assertFalse(f.record(id).readText().contains(f.tree.toString())); f.reopen(true); completed(f)
         repeat(f.row().next) {assertNotNull(f.sender.itemResult(id,it))}
     }}
+    @Test fun canceledPublishedBatchCheckReturnsAfterTheOutgoingControlIsReleased()=runBlocking {
+        verificationReturnsAfterControlRelease(CancellationException("Generated check cancellation."))
+    }
+    @Test fun failedPublishedBatchCheckReturnsAfterTheOutgoingControlIsReleased()=runBlocking {
+        verificationReturnsAfterControlRelease(IOException("Generated check failure."))
+    }
+    private suspend fun verificationReturnsAfterControlRelease(failure:Exception)=coroutineScope {fixture {f->
+        f.main {f.browser.browse(f.browser.state.value.rows.single().entry)}
+        withTimeout(20_000) {while(f.browser.state.value.busy || f.browser.state.value.rows.none {it.entry.name=="simu.txt"}) delay(15)}
+        lateinit var selected:List<LocalUploadSource>
+        f.main {selected=f.browser.captureBatch(f.browser.state.value.rows.filter {it.entry.name in setOf("simu.txt","zero.bin","Empty","Reports")}.map {it.entry})}
+        assertEquals(4,selected.size)
+        val source=f.sources.stage(f.approval,selected,UploadCollision.UPLOAD_KEEP_BOTH) {f.allowed.get()}
+        withTimeout(30_000) {f.sources.whenIdle()}; f.source=f.sources.state.value.single {it.id==source}
+        val id=f.queue(); f.send(id); completed(f)
+        assertTrue(Rules.decode(f.row().receiverOutcomes).all {it==1.toByte()})
+        val before=f.record(id).readBytes(); val bytes=f.sourceBytes("simu.txt")
+        val caller=java.util.concurrent.Executors.newSingleThreadExecutor().asCoroutineDispatcher()
+        val entered=CompletableDeferred<Unit>(); val failNow=CompletableDeferred<Unit>(); val failureThread=CompletableDeferred<Thread>()
+        val checking=async(caller) {runCatching {
+            f.sender.verifyPublished(id,f.approval,{f.allowed.get()}) {
+                entered.complete(Unit); failNow.await(); failureThread.complete(Thread.currentThread()); throw failure
+            }
+        }}
+        val gateEntered=java.util.concurrent.CountDownLatch(1); val releaseGate=java.util.concurrent.CountDownLatch(1)
+        val holding=AtomicBoolean(false)
+        val holder=Thread {
+            synchronized(f.policy.gate) {
+                holding.set(true); gateEntered.countDown()
+                try {releaseGate.await(10,java.util.concurrent.TimeUnit.SECONDS)} finally {holding.set(false)}
+            }
+        }.apply {isDaemon=true}
+        try {
+            withTimeout(5_000) {kotlinx.coroutines.selects.select<Unit> {
+                entered.onAwait {}
+                checking.onAwait {throw AssertionError("Verification ended before requesting its receiver check.",it.exceptionOrNull())}
+            }}
+            holder.start()
+            assertTrue("The owner gate must be held for the cleanup boundary.",gateEntered.await(3,java.util.concurrent.TimeUnit.SECONDS))
+            failNow.complete(Unit)
+            val worker=withTimeout(3_000) {failureThread.await()}
+            withTimeout(3_000) {while(worker.state!=Thread.State.BLOCKED) delay(1)}
+            // The result continuation is already queued. A FIFO caller barrier
+            // observes whether the API returned while cleanup still needs its gate.
+            withTimeout(3_000) {withContext(caller) {}}
+            assertTrue("The cleanup boundary must remain held during the observation.",holding.get())
+            assertFalse("Verification returned before its outgoing control was released.",checking.isCompleted)
+        } finally {
+            releaseGate.countDown(); failNow.complete(Unit)
+            withContext(NonCancellable) {
+                try {
+                    if(holder.isAlive) withContext(Dispatchers.IO) {holder.join(3_000)}
+                    withTimeout(5_000) {checking.join()}
+                } finally {caller.close()}
+            }
+        }
+        val received=checking.await().exceptionOrNull()
+        assertNotNull(received); assertEquals(failure.javaClass,received!!.javaClass); assertEquals(failure.message,received.message)
+        assertFalse(f.sender.state.value.single().active)
+        assertArrayEquals(before,f.record(id).readBytes()); assertArrayEquals(bytes,f.sourceBytes("simu.txt")); completed(f)
+        // The caller needs no separate whenIdle() before starting another check.
+        f.sender.verifyPublished(id,f.approval,{f.allowed.get()},true) {f.request(it)}
+    }}
     @Test fun stoppingCompletedBatchCheckUsesNegotiatedRemoteCancellationAndKeepsCompletedHistory()=runBlocking {
         for(negotiated in listOf(false,true)) fixture {f->
             f.main {f.browser.browse(f.browser.state.value.rows.single().entry)}

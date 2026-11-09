@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 1,
+  "observedDate": "2026-11-09",
+  "timeZone": "Africa/Nairobi",
+  "avd": "iconnect-large-files",
+  "apiLevel": 35,
+  "before": {
+    "applicationSha256": "1727aa9e2c1e81e9624bb260da9482aa1f801b32e8eb1ef8c13e786a47d77262",
+    "instrumentationApkSha256": "8118961b7a98721b82a5f0a138a769193e25a8342a143ecb4df5d380024cdd07",
+    "cases": 2,
+    "failures": 2,
+    "skipped": 0,
+    "elapsedSeconds": 11.295,
+    "log": "sender-control-release-before-2026-11-09.txt",
+    "logSha256": "65597bfb39cd3d943b875cda785b28d687560cf401d62f0343712d6e75c71035"
+  },
+  "after": {
+    "applicationSha256": "dd6f88a4198ad991e9e2c5c3ebde43b6b480cdb19a9e81a941d86e19baff6e9c",
+    "instrumentationApkSha256": "8118961b7a98721b82a5f0a138a769193e25a8342a143ecb4df5d380024cdd07",
+    "cases": 53,
+    "failures": 0,
+    "skipped": 0,
+    "elapsedSeconds": 100.683,
+    "log": "sender-control-release-after-2026-11-09.txt",
+    "logSha256": "bda001009ac85143066fc0d9543e34e70fc801fd4ef8355025a19723accaf8b7"
+  },
+  "excludedFixtureAttempts": [
+    {
+      "variant": "before",
+      "instrumentationApkSha256": "d8a3cef3aeb40d5c954ac6ae568dac315c4e3650a4dc1245096d5d7007bcd42b",
+      "outcome": "two timeouts, excluded from baseline/fixed success evidence",
+      "log": "sender-control-fixture-prototype-before-2026-11-09.txt",
+      "logSha256": "b1aa19fab168fb6c42ada99121d2652eeff32e2a3ffb5a21bcc6bba0c9d07a30",
+      "applicationSha256": "1727aa9e2c1e81e9624bb260da9482aa1f801b32e8eb1ef8c13e786a47d77262"
+    },
+    {
+      "variant": "candidate",
+      "instrumentationApkSha256": "d8a3cef3aeb40d5c954ac6ae568dac315c4e3650a4dc1245096d5d7007bcd42b",
+      "outcome": "two timeouts, excluded from baseline/fixed success evidence",
+      "log": "sender-control-fixture-prototype-candidate-2026-11-09.txt",
+      "logSha256": "b7d30c479130b4924d1a6a881912be60b5e1b1de65fb84664767ca1f89d14429",
+      "applicationSha256": "dd6f88a4198ad991e9e2c5c3ebde43b6b480cdb19a9e81a941d86e19baff6e9c"
+    }
+  ],
+  "build": {
+    "fullProductionBuildDuration": "9m 7s",
+    "fullProductionBuildLogSha256": "babfc17868d232edaf47fcbe5ac99a7aaf944e7f380d222c7e51a0282e81fc80",
+    "finalTestAndLintBuildDuration": "3m 18s",
+    "finalTestAndLintBuildLogSha256": "10e4988186f63f5c748ac22fb21d144136ca62596a2898cafa08a331a29e2d32",
+    "productionApksUnchangedDuringTestOnlyRebuild": true,
+    "unsignedReleaseSha256": "9bd46177eecaddc83ddbe5f26419b46cc17a5ca5e095f8b3c010249b1bc68667",
+    "jvm": {
+      "tests": 87,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lint": {
+      "Error": 0,
+      "Fatal": 0,
+      "Warning": 71
+    },
+    "buildSourceParent": "315d8bb86075c69867ccd54efd1dfcc089a7e48e",
+    "builtBeforeCommit": true,
+    "sourceInputs": [
+      {
+        "Path": "apps/android/app/src/main/java/com/iconnect/proof/PhoneBatchSender.kt",
+        "Sha256": "2102ce023d94c3847fb940b7ca08951b6f854121ab9f636dba799170b27765b7"
+      },
+      {
+        "Path": "apps/android/app/src/androidTest/java/com/iconnect/proof/BatchSenderTest.kt",
+        "Sha256": "91ebc80079b19e8689f8cb7786fc7208512ea3df6fef7a64a74c964a94a45ca2"
+      }
+    ]
+  },
+  "nativeCancellation": {
+    "cases": [
+      {
+        "inboxMode": "listing",
+        "initiator": "windows",
+        "bothDirectionsVerified": true,
+        "cancellationAcknowledgedBothDirections": true,
+        "freshCheckBothDirections": true,
+        "itemsEachDirection": 6,
+        "bytesEachDirection": 2097207
+      },
+      {
+        "inboxMode": "listing",
+        "initiator": "android",
+        "bothDirectionsVerified": true,
+        "cancellationAcknowledgedBothDirections": true,
+        "freshCheckBothDirections": true,
+        "itemsEachDirection": 6,
+        "bytesEachDirection": 2097207
+      },
+      {
+        "inboxMode": "blind",
+        "initiator": "windows",
+        "bothDirectionsVerified": true,
+        "cancellationAcknowledgedBothDirections": true,
+        "freshCheckBothDirections": true,
+        "itemsEachDirection": 6,
+        "bytesEachDirection": 2097207
+      },
+      {
+        "inboxMode": "blind",
+        "initiator": "android",
+        "bothDirectionsVerified": true,
+        "cancellationAcknowledgedBothDirections": true,
+        "freshCheckBothDirections": true,
+        "itemsEachDirection": 6,
+        "bytesEachDirection": 2097207
+      }
+    ],
+    "rolesCompleted": 4,
+    "publishedBatchCancellations": 8,
+    "freshPublishedBatchChecks": 8,
+    "nativeSha256": "84a0a63dcc579d97e4afac959866f9e61e9584c18732045a48db673d8ec87dde",
+    "windowsFixtureSha256": "72e0128374dac22406ad93ae3009b47aac3fc5f8ca966c29e327ba1bcf7bad5c",
+    "proofSha256": "22d1ffd4d76fefe9a1631a5fe1180b2d159277baf1bed47a438a184dc7c0fdea",
+    "baseResultSha256": "b86b494bb28fdd6c298999f5ac20ab7f6e661d0e490b852014363b47c5ea5443",
+    "physicalNetworkVerified": false,
+    "fullControllerInteropVerified": false
+  },
+  "nativeWindowsFolderRecovery": {
+    "cases": [
+      {
+        "inboxMode": "listing",
+        "initiator": "windows",
+        "bothDirectionsVerified": true,
+        "cancellationAcknowledgedBothDirections": true,
+        "freshCheckBothDirections": true,
+        "itemsEachDirection": 6,
+        "bytesEachDirection": 2097207,
+        "windowsOriginalMoveAndRestoreVerified": true
+      },
+      {
+        "inboxMode": "listing",
+        "initiator": "android",
+        "bothDirectionsVerified": true,
+        "cancellationAcknowledgedBothDirections": true,
+        "freshCheckBothDirections": true,
+        "itemsEachDirection": 6,
+        "bytesEachDirection": 2097207,
+        "windowsOriginalMoveAndRestoreVerified": true
+      },
+      {
+        "inboxMode": "blind",
+        "initiator": "windows",
+        "bothDirectionsVerified": true,
+        "cancellationAcknowledgedBothDirections": true,
+        "freshCheckBothDirections": true,
+        "itemsEachDirection": 6,
+        "bytesEachDirection": 2097207,
+        "windowsOriginalMoveAndRestoreVerified": true
+      },
+      {
+        "inboxMode": "blind",
+        "initiator": "android",
+        "bothDirectionsVerified": true,
+        "cancellationAcknowledgedBothDirections": true,
+        "freshCheckBothDirections": true,
+        "itemsEachDirection": 6,
+        "bytesEachDirection": 2097207,
+        "windowsOriginalMoveAndRestoreVerified": true
+      }
+    ],
+    "rolesCompleted": 4,
+    "publishedBatchCancellations": 8,
+    "freshPublishedBatchChecks": 8,
+    "nativeSha256": "84a0a63dcc579d97e4afac959866f9e61e9584c18732045a48db673d8ec87dde",
+    "windowsFixtureSha256": "5b55d480c326fd48eea17f704df338c05378cac1452a208fced963cb3acb4776",
+    "proofSha256": "5867e9802c1c57b3648d76a3a09cd09b34c00eb5e198a9ec1c88ef7e85ff180f",
+    "baseResultSha256": "01f6ef53bf746299cda641a4344175857b715129794fb2ba6c45aaebc9f0c1bc",
+    "physicalNetworkVerified": false,
+    "fullControllerInteropVerified": false,
+    "verifiedWindowsOriginalMoves": 4,
+    "verifiedWindowsOriginalRestores": 4,
+    "androidSourceMovesProven": false
+  },
+  "originalFolderFailureEvidence": "android-folder-recovery-failure-2026-11-09.json",
+  "foundationOutcome": "failed",
+  "completeLargeFileMatrixProven": false,
+  "fullApplicationComplete": false
+}

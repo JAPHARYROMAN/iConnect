@@ -5,3 +5,7 @@ android-read-cancellation-baseline-2026-11-09.txt -text whitespace=cr-at-eol
 android-read-cancellation-fixed-2026-11-09.txt -text whitespace=cr-at-eol
 android-batch-cancellation-before-binding-fix-2026-11-09.txt -text whitespace=cr-at-eol
 android-batch-cancellation-after-binding-fix-2026-11-09.txt -text whitespace=cr-at-eol
+sender-control-release-before-2026-11-09.txt -text whitespace=cr-at-eol
+sender-control-release-after-2026-11-09.txt -text whitespace=cr-at-eol
+sender-control-fixture-prototype-before-2026-11-09.txt -text whitespace=cr-at-eol
+sender-control-fixture-prototype-candidate-2026-11-09.txt -text whitespace=cr-at-eol

@@ -34,6 +34,12 @@ After the separate [batch-cancellation sequence](published-batch-cancellation.md
 
 Full 4,096-item move performance, complete interruption/storage/volume and metadata matrices, actual controller/invitation/coordinator journeys, native accessibility, physical separate networks, independent review and release approval remain open. Android-source folder moves and other provider-safe Android source management remain unimplemented. Full application completion remains false.
 
+## Executed sender-lifecycle follow-up
+
+The [control-release fix](sender-control-release.md) reproduces both exact early-return failures on the previous Android app, then passes all 53 selected device cases on `dd6f88a4…` with identical `8118961b…` instrumentation. A new native run completes **all four initiating-role/inbox combinations**, with **four verified Windows original moves and four verified restores**. It uses the unchanged `5b55d480…` Windows fixture and `84a0a63d…` pinned native library, retains both directions' cancellation/fresh-check and transfer/preservation assertions, and verifies exact installed APK hashes before and after.
+
+The [tracked result](evidence/sender-control-release-2026-11-09.json) identifies these separate executions and preserves the earlier failed attempt. Android-source moves, full-capacity/volume/interruption/metadata matrices, complete controller/native UI/accessibility, physical-network and independent security/release gates remain open.
+
 ## Prepared operator journey
 
 1. Use disposable generated originals: a nested folder, Unicode filename, empty directory and zero-byte file. Complete a folder batch to Android, once with a listing inbox and once with a blind inbox. Retain hashes and actual receipt names.

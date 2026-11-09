@@ -212,7 +212,7 @@ internal class PhoneBatchSender(private val context:Context,private val owner:An
     }
     internal suspend fun verifyPublished(id:String,approval:PeerApproval,allowed:()->Boolean,cancelReceiver:Boolean,request:suspend (FileRequest)->FileResponse) {
         val result=CompletableDeferred<Unit>()
-        val job=synchronized(gate) {
+        val (job,done)=synchronized(gate) {
             ready(); val row=rows.getValue(id)
             check(current(row) && row.peer==approval.id && row.pairing==approval.epoch && allowed()) {"Connect to the original paired receiver to check this batch."}
             check(!row.archived && !row.purging && row.phase==PhoneBatchSendingPhase.COMPLETED && row.header.isNotEmpty() &&
@@ -230,10 +230,16 @@ internal class PhoneBatchSender(private val context:Context,private val owner:An
                 }
                 if(failure!=null) result.completeExceptionally(failure)
             }
-            emit(); pending.start(); pending
+            emit(); pending.start(); pending to done
         }
-        try {result.await(); job.join()}
-        catch(e:CancellationException) {job.cancel(); throw e}
+        try {result.await()}
+        catch(e:Throwable) {job.cancel(); throw e}
+        finally {
+            // The result can arrive before the completion callback unregisters
+            // the control. Return only after that callback has released it, on
+            // success, failure and caller cancellation alike.
+            withContext(NonCancellable) {job.join(); done.await()}
+        }
     }
     private suspend fun requirePublishedBatchProof(row:PhoneBatchSend,allowed:()->Boolean,cancelReceiver:Boolean,request:suspend (FileRequest)->FileResponse) {
         val h=header(row); val challenge=StorageRules.token(); val started=android.os.SystemClock.elapsedRealtime()
