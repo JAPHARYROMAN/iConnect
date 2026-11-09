@@ -74,7 +74,7 @@ jobs:
           foreach ($relative in @('App.xbf', 'MainWindow.xbf', 'IConnect.Desktop.pri', 'libDatachannel/datachannel.dll', 'PreviewWorker/IConnect.Preview.Worker.exe', 'PreviewWorker/coreclr.dll', 'PreviewWorker/WinRT.Runtime.dll', 'AttachmentWorker/IConnect.Attachment.Worker.exe', 'AttachmentWorker/coreclr.dll')) {
             if (-not (Test-Path -LiteralPath (Join-Path $destination $relative) -PathType Leaf)) { throw "Missing published asset: $relative" }
           }
-          ./tools/write-windows-release-sbom.ps1 -Payload $destination -ConnectivityAssets apps/windows/IConnect.Connectivity/obj/project.assets.json -PackageName iConnect.CiPublishFixture -Version 1.0.0.0
+          ./tools/write-windows-release-sbom.ps1 -Payload $destination -ConnectivityAssets apps/windows/IConnect.Connectivity/obj/project.assets.json -PackageName iConnect.CiPublishFixture -Version 0.2.0.0
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: '3.12'

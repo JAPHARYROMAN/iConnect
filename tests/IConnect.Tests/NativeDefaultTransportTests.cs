@@ -12,6 +12,12 @@ public sealed class NativeDefaultTransportTests
         var root = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "PackageMetadata", "NativeTransport"));
         using var manifest = JsonDocument.Parse(File.ReadAllText(Path.Combine(root, "bundle-evidence.json")));
         using var build = JsonDocument.Parse(File.ReadAllText(Path.Combine(root, "build-evidence.json")));
+        var sourceLockPath = Path.Combine(root, "source-lock.json");
+        using var sourceLock = JsonDocument.Parse(File.ReadAllText(sourceLockPath));
+        Assert.Equal(Hash(sourceLockPath), manifest.RootElement.GetProperty("sourceLockSha256").GetString());
+        var openssl = sourceLock.RootElement.GetProperty("openssl");
+        Assert.Equal("openssl-3.5.9", openssl.GetProperty("tag").GetString());
+        Assert.Equal("2030-04-08", openssl.GetProperty("supportUntil").GetString());
         var runtime = Path.Combine(AppContext.BaseDirectory, "libDatachannel", "datachannel.dll");
         var digest = Hash(runtime);
         Assert.Equal(digest, manifest.RootElement.GetProperty("binarySha256").GetString());
@@ -29,6 +35,8 @@ public sealed class NativeDefaultTransportTests
         Assert.True(count >= 15);
         var components = manifest.RootElement.GetProperty("components").EnumerateArray().ToArray();
         Assert.Equal(7, components.Length);
+        Assert.Equal(openssl.GetProperty("commit").GetString(),
+            components.Single(component => component.GetProperty("name").GetString() == "openssl").GetProperty("commit").GetString());
         foreach (var component in components)
         {
             Check(component, "sourceArchive", "sourceArchiveSha256");

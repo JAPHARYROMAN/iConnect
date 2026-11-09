@@ -15,8 +15,9 @@ if (!(Test-Path -LiteralPath $desktopPath -PathType Leaf) -or
     ((Get-Item -LiteralPath $desktopPath -Force).Attributes -band [IO.FileAttributes]::ReparsePoint)) {
     throw 'The inventory requires the actual nonredirected staged desktop binary.'
 }
-if ([Diagnostics.FileVersionInfo]::GetVersionInfo($desktopPath).FileVersion -cne $Version) {
-    throw 'The desktop binary does not match the inventory version.'
+$actualVersion = [Diagnostics.FileVersionInfo]::GetVersionInfo($desktopPath).FileVersion
+if ($actualVersion -cne $Version) {
+    throw "The desktop binary does not match the inventory version. Binary: $actualVersion; inventory: $Version."
 }
 $nativeMetadata = Join-Path $Payload 'PackageMetadata/NativeTransport'
 $sourceNative = if (Test-Path -LiteralPath $nativeMetadata) {

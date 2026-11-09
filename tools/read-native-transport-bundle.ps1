@@ -23,8 +23,19 @@ function Json([string]$Relative,[long]$Maximum) {
 }
 $manifest = Json 'bundle-evidence.json' 1MB
 $lockPath = Join-Path $PSScriptRoot 'native-transport-sources.json'
-$lock = Get-Content -LiteralPath $lockPath -Raw | ConvertFrom-Json -AsHashtable
+$currentLockHash = Hash $lockPath
+$legacyLockHash = 'd8d8c75efa7114c6c7df7984fc199415dafa222de5ba95506d86847313ab0b53'
+$legacyLockRelative = 'native-source-locks/0246-openssl365.json'
+if ($manifest.sourceLockSha256 -cne $currentLockHash) {
+    # Retain inspection of the exact historical artifacts; application selection
+    # separately requires the current supported source lock.
+    $historical = Join-Path $PSScriptRoot $legacyLockRelative
+    if ($manifest.sourceLockSha256 -cne $legacyLockHash -or !(Test-Path -LiteralPath $historical -PathType Leaf) -or
+        (Hash $historical) -cne $legacyLockHash) { throw 'Native bundle evidence does not match a known pinned source lock.' }
+    $lockPath = $historical
+}
 $lockHash = Hash $lockPath
+$lock = Get-Content -LiteralPath $lockPath -Raw | ConvertFrom-Json -AsHashtable
 if ($lock.schema -ne 1 -or $lock.libdatachannel.submodules.Count -ne 5 -or
     $manifest.schema -ne 1 -or $manifest.stage -cne 'SourceAndNoticeBundle' -or
     $manifest.sourceLockSha256 -cne $lockHash -or $manifest.binarySha256 -cnotmatch '\A[a-f0-9]{64}\z' -or
@@ -49,6 +60,10 @@ if ($nativePatches.Count) {
         @($nativePatches | ForEach-Object { 'recipe/' + $_.patchFile })
 }
 $allowed = $required + @('recipe/read-native-transport-bundle.ps1') + $patchRecipe
+if ($lockHash -ceq $currentLockHash -and $lock.openssl.supportUntil) {
+    $required += @('recipe/' + $legacyLockRelative)
+    $allowed += @('recipe/' + $legacyLockRelative)
+}
 foreach ($name in $required) { if (!$manifest.files.Contains($name)) { throw "Native bundle is missing $name." } }
 foreach ($name in $manifest.files.Keys) {
     if ($name -cnotin $allowed) { throw 'Unexpected native bundle recipe or payload entry.' }
@@ -56,6 +71,9 @@ foreach ($name in $manifest.files.Keys) {
 }
 if ($manifest.files['datachannel.dll'] -cne $manifest.binarySha256 -or $manifest.files['source-lock.json'] -cne $lockHash -or
     $manifest.files['recipe/native-transport-sources.json'] -cne $lockHash) { throw 'Native bundle payload or source lock is inconsistent.' }
+if ($manifest.files.Contains('recipe/' + $legacyLockRelative) -and $manifest.files['recipe/' + $legacyLockRelative] -cne $legacyLockHash) {
+    throw 'The historical source-lock catalog changed.'
+}
 foreach ($patch in $nativePatches) {
     $definition = Get-IConnectNativePatchDefinitionName $patch.id
     if ($manifest.files['recipe/' + $patch.patchFile] -cne $patch.patchSha256 -or

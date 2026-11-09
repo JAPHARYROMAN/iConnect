@@ -2,6 +2,8 @@
 
 Windows application builds now require the pinned source transport with both the [SCTP serialization](native-sctp-investigation.md) and [DTLS startup](native-dtls-startup.md) corrections. The production connectivity project no longer restores the vendor DLL. Its former NuGet package remains a private test dependency for the package verifier's legacy-origin refusal control.
 
+The current pin is **OpenSSL 3.5.9 LTS**, supported through 8 April 2030 under the [OpenSSL release strategy](https://openssl-library.org/policies/releasestrat/). The [current downloads policy](https://openssl-library.org/source/) identifies the earlier 3.6 line as out of support. Its passing runtime/advisory checks below are historical evidence; those binaries are refused for current application selection. The [LTS migration record](native-openssl-lts.md) tracks qualification of the replacement.
+
 ## Prepare and build
 
 Use Windows x64, PowerShell 7.2+, Git, MSVC x64, CMake, Ninja and Perl. The builder also downloads the pinned, hash-checked NASM archive. The first preparation compiles OpenSSL and libdatachannel; subsequent development commands validate and reuse the completed bundle.
@@ -11,7 +13,7 @@ Use Windows x64, PowerShell 7.2+, Git, MSVC x64, CMake, Ninja and Perl. The buil
 ./tools/dev.ps1 build -c Release -p:RestoreLockedMode=true
 ```
 
-The default application cache is `%USERPROFILE%/.cache/iconnect/native-transport/application-connection-init-v1/bundle`. Native compilation uses a separate cache without whitespace. `prepare-native-transport.ps1 -BuildDirectory <path>` selects a different compilation directory. A completed matching OpenSSL build can be reused through `-ReuseOpenSslBuildDirectory`; its source, assembler and library hashes are checked before and after compilation.
+The default application cache is `%USERPROFILE%/.cache/iconnect/native-transport/application-connection-init-v2-openssl35/bundle`. Native compilation uses a separate cache without whitespace. `prepare-native-transport.ps1 -BuildDirectory <path>` selects a different compilation directory. A completed matching OpenSSL build can be reused through `-ReuseOpenSslBuildDirectory`; its source, assembler and library hashes are checked before and after compilation. An older 3.6 cache cannot satisfy the new source lock.
 
 To prepare from an existing source bundle, supply `-CandidateBundle <bundle>`. Preparation verifies both corrections and every recorded member, copies only those members, rechecks both sides, then publishes the completed directory. It preserves a verified previous selection when replacing it and refuses an invalid existing destination. It never falls back to the old vendor binary.
 
@@ -30,9 +32,11 @@ Local selection verification is available independently:
 ./tools/test-native-transport-selection.ps1
 ```
 
-The latter preserves generated fixtures and a JSON report under `.tools/native-selection-verification`. It checks missing evidence, a changed binary, preservation of an invalid existing destination, exclusion of unlisted files, idempotent preparation and environment selection. The default-runtime regression additionally checks the actual copied DLL, both ordered correction IDs and all source-bundle hashes.
+The latter preserves generated fixtures and a JSON report under `.tools/native-selection-verification`. It checks missing evidence, a changed binary, unknown source locks, an altered historical-lock catalog even with an updated manifest, preservation of an invalid existing destination, exclusion of unlisted files, idempotent preparation and environment selection. The default-runtime regression additionally checks the actual copied DLL, both ordered correction IDs, the LTS source coordinates and all source-bundle hashes. Selection refuses an expired or unspecified pinned support period.
 
-## Adoption validation on 9 November 2026
+## Historical 3.6 adoption validation on 9 November 2026
+
+These artifacts established the correction and packaging behavior before the support-policy review. They do not qualify the replacement LTS binary for release.
 
 The ordinary Release solution builds without warnings/errors and its locked restore passes. The default output contains the no-delay combined DLL `57f119d4…`. All **959 selected Windows main cases** pass without failures/skips, including the new complete-bundle regression, and all 60 tooling tests pass. Seven selection checks pass. Separate actual-bundle controls refuse the older SCTP-only candidate and a missing bundle in a direct SDK build. A further SDK control restores a changed runtime DLL and metadata file despite their deliberately newer timestamps.
 

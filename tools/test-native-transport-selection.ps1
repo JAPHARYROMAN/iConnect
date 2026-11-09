@@ -38,6 +38,21 @@ $changedHash = (Get-FileHash -LiteralPath $dll -Algorithm SHA256).Hash
 Expect-Refusal { & (Join-Path $PSScriptRoot 'assert-native-transport.ps1') -BundleDirectory $mutated } 'datachannel.dll' 'ChangedBinary'
 Expect-Refusal { & (Join-Path $PSScriptRoot 'prepare-native-transport.ps1') -CandidateBundle $source.Directory -Destination $mutated } 'datachannel.dll' 'InvalidExistingDestination'
 if ((Get-FileHash -LiteralPath $dll -Algorithm SHA256).Hash -cne $changedHash) { throw 'Preparation overwrote an invalid existing destination.' }
+$unknown = Copy-Bundle 'unknown-source-lock'
+$unknownManifestPath = Join-Path $unknown 'bundle-evidence.json'
+$unknownManifest = Get-Content -LiteralPath $unknownManifestPath -Raw | ConvertFrom-Json -AsHashtable
+$unknownManifest.sourceLockSha256 = '0' * 64
+$unknownManifest | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $unknownManifestPath -Encoding utf8
+Expect-Refusal { & (Join-Path $PSScriptRoot 'assert-native-transport.ps1') -BundleDirectory $unknown } 'known pinned source lock' 'UnknownSourceLock'
+$catalog = Copy-Bundle 'changed-historical-catalog'
+$catalogRelative = 'recipe/native-source-locks/0246-openssl365.json'
+$catalogPath = Join-Path $catalog $catalogRelative
+[IO.File]::AppendAllText($catalogPath, ' ')
+$catalogManifestPath = Join-Path $catalog 'bundle-evidence.json'
+$catalogManifest = Get-Content -LiteralPath $catalogManifestPath -Raw | ConvertFrom-Json -AsHashtable
+$catalogManifest.files[$catalogRelative] = (Get-FileHash -LiteralPath $catalogPath -Algorithm SHA256).Hash.ToLowerInvariant()
+$catalogManifest | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $catalogManifestPath -Encoding utf8
+Expect-Refusal { & (Join-Path $PSScriptRoot 'assert-native-transport.ps1') -BundleDirectory $catalog } 'historical source-lock catalog changed' 'ChangedHistoricalCatalogDespiteUpdatedManifest'
 $extra = Copy-Bundle 'with-unlisted-file'
 [IO.File]::WriteAllText((Join-Path $extra 'unlisted-fixture.txt'), 'This file must stay outside the prepared bundle.')
 $destination = Join-Path $root 'prepared-cache/bundle'

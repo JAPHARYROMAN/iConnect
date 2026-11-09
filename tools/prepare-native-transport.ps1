@@ -2,7 +2,7 @@
 [CmdletBinding()]
 param(
     [string]$CandidateBundle,
-    [string]$Destination = (Join-Path $env:USERPROFILE '.cache/iconnect/native-transport/application-connection-init-v1/bundle'),
+    [string]$Destination = (Join-Path $env:USERPROFILE '.cache/iconnect/native-transport/application-connection-init-v2-openssl35/bundle'),
     [string]$BuildDirectory,
     [string]$ReuseOpenSslBuildDirectory,
     [ValidateRange(1,8)][int]$Jobs = 1

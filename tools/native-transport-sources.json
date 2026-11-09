@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "cacheKey": "0246-openssl365",
+  "cacheKey": "0246-openssl359-lts",
   "libdatachannel": {
     "repository": "https://github.com/paullouisageneau/libdatachannel.git",
     "tag": "v0.24.6",
@@ -15,8 +15,10 @@
   },
   "openssl": {
     "repository": "https://github.com/openssl/openssl.git",
-    "tag": "openssl-3.6.5",
-    "commit": "c8bd5a57108599ac650bbae77fcabe3109dab2e8"
+    "tag": "openssl-3.5.9",
+    "commit": "45e844fa2a14ec92d146bd8f5778ac130b6625fb",
+    "supportUntil": "2030-04-08",
+    "supportPolicy": "https://openssl-library.org/policies/releasestrat/"
   },
   "nasm": {
     "version": "3.02",

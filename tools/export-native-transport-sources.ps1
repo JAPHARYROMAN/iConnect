@@ -92,8 +92,9 @@ try {
         Assert-Source $component.source $component.commit $(if ($component.name -ceq 'libdatachannel') { $nativePatches } else { @() })
     }
     $files = @{}
-    foreach ($name in @('build-native-transport.ps1','native-transport-sources.json','test-native-transport.ps1','export-native-transport-sources.ps1','review-native-transport.ps1','read-native-transport-bundle.ps1','native-transport-patches.ps1','native-sctp-initialization.json','native-dtls-initialization.json')) {
+    foreach ($name in @('build-native-transport.ps1','native-transport-sources.json','test-native-transport.ps1','export-native-transport-sources.ps1','review-native-transport.ps1','read-native-transport-bundle.ps1','native-transport-patches.ps1','native-sctp-initialization.json','native-dtls-initialization.json','native-source-locks/0246-openssl365.json')) {
         $relative = 'recipe/' + $name
+        [void][IO.Directory]::CreateDirectory([IO.Path]::GetDirectoryName((Join-Path $destinationPath $relative)))
         Copy-Item -LiteralPath (Join-Path $PSScriptRoot $name) -Destination (Join-Path $destinationPath $relative)
         $files[$relative] = Hash (Join-Path $destinationPath $relative)
     }

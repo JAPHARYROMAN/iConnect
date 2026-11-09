@@ -2,7 +2,7 @@
   <PropertyGroup>
     <PlatformTarget>x64</PlatformTarget>
     <IConnectNativeTransportBundle Condition="'$(IConnectNativeTransportBundle)' == '' and '$(ICONNECT_NATIVE_TRANSPORT_BUNDLE)' != ''">$(ICONNECT_NATIVE_TRANSPORT_BUNDLE)</IConnectNativeTransportBundle>
-    <IConnectNativeTransportBundle Condition="'$(IConnectNativeTransportBundle)' == ''">$(USERPROFILE)/.cache/iconnect/native-transport/application-connection-init-v1/bundle</IConnectNativeTransportBundle>
+    <IConnectNativeTransportBundle Condition="'$(IConnectNativeTransportBundle)' == ''">$(USERPROFILE)/.cache/iconnect/native-transport/application-connection-init-v2-openssl35/bundle</IConnectNativeTransportBundle>
     <_IConnectNativeTools>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)../../../tools'))</_IConnectNativeTools>
   </PropertyGroup>
   <ItemGroup>
@@ -21,6 +21,8 @@
              Link="PackageMetadata/NativeTransport/recipe/%(Filename)%(Extension)" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" Visible="false" />
     <Content Include="$(IConnectNativeTransportBundle)/recipe/native-patches/serialize-sctp-initialization.patch;$(IConnectNativeTransportBundle)/recipe/native-patches/initialize-dtls-before-receive.patch"
              Link="PackageMetadata/NativeTransport/recipe/native-patches/%(Filename)%(Extension)" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" Visible="false" />
+    <Content Include="$(IConnectNativeTransportBundle)/recipe/native-source-locks/0246-openssl365.json"
+             Link="PackageMetadata/NativeTransport/recipe/native-source-locks/%(Filename)%(Extension)" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" Visible="false" />
   </ItemGroup>
   <Target Name="VerifyApplicationNativeTransport" BeforeTargets="PrepareForBuild" Condition="'$(DesignTimeBuild)' != 'true'">
     <Exec Command="pwsh -NoProfile -File &quot;$(_IConnectNativeTools)/assert-native-transport.ps1&quot;"

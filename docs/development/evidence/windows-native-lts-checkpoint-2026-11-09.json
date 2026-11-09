@@ -1,0 +1,115 @@
+{
+  "schema": 1,
+  "stage": "LtsSourceBuildAndSelectionCheckpoint",
+  "checkedAtUtc": "2026-11-09T19:07:36.132252+00:00",
+  "nativeSha256": "016d8b449da214db2fc34ce900d13c539c2b56d885af9fbd870f326005249c68",
+  "buildEvidenceSha256": "00a4be8e38dab813da30ef7653ea8ca95d869d19be656c9993236e4b9bc9290c",
+  "bundleEvidenceSha256": "88d87dc9236694a442c43bd3182203f9982a03c8121d253a29713f037ac4145c",
+  "sourceLockSha256": "aabf9896378a9d304980d586a501f668739ea2a4b07ea7dc8dd8ac4fbef743ce",
+  "openssl": {
+    "repository": "https://github.com/openssl/openssl.git",
+    "tag": "openssl-3.5.9",
+    "commit": "45e844fa2a14ec92d146bd8f5778ac130b6625fb",
+    "supportUntil": "2030-04-08",
+    "supportPolicy": "https://openssl-library.org/policies/releasestrat/"
+  },
+  "patches": [
+    {
+      "schema": 1,
+      "id": "serialize-sctp-initialization-v1",
+      "baseCommit": "6b1e2e620f1e37f0eafeee702eaea0043cb305fd",
+      "patchFile": "native-patches/serialize-sctp-initialization.patch",
+      "patchSha256": "ecb09364ce5510bcf7109bf672de1caf526717f3f393586ee767b8920d23d7b1",
+      "postImages": {
+        "src/impl/peerconnection.cpp": "4345ea0a2f9169ae91a43dbddfe1dbc43cb6648cd7737892ced70c84e57ce8b9",
+        "src/impl/peerconnection.hpp": "76484bdbc1784867ef81d67d5210947f53d43eb1a96f7ae28e03637ef49a96c6"
+      }
+    },
+    {
+      "schema": 1,
+      "id": "initialize-dtls-before-receive-v1",
+      "baseCommit": "6b1e2e620f1e37f0eafeee702eaea0043cb305fd",
+      "patchFile": "native-patches/initialize-dtls-before-receive.patch",
+      "patchSha256": "b893d83392352eab12710c47b826f6392a5d2924ad6fb3b8731982ae3ce3a79e",
+      "postImages": {
+        "src/impl/dtlstransport.cpp": "634249b05edf66c36589eaa771eb6bd058f2b129fe759bd617bdad305de1769a"
+      }
+    }
+  ],
+  "verifiedBundleFiles": 31,
+  "sourceComponents": 7,
+  "selectionChecks": [
+    "MissingBundle",
+    "DllWithoutSourceEvidence",
+    "ChangedBinary",
+    "InvalidExistingDestination",
+    "UnknownSourceLock",
+    "ChangedHistoricalCatalogDespiteUpdatedManifest",
+    "VerifiedMembersOnly",
+    "IdempotentPreparation",
+    "EnvironmentSelection"
+  ],
+  "selectionReportSha256": "b941cf0f3ee9ef7e50a5f6b0e4ad51f7ac311212832c000970fb1c2e8ebc479c",
+  "historicalBundleInspectionAndApplicationRefusal": {
+    "BinarySha256": "57f119d4f978085570df1e3f9e333e7655680af6d0bb89eebecf6f424787dfbc",
+    "HistoricalApplicationSelectionRefused": true,
+    "HistoricalInspectionPassed": true,
+    "CheckedAtUtc": "2026-11-09T17:58:46.7774779+00:00"
+  },
+  "managedBuildExitCode": 0,
+  "managedBuildWarnings": 0,
+  "managedBuildErrors": 0,
+  "managedBuildLogSha256": "32517751c523b7c78e40028874a6c68d67fd13643aa0582afacc902f68519c2c",
+  "upstream": {
+    "FullCompletion": false,
+    "ExitCode": 0,
+    "PhysicalSeparateNetworkVerified": false,
+    "Stage": "ThirteenConfiguredUpstreamCasesPassed",
+    "Failed": 0,
+    "LogSha256": "27d3f183e1e0ac250c057d0406bf94f6b97c6d3cf7375cbc2c1acf2a6b157321",
+    "Passed": 13,
+    "UsesConfiguredPublicStunServer": true,
+    "NativeSha256": "016d8b449da214db2fc34ce900d13c539c2b56d885af9fbd870f326005249c68",
+    "TestExecutableSha256": "6b80d31f4f8d34b20151800fd03835b9537a5ac93f4d284f6c0d1e897d4052c0"
+  },
+  "reconstruction": {
+    "CheckedAtUtc": "2026-11-09T19:07:09.5196978+00:00",
+    "SourceArchiveSha256": "e9209f5661fc32ef87b20d2c33f2550f11aa02f85e955c8f4f2209d860855ec5",
+    "PostImages": {
+      "src/impl/dtlstransport.cpp": "634249b05edf66c36589eaa771eb6bd058f2b129fe759bd617bdad305de1769a",
+      "src/impl/peerconnection.hpp": "76484bdbc1784867ef81d67d5210947f53d43eb1a96f7ae28e03637ef49a96c6",
+      "src/impl/peerconnection.cpp": "4345ea0a2f9169ae91a43dbddfe1dbc43cb6648cd7737892ced70c84e57ce8b9"
+    },
+    "FilesVerified": 31,
+    "Components": 7,
+    "Stage": "LtsBundleSourceReconstructionPassed",
+    "BinarySha256": "016d8b449da214db2fc34ce900d13c539c2b56d885af9fbd870f326005249c68"
+  },
+  "toolingTests": 60,
+  "toolingFailures": 0,
+  "toolingLogSha256": "fcf99d5a88a794e62dd7890cbd544661d6520c4183e8fe0a43d01e0df3ec283b",
+  "originalManagedBuildAttemptFailed": true,
+  "originalManagedBuildExitCodeRetained": false,
+  "originalManagedBuildLogSha256": "0ee6ea8d7459971dfbfbcb9b178877f71c1a374f59212de480a43a6fdc176758",
+  "interruptedLocalRuns": {
+    "AndroidExpectedCases": 552,
+    "EmulatorProcessAbsent": true,
+    "Stage": "LocalValidationOwnersEndedWithoutCompletion",
+    "WindowsBuildOriginalExitRetained": false,
+    "AndroidTerminalResultRetained": false,
+    "AndroidRunCompleted": false,
+    "AndroidLastStartedCase": 75,
+    "StressCompleted": false,
+    "WindowsBuildLog": "phase301-lts-qualification/ac0c8ad806b04dbdafae4eff2d4091dc/solution-build.log",
+    "ReasonEstablished": false,
+    "StressStartedSample": 1,
+    "ObservedAtUtc": "2026-11-09T19:02:24.0503025+00:00"
+  },
+  "windowsFullRegressionCompleted": false,
+  "constrainedStressCompleted": false,
+  "currentWindowsAndroidInteropCompleted": false,
+  "unsignedPackageQualified": false,
+  "physicalSeparateNetworksVerified": false,
+  "completeProvenanceReview": false,
+  "fullApplicationComplete": false
+}
