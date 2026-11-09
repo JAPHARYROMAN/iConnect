@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "stage": "HostedLtsAllFiveJobsPassed",
+  "checkedAtUtc": "2026-11-09T21:15:45.379083+00:00",
+  "runId": 42688880004,
+  "commit": "465987938878ba3a435b2e4948798f5fcc19b027",
+  "url": "https://github.com/JAPHARYROMAN/iConnect/actions/runs/42688880004",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "id": 129402981671,
+      "name": "native-transport",
+      "conclusion": "success"
+    },
+    {
+      "id": 129402982260,
+      "name": "android",
+      "conclusion": "success"
+    },
+    {
+      "id": 129402982389,
+      "name": "native-notice-tools",
+      "conclusion": "success"
+    },
+    {
+      "id": 129411927644,
+      "name": "windows-large-files",
+      "conclusion": "success"
+    },
+    {
+      "id": 129411927757,
+      "name": "windows",
+      "conclusion": "success"
+    }
+  ],
+  "nativeSha256": "a2f386e397d749f6a36d7ab7faa40f29e99bcb47d946d911194864f3f3686b66",
+  "bundleEvidenceSha256": "d4beec059ca5e1c1640e97e883b61a67216050f49e5831ae2f1b3081d54b1beb",
+  "openSsl": "openssl-3.5.9",
+  "supportUntil": "2030-04-08",
+  "applicationSelectionChecks": 9,
+  "windowsCases": 975,
+  "failed": 0,
+  "skipped": 0,
+  "suiteCounts": [
+    959,
+    1,
+    1,
+    1,
+    10,
+    3
+  ],
+  "packageGuards": 7,
+  "sourceFiles": 31,
+  "evidenceScope": "GitHub run/job metadata and completed job logs. This follow-up artifact was not independently downloaded; the earlier hosted artifact verification remains separately recorded.",
+  "logSha256": {
+    "native": "a9c1e7fc5a920fc7b3c08e9d0e9524eaa605decff738c5660542ff722da299a8",
+    "main": "2f4d520f4f608889f8c2353634547f26232aa2f29c2fca6e8b14d9c087e1de3c",
+    "large": "0b7fe5e455cb1de795ffb05b6f28d5ea9c420f0515d90afd21bcc3a92df2e770"
+  },
+  "logCaptureNormalization": "CRLF normalized to LF",
+  "earlierFailedWorkflowPreserved": true,
+  "androidJobScope": "Build, JVM tests and lint; no hosted device instrumentation",
+  "physicalSeparateNetworksVerified": false,
+  "fullApplicationComplete": false
+}

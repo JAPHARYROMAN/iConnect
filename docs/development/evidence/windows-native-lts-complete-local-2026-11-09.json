@@ -1,0 +1,116 @@
+{
+  "schema": 1,
+  "stage": "LtsWindowsSplitRegressionAndUnsignedPackagePassed",
+  "checkedAtUtc": "2026-11-09T21:15:45.379083+00:00",
+  "nativeSha256": "016d8b449da214db2fc34ce900d13c539c2b56d885af9fbd870f326005249c68",
+  "bundleEvidenceSha256": "88d87dc9236694a442c43bd3182203f9982a03c8121d253a29713f037ac4145c",
+  "cases": 975,
+  "failed": 0,
+  "skipped": 0,
+  "suites": [
+    {
+      "name": "main",
+      "cases": 959,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "8be06788b797c717abb7491e5b64f685ab1d24f071b2bb9313ece7b0a82e41aa",
+      "consoleSha256": "4d936fff226fa95fce79c4bf56d6d7755aa8c4996ed0289f5b5efd37b4da854d"
+    },
+    {
+      "name": "receiver-capacity",
+      "cases": 1,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "ce2ea428255b8184957080f17460ce90e63364efcc4de7c2e66c32346031f6bd",
+      "consoleSha256": "211690694dd30eb30f32775ed0c6273fe5d8b387b960075ce87ffe412899c980"
+    },
+    {
+      "name": "snapshot-capacity",
+      "cases": 1,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "7ccad0adf5ad16edcb3d8dcbd74c3238448aa1b336a2577a69bfcb8a1b0b0a18",
+      "consoleSha256": "4ad9809167413c3749b0abcf561be582f4c97108b521cac3f770402feee149fe"
+    },
+    {
+      "name": "sender-capacity",
+      "cases": 1,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "eb5957aab8cf27df8c8660c8a350f31c3da06da7a7aa7920305841cd1e6309c9",
+      "consoleSha256": "ba065e4eeb767f6f87a9ebb7ff5bcf695c01b41a911786d961a36c4d60bba8e3"
+    },
+    {
+      "name": "large-files",
+      "cases": 3,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "e76b6c82c90965f50001b851c70cdc81db176254148a12541123367fecead840",
+      "consoleSha256": "b1fc1ab612bbb0967eda0f7489a8560394f77f0006d06a6ee59ed0fc1e572c09"
+    },
+    {
+      "name": "previews",
+      "cases": 10,
+      "failed": 0,
+      "skipped": 0,
+      "trxSha256": "558bdae32a8f31d889f8187875fd52e25bab5f6bb1f75870138d859d5aa7cfb5",
+      "consoleSha256": "4c839449cb5919cb702b8650f0914df884325dbd69c3fccb28dc6badb2b76b22"
+    }
+  ],
+  "validationResultSha256": "7b3435c60c8442467a7917bca89ae30c75568b86cb03fd0a3e34ba03fcd411a3",
+  "publishInventoryComponents": 24,
+  "unsignedPackage": {
+    "version": "1.317.0.0",
+    "sha256": "395578420c4de53caad6ec6aee7330f81eded30e6e271174710cda7733641cbd",
+    "sourceFiles": 31,
+    "nativeNoticeInventorySha256": "fb30fd3e442c6de4216436eac22eea52815e5f5cdcafc48ccc53eee2ae5ca167",
+    "guards": [
+      {
+        "Components": 18,
+        "Case": "default-nuget-inventory",
+        "Passed": true
+      },
+      {
+        "Case": "existing-inventory-preserved",
+        "Passed": true
+      },
+      {
+        "Case": "application-version-mismatch-refused",
+        "Passed": true
+      },
+      {
+        "Case": "unlabelled-replacement-refused",
+        "Passed": true
+      },
+      {
+        "Case": "source-runtime-mismatch-refused",
+        "Passed": true
+      },
+      {
+        "Case": "changed-notice-preflight-refused",
+        "Passed": true
+      },
+      {
+        "Case": "redirected-notices-refused",
+        "Passed": true
+      }
+    ],
+    "guardReportSha256": "91838e22a0f3df54c39f71b59feb888e9034cd0e2b09ca18583dcdd20faa8d46",
+    "callerNativeSelectionRestored": true,
+    "signed": false,
+    "installed": false
+  },
+  "artifactBoundAdvisoryLookup": {
+    "source": "https://api.osv.dev/v1/querybatch",
+    "checkedAtUtc": "2026-11-09T21:06:58.9603816+00:00",
+    "coordinates": 24,
+    "findings": [],
+    "sbomSha256": "797849eeeae14c7e7b9dee9b1092a44ce67b0e28a8dd8a29f7fb86f1e823b959",
+    "reviewSha256": "8fa21d51b640ba34920b44c3bc5c2db7a98f36fda21c04d0f5cad834998bcb5f",
+    "completeSecurityReview": false
+  },
+  "timingLimitation": "An approximately one-hour host clock gap overlaps the offline-copy case. The cause is unproven; elapsed durations are not performance benchmarks.",
+  "priorHarnessFailuresPreserved": true,
+  "physicalSeparateNetworksVerified": false,
+  "fullApplicationComplete": false
+}
