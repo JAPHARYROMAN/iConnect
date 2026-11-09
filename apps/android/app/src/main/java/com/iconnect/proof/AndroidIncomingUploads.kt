@@ -441,7 +441,7 @@ class AndroidIncomingUploads internal constructor(private val context:Context,pr
         } finally {synchronized(gate) {work.remove(id)?.permit?.close(); emit()}}
     }
     private suspend fun hashProvider(row:Row,uri:Uri,allowed:()->Boolean,signal:CancellationSignal,progress:((Long)->Unit)?=null,
-        provider:ContentResolver=context.contentResolver):String {
+        provider:ContentResolver?=null):String {
         val hash=MessageDigest.getInstance("SHA-256"); var count=0L
         withProvider(uri,"r",signal,provider) {descriptor->ParcelFileDescriptor.AutoCloseInputStream(descriptor).use {input->
             val bytes=ByteArray(StorageRules.RANGE)
@@ -453,12 +453,23 @@ class AndroidIncomingUploads internal constructor(private val context:Context,pr
         val name=destination.name(uri); val grant=synchronized(gate) {grants.get(row.target.grant,row.peer)}
         check(name==row.finalName && grants.visible(grant,name)) {"The provider copy was renamed or excluded; it was kept."}
     }
-    private suspend fun <T> withProvider(uri:Uri,mode:String,signal:CancellationSignal,provider:ContentResolver=context.contentResolver,
+    private suspend fun <T> withProvider(uri:Uri,mode:String,signal:CancellationSignal,provider:ContentResolver?=null,
         action:suspend (ParcelFileDescriptor)->T):T=coroutineScope {
         val opened=AtomicReference<ParcelFileDescriptor?>()
         val finished=java.util.concurrent.atomic.AtomicBoolean(false)
         val watcher=launch(Dispatchers.IO,start=CoroutineStart.UNDISPATCHED) {try {awaitCancellation()} finally {if(!finished.get()) {signal.cancel(); runCatching {opened.get()?.close()}}}}
-        try {val descriptor=requireNotNull(provider.openFileDescriptor(uri,mode,signal)); opened.set(descriptor); currentCoroutineContext().ensureActive(); descriptor.use {action(it)}}
+        suspend fun useDescriptor(value:ParcelFileDescriptor?):T {
+            val descriptor=requireNotNull(value); opened.set(descriptor); currentCoroutineContext().ensureActive()
+            return descriptor.use {action(it)}
+        }
+        try {
+            // Publication supplies its already retained, wrapped provider client.
+            // Other checks open the actual document with a cancellable raw read.
+            if(provider!=null) useDescriptor(provider.openFileDescriptor(uri,mode,signal))
+            else requireNotNull(context.contentResolver.acquireUnstableContentProviderClient(uri)).use {client->
+                useDescriptor(client.openFile(uri,mode,signal))
+            }
+        }
         finally {finished.set(true); runCatching {opened.getAndSet(null)?.close()}; withContext(NonCancellable) {watcher.cancelAndJoin()}}
     }
     private fun uniqueName(name:String):String {
