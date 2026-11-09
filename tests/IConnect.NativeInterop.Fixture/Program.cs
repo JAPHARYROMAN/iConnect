@@ -70,7 +70,8 @@ if (suite != "frames")
         throw new InvalidDataException("The guest's explicit mutual-pairing setup was rejected.");
     pairing.HostApproval = ByteString.CopyFrom(identity.Sign(ProtocolRules.PairingTranscript(pairing)));
 }
-await using var uploads = pairing is null ? null : new NativeUploadEndpoint(directory, identity, pairing, listForBatches: suite == "batches");
+await using var uploads = pairing is null ? null : new NativeUploadEndpoint(directory, identity, pairing, listForBatches: suite == "batches")
+{ ExerciseFolderMoveOnSend = batchSuite && Environment.GetEnvironmentVariable("ICONNECT_NATIVE_FOLDER_MOVE_PROBE") == "1" };
 if (batchSuite) uploads!.PrepareBatchDataset();
 using var peer = new PeerSession(identity, peerKey, run, role == "windows", inbox, Report, fileService: uploads?.Service);
 var nativePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "libDatachannel", "datachannel.dll"));

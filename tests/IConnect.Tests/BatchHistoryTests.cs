@@ -113,7 +113,7 @@ public sealed partial class BatchSenderTests
         var path = Path.Combine(f.Profile, "outgoing-batch-jobs", id + ".json"); var saved = System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(path))!; saved["Schema"] = 1;
         foreach (var field in new[] { "Archived", "Purging", "PurgeCursor", "PurgeCount" }) saved["Row"]!.AsObject().Remove(field); File.WriteAllText(path, saved.ToJsonString());
         await f.ReopenSender(); Assert.Empty(f.Sender.RecoveryIssues); var row = Assert.Single(f.Sender.All); Assert.Equal(before.Authority, row.Authority); Assert.Equal(before.Source, row.Source); Assert.False(row.Archived);
-        Archive(f, id); Assert.Equal(2, System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(path))!["Schema"]!.GetValue<int>());
+        Archive(f, id); Assert.Equal(3, System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(path))!["Schema"]!.GetValue<int>());
     }
     [Fact]
     public async Task A_written_item_ahead_of_the_parent_cursor_remains_owned_history_and_purges_without_an_orphan()

@@ -183,7 +183,7 @@ public sealed partial class WindowsRecovery
             var source = heldSource ?? opened!;
             var actual = heldSource is null ? source.Info : SecureWindowsDirectory.Inspect(source.Handle);
             if (actual.Identity != identity || actual.Version != request.ExpectedVersion || actual.IsDirectory != directory ||
-                heldSource is not null && (!local || directory ||
+                heldSource is not null && (!local || directory && (verifySource is null || verifySaved is null || requireCurrent is null) ||
                     !actual.CanonicalPath.Equals(Path.Combine(grant.CanonicalPath, Path.Combine(segments)), StringComparison.OrdinalIgnoreCase)))
                 throw new StorageException(FileStatus.StaleReference, "The item changed. Refresh it before deleting.");
             verifySource?.Invoke(source);

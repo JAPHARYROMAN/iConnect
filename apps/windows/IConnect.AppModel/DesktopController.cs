@@ -191,6 +191,24 @@ public sealed partial class DesktopController : IAsyncDisposable
         await outgoingBatchSender.StopAsync(id, async (value, token) => await request(value, token), connectionLifetime!.Token);
     }
     public void PauseOutgoingBatch(string id) => outgoingBatchSender.Pause(id);
+    public bool OutgoingFolderMoveActive(string id) => outgoingBatchSender.FolderMoveActive(id);
+    public Task<OutgoingFolderMoveReview> ReviewOutgoingFolderMoveAsync(string id, string selectedFolder) =>
+        LocalFiles.ManageAsync(manager => outgoingBatchSender.ReviewFolderMove(id, selectedFolder, manager));
+    public void CancelOutgoingFolderMoveReview(OutgoingFolderMoveReview review) => outgoingBatchSender.CancelFolderMoveReview(review);
+    public async Task<MutationInfo> FinishOutgoingFolderMoveAsync(OutgoingFolderMoveReview review)
+    {
+        var row = outgoingBatchSender.All.Single(x => x.Id == review.BatchId);
+        if (!PublishedBatchCheckSupported || ActivePeerId != row.Authority.Peer)
+            throw new InvalidOperationException("Connect to the original paired device with saved-batch checking enabled.");
+        var client = RequireClient(); var current = generation; var token = connectionLifetime!.Token;
+        var request = client.CaptureFileRequester(row.Authority.Peer, out var sessionCurrent);
+        try
+        {
+            return await LocalFiles.ManageWorkAsync(manager => outgoingBatchSender.FinishFolderMoveAsync(review, manager, request.Invoke,
+                () => current == generation && ReferenceEquals(this.client, client) && sessionCurrent(), client.AcceptsPublishedBatchCheckCancellation, token));
+        }
+        finally { await LocalFiles.RefreshManagementAsync(); await LocalFiles.RefreshAfterManagementAsync(); }
+    }
     public Task VerifyPublishedBatchAsync(string id)
     {
         var row = outgoingBatchSender.All.Single(x => x.Id == id);

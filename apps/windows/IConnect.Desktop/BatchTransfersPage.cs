@@ -73,6 +73,26 @@ public sealed partial class MainWindow
         await Model.PrepareOutgoingBatch(peers[peerChoice.SelectedIndex].Id, paths.ToArray(),
             collision.SelectedIndex switch { 1 => UploadCollision.UploadSkip, 2 => UploadCollision.UploadFail, _ => UploadCollision.UploadKeepBoth });
     }
+    private async Task ReviewOutgoingFolderMoveAsync(OutgoingBatchSend row)
+    {
+        var manifest = await Model.InspectPrivateBatch(row.Source);
+        if (!manifest.Items[0].IsDirectory || manifest.Items.Skip(1).Any(x => x.Parent < 0) || manifest.Items.Any(x => x.Error.Length != 0))
+            throw new InvalidOperationException("Choose a fully copied batch containing one complete folder tree.");
+        var picker = new FolderPicker(); picker.FileTypeFilter.Add("*");
+        WinRT.Interop.InitializeWithWindow.Initialize(picker, WinRT.Interop.WindowNative.GetWindowHandle(this));
+        var selected = await picker.PickSingleFolderAsync(); if (selected is null) return;
+        var review = await Model.ReviewOutgoingFolderMoveAsync(row.Id, selected.Path);
+        var detail = Column(Body("iConnect will verify every original file, obtain a fresh check of the whole receiving folder and move the selected original into recovery on this Windows volume. The saved tree is checked again after that move. Concurrent changes or interruption can require local recovery review. There is no automatic expiry of the saved original."),
+            Body("Original folder"), Selectable(review.Source), Body("Receiving device"), Selectable(Model.BatchPeerName(row.Authority)),
+            Body("Receiving location"), Selectable(review.Destination + " / " + review.FinalName), Body($"{review.Files} files · {review.Folders} folders · {review.Bytes:N0} bytes"));
+        try
+        {
+            if (await ShowAsync(Dialog("Finish this verified folder move?", detail, "Move original into recovery")) == ContentDialogResult.Primary)
+                await ShowLocalResult(await Model.FinishOutgoingFolderMoveAsync(review));
+        }
+        finally { Model.CancelOutgoingFolderMoveReview(review); }
+    }
+
     private async Task ReviewBatchPlanAsync(OutgoingBatchSource source)
     {
         var manifest = await Model.InspectPrivateBatch(source.Id); var page = 0;
@@ -198,9 +218,11 @@ public sealed partial class MainWindow
             else
             {
                 actions.Add(BatchAction("Review item results…", () => ShowBatchResultsAsync(row), !active));
-                if (active && row.Phase == BatchSendingPhase.Completed) actions.Add(Body("Waiting for the receiver's saved-batch check."));
+                if (active && row.Phase == BatchSendingPhase.Completed) actions.Add(Body(Model.OutgoingFolderMoveActive(row.Id)
+                    ? "Verifying the original and receiving copies for this move. Recovery may need local review if interrupted."
+                    : "Waiting for the receiver's saved-batch check."));
                 if (active) actions.Add(Action(row.Phase == BatchSendingPhase.Completed ?
-                    Model.PublishedBatchCheckCancellationSupported ? "Stop batch check" : "Stop waiting for batch check" : "Pause this batch send",
+                    Model.OutgoingFolderMoveActive(row.Id) ? "Stop folder move" : Model.PublishedBatchCheckCancellationSupported ? "Stop batch check" : "Stop waiting for batch check" : "Pause this batch send",
                     () => { Model.PauseOutgoingBatch(row.Id); return Task.CompletedTask; }));
                 if (row.Archived)
                 {
@@ -210,11 +232,15 @@ public sealed partial class MainWindow
                 else
                 {
                     if (row.Phase == BatchSendingPhase.Completed && row.ReceiverOutcomes is { Length: > 0 } && row.ReceiverOutcomes.All(x => x == 1))
+                    {
                         actions.Add(Action("Verify saved batch", async () =>
                         {
                             await Model.VerifyPublishedBatchAsync(row.Id);
                             await ShowAsync(Dialog("Saved batch verified", Body("The receiver checked the saved identities, file bytes and contents of every received folder at the time of this check. Received files remain untrusted."), "Close"));
                         }, !active && online && Model.PublishedBatchCheckSupported));
+                        if (!row.SourceRecovered) actions.Add(BatchAction("Review moving an original folder…", () => ReviewOutgoingFolderMoveAsync(row),
+                            !active && online && Model.PublishedBatchCheckSupported && Model.OutgoingBatchSourceSnapshot(row.Source)?.Phase == BatchSourcePhase.Ready));
+                    }
                     if (row.Phase is not (BatchSendingPhase.Completed or BatchSendingPhase.Stopped or BatchSendingPhase.Stopping))
                     {
                         var target = Model.ReceivingLocation ?? Model.Breadcrumbs.LastOrDefault(); var started = row.Header is { Length: > 0 };

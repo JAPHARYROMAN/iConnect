@@ -44,7 +44,12 @@ public sealed class NativeUploadEngineTests(ITestOutputHelper output)
     public async Task Native_folder_batches_resume_original_plans_preserve_complete_trees_and_refuse_withdrawn_inboxes(bool listing)
         => await Exercise(true, listing);
 
-    private async Task Exercise(bool batch, bool listing = false)
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public async Task Native_folder_moves_verify_the_receiving_tree_and_restore_originals_from_local_recovery(bool listing)
+        => await Exercise(true, listing, folderMove: true);
+
+    private async Task Exercise(bool batch, bool listing = false, bool folderMove = false)
     {
         using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(100));
         using var host = DeviceIdentity.Ephemeral("Generated native host"); using var guest = DeviceIdentity.Ephemeral("Generated native guest");
@@ -74,6 +79,7 @@ public sealed class NativeUploadEngineTests(ITestOutputHelper output)
             if (batch)
             {
                 await Task.WhenAll(hostFiles.SendBatchAsync(first, _ => { }, timeout.Token), guestFiles.SendBatchAsync(second, _ => { }, timeout.Token));
+                if (folderMove) await Task.WhenAll(hostFiles.VerifyFolderMoveAsync(first, timeout.Token), guestFiles.VerifyFolderMoveAsync(second, timeout.Token));
                 hostFiles.RevokeBatch(); guestFiles.RevokeBatch();
             }
             else
@@ -95,6 +101,7 @@ public sealed class NativeUploadEngineTests(ITestOutputHelper output)
                     Assert.Equal(6, value.GetProperty("items").GetInt32());
                     foreach (var field in new[] { "emptyDirectoriesKept", "unicodeNameTextKept", "zeroLengthFilesKept", "parentOutcomesMatch", "publishedBatchChecked", "publishedBatchCanceled" }) Assert.True(value.GetProperty(field).GetBoolean());
                     Assert.Equal(!listing, value.GetProperty("blindNamesRetained").GetBoolean());
+                    Assert.Equal(folderMove, value.GetProperty("originalFolderMoveVerified").GetBoolean());
                 }
                 else Assert.True(value.GetProperty("publishedCopyChecked").GetBoolean());
             }

@@ -152,9 +152,16 @@ public sealed class WindowsLocalManagement : IDisposable
         RecoverVerifiedSource(binding.ParentPath, binding.ParentIdentity, [binding.Name], binding.DisplayPath,
             binding.Identity, binding.Version, false, null, requireCurrent, cancellation, recoveryId, heldSource);
 
+    internal MutationInfo RecoverVerifiedOutgoingFolder(OutgoingFolderMoveSource binding, SecureWindowsDirectory heldSource,
+        string recoveryId, Action<SecureWindowsDirectory> verifyBefore, Action<SecureWindowsDirectory> verifySaved,
+        Action requireCurrent, CancellationToken cancellation) =>
+        RecoverVerifiedSource(binding.ParentPath, binding.ParentIdentity, [binding.Name], binding.DisplayPath,
+            binding.Identity, binding.Version, true, verifyBefore, requireCurrent, cancellation, recoveryId, heldSource, verifySaved);
+
     private MutationInfo RecoverVerifiedSource(string rootPath, string rootIdentity, string[] path, string display,
         string identity, string version, bool directory, Action<SecureWindowsDirectory>? verifySource, Action requireCurrent,
-        CancellationToken cancellation, string? recoveryId = null, SecureWindowsDirectory? heldSource = null) => Authorized(() =>
+        CancellationToken cancellation, string? recoveryId = null, SecureWindowsDirectory? heldSource = null,
+        Action<SecureWindowsDirectory>? verifySavedSource = null) => Authorized(() =>
     {
         Healthy();
         using var parent = SecureWindowsDirectory.OpenPath(rootPath, rootIdentity, path[..^1], true);
@@ -172,7 +179,7 @@ public sealed class WindowsLocalManagement : IDisposable
                 requireCurrent();
             }, requireCurrent, directory ? saved =>
             {
-                verifySource!(saved);
+                (verifySavedSource ?? verifySource!)(saved);
                 requireCurrent();
             } : null, heldSource);
         WindowsActivity.Publish(Activity, new(WindowsActivityKind.LocalFileChange,

@@ -9,12 +9,13 @@ public enum BatchSendingPhase { Ready, Admitting, Sending, Paused, Review, Stopp
 public sealed record OutgoingBatchSend(string Id, string Source, UploadAuthority Authority, string SourceHash, int Items, long Bytes, int EncodedLength,
     BatchSendingPhase Phase = BatchSendingPhase.Ready, byte[]? Header = null, int Next = 0, bool Attempted = false, long Offset = 0,
     byte[]? Outcomes = null, string Destination = "", string Message = "Private batch ready. Choose an approved receiving folder.", byte[]? ReceiverOutcomes = null, bool EffectsStarted = false,
-    bool Archived = false, bool Purging = false, int PurgeCursor = 0, int PurgeCount = 0, string Label = "");
+    bool Archived = false, bool Purging = false, int PurgeCursor = 0, int PurgeCount = 0, string Label = "",
+    OutgoingFolderMoveSource? MoveSource = null, string SourceRecoveryId = "", bool SourceRecovered = false);
 public sealed record OutgoingBatchItemResult(int Index, UploadBatchItemPhase Phase, string Name, string Message);
 public sealed record OutgoingBatchPayload(int Index, string Name, long Size, long Offset, PayloadRateEstimate Estimate,
     long BatchRemaining, PayloadRateEstimate BatchEstimate);
 
-/// <summary>Durable sender intents and item attempts. Original files are never reopened here.</summary>
+/// <summary>Durable sender intents and item attempts; reviewed moves separately pin an owner-selected original.</summary>
 public sealed partial class WindowsBatchSender : IAsyncDisposable
 {
     private sealed record Envelope(int Schema, OutgoingBatchSend Row);
@@ -52,8 +53,8 @@ public sealed partial class WindowsBatchSender : IAsyncDisposable
 
         public void RemoveBranch(int index) => Remaining -= branchBytes[index];
     }
-    private sealed class Work(CancellationTokenSource cancellation)
-    { public CancellationTokenSource Cancellation { get; } = cancellation; public Task Task { get; set; } = Task.CompletedTask; }
+    private sealed class Work(CancellationTokenSource cancellation, bool folderMove = false)
+    { public CancellationTokenSource Cancellation { get; } = cancellation; public bool FolderMove { get; } = folderMove; public Task Task { get; set; } = Task.CompletedTask; }
     private const int RecordLimit = 64 * 1024, ResultLimit = 8 * 1024, ResultsLimit = 16 * 1024 * 1024;
     private static readonly JsonSerializerOptions JsonOptions = new() { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.Create(System.Text.Unicode.UnicodeRanges.All) };
     private readonly object gate = new();
@@ -86,6 +87,7 @@ public sealed partial class WindowsBatchSender : IAsyncDisposable
     public IReadOnlyList<OutgoingBatchSend> All { get { lock (gate) return rows.Values.Reverse().Select(Clone).ToArray(); } }
     public IReadOnlyList<StateRecoveryIssue> RecoveryIssues { get { lock (gate) return recovery.Issues; } }
     public bool Active(string id) { lock (gate) return work.ContainsKey(id); }
+    public bool FolderMoveActive(string id) { lock (gate) return work.TryGetValue(id, out var active) && active.FolderMove; }
     public long? ReadCheckpoint(string id, int index)
     {
         lock (gate) return rows.TryGetValue(id, out var row) && row.Next == index ? row.Offset : null;
@@ -156,7 +158,10 @@ public sealed partial class WindowsBatchSender : IAsyncDisposable
             if (parents.Length > MaxRecords) throw new InvalidDataException("Too many outgoing batch jobs.");
             foreach (var path in parents)
             {
-                var saved = StateRecovery.Read<Envelope>(path, RecordLimit); if (saved.Schema is not (1 or 2) || saved.Schema == 1 && (saved.Row.Archived || saved.Row.Purging || saved.Row.PurgeCursor != 0 || saved.Row.PurgeCount != 0)) throw new InvalidDataException("Unsupported outgoing batch job.");
+                var saved = ReadEnvelope(path);
+                if (saved.Schema is not (1 or 2 or 3) || saved.Schema == 1 && (saved.Row.Archived || saved.Row.Purging || saved.Row.PurgeCursor != 0 || saved.Row.PurgeCount != 0) ||
+                    saved.Schema < 3 && (saved.Row.MoveSource is not null || saved.Row.SourceRecoveryId is not "" || saved.Row.SourceRecovered))
+                    throw new InvalidDataException("Unsupported outgoing batch job.");
                 Validate(saved.Row); if (Path.GetFileName(path) != saved.Row.Id + ".json" || !rows.TryAdd(saved.Row.Id, saved.Row)) throw new InvalidDataException("Invalid outgoing batch job ownership.");
                 using var file = root.OpenChild(Path.GetFileName(path)); versions[saved.Row.Id] = file.Info.Version;
             }
@@ -219,6 +224,7 @@ public sealed partial class WindowsBatchSender : IAsyncDisposable
         if (row.Phase == BatchSendingPhase.Stopped && row.EffectsStarted && row.ReceiverOutcomes is not { Length: > 0 }) throw new InvalidDataException("Stopped sender lost its receiver outcomes.");
         if (row.Purging ? !row.Archived || row.PurgeCount < row.Next || row.PurgeCount > Math.Min(row.Items, row.Next + 1) || row.PurgeCursor < 0 || row.PurgeCursor > row.PurgeCount : row.PurgeCursor != 0 || row.PurgeCount != 0)
             throw new InvalidDataException("Invalid outgoing history cleanup cursor.");
+        ValidateFolderMove(row);
     }
     private void Ready()
     {
@@ -242,7 +248,7 @@ public sealed partial class WindowsBatchSender : IAsyncDisposable
     private OutgoingBatchSend Put(OutgoingBatchSend row, bool progressOnly = false)
     {
         BatchSendingPhase? previous;
-        lock (gate) { previous = rows.GetValueOrDefault(row.Id)?.Phase; Validate(row); recovery.RequireHealthy(); Save(row.Id + ".json", new Envelope(2, row), RecordLimit); rows[row.Id] = Clone(row); using var file = root.OpenChild(row.Id + ".json"); versions[row.Id] = file.Info.Version; }
+        lock (gate) { previous = rows.GetValueOrDefault(row.Id)?.Phase; Validate(row); recovery.RequireHealthy(); Save(row.Id + ".json", new Envelope(3, row), RecordLimit); rows[row.Id] = Clone(row); using var file = root.OpenChild(row.Id + ".json"); versions[row.Id] = file.Info.Version; }
         if (previous != row.Phase)
         {
             var allCopied = row.ReceiverOutcomes is { Length: > 0 } && row.ReceiverOutcomes.All(x => x == 1);

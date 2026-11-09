@@ -69,7 +69,10 @@ try {
     [Environment]::SetEnvironmentVariable('ICONNECT_EXPECTED_NATIVE_SHA256',$evidence.binarySha256)
     & $Dotnet vstest (Join-Path $run 'IConnect.Tests.dll') ('--TestCaseFilter:' + $filter) '--logger:console;verbosity=minimal' '--logger:trx;LogFileName=native-transport.trx' ('--ResultsDirectory:' + $run)
     if ($LASTEXITCODE -ne 0) { throw "Native application fixtures failed. Evidence remains at $run" }
-} finally { [Environment]::SetEnvironmentVariable('ICONNECT_EXPECTED_NATIVE_SHA256',$before) }
+} finally {
+    if($null -eq $before) {Remove-Item -LiteralPath Env:ICONNECT_EXPECTED_NATIVE_SHA256 -ErrorAction SilentlyContinue}
+    else {[Environment]::SetEnvironmentVariable('ICONNECT_EXPECTED_NATIVE_SHA256',$before)}
+}
 [xml]$trx = Get-Content -LiteralPath (Join-Path $run 'native-transport.trx') -Raw
 $counts = $trx.TestRun.ResultSummary.Counters
 if ([int]$counts.failed -ne 0 -or [int]$counts.notExecuted -ne 0 -or [int]$counts.passed -ne 9 -or [int]$counts.passed -ne [int]$counts.total) { throw 'The expected nine native fixture cases did not complete successfully.' }

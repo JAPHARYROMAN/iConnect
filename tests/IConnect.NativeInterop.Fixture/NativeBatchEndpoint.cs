@@ -21,6 +21,8 @@ internal sealed partial class NativeUploadEndpoint
     private bool batchLost;
     private bool batchPublishedChecked;
     private bool batchPublishedCanceled;
+    private bool batchFolderMoveVerified;
+    public bool ExerciseFolderMoveOnSend { get; init; }
     private readonly bool batchListing;
 
     public void PrepareBatchDataset()
@@ -118,8 +120,25 @@ internal sealed partial class NativeUploadEndpoint
             throw new InvalidDataException("The exact parent plan or complete item outcomes were not retained.");
         await CancelBatchProofAsync(peer, ct);
         await VerifyBatchAsync(peer, ct); batchPublishedChecked = true;
+        if (ExerciseFolderMoveOnSend) await VerifyFolderMoveAsync(peer, ct);
         emit(new { @event = "sent", sha256 = batchOriginalHash, bytes = BatchBytes, items = 6, preparations = batchBegins, publishedBatchChecked = batchPublishedChecked, publishedBatchCanceled = batchPublishedCanceled,
-            lostAcknowledgements = 1, resumedOriginalReceipt = true, names = BatchResultNames });
+            originalFolderMoveVerified = batchFolderMoveVerified, lostAcknowledgements = 1, resumedOriginalReceipt = true, names = BatchResultNames });
+    }
+    public async Task VerifyFolderMoveAsync(PeerSession peer, CancellationToken ct)
+    {
+        if (batchCompleted is null || !peer.AcceptsPublishedBatchChecks || batchFolderMoveVerified)
+            throw new InvalidOperationException("Finish one native folder batch before its reviewed original move.");
+        using var management = new WindowsLocalManagement(profile);
+        var review = batchSender!.ReviewFolderMove(batchCompleted.Id, batchOriginal, management);
+        var result = await batchSender.FinishFolderMoveAsync(review, management, peer.RequestFilesAsync,
+            () => !peer.IsClosed && BatchCurrent(authority), peer.AcceptsPublishedBatchCheckCancellation, ct);
+        if (result.Phase != MutationPhase.ChangeSucceeded || Directory.Exists(batchOriginal) || batchSender.All.Single().SourceRecovered != true)
+            throw new InvalidDataException("The native folder move did not retain a verified source recovery transaction.");
+        var saved = management.Deleted.Single(x => x.Item.Id == result.Id);
+        if (Tree(saved.SavedLocation).Hash != batchOriginalHash || management.Restore(result.Id).Phase != MutationPhase.ChangeSucceeded ||
+            Tree(batchOriginal).Hash != batchOriginalHash)
+            throw new InvalidDataException("The native folder original did not verify and restore with its complete tree.");
+        batchFolderMoveVerified = true;
     }
     public Task VerifyBatchAsync(PeerSession peer, CancellationToken ct)
     {
@@ -199,6 +218,7 @@ internal sealed partial class NativeUploadEndpoint
         return new { @event = "verified", suite = "batches", sentHash = batchOriginalHash, receivedHash = checkedTree.Hash,
             bytes = BatchBytes, items = 6, preparations = batchBegins, lostAcknowledgements = 1, resumedOriginalReceipt = true,
             collisionOriginalKept = true, originalSourceKept = true, emptyDirectoriesKept = true, unicodeNameTextKept = true,
-            zeroLengthFilesKept = true, parentOutcomesMatch = true, blindNamesRetained = !batchListing, withdrawnInboxDenied = true, publishedBatchChecked = batchPublishedChecked, publishedBatchCanceled = batchPublishedCanceled };
+            zeroLengthFilesKept = true, parentOutcomesMatch = true, blindNamesRetained = !batchListing, withdrawnInboxDenied = true, publishedBatchChecked = batchPublishedChecked, publishedBatchCanceled = batchPublishedCanceled,
+            originalFolderMoveVerified = batchFolderMoveVerified };
     }
 }
